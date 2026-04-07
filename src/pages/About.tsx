@@ -89,11 +89,9 @@ const workArticleList: CSSProperties = {
 }
 
 export function About() {
-  const { locale, m } = useLanguage()
-  const [skillIndex, setSkillIndex] = useState(0)
+  const { m } = useLanguage()
   const [activeTimelineId, setActiveTimelineId] = useState<TimelineId>('about-2026')
   const scrollOffsetRef = useRef(0)
-  const skills = m.about.skills
 
   const timelineEntries = useMemo(
     () =>
@@ -110,18 +108,6 @@ export function About() {
   useEffect(() => {
     document.title = m.about.title
   }, [m.about.title])
-
-  useEffect(() => {
-    setSkillIndex(0)
-  }, [locale])
-
-  useEffect(() => {
-    const len = skills.length
-    const id = window.setInterval(() => {
-      setSkillIndex((i) => (i + 1) % len)
-    }, 2200)
-    return () => window.clearInterval(id)
-  }, [locale, skills.length])
 
   useEffect(() => {
     const hash = window.location.hash.slice(1)
@@ -188,17 +174,6 @@ export function About() {
     >
       <div id="about-2026" style={{ ...anchorTarget, position: 'relative', marginBottom: '1.5rem' }}>
         <h2 style={{ margin: 0, fontSize: 'clamp(1.75rem, 4vw, 2.25rem)', fontWeight: 700 }}>{m.about.iDo}</h2>
-        <p
-          style={{
-            margin: '0.75rem 0 0',
-            fontSize: '1.06rem',
-            fontWeight: 700,
-            minHeight: '1.3em',
-            transition: 'opacity 0.35s ease',
-          }}
-        >
-          {skills[skillIndex]}
-        </p>
       </div>
 
       <div style={aboutIntroColumn}>

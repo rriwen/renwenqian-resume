@@ -10,7 +10,7 @@ function readStoredLocale(): Locale {
   } catch {
     /* ignore */
   }
-  return 'en'
+  return 'zh'
 }
 
 type LanguageContextValue = {

@@ -51,7 +51,7 @@ function useStackLayout(cardCount: number) {
 
   const isMobile = w < 640
   const cardW =
-    isMobile ? 210 : w >= 640 && w < 1024 ? 250 : w >= 1280 && w < 1536 ? 270 : 290
+    isMobile ? 228 : w >= 640 && w < 1024 ? 272 : w >= 1280 && w < 1536 ? 292 : 312
   const L = isMobile ? 52 : 74
   const M = isMobile ? -24 : -34
   const n1 = Math.max(0, cardCount - 1)
@@ -308,7 +308,7 @@ export function CardStack({ projects, activeIndex, onActiveChange, onOpenProject
                 left: '50%',
                 top: '50%',
                 width: layout.cardW,
-                maxWidth: 'min(88vw, 290px)',
+                maxWidth: 'min(88vw, 312px)',
                 aspectRatio: '16 / 9',
                 border: 'none',
                 padding: 0,

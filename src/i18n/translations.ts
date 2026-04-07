@@ -19,7 +19,6 @@ export type Messages = {
   about: {
     title: string
     iDo: string
-    skills: string[]
     body1: string
     /** 中文简介分段，用于姓名加粗；英文省略 */
     body1IntroBold?: {
@@ -143,8 +142,7 @@ export const translations: Record<Locale, Messages> = {
     },
     about: {
       title: 'About | REN WENQIAN',
-      iDo: 'I Do',
-      skills: ['Product Design', 'Web Design', 'Prototyping', 'Design System', 'User Story'],
+      iDo: 'What I Do',
       body1:
         "I'm Ren Wenqian—a product designer who understands AI, users, and data, and ships.",
       body2:
@@ -289,8 +287,7 @@ export const translations: Record<Locale, Messages> = {
     },
     about: {
       title: '关于 | REN WENQIAN',
-      iDo: '我做什么',
-      skills: ['产品设计', '网页设计', '原型制作', '设计系统', '用户故事'],
+      iDo: '我做过什么',
       body1: '我是 任文倩，也可以叫我 泗澄，一名懂 AI、懂用户、懂数据、能落地的产品设计师。',
       body1IntroBold: {
         beforeName1: '我是 ',
