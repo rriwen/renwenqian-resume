@@ -103,19 +103,50 @@ const details: Record<string, { en: ProjectDetailBlock; zh: ProjectDetailBlock }
   },
   coinos: {
     en: {
-      tags: ['Design System', 'Tokens', 'Documentation'],
+      tags: ['Design System', 'Interaction patterns', 'Iteration efficiency'],
       paragraphs: [
-        'A living AI Design System that encodes layout, motion, and content rules so teams can ship on-brand experiences without reinventing patterns every sprint.',
-        'Deliverables included token naming and theming, component specs tuned for both design and code, and docs that double as onboarding for new contributors.',
+        'With multiple AI products (intelligent analytics Q&A, dev assistant, ops assistant, and more) iterating in parallel, the team hit the usual pain points—inconsistent design, reinventing patterns, and high delivery cost—without unified design assets and standards.',
+        'I led the AI design system from 0 to 1: reusable components and interaction patterns that raise cross-product consistency and team iteration speed.',
       ],
+      highlightBullets: [
+        {
+          keyword: 'Shared abstraction',
+          text: 'Mapped common capabilities and interaction scenarios across AI products, abstracting core components and patterns such as prompt input, chain-of-thought display, and message cards.',
+        },
+        {
+          keyword: 'Standards & documentation',
+          text: 'Defined design standards (visual, interaction, copy, motion), and shipped a component library with usage docs.',
+        },
+        {
+          keyword: 'Multi-product rollout',
+          text: 'Drove adoption of the design system across multiple product lines.',
+        },
+      ],
+      afterHighlightBullets:
+        'It became standardized AI product design assets for the team, with reuse across product lines exceeding 70%.',
       gallery: ['/images/work-5.webp', '/images/work-4.webp', '/images/work-6.webp', '/images/work-3.webp'],
     },
     zh: {
-      tags: ['设计系统', 'Token', '文档'],
+      tags: ['设计系统', '交互模式', '迭代效率'],
       paragraphs: [
-        '一套可演进的 AI 设计系统，沉淀布局、动效与文案规则，让各团队在迭代中仍能交付一致的品牌体验。',
-        '产出包含命名与主题化的 Token、面向设计与开发的组件规格，以及兼具新人上手用途的文档体系。',
+        '团队在多个 AI 产品（智能问数、开发助手、运维助手等）并行迭代过程中，面临设计不一致、重复造轮子、开发成本高等典型问题，缺乏统一的设计资产与规范。',
+        '我主要负责：从 0 到 1 规划并建设 AI 设计系统，沉淀可复用的组件与交互模式，提升跨产品设计一致性及团队迭代效率。',
       ],
+      highlightBullets: [
+        {
+          keyword: '共性抽象',
+          text: '梳理各 AI 产品的共性能力与交互场景，抽象出 Prompt 输入、思维链展示、消息卡片等核心组件及对应交互模式。',
+        },
+        {
+          keyword: '规范与文档',
+          text: '制定设计规范（包括视觉、交互、文案、动效等），输出组件库与使用文档。',
+        },
+        {
+          keyword: '多线落地',
+          text: '推动设计系统在多条产品线中落地。',
+        },
+      ],
+      afterHighlightBullets: '形成团队 AI 产品设计的标准化资产，在多条产品线中复用率超过 70%。',
       gallery: ['/images/work-5.webp', '/images/work-4.webp', '/images/work-6.webp', '/images/work-3.webp'],
     },
   },
