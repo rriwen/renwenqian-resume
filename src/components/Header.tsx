@@ -1,4 +1,5 @@
 import { Link, useLocation } from 'react-router-dom'
+import { projects } from '../data/projects'
 import { useLanguage } from '../i18n/LanguageContext'
 import { LanguageSwitcher } from './LanguageSwitcher'
 import { VariableProximityName } from './VariableProximityName'
@@ -6,6 +7,7 @@ import { VariableProximityName } from './VariableProximityName'
 export function Header() {
   const { pathname } = useLocation()
   const { m } = useLanguage()
+  const projectPathMatch = pathname.startsWith('/project/')
 
   return (
     <header
@@ -15,7 +17,11 @@ export function Header() {
         right: 0,
         top: 0,
         zIndex: 50,
-        padding: '1rem clamp(1rem, 3vw, 1.5rem) 0',
+        backgroundColor: 'rgba(255, 255, 255, 1)',
+        paddingLeft: '1.5rem',
+        paddingRight: '1.5rem',
+        paddingTop: '16px',
+        paddingBottom: '16px',
       }}
     >
       <div
@@ -31,7 +37,7 @@ export function Header() {
           lineHeight: 1.25,
         }}
       >
-        <Link to="/" style={{ minWidth: 0 }}>
+        <Link to="/" style={{ flexShrink: 0 }}>
           <p style={{ margin: 0, lineHeight: 1.25 }}>
             <VariableProximityName text={m.header.name} />
           </p>
@@ -48,9 +54,72 @@ export function Header() {
               flexDirection: 'row',
               alignItems: 'center',
               justifyContent: 'flex-end',
-              gap: 'clamp(0.75rem, 2vw, 1.25rem)',
+              gap: '1.25rem',
             }}
           >
+            <li>
+              <Link
+                to="/"
+                style={{
+                  display: 'inline-block',
+                  fontWeight: 500,
+                  borderBottom: pathname === '/' ? '1px solid currentColor' : '1px solid transparent',
+                }}
+              >
+                {m.header.home}
+              </Link>
+            </li>
+            <li className="header-nav-dropdown">
+              <button
+                type="button"
+                className="header-nav-dropdown-trigger"
+                aria-haspopup="menu"
+                aria-controls="header-projects-menu"
+                id="header-projects-trigger"
+                style={{
+                  display: 'inline-block',
+                  fontWeight: 500,
+                  borderBottom: projectPathMatch ? '1px solid currentColor' : '1px solid transparent',
+                  background: 'none',
+                  cursor: 'pointer',
+                  color: 'inherit',
+                  textTransform: 'inherit',
+                  letterSpacing: 'inherit',
+                }}
+              >
+                {m.header.projects}
+              </button>
+              <div className="header-nav-dropdown-panel" role="presentation">
+                <div className="header-nav-dropdown-panel-inner">
+                  <ul
+                    id="header-projects-menu"
+                    className="header-nav-dropdown-list"
+                    role="menu"
+                    aria-label={m.header.projectsMenuAria}
+                  >
+                    {projects.map((p) => {
+                      const projectActive = pathname === `/project/${p.slug}`
+                      return (
+                        <li key={p.id} role="none">
+                          <Link
+                            role="menuitem"
+                            to={`/project/${p.slug}`}
+                            className={
+                              projectActive
+                                ? 'header-nav-dropdown-link header-nav-dropdown-link--active'
+                                : 'header-nav-dropdown-link'
+                            }
+                            aria-current={projectActive ? 'page' : undefined}
+                          >
+                            {p.title}
+                          </Link>
+                        </li>
+                      )
+                    })}
+                  </ul>
+                </div>
+              </div>
+            </li>
             <li>
               <Link
                 to="/about"

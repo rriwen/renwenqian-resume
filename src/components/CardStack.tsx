@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { Fragment, useCallback, useEffect, useRef, useState } from 'react'
 import type { Project } from '../data/projects'
 import { playCardStackAdvance, playCardStackTick, unlockStackAudio } from '../audio/stackAudio'
 import { useLanguage } from '../i18n/LanguageContext'
@@ -16,25 +16,10 @@ const VELOCITY_COMMIT = 0.45
 
 const SKEW_Y = 16
 
-function usePrefersReducedMotion() {
-  const [reduced, setReduced] = useState(false)
-  useEffect(() => {
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
-    const sync = () => setReduced(mq.matches)
-    sync()
-    mq.addEventListener('change', sync)
-    return () => mq.removeEventListener('change', sync)
-  }, [])
-  return reduced
-}
-
 /** Hover / 选中态共用：以水平位移为主，并带少量右下分量（与 isPopped 布局无关）。 */
 function hoverOffset(isMobile: boolean) {
   return isMobile ? { x: 78, y: 14 } : { x: 118, y: 20 }
 }
-
-const HOVER_SHADOW =
-  '10px 32px 56px rgba(0,0,0,0.2), 4px 12px 24px rgba(0,0,0,0.08), 0 0 0 1px rgba(255,255,255,0.06), 0 2px 0 rgba(255,255,255,0.04) inset'
 
 /**
  * 斜向 skew 堆叠：相邻张按 L/M 台阶错开；D/R 把整摞中心对齐到容器中心（50%/50% 锚点）。
@@ -68,7 +53,6 @@ export function CardStack({ projects, activeIndex, onActiveChange, onOpenProject
   const { m } = useLanguage()
   const n = projects.length
   const layout = useStackLayout(n)
-  const reducedMotion = usePrefersReducedMotion()
 
   const [dragPx, setDragPx] = useState(0)
   const [isDragging, setIsDragging] = useState(false)
@@ -260,89 +244,54 @@ export function CardStack({ projects, activeIndex, onActiveChange, onOpenProject
           const showHoverLike = isHovered || (isActive && !isDragging)
           const dragExtra = i === activeIndex ? dragPx : 0
           const ho = showHoverLike ? hoverOffset(layout.isMobile) : { x: 0, y: 0 }
-          const baseX =
-            layout.D + i * layout.L + (isPopped ? layout.popX : 0) + dragExtra + ho.x
-          const baseY =
-            layout.R + i * layout.M + (isPopped ? layout.popY : 0) + ho.y
+          /** 命中区不含 hover 偏移，避免边缘处指针与卡片相对位移导致 hover 在相邻卡之间振荡 */
+          const hitX = layout.D + i * layout.L + (isPopped ? layout.popX : 0) + dragExtra
+          const hitY = layout.R + i * layout.M + (isPopped ? layout.popY : 0)
           const dragWobble = isDragging && i === activeIndex ? Math.sin((dragPx / 140) * 0.4) * 4 : 0
 
           const zBase = n - i + 20
           const z = isPopped ? zBase + 55 : zBase
 
-          const cardScale = reducedMotion || !showHoverLike ? 1 : 1.014
-          const imgScale = reducedMotion || !showHoverLike ? 1 : 1.048
-
           const tz = -i * layout.zStep
-          const transform = `translate(-50%, -50%) translate(${baseX}px, ${baseY + dragWobble}px) translateZ(${tz}px) skewY(${SKEW_Y}deg) scale(${cardScale})`
+          const hitTransform = `translate(-50%, -50%) translate(${hitX}px, ${hitY + dragWobble}px) translateZ(${tz}px) skewY(${SKEW_Y}deg) scale(1)`
+          /** hover 位移放在 skew 之前，与原先单节点 transform 等价 */
+          const visualTransform = `translate(-50%, -50%) translate(${hitX}px, ${hitY + dragWobble}px) translateZ(${tz}px) translate(${ho.x}px, ${ho.y}px) skewY(${SKEW_Y}deg) scale(1)`
+
+          const layerStyleBase = {
+            position: 'absolute' as const,
+            left: '50%',
+            top: '50%',
+            width: layout.cardW,
+            maxWidth: 'min(88vw, 312px)' as const,
+            aspectRatio: '16 / 9' as const,
+            borderRadius: 4,
+            transformStyle: 'preserve-3d' as const,
+            backfaceVisibility: 'hidden' as const,
+            WebkitBackfaceVisibility: 'hidden' as const,
+            zIndex: z,
+          }
+
+          const transitionMs = isDragging ? '0s' : showHoverLike ? '0.38s' : '0.42s'
+          const transitionEasing = showHoverLike
+            ? 'cubic-bezier(0.2, 0.85, 0.15, 1)'
+            : easeOut
 
           return (
-            <button
-              key={p.id}
-              type="button"
-              className="card-stack-project"
-              aria-label={`${p.title} ${m.cardStack.cardSuffix}`}
-              aria-current={isActive ? true : undefined}
-              onClick={(ev) => {
-                ev.stopPropagation()
-                if (isActive) {
-                  if (suppressDetailClickRef.current) {
-                    suppressDetailClickRef.current = false
-                    return
-                  }
-                  void unlockStackAudio()
-                  onOpenProject(p)
-                  return
-                }
-                void unlockStackAudio()
-                onOpenProject(p)
-              }}
-              onPointerEnter={() => {
-                if (!isDragging) setHoveredIndex(i)
-              }}
-              onPointerDown={isActive ? onActivePointerDown : undefined}
-              onPointerMove={isActive ? onActivePointerMove : undefined}
-              onPointerUp={isActive ? onActivePointerUp : undefined}
-              onPointerCancel={isActive ? onActivePointerCancel : undefined}
-              style={{
-                position: 'absolute',
-                left: '50%',
-                top: '50%',
-                width: layout.cardW,
-                maxWidth: 'min(88vw, 312px)',
-                aspectRatio: '16 / 9',
-                border: 'none',
-                padding: 0,
-                borderRadius: 4,
-                overflow: 'hidden',
-                boxShadow: showHoverLike
-                  ? HOVER_SHADOW
-                  : isPopped
-                    ? '0 28px 60px rgba(0,0,0,0.22), 0 10px 24px rgba(0,0,0,0.1)'
-                    : '0 18px 44px rgba(0,0,0,0.16), 0 0 0 1px rgba(0,0,0,0.04)',
-                cursor: isActive ? (isDragging ? 'grabbing' : 'grab') : 'pointer',
-                transform,
-                zIndex: z,
-                opacity: 1,
-                pointerEvents: 'auto',
-                transformStyle: 'preserve-3d',
-                backfaceVisibility: 'hidden',
-                WebkitBackfaceVisibility: 'hidden',
-                transitionProperty: 'transform, box-shadow',
-                transitionDuration: isDragging ? '0s' : showHoverLike ? '0.38s' : '0.42s',
-                transitionTimingFunction: showHoverLike
-                  ? 'cubic-bezier(0.2, 0.85, 0.15, 1)'
-                  : easeOut,
-                background: '#111',
-                willChange: isDragging && isActive ? 'transform' : 'auto',
-                touchAction: isActive ? 'none' : 'manipulation',
-              }}
-            >
+            <Fragment key={p.id}>
               <div
+                aria-hidden
+                className="card-stack-project-visual"
                 style={{
-                  width: '100%',
-                  height: '100%',
+                  ...layerStyleBase,
                   overflow: 'hidden',
-                  borderRadius: 'inherit',
+                  boxShadow: 'none',
+                  pointerEvents: 'none',
+                  transform: visualTransform,
+                  transitionProperty: 'transform',
+                  transitionDuration: transitionMs,
+                  transitionTimingFunction: transitionEasing,
+                  background: '#111',
+                  willChange: isDragging && isActive ? 'transform' : 'auto',
                 }}
               >
                 <img
@@ -356,16 +305,65 @@ export function CardStack({ projects, activeIndex, onActiveChange, onOpenProject
                     display: 'block',
                     userSelect: 'none',
                     pointerEvents: 'none',
-                    transform: `scale(${imgScale})`,
+                    transform: 'none',
                     transformOrigin: 'center center',
-                    filter: showHoverLike ? 'brightness(1.05) contrast(1.02)' : 'brightness(1)',
-                    transition: reducedMotion
-                      ? 'none'
-                      : 'transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), filter 0.32s ease',
+                    filter: 'none',
+                    transition: 'none',
                   }}
                 />
               </div>
-            </button>
+              <div
+                style={{
+                  ...layerStyleBase,
+                  pointerEvents: 'auto',
+                  transform: hitTransform,
+                  transitionProperty: 'transform',
+                  transitionDuration: transitionMs,
+                  transitionTimingFunction: transitionEasing,
+                  background: 'transparent',
+                  willChange: isDragging && isActive ? 'transform' : 'auto',
+                }}
+              >
+                <button
+                  type="button"
+                  className="card-stack-project"
+                  aria-label={`${p.title} ${m.cardStack.cardSuffix}`}
+                  aria-current={isActive ? true : undefined}
+                  onClick={(ev) => {
+                    ev.stopPropagation()
+                    if (isActive) {
+                      if (suppressDetailClickRef.current) {
+                        suppressDetailClickRef.current = false
+                        return
+                      }
+                      void unlockStackAudio()
+                      onOpenProject(p)
+                      return
+                    }
+                    void unlockStackAudio()
+                    onOpenProject(p)
+                  }}
+                  onPointerEnter={() => {
+                    if (!isDragging) setHoveredIndex(i)
+                  }}
+                  onPointerDown={isActive ? onActivePointerDown : undefined}
+                  onPointerMove={isActive ? onActivePointerMove : undefined}
+                  onPointerUp={isActive ? onActivePointerUp : undefined}
+                  onPointerCancel={isActive ? onActivePointerCancel : undefined}
+                  style={{
+                    display: 'block',
+                    width: '100%',
+                    height: '100%',
+                    border: 'none',
+                    padding: 0,
+                    borderRadius: 'inherit',
+                    cursor: isActive ? (isDragging ? 'grabbing' : 'grab') : 'pointer',
+                    background: 'transparent',
+                    touchAction: isActive ? 'none' : 'manipulation',
+                  }}
+                />
+              </div>
+            </Fragment>
           )
         })}
       </div>

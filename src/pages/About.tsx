@@ -88,8 +88,17 @@ const workArticleList: CSSProperties = {
   opacity: 0.88,
 }
 
+/** 与 ContactOverlay 邮件链接一致 */
+const contactLink: CSSProperties = {
+  color: 'inherit',
+  textDecoration: 'none',
+  borderBottom: '1px solid currentColor',
+  paddingBottom: 2,
+}
+
 export function About() {
-  const { m } = useLanguage()
+  const { m, locale } = useLanguage()
+  const contactLabelSep = locale === 'zh' ? ' ： ' : ': '
   const [activeTimelineId, setActiveTimelineId] = useState<TimelineId>('about-2026')
   const scrollOffsetRef = useRef(0)
 
@@ -173,7 +182,7 @@ export function About() {
       }}
     >
       <div id="about-2026" style={{ ...anchorTarget, position: 'relative', marginBottom: '1.5rem' }}>
-        <h2 style={{ margin: 0, fontSize: 'clamp(1.75rem, 4vw, 2.25rem)', fontWeight: 700 }}>{m.about.iDo}</h2>
+        <h2 style={{ margin: 0, fontSize: '2.25rem', fontWeight: 700 }}>{m.about.iDo}</h2>
       </div>
 
       <div style={aboutIntroColumn}>
@@ -276,9 +285,40 @@ export function About() {
                 {edu.njupt.period}
               </p>
             </header>
-            <p style={{ ...bodyText, marginTop: '1rem', marginBottom: 0 }}>{edu.njupt.body}</p>
+            <ul style={{ ...workArticleList, marginTop: '1rem', marginBottom: 0 }}>
+              {edu.njupt.items.map((item, i, arr) => (
+                <li key={i} style={{ marginBottom: i < arr.length - 1 ? '0.65rem' : 0 }}>
+                  {item}
+                </li>
+              ))}
+            </ul>
           </div>
         </article>
+      </section>
+
+      <section
+        id="about-contact"
+        style={{ ...anchorTarget, marginTop: '2.75rem', paddingTop: '2rem', borderTop: '1px solid rgba(10,10,10,0.12)' }}
+      >
+        <div style={workArticleProse}>
+          <h3 style={workArticleTitle}>{m.about.contactCta.title}</h3>
+          <ul style={{ ...workArticleList, marginTop: '1rem', marginBottom: 0 }}>
+            <li style={{ marginBottom: '0.65rem' }}>
+              {m.about.contactCta.wechatPhoneLabel}
+              {contactLabelSep}
+              <a href={`tel:${m.about.contactCta.phone}`} style={contactLink}>
+                {m.about.contactCta.phone}
+              </a>
+            </li>
+            <li style={{ marginBottom: 0 }}>
+              {m.about.contactCta.emailLabel}
+              {contactLabelSep}
+              <a href={`mailto:${m.about.contactCta.email}`} style={contactLink}>
+                {m.about.contactCta.email}
+              </a>
+            </li>
+          </ul>
+        </div>
       </section>
     </main>
 

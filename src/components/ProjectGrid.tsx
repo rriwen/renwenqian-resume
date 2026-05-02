@@ -9,6 +9,9 @@ type Props = {
 
 const ease = 'cubic-bezier(0.22, 1, 0.36, 1)'
 
+/** hover 轻投影，存在感弱 */
+const GRID_SHADOW_HOVER = '0 10px 28px rgba(0,0,0,0.055), 0 2px 8px rgba(0,0,0,0.035)'
+
 export function ProjectGrid({ projects, activeIndex, onOpenProject }: Props) {
   const [hovered, setHovered] = useState<number | null>(null)
 
@@ -27,7 +30,6 @@ export function ProjectGrid({ projects, activeIndex, onOpenProject }: Props) {
       {projects.map((p, i) => {
         const isActive = i === activeIndex
         const isHover = hovered === i
-        const lift = isHover ? -7 : 0
 
         return (
           <button
@@ -41,18 +43,11 @@ export function ProjectGrid({ projects, activeIndex, onOpenProject }: Props) {
               textAlign: 'left',
               borderRadius: 4,
               overflow: 'hidden',
-              border:
-                isActive && !isHover
-                  ? '1px solid rgba(10,10,10,0.88)'
-                  : isHover
-                    ? '1px solid rgba(10,10,10,0.12)'
-                    : '1px solid rgba(10,10,10,0.06)',
-              boxShadow: isHover
-                ? '0 20px 48px rgba(0,0,0,0.14), 0 8px 16px rgba(0,0,0,0.06)'
-                : '0 10px 32px rgba(0,0,0,0.07), 0 2px 8px rgba(0,0,0,0.04)',
-              transition: `transform 0.4s ${ease}, box-shadow 0.4s ${ease}, border-color 0.35s ${ease}`,
+              border: 'none',
+              boxShadow: isHover ? GRID_SHADOW_HOVER : 'none',
               background: '#f6f6f6',
-              transform: `translateY(${lift}px)`,
+              transform: 'none',
+              transition: `box-shadow 0.28s ${ease}`,
             }}
           >
             <div
@@ -71,10 +66,10 @@ export function ProjectGrid({ projects, activeIndex, onOpenProject }: Props) {
                   height: '100%',
                   objectFit: 'cover',
                   display: 'block',
-                  transform: isHover ? 'scale(1.06)' : 'scale(1)',
+                  transform: 'none',
                   transformOrigin: 'center center',
-                  transition: `transform 0.55s ${ease}`,
-                  filter: isHover ? 'brightness(1.04)' : 'brightness(1)',
+                  transition: 'none',
+                  filter: 'none',
                 }}
               />
             </div>
@@ -83,10 +78,9 @@ export function ProjectGrid({ projects, activeIndex, onOpenProject }: Props) {
                 margin: 0,
                 padding: '0.75rem 0.9rem',
                 fontSize: '0.8rem',
-                letterSpacing: '0.12em',
-                textTransform: 'uppercase',
-                fontWeight: 600,
-                color: isHover ? '#0a0a0a' : 'rgba(10,10,10,0.78)',
+                letterSpacing: 'normal',
+                fontWeight: isActive ? 700 : isHover ? 600 : 400,
+                color: isHover || isActive ? '#0a0a0a' : 'rgba(10,10,10,0.78)',
                 transition: `color 0.3s ${ease}`,
               }}
             >

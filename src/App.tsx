@@ -20,7 +20,7 @@ export default function App() {
           <Header />
           <Routes>
             <Route path="/" element={<Home viewMode={viewMode} onViewMode={setViewMode} />} />
-            <Route path="/work/:slug" element={<ProjectDetail />} />
+            <Route path="/project/:slug" element={<ProjectDetail />} />
             <Route path="/about" element={<About />} />
           </Routes>
           <ChatbotOverlay />

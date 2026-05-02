@@ -13,16 +13,13 @@ type Props = {
   onViewMode: (m: ViewMode) => void
 }
 
-/** 为固定底部栏预留空间（与 FooterBar 渐变区大致一致） */
-const MAIN_PAD_BOTTOM = 'clamp(8.5rem, 20dvh, 13.5rem)'
-
 export function Home({ viewMode, onViewMode }: Props) {
   const { m } = useLanguage()
   const navigate = useNavigate()
   const [activeIndex, setActiveIndex] = useState(-1)
 
   const openProject = (p: Project) => {
-    navigate(`/work/${p.slug}`)
+    navigate(`/project/${p.slug}`)
   }
 
   useEffect(() => {
@@ -38,7 +35,7 @@ export function Home({ viewMode, onViewMode }: Props) {
         minHeight: '100dvh',
         maxHeight: '100dvh',
         paddingTop: 'clamp(3.75rem, 10dvh, 4.75rem)',
-        paddingBottom: MAIN_PAD_BOTTOM,
+        paddingBottom: 0,
         boxSizing: 'border-box',
         display: 'flex',
         flexDirection: 'column',
@@ -87,6 +84,7 @@ export function Home({ viewMode, onViewMode }: Props) {
                   textTransform: 'uppercase',
                   opacity: 0.42,
                   fontWeight: 500,
+                  whiteSpace: 'nowrap',
                 }}
               >
                 {active.title}

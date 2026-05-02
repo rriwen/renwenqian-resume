@@ -19,18 +19,18 @@ export function FooterBar({ projects, viewMode, onViewMode, activeIndex, onActiv
     <footer
       className="site-footer"
       style={{
-        position: 'fixed',
-        left: 0,
-        right: 0,
-        bottom: 'clamp(14px, 3.2vh, 32px)',
+        flexShrink: 0,
+        width: '100%',
+        minWidth: 1024,
         zIndex: 120,
-        padding: '1.1rem clamp(1rem, 3vw, 1.5rem) max(0.65rem, env(safe-area-inset-bottom))',
+        padding: '1.1rem 1.5rem max(0.65rem, env(safe-area-inset-bottom))',
         pointerEvents: 'none',
+        marginTop: 'auto',
         background:
           'linear-gradient(to top, #fff 0%, rgba(255,255,255,0.95) 42%, rgba(255,255,255,0.72) 72%, rgba(255,255,255,0) 100%)',
       }}
     >
-      <div style={{ pointerEvents: 'auto', maxWidth: 396 }}>
+      <div style={{ pointerEvents: 'auto', width: 413, boxSizing: 'border-box' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '-0.35rem', marginBottom: '0.5rem' }}>
           <img
             src="/images/profile.png"
@@ -44,8 +44,12 @@ export function FooterBar({ projects, viewMode, onViewMode, activeIndex, onActiv
             }}
           />
         </div>
-        <p style={{ margin: 0, fontSize: '0.78rem', lineHeight: 1.55, opacity: 0.78, maxWidth: 396 }}>
-          {m.footer.bio}
+        <p style={{ margin: 0, fontSize: '0.78rem', lineHeight: 1.55, opacity: 0.78 }}>
+          {m.footer.bioLines.map((line, i) => (
+            <span key={i} style={{ display: 'block' }}>
+              {line}
+            </span>
+          ))}
         </p>
         <a
           href="#chat"
@@ -53,11 +57,11 @@ export function FooterBar({ projects, viewMode, onViewMode, activeIndex, onActiv
             display: 'inline-block',
             fontSize: '0.78rem',
             letterSpacing: '0.14em',
-            textDecoration: 'underline',
-            textUnderlineOffset: 3,
+            textDecoration: 'none',
             marginTop: 12,
             marginBottom: '0.45rem',
             fontWeight: 600,
+            whiteSpace: 'nowrap',
           }}
         >
           {m.footer.botLink}
@@ -116,7 +120,7 @@ export function FooterBar({ projects, viewMode, onViewMode, activeIndex, onActiv
           fontSize: '0.68rem',
           letterSpacing: '0.1em',
           lineHeight: 1.85,
-          maxHeight: 'min(38vh, 280px)',
+          maxHeight: 280,
           overflowY: 'auto',
           paddingLeft: '1rem',
         }}
@@ -139,6 +143,7 @@ export function FooterBar({ projects, viewMode, onViewMode, activeIndex, onActiv
                 opacity: i === activeIndex ? 1 : 0.38,
                 fontWeight: i === activeIndex ? 600 : 400,
                 textAlign: 'right',
+                whiteSpace: 'nowrap',
               }}
             >
               {p.title}

@@ -4,6 +4,9 @@ export type Messages = {
   header: {
     name: string
     role: string
+    home: string
+    projects: string
+    projectsMenuAria: string
     about: string
     contact: string
     navAria: string
@@ -60,8 +63,15 @@ export type Messages = {
       njupt: {
         role: string
         period: string
-        body: string
+        items: string[]
       }
+    }
+    contactCta: {
+      title: string
+      wechatPhoneLabel: string
+      emailLabel: string
+      phone: string
+      email: string
     }
     timeline: {
       navAria: string
@@ -73,7 +83,7 @@ export type Messages = {
     }
   }
   footer: {
-    bio: string
+    bioLines: string[]
     botLink: string
     ariaGrid: string
     ariaStack: string
@@ -116,6 +126,10 @@ export type Messages = {
     viewSite: string
     notFound: string
     galleryAria: string
+    /** 缩略图按钮：打开全屏查看 */
+    galleryOpenFullscreenAria: string
+    /** 全屏层 dialog 的无障碍名称 */
+    galleryLightboxAria: string
   }
 }
 
@@ -128,6 +142,9 @@ export const translations: Record<Locale, Messages> = {
     header: {
       name: 'REN WENQIAN',
       role: 'Product Designer',
+      home: 'Home',
+      projects: 'Projects',
+      projectsMenuAria: 'Project list',
       about: 'About',
       contact: 'Contact',
       navAria: 'Primary navigation',
@@ -205,8 +222,19 @@ export const translations: Record<Locale, Messages> = {
         njupt: {
           role: 'Nanjing University of Posts and Telecommunications · B.S., Software Engineering',
           period: '2012.09 - 2016.07',
-          body: 'Vice President of the New Media Society: content planning, collateral design, and publishing for the university’s official new media channels.',
+          items: [
+            'Coursework included advanced mathematics, data structures, algorithm analysis, computer networks, Android/iOS software development, databases, and related computer science topics.',
+            'Vice President of the New Media Society: content planning, collateral design, and publishing for the university’s official new media channels.',
+            'University entrepreneurship competition (national silver award, provincial silver award); SmileGate Creative Contest (Logo design track, second prize).',
+          ],
         },
+      },
+      contactCta: {
+        title: 'Feel free to contact me',
+        wechatPhoneLabel: 'WeChat / Phone',
+        emailLabel: 'Email',
+        phone: '18362976211',
+        email: 'rriwen@gmail.com',
       },
       timeline: {
         navAria: 'Jump to experience on this page',
@@ -218,7 +246,11 @@ export const translations: Record<Locale, Messages> = {
       },
     },
     footer: {
-      bio: "I'm Ren Wenqian, a product designer. From business insight, through concept design, to building products. I believe that great products care about both how they work and how they feel.",
+      bioLines: [
+        "I'm Ren Wenqian, a product designer.",
+        'From business insight, through concept design, to building products.',
+        'I believe that great products care about both how they work and how they feel.',
+      ],
       botLink: 'Talk to Me',
       ariaGrid: 'Grid view',
       ariaStack: 'Stack view',
@@ -256,7 +288,7 @@ export const translations: Record<Locale, Messages> = {
       thinking: 'Thinking…',
       quickToggleAria: 'Show or hide suggested prompts',
       systemPrompt:
-        'You are the conversational assistant for Ren Wenqian’s portfolio site. She is a product designer with strong UX, design systems, and AI product experience (e.g. work at OceanBase / Ant Group). Answer clearly and concisely; stay factual and grounded in typical portfolio / résumé topics. If the user asks for personal contact, collaboration, or hiring, politely point them to the site’s Contact section. Match the user’s language: reply in English for English messages, in Chinese for Chinese messages.',
+        'You are the conversational assistant for Ren Wenqian’s portfolio site. Summarize and answer users using only information that appears on this website—such as About, individual project detail pages, Contact details, footer copy, and other on-site text. Do not invent facts, employers, projects, metrics, or opinions beyond what those sources state; “no free elaboration” means no guessing—faithful, thorough coverage of on-site material is encouraged. When interpreting each question, apply fuzzy keyword matching (synonyms, abbreviations, loose or inexact wording) and semantic understanding to map the user’s intent to the closest relevant on-site topic, then answer by faithfully synthesizing that material; mapping is for finding the right on-site basis, not for guessing off-site. Prefer detailed, well-structured answers when the site provides enough detail: organize clearly, walk through relevant points, and quote or paraphrase closely—depth must come from what is on the site, not from speculation. If the site has no relevant content, say so briefly and point users to the appropriate page or the Contact section. For personal contact, collaboration, or hiring, direct users to Contact. Match the user’s language: English for English messages, Chinese for Chinese messages.',
     },
     cardStack: {
       stackAria: 'Project stack',
@@ -264,15 +296,20 @@ export const translations: Record<Locale, Messages> = {
     },
     workDetail: {
       back: 'Back',
-      viewSite: 'View the site',
+      viewSite: 'View the site ↗',
       notFound: 'This project could not be found.',
       galleryAria: 'Project imagery',
+      galleryOpenFullscreenAria: 'View image fullscreen',
+      galleryLightboxAria: 'Fullscreen image',
     },
   }),
   zh: deepFreezeMessages({
     header: {
       name: 'REN WENQIAN',
       role: '产品设计师',
+      home: '首页',
+      projects: '项目',
+      projectsMenuAria: '项目列表',
       about: '关于',
       contact: '联系',
       navAria: '主导航',
@@ -297,7 +334,7 @@ export const translations: Record<Locale, Messages> = {
         afterName2: '，一名懂 AI、懂用户、懂数据、能落地的产品设计师。',
       },
       body2:
-        '主导过 Agent 记忆插件、智能问数等 AI 产品设计，擅长把 AI 技术转化为对用户或 Agent 友好的产品功能和交互，用数据驱动体验决策，也自己造插件工具来提效。',
+        '主导过 Agent 记忆插件、智能问数等 AI 产品设计，擅长把 AI 技术转化为对用户或 Agent 友好的产品功能和交互，用数据驱动体验决策，也自己造插件工具来优化设计工作流。',
       body3a:
         '负责过数据库运维、数据开发工具等产品体验，通过搭建体验度量体系发现关键断点，针对性优化信息架构与操作流程，让产品自助使用率从15%提升到',
       body3b: '，用户满意度提高',
@@ -312,7 +349,7 @@ export const translations: Record<Locale, Messages> = {
             {
               keyword: 'AI 产品探索与落地',
               detail:
-                '：主导多个 AI 产品从 0 到 1 孵化（OpenClaw 记忆插件、智能问数、SQL 生成补全），负责业务洞察与产品方案探索，快速将技术能力转化为对用户或 Agent 友好的功能。通过设计可视化执行过程建立用户信任并推动上线，核心场景下用户对生成结果的采纳率从 18% 提升至 60%；',
+                '：主导多个 AI 产品（OpenClaw 记忆插件、智能问数、SQL 生成补全） 0 到 1 孵化落地和持续迭代；负责业务洞察与产品方案探索，快速将技术能力转化为对用户或 Agent 友好的功能；通过设计可视化执行过程建立用户信任并推动上线，核心场景下用户对生成结果的采纳率从 18% 提升至 60%；',
             },
             {
               keyword: 'AI 设计系统沉淀',
@@ -356,8 +393,19 @@ export const translations: Record<Locale, Messages> = {
         njupt: {
           role: '南京邮电大学 · 软件工程本科',
           period: '2012.09 - 2016.07',
-          body: '新媒体社团副主席，负责官方新媒体平台内容策划、物料设计与发布；大学生创业计划竞赛（全国银奖、江苏省银奖），SmileGate 创意大赛（Logo 设计组二等奖）。',
+          items: [
+            '学习高等数学、数据结构、算法分析、计算机网络、Android/iOS软件开发、数据库等相关计算机课程；',
+            '新媒体社团副主席，负责官方新媒体平台内容策划、物料设计与发布；',
+            '大学生创业计划竞赛（全国银奖、江苏省银奖），SmileGate 创意大赛（Logo 设计组二等奖）。',
+          ],
         },
+      },
+      contactCta: {
+        title: '欢迎随时联系我',
+        wechatPhoneLabel: '微信/电话',
+        emailLabel: '邮件',
+        phone: '18362976211',
+        email: 'rriwen@gmail.com',
       },
       timeline: {
         navAria: '本页经历时间轴导航',
@@ -369,7 +417,11 @@ export const translations: Record<Locale, Messages> = {
       },
     },
     footer: {
-      bio: '我是任文倩，一名产品设计师。从业务洞察，经概念设计，到落地产品。我相信优秀的产品既要好用，也要有质感。',
+      bioLines: [
+        '我是任文倩，一名产品设计师。',
+        '从业务洞察，经概念设计，到落地产品。',
+        '我相信优秀的产品既要好用，也要有质感。',
+      ],
       botLink: '和我聊聊',
       ariaGrid: '网格视图',
       ariaStack: '堆叠视图',
@@ -385,25 +437,25 @@ export const translations: Record<Locale, Messages> = {
     chatbot: {
       dialogAria: '对话助手',
       backHome: '返回',
-      headline: '嘿！你好',
-      placeholder: '输入你的消息…',
+      headline: '嘿！聊点什么',
+      placeholder: '输入你的问题…',
       sendAria: '发送',
       closeAria: '关闭对话',
-      quickServices: '关于我',
+      quickServices: '关于你',
       quickDesignDev: '擅长领域',
       quickTimeline: '工作经历',
       quickEnquiry: '如何联系',
-      quickPromptServices: '简单介绍一下你自己，以及访客在这个网站可以了解你的哪些方面。',
-      quickPromptDesignDev: '你在产品设计、用户体验等方面主要擅长哪些领域？',
-      quickPromptTimeline: '介绍一下你的工作经历与时间线，有哪些值得一提的亮点。',
-      quickPromptContact: '如果想合作、咨询或联系，可以通过哪些方式？网站上的联系入口在哪里？',
+      quickPromptServices: '简单介绍一下你自己。',
+      quickPromptDesignDev: '你在产品设计、用户体验、产品设计等方面主要擅长哪些领域？',
+      quickPromptTimeline: '介绍一下你的工作经历，有哪些值得一提的亮点。',
+      quickPromptContact: '如果想合作或咨询，可以通过哪些方式联系？',
       noKeyHint:
-        '请在项目根目录的 .env 中配置 VITE_DEEPSEEK_API_KEY=你的密钥，保存后重新运行 dev 或 build。配置完成后对话即可使用 DeepSeek。',
+        '抱歉，暂无 API Key。',
       errorGeneric: '出错了，请稍后再试。',
       thinking: '正在思考…',
       quickToggleAria: '展开或收起快捷提问',
       systemPrompt:
-        '你是任文倩个人作品站的对话助手。她是产品设计师，擅长用户体验、设计系统、AI 产品化（例如在 OceanBase / 蚂蚁相关经历）。回答要简洁、专业、可信；内容围绕作品集与履历常见话题。若用户询问私人联系方式、合作或招聘，请礼貌引导其使用网站上的「联系」入口。根据用户语言回复：用户用中文则用中文，用户用英文则用英文。',
+        '你是任文倩个人作品站的 AI 助手。她是一名产品设计师，擅长用户体验、设计系统、AI 产品化（例如在 OceanBase / 蚂蚁相关经历）。仅根据本网站已有文案内容（如「关于我」、各项目详情、联系方式、页脚简介及站内其他文案）进行提炼、润色、归纳、总结并回答用户；不得自由发挥，不得编造站内未出现的履历、公司、项目、数据或观点。「不自由发挥」指不得臆测；在忠于站内原文的前提下，回答应尽量详细：条理清晰，覆盖与用户问题相关的要点，必要时分层展开，篇幅可以充分，但每一条仍须有站内依据。理解用户问题时，须结合关键词模糊匹配（同义表述、简称、错别字或措辞不完全一致）与语义匹配，将提问对应到站内最相关的页面或主题后再作答；匹配只用于找准站内依据，不能当作臆测借口。若站内无相关内容，请如实说明并引导用户查看对应页面或使用「联系」入口。经历与能力等表述须与各页面原文一致。文风保持专业。若用户询问私人联系方式、合作或招聘，说明联系方式（电话和邮箱）。用户用中文则以中文回复，用英文则以英文回复。',
     },
     cardStack: {
       stackAria: '项目堆叠',
@@ -411,9 +463,11 @@ export const translations: Record<Locale, Messages> = {
     },
     workDetail: {
       back: '返回',
-      viewSite: '查看站点',
+      viewSite: '查看站点 ↗',
       notFound: '未找到该项目。',
       galleryAria: '项目配图',
+      galleryOpenFullscreenAria: '全屏查看图片',
+      galleryLightboxAria: '全屏图片',
     },
   }),
 }
