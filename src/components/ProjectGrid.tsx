@@ -86,6 +86,7 @@ export function ProjectGrid({ projects, activeIndex, onOpenProject }: Props) {
                 fontWeight: isActive ? 700 : isHover ? 600 : 400,
                 color: isHover || isActive ? '#0a0a0a' : 'rgba(10,10,10,0.78)',
                 transition: `color 0.3s ${ease}`,
+                backgroundColor: '#fff',
               }}
             >
               {p.title}

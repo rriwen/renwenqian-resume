@@ -40,6 +40,7 @@ export function Home({ viewMode, onViewMode }: Props) {
         display: 'flex',
         flexDirection: 'column',
         overflow: 'hidden',
+        backgroundColor: '#F3F6FC',
       }}
     >
       <div

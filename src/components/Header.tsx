@@ -8,6 +8,7 @@ export function Header() {
   const { pathname } = useLocation()
   const { m } = useLanguage()
   const projectPathMatch = pathname.startsWith('/project/')
+  const isHome = pathname === '/'
 
   return (
     <header
@@ -17,7 +18,7 @@ export function Header() {
         right: 0,
         top: 0,
         zIndex: 50,
-        backgroundColor: 'rgba(255, 255, 255, 1)',
+        backgroundColor: isHome ? 'rgba(255, 255, 255, 0)' : 'rgba(255, 255, 255, 1)',
         paddingLeft: '1.5rem',
         paddingRight: '1.5rem',
         paddingTop: '16px',

@@ -27,7 +27,7 @@ export function FooterBar({ projects, viewMode, onViewMode, activeIndex, onActiv
         pointerEvents: 'none',
         marginTop: 'auto',
         background:
-          'linear-gradient(to top, #fff 0%, rgba(255,255,255,0.95) 42%, rgba(255,255,255,0.72) 72%, rgba(255,255,255,0) 100%)',
+          'linear-gradient(to top, #F3F6FC 0%, rgba(243, 246, 252, 0.95) 42%, rgba(243, 246, 252, 0.72) 72%, rgba(243, 246, 252, 0) 100%)',
       }}
     >
       <div style={{ pointerEvents: 'auto', width: 413, boxSizing: 'border-box' }}>
