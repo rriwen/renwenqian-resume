@@ -2,8 +2,9 @@ import { createElement, useEffect, useState, type CSSProperties } from 'react'
 import { createPortal } from 'react-dom'
 import { Link, useParams } from 'react-router-dom'
 import { getProjectDetail, type ProjectDetailParagraph } from '../data/projectDetails'
-import { getProjectBySlug } from '../data/projects'
+import { getAdjacentProjects, getProjectBySlug } from '../data/projects'
 import { useLanguage } from '../i18n/LanguageContext'
+import { isGifSrc } from '../lib/isGifSrc'
 
 const body: CSSProperties = {
   margin: '0 0 1rem',
@@ -25,14 +26,14 @@ function renderParagraphContent(para: ProjectDetailParagraph) {
   )
 }
 
-type LightboxItem = { src: string; caption: string }
-
 export function ProjectDetail() {
   const { slug } = useParams<{ slug: string }>()
   const { locale, m } = useLanguage()
   const project = getProjectBySlug(slug)
   const detail = project ? getProjectDetail(project.slug, locale) : undefined
-  const [lightbox, setLightbox] = useState<LightboxItem | null>(null)
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
+  const [lightboxIntrinsic, setLightboxIntrinsic] = useState<{ w: number; h: number } | null>(null)
+  const [heroIntrinsic, setHeroIntrinsic] = useState<{ w: number; h: number } | null>(null)
 
   useEffect(() => {
     if (project) {
@@ -43,22 +44,38 @@ export function ProjectDetail() {
   }, [project, m.home.title])
 
   useEffect(() => {
-    setLightbox(null)
+    setLightboxIndex(null)
   }, [slug])
 
   useEffect(() => {
-    if (!lightbox) return
+    setHeroIntrinsic(null)
+  }, [project?.image])
+
+  const galleryLen = detail?.gallery.length ?? 0
+
+  useEffect(() => {
+    setLightboxIntrinsic(null)
+  }, [lightboxIndex])
+
+  useEffect(() => {
+    if (lightboxIndex === null) return
     const prev = document.body.style.overflow
     document.body.style.overflow = 'hidden'
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setLightbox(null)
+      if (e.key === 'Escape') setLightboxIndex(null)
+      if (e.key === 'ArrowLeft') {
+        setLightboxIndex((i) => (i !== null && i > 0 ? i - 1 : i))
+      }
+      if (e.key === 'ArrowRight') {
+        setLightboxIndex((i) => (i !== null && i < galleryLen - 1 ? i + 1 : i))
+      }
     }
     window.addEventListener('keydown', onKey)
     return () => {
       document.body.style.overflow = prev
       window.removeEventListener('keydown', onKey)
     }
-  }, [lightbox])
+  }, [lightboxIndex, galleryLen])
 
   if (!project || !detail) {
     return (
@@ -73,6 +90,7 @@ export function ProjectDetail() {
         <p style={{ ...body, marginTop: '0.5rem' }}>{m.workDetail.notFound}</p>
         <Link
           to="/"
+          className="project-detail-back-link"
           style={{
             display: 'inline-block',
             marginTop: '1.25rem',
@@ -80,8 +98,6 @@ export function ProjectDetail() {
             letterSpacing: '0.14em',
             textTransform: 'uppercase',
             fontWeight: 600,
-            textDecoration: 'underline',
-            textUnderlineOffset: 4,
           }}
         >
           {m.workDetail.back}
@@ -89,6 +105,8 @@ export function ProjectDetail() {
       </main>
     )
   }
+
+  const { prev: prevProject, next: nextProject } = getAdjacentProjects(project.slug)
 
   return (
     <main
@@ -101,6 +119,7 @@ export function ProjectDetail() {
     >
       <Link
         to="/"
+        className="project-detail-back-link"
         style={{
           display: 'inline-block',
           marginBottom: '1.75rem',
@@ -109,9 +128,6 @@ export function ProjectDetail() {
           textTransform: 'uppercase',
           fontWeight: 600,
           opacity: 0.55,
-          textDecoration: 'none',
-          borderBottom: '1px solid rgba(10,10,10,0.2)',
-          paddingBottom: 2,
         }}
       >
         {m.workDetail.back}
@@ -119,18 +135,36 @@ export function ProjectDetail() {
 
       <div
         style={{
-          borderRadius: 4,
+          borderRadius: 8,
           overflow: 'hidden',
           marginBottom: '2.25rem',
-          aspectRatio: '16 / 9',
-          maxHeight: 420,
-          background: '#0a0a0a',
+          width: '100%',
+          background: '#eaeaea',
+          border: '1px solid rgba(10, 10, 10, 0.04)',
+          boxSizing: 'border-box',
+          display: 'flex',
+          justifyContent: 'center',
         }}
       >
         <img
           src={project.image}
           alt=""
-          style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+          loading={isGifSrc(project.image) ? 'eager' : undefined}
+          decoding="async"
+          onLoad={(e) => {
+            const { naturalWidth, naturalHeight } = e.currentTarget
+            if (naturalWidth > 0 && naturalHeight > 0) {
+              setHeroIntrinsic({ w: naturalWidth, h: naturalHeight })
+            }
+          }}
+          style={{
+            maxWidth: heroIntrinsic ? `min(100%, ${heroIntrinsic.w}px)` : '100%',
+            width: heroIntrinsic ? 'auto' : '100%',
+            height: 'auto',
+            objectFit: 'contain',
+            objectPosition: 'center top',
+            display: 'block',
+          }}
         />
       </div>
 
@@ -291,23 +325,26 @@ export function ProjectDetail() {
               <button
                 type="button"
                 aria-label={`${m.workDetail.galleryOpenFullscreenAria}: ${item.caption}`}
-                onClick={() => setLightbox({ src: item.src, caption: item.caption })}
+                onClick={() => setLightboxIndex(idx)}
                 style={{
                   display: 'block',
                   width: '100%',
                   margin: 0,
                   padding: 0,
-                  border: 'none',
+                  border: '1px solid rgba(10, 10, 10, 0.04)',
                   borderRadius: 4,
+                  boxSizing: 'border-box',
                   overflow: 'hidden',
                   cursor: 'zoom-in',
                   background: '#eaeaea',
-                  aspectRatio: '4 / 3',
+                  aspectRatio: '16 / 9',
                 }}
               >
                 <img
                   src={item.src}
                   alt=""
+                  loading={isGifSrc(item.src) ? 'eager' : undefined}
+                  decoding="async"
                   style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', pointerEvents: 'none' }}
                 />
               </button>
@@ -326,7 +363,89 @@ export function ProjectDetail() {
         </div>
       </section>
 
-      {lightbox &&
+      {prevProject || nextProject ? (
+        <nav
+          aria-label={m.workDetail.projectNavAria}
+          style={{
+            marginTop: '120px',
+            paddingTop: '1.75rem',
+            borderTop: '1px solid rgba(10, 10, 10, 0.1)',
+          }}
+        >
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)',
+              gap: '1.5rem',
+              alignItems: 'start',
+            }}
+          >
+            <div style={{ minWidth: 0 }}>
+              {prevProject ? (
+                <>
+                  <p
+                    style={{
+                      margin: '0 0 0.35rem',
+                      fontSize: '0.68rem',
+                      letterSpacing: locale === 'zh' ? '0.06em' : '0.1em',
+                      textTransform: locale === 'zh' ? 'none' : 'uppercase',
+                      fontWeight: 600,
+                      opacity: 0.5,
+                    }}
+                  >
+                    {m.workDetail.prevProject}
+                  </p>
+                  <Link
+                    to={`/project/${prevProject.slug}`}
+                    className="project-detail-adjacent-link"
+                    style={{
+                      fontSize: '0.95rem',
+                      fontWeight: 600,
+                      lineHeight: 1.4,
+                      color: 'inherit',
+                    }}
+                  >
+                    {prevProject.title}
+                  </Link>
+                </>
+              ) : null}
+            </div>
+            <div style={{ minWidth: 0, textAlign: 'right' }}>
+              {nextProject ? (
+                <>
+                  <p
+                    style={{
+                      margin: '0 0 0.35rem',
+                      fontSize: '0.68rem',
+                      letterSpacing: locale === 'zh' ? '0.06em' : '0.1em',
+                      textTransform: locale === 'zh' ? 'none' : 'uppercase',
+                      fontWeight: 600,
+                      opacity: 0.5,
+                    }}
+                  >
+                    {m.workDetail.nextProject}
+                  </p>
+                  <Link
+                    to={`/project/${nextProject.slug}`}
+                    className="project-detail-adjacent-link"
+                    style={{
+                      fontSize: '0.95rem',
+                      fontWeight: 600,
+                      lineHeight: 1.4,
+                      color: 'inherit',
+                    }}
+                  >
+                    {nextProject.title}
+                  </Link>
+                </>
+              ) : null}
+            </div>
+          </div>
+        </nav>
+      ) : null}
+
+      {lightboxIndex !== null &&
+        detail.gallery[lightboxIndex] &&
         createPortal(
           <div
             role="dialog"
@@ -345,12 +464,12 @@ export function ProjectDetail() {
               paddingTop: 'max(0.75rem, env(safe-area-inset-top))',
               paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))',
             }}
-            onClick={() => setLightbox(null)}
+            onClick={() => setLightboxIndex(null)}
           >
             <button
               type="button"
               aria-label={m.contact.closeAria}
-              onClick={() => setLightbox(null)}
+              onClick={() => setLightboxIndex(null)}
               style={{
                 position: 'absolute',
                 top: '10px',
@@ -368,6 +487,66 @@ export function ProjectDetail() {
             >
               ×
             </button>
+            {galleryLen > 1 && lightboxIndex > 0 ? (
+              <button
+                type="button"
+                aria-label={m.workDetail.galleryPrevAria}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  setLightboxIndex((i) => (i !== null && i > 0 ? i - 1 : i))
+                }}
+                style={{
+                  position: 'absolute',
+                  left: 'max(10px, env(safe-area-inset-left))',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  width: 44,
+                  height: 44,
+                  border: 'none',
+                  borderRadius: 4,
+                  background: 'rgba(10,10,10,0.06)',
+                  color: '#0a0a0a',
+                  fontSize: '1.25rem',
+                  lineHeight: 1,
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                ‹
+              </button>
+            ) : null}
+            {galleryLen > 1 && lightboxIndex < galleryLen - 1 ? (
+              <button
+                type="button"
+                aria-label={m.workDetail.galleryNextAria}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  setLightboxIndex((i) => (i !== null && i < galleryLen - 1 ? i + 1 : i))
+                }}
+                style={{
+                  position: 'absolute',
+                  right: 'max(10px, env(safe-area-inset-right))',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  width: 44,
+                  height: 44,
+                  border: 'none',
+                  borderRadius: 4,
+                  background: 'rgba(10,10,10,0.06)',
+                  color: '#0a0a0a',
+                  fontSize: '1.25rem',
+                  lineHeight: 1,
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                ›
+              </button>
+            ) : null}
             <div
               onClick={(e) => e.stopPropagation()}
               style={{
@@ -375,22 +554,40 @@ export function ProjectDetail() {
                 flexDirection: 'column',
                 alignItems: 'center',
                 gap: '0.85rem',
-                maxWidth: '100%',
-                maxHeight: '100%',
+                maxWidth: 'min(100%, calc(100vw - 3rem))',
+                maxHeight: 'min(calc(100dvh - 5.5rem), 100%)',
+                minHeight: 0,
               }}
             >
               <img
-                src={lightbox.src}
-                alt={lightbox.caption}
+                key={lightboxIndex}
+                src={detail.gallery[lightboxIndex].src}
+                alt={detail.gallery[lightboxIndex].caption}
+                loading={isGifSrc(detail.gallery[lightboxIndex].src) ? 'eager' : undefined}
+                decoding="async"
+                onLoad={(e) => {
+                  const { naturalWidth, naturalHeight } = e.currentTarget
+                  if (naturalWidth > 0 && naturalHeight > 0) {
+                    setLightboxIntrinsic({ w: naturalWidth, h: naturalHeight })
+                  }
+                }}
                 style={{
-                  maxWidth: '100%',
-                  maxHeight: '100%',
+                  maxWidth: lightboxIntrinsic ? `min(100%, ${lightboxIntrinsic.w}px)` : '100%',
+                  maxHeight: lightboxIntrinsic
+                    ? `min(min(calc(100dvh - 8.5rem), 85dvh), ${lightboxIntrinsic.h}px)`
+                    : 'min(calc(100dvh - 8.5rem), 85dvh)',
                   width: 'auto',
                   height: 'auto',
                   objectFit: 'contain',
+                  objectPosition: 'center',
                   display: 'block',
                   borderRadius: 2,
                   boxShadow: '0 24px 48px rgba(0,0,0,0.12)',
+                  ...(isGifSrc(detail.gallery[lightboxIndex].src)
+                    ? {
+                        imageRendering: 'smooth',
+                      }
+                    : {}),
                 }}
               />
               <p
@@ -404,7 +601,7 @@ export function ProjectDetail() {
                   letterSpacing: locale === 'zh' ? '0.01em' : '0.02em',
                 }}
               >
-                {lightbox.caption}
+                {detail.gallery[lightboxIndex].caption}
               </p>
             </div>
           </div>,

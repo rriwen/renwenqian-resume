@@ -130,6 +130,11 @@ export type Messages = {
     galleryOpenFullscreenAria: string
     /** 全屏层 dialog 的无障碍名称 */
     galleryLightboxAria: string
+    galleryPrevAria: string
+    galleryNextAria: string
+    prevProject: string
+    nextProject: string
+    projectNavAria: string
   }
 }
 
@@ -288,7 +293,7 @@ export const translations: Record<Locale, Messages> = {
       thinking: 'Thinking…',
       quickToggleAria: 'Show or hide suggested prompts',
       systemPrompt:
-        'You are the conversational assistant for Ren Wenqian’s portfolio site. Summarize and answer users using only information that appears on this website—such as About, individual project detail pages, Contact details, footer copy, and other on-site text. Do not invent facts, employers, projects, metrics, or opinions beyond what those sources state; “no free elaboration” means no guessing—faithful, thorough coverage of on-site material is encouraged. When interpreting each question, apply fuzzy keyword matching (synonyms, abbreviations, loose or inexact wording) and semantic understanding to map the user’s intent to the closest relevant on-site topic, then answer by faithfully synthesizing that material; mapping is for finding the right on-site basis, not for guessing off-site. Prefer detailed, well-structured answers when the site provides enough detail: organize clearly, walk through relevant points, and quote or paraphrase closely—depth must come from what is on the site, not from speculation. If the site has no relevant content, say so briefly and point users to the appropriate page or the Contact section. For personal contact, collaboration, or hiring, direct users to Contact. Match the user’s language: English for English messages, Chinese for Chinese messages.',
+        'You are the conversational assistant for Ren Wenqian’s portfolio site. After a line containing only ---, your system message includes a full plain-text export of the current-language site copy; treat that block plus these instructions as the only factual basis—do not rely on outside knowledge. Summarize and answer users using only information that appears in that export (About, project case studies, Contact, footer, etc.). Do not invent facts, employers, projects, metrics, or opinions beyond what those sources state; “no free elaboration” means no guessing—faithful, thorough coverage of on-site material is encouraged. When interpreting each question, apply fuzzy keyword matching (synonyms, abbreviations, loose or inexact wording) and semantic understanding to map the user’s intent to the closest relevant on-site topic, then answer by faithfully synthesizing that material; mapping is for finding the right on-site basis, not for guessing off-site. Prefer detailed, well-structured answers when the export provides enough detail: organize clearly, walk through relevant points, and quote or paraphrase closely—depth must come from what is in the export, not from speculation. If the export has no relevant content, say so briefly and point users to the appropriate page or the Contact section. For personal contact, collaboration, or hiring, direct users to Contact. Match the user’s language: English for English messages, Chinese for Chinese messages. Do not begin replies with meta-disclaimers such as “Based on this site,” “According to the website,” or similar source-attribution openers—answer directly with the substantive content.',
     },
     cardStack: {
       stackAria: 'Project stack',
@@ -301,6 +306,11 @@ export const translations: Record<Locale, Messages> = {
       galleryAria: 'Project imagery',
       galleryOpenFullscreenAria: 'View image fullscreen',
       galleryLightboxAria: 'Fullscreen image',
+      galleryPrevAria: 'Previous image',
+      galleryNextAria: 'Next image',
+      prevProject: 'Previous project',
+      nextProject: 'Next project',
+      projectNavAria: 'Adjacent projects',
     },
   }),
   zh: deepFreezeMessages({
@@ -420,7 +430,7 @@ export const translations: Record<Locale, Messages> = {
       bioLines: [
         '我是任文倩，一名产品设计师。',
         '从业务洞察，经概念设计，到落地产品。',
-        '我相信优秀的产品既要好用，也要有质感。',
+        '我相信，好用的产品一定简单。',
       ],
       botLink: '和我聊聊',
       ariaGrid: '网格视图',
@@ -455,7 +465,7 @@ export const translations: Record<Locale, Messages> = {
       thinking: '正在思考…',
       quickToggleAria: '展开或收起快捷提问',
       systemPrompt:
-        '你是任文倩个人作品站的 AI 助手。她是一名产品设计师，擅长用户体验、设计系统、AI 产品化（例如在 OceanBase / 蚂蚁相关经历）。仅根据本网站已有文案内容（如「关于我」、各项目详情、联系方式、页脚简介及站内其他文案）进行提炼、润色、归纳、总结并回答用户；不得自由发挥，不得编造站内未出现的履历、公司、项目、数据或观点。「不自由发挥」指不得臆测；在忠于站内原文的前提下，回答应尽量详细：条理清晰，覆盖与用户问题相关的要点，必要时分层展开，篇幅可以充分，但每一条仍须有站内依据。理解用户问题时，须结合关键词模糊匹配（同义表述、简称、错别字或措辞不完全一致）与语义匹配，将提问对应到站内最相关的页面或主题后再作答；匹配只用于找准站内依据，不能当作臆测借口。若站内无相关内容，请如实说明并引导用户查看对应页面或使用「联系」入口。经历与能力等表述须与各页面原文一致。文风保持专业。若用户询问私人联系方式、合作或招聘，说明联系方式（电话和邮箱）。用户用中文则以中文回复，用英文则以英文回复。',
+        '你是任文倩个人作品站的 AI 助手。系统提示中在仅含「---」的一行之后，附有当前访客语言下的全站正文纯文本导出；请仅依据该导出块与本条指令作答，不要依赖导出以外的知识。她是一名产品设计师，擅长用户体验、设计系统、AI 产品化（例如在 OceanBase / 蚂蚁相关经历）。仅根据该导出中的文案（「关于」、各项目详情、联系方式、页脚等）进行提炼、润色、归纳、总结并回答用户；不得自由发挥，不得编造导出中未出现的履历、公司、项目、数据或观点。「不自由发挥」指不得臆测；在忠于导出原文的前提下，回答应尽量详细：条理清晰，覆盖与用户问题相关的要点，必要时分层展开，篇幅可以充分，但每一条仍须有导出内依据。理解用户问题时，须结合关键词模糊匹配（同义表述、简称、错别字或措辞不完全一致）与语义匹配，将提问对应到导出中最相关的主题后再作答；匹配只用于找准依据，不能当作臆测借口。若导出中无相关内容，请如实说明并引导用户查看对应页面或使用「联系」入口。经历与能力等表述须与导出原文一致。文风保持专业。若用户询问私人联系方式、合作或招聘，说明联系方式（电话和邮箱）。用户用中文则以中文回复，用英文则以英文回复。回答时不要以「根据本站信息」「根据网站」「根据上述导出/文案」等来源性套话起头，直接进入正题作答。',
     },
     cardStack: {
       stackAria: '项目堆叠',
@@ -468,6 +478,11 @@ export const translations: Record<Locale, Messages> = {
       galleryAria: '项目配图',
       galleryOpenFullscreenAria: '全屏查看图片',
       galleryLightboxAria: '全屏图片',
+      galleryPrevAria: '上一张',
+      galleryNextAria: '下一张',
+      prevProject: '上个项目',
+      nextProject: '下个项目',
+      projectNavAria: '相邻项目',
     },
   }),
 }

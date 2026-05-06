@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import type { Project } from '../data/projects'
+import { isGifSrc } from '../lib/isGifSrc'
 
 type Props = {
   projects: Project[]
@@ -30,6 +31,7 @@ export function ProjectGrid({ projects, activeIndex, onOpenProject }: Props) {
       {projects.map((p, i) => {
         const isActive = i === activeIndex
         const isHover = hovered === i
+        const gifCover = isGifSrc(p.image)
 
         return (
           <button
@@ -61,6 +63,8 @@ export function ProjectGrid({ projects, activeIndex, onOpenProject }: Props) {
                 src={p.image}
                 alt=""
                 draggable={false}
+                loading={gifCover ? 'eager' : undefined}
+                decoding="async"
                 style={{
                   width: '100%',
                   height: '100%',

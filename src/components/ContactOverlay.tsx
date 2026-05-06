@@ -21,6 +21,10 @@ export function ContactOverlay() {
     setOpen(false)
   }, [])
 
+  const openChat = useCallback(() => {
+    window.location.hash = '#chat'
+  }, [])
+
   useEffect(() => {
     sync()
     window.addEventListener('hashchange', sync)
@@ -119,6 +123,27 @@ export function ContactOverlay() {
             18362976211
           </div>
         </div>
+        <button
+          type="button"
+          onClick={openChat}
+          style={{
+            marginTop: '1.35rem',
+            width: '100%',
+            padding: '0.65rem 1rem',
+            font: 'inherit',
+            fontSize: '0.78rem',
+            fontWeight: 600,
+            letterSpacing: '0.14em',
+            textTransform: 'none',
+            color: '#0a0a0a',
+            background: 'rgba(10,10,10,0.06)',
+            border: '1px solid rgba(10,10,10,0.12)',
+            borderRadius: 8,
+            cursor: 'pointer',
+          }}
+        >
+          {m.footer.botLink}
+        </button>
       </div>
     </div>
   )

@@ -143,6 +143,24 @@ button {
   background: rgba(10, 10, 10, 0.1);
 }
 
+/* Project detail: back link — underline only on hover */
+.project-detail-back-link {
+  text-decoration: none;
+}
+.project-detail-back-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Project detail: prev/next project links — underline only on hover */
+.project-detail-adjacent-link {
+  text-decoration: none;
+}
+.project-detail-adjacent-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 /* About: fixed narrow ruler-style timeline (ticks + spine; hover shows time point) */
 .about-timeline-nav {
   --about-timeline-edge-inset: 48px;

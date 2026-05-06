@@ -8,6 +8,7 @@ export type ProjectDetailHighlight = {
 }
 
 export type ProjectGalleryItem = {
+  /** 配图 URL（如 `/images/xxx.gif`）；支持 jpg/webp/png 及 **GIF 动图** */
   src: string
   /** 配图下方说明（与 locale 一致的语言） */
   caption: string
@@ -80,8 +81,8 @@ const details: Record<string, { en: ProjectDetailBlock; zh: ProjectDetailBlock }
         'The product was incubated and went live within two weeks; it is now in public beta, and commercialization planning is underway.',
       externalUrl: 'https://m0.seekdb.ai/',
       gallery: [
-        { src: '/images/work-5.webp', caption: 'Memory management interaction.' },
-        { src: '/images/work-4.webp', caption: 'Experience accumulation logic.' },
+        { src: '/images/memory-m0-admin.gif', caption: 'Memory management interaction.' },
+        { src: '/images/memory-m0-experience-flow.png', caption: 'Experience accumulation logic.' },
       ],
     },
     zh: {
@@ -105,8 +106,8 @@ const details: Record<string, { en: ProjectDetailBlock; zh: ProjectDetailBlock }
         '产品在两周内快速孵化落地，目前已进入公测阶段、正在启动商业化规划。',
       externalUrl: 'https://m0.seekdb.ai/',
       gallery: [
-        { src: '/images/work-5.webp', caption: '记忆管理交互' },
-        { src: '/images/work-4.webp', caption: '经验沉淀逻辑' },
+        { src: '/images/memory-m0-admin.gif', caption: '记忆管理交互' },
+        { src: '/images/memory-m0-experience-flow.png', caption: '经验沉淀逻辑' },
       ],
     },
   },
@@ -118,12 +119,26 @@ const details: Record<string, { en: ProjectDetailBlock; zh: ProjectDetailBlock }
         'The project focused on progressive disclosure for expert users, consistent language across SQL and conversational entry points, and states that stay legible under load and partial failures.',
       ],
       gallery: [
-        { src: '/images/work-3.webp', caption: 'Conversational workspace — NL intent and assisted flows.' },
-        { src: '/images/work-6.webp', caption: 'Diagnostics — signals, recommendations, and drill-down.' },
+        {
+          src: '/images/datapilot-metric-layer-data.png',
+          caption: 'Metric layer data management — table structure & field semantics.',
+        },
+        {
+          src: '/images/datapilot-metric-layer-modeling.png',
+          caption: 'Metric layer data modeling — canvas view for table relationships.',
+        },
+        {
+          src: '/images/datapilot-ai-serial-execution.png',
+          caption: 'Serial AI execution — chat, chart, and transparent pipeline (metrics → DSL → SQL).',
+        },
+        {
+          src: '/images/datapilot-ai-parallel-execution.png',
+          caption: 'Parallel AI execution — multi-expert workflow canvas with conversational progress.',
+        },
       ],
     },
     zh: {
-      tags: ['Web 应用', '数据产品', 'B 端'],
+      tags: ['AI 数据分析', 'Web 应用', 'B 端'],
       paragraphs: [
         'Datapilot 是面向业务团队的 AI 智能数据分析产品。公司希望基于现有的 Text2SQL 技术进行产品化落地，降低数据使用门槛的同时寻找产品商业化路径。初期产品技术方案仅靠提示词工程，AI 生成 SQL 的准确率仅 25%，远未达到可用标准，用户对结果缺乏信任，产品面临失败风险。',
       ],
@@ -155,7 +170,7 @@ const details: Record<string, { en: ProjectDetailBlock; zh: ProjectDetailBlock }
               {
                 title: '设计模式沉淀',
                 body:
-                  '形成了一套可复用的 AI 产品交互设计模式（执行过程可视化 + 分支管理 + 语义中介解释），为后续 AI 产品的设计提供参考框架。',
+                  '形成了一套可复用的 AI 产品交互设计模式（执行过程可视化 + 分支管理），为后续 AI 产品的设计提供参考框架。',
               },
             ],
           },
@@ -166,8 +181,10 @@ const details: Record<string, { en: ProjectDetailBlock; zh: ProjectDetailBlock }
         '产品二期正在计划引入自然语言交互，用户通过对话式描述直接生成指标配置，降低学习成本与操作步骤；同时探索模板化配置、智能推荐等设计策略，进一步平滑上手体验，提升易用性体验。',
       ],
       gallery: [
-        { src: '/images/work-3.webp', caption: '指标层管理' },
-        { src: '/images/work-6.webp', caption: 'AI 对话交互模式' },
+        { src: '/images/datapilot-metric-layer-data.png', caption: '指标层数据管理' },
+        { src: '/images/datapilot-metric-layer-modeling.png', caption: '指标层数据建模' },
+        { src: '/images/datapilot-ai-serial-execution.png', caption: 'AI 串行执行可视化' },
+        { src: '/images/datapilot-ai-parallel-execution.png', caption: 'AI 并行执行可视化(延展)' },
       ],
     },
   },
@@ -194,9 +211,12 @@ const details: Record<string, { en: ProjectDetailBlock; zh: ProjectDetailBlock }
       ],
       afterHighlightBullets:
         'It became standardized AI product design assets for the team, with reuse across product lines exceeding 70%.',
+      externalUrl: 'http://originnext.oceanbase-ai.odcfront.alipay.net/',
       gallery: [
-        { src: '/images/work-5.webp', caption: 'Prompt input & message patterns — shared primitives.' },
-        { src: '/images/work-4.webp', caption: 'Chain-of-thought and structured reasoning display.' },
+        { src: '/images/aidesignsystem-plan-component.jpg', caption: 'Plan component' },
+        { src: '/images/aidesignsystem-chain-of-thought.jpg', caption: 'Chain-of-thought and structured reasoning display.' },
+        { src: '/images/aidesignsystem-skill-exploration.jpg', caption: 'Skill exploration' },
+        { src: '/images/aidesignsystem-design-agent.jpg', caption: 'Design Agent setup' },
         { src: '/images/work-6.webp', caption: 'Component coverage across AI product surfaces.' },
         { src: '/images/work-3.webp', caption: 'Docs and usage notes for adoption.' },
       ],
@@ -210,21 +230,24 @@ const details: Record<string, { en: ProjectDetailBlock; zh: ProjectDetailBlock }
       highlightBullets: [
         {
           keyword: '共性抽象',
-          text: '梳理各 AI 产品的共性能力与交互场景，抽象出 Prompt 输入、思维链展示、消息卡片等核心组件及对应交互模式。',
+          text: '梳理各 AI 产品的共性能力与交互场景，抽象出 Prompt 输入、思维链、计划等核心组件及对应交互模式。',
         },
         {
-          keyword: '规范与文档',
-          text: '制定部分核心组件交互规范（Prompt 输入、思维链展示、消息卡片等），输出组件库。',
+          keyword: '规范文档',
+          text: '制定部分核心组件交互规范（Prompt 输入、思维链、计划等），输出组件库。',
         },
         {
           keyword: '多线落地',
           text: '形成团队 AI 产品设计的标准化资产，在多条产品线中复用率超过 70%。',
         },
       ],
-      afterHighlightBullets: '近期，探索利用 Skill 提供组件约束和工程安装说明，能实现一句话搭建简单的 AI 对话应用。',
+      afterHighlightBullets: '近期，正在探索利用 Skill 提供组件约束和工程安装说明，能实现一句话搭建简单的 AI 对话应用。',
+      externalUrl: 'http://originnext.oceanbase-ai.odcfront.alipay.net/',
       gallery: [
-        { src: '/images/work-5.webp', caption: 'Prompt 输入交互' },
-        { src: '/images/work-4.webp', caption: '思维链与结构化推理' },
+        { src: '/images/aidesignsystem-plan-component.jpg', caption: '计划组件' },
+        { src: '/images/aidesignsystem-chain-of-thought.jpg', caption: '思维链组件' },
+        { src: '/images/aidesignsystem-skill-exploration.jpg', caption: 'Skill 探索' },
+        { src: '/images/aidesignsystem-design-agent.jpg', caption: '设计 Agent 搭建' },
       ],
     },
   },
@@ -262,8 +285,9 @@ const details: Record<string, { en: ProjectDetailBlock; zh: ProjectDetailBlock }
       afterHighlightBullets:
         'After iteration, self-service completion on the core chain rose from 15% to over 75%, much closer to the three-steps-five-minutes vision, and customer support effort dropped by roughly 20%.',
       gallery: [
-        { src: '/images/work-6.webp', caption: 'Change list — dense table with clear hierarchy.' },
-        { src: '/images/work-7.webp', caption: 'Health overview — signals and status at a glance.' },
+        { src: '/images/databaseops-ux-map.jpg', caption: 'User experience map' },
+        { src: '/images/databaseops-help-guidance.jpg', caption: 'Help guidance — docs alongside the migration wizard.' },
+        { src: '/images/databaseops-funnel-before-after.jpg', caption: 'Migration funnel — before vs after optimization' },
         { src: '/images/work-2.jpg', caption: 'Approval path — gates before production risk.' },
         { src: '/images/work-5.webp', caption: 'Single control surface — tickets, signals, and actions.' },
       ],
@@ -301,9 +325,9 @@ const details: Record<string, { en: ProjectDetailBlock; zh: ProjectDetailBlock }
       afterHighlightBullets:
         '通过持续的迭代优化，核心任务链路的用户自助完成率从 15% 提升至 75% 以上，大幅接近「三步五分钟」目标，且客户技术支持成本显著降低约 20%。',
       gallery: [
-        { src: '/images/work-6.webp', caption: '对象过滤交互重构' },
-        { src: '/images/work-7.webp', caption: '帮助引导优化' },
-
+        { src: '/images/databaseops-ux-map.jpg', caption: '用户体验地图' },
+        { src: '/images/databaseops-help-guidance.jpg', caption: '数据迁移交互重构' },
+        { src: '/images/databaseops-funnel-before-after.jpg', caption: '优化前后埋点数据变化' },
       ],
     },
   },
@@ -337,10 +361,10 @@ const details: Record<string, { en: ProjectDetailBlock; zh: ProjectDetailBlock }
         'Satisfaction across the product matrix rose from 4.8 to 6.2 (out of 7), while active users roughly doubled.',
       ],
       gallery: [
-        { src: '/images/work-7.webp', caption: 'SQL editor' },
-        { src: '/images/work-3.webp', caption: 'Data table redesign' },
-        { src: '/images/work-5.webp', caption: 'Task flow editor' },
-        { src: '/images/work-6.webp', caption: 'Dark mode' },
+        { src: '/images/datadevelop-sql-editor.jpg', caption: 'SQL editor' },
+        { src: '/images/datadevelop-table-spec.jpg', caption: 'Data table redesign' },
+        { src: '/images/datadevelop-workflow.jpg', caption: 'Task flow editor' },
+        { src: '/images/datadevelop-darkmode.jpg', caption: 'Dark mode' },
       ],
     },
     zh: {
@@ -372,38 +396,10 @@ const details: Record<string, { en: ProjectDetailBlock; zh: ProjectDetailBlock }
         '目前整个产品矩阵的用户满意度从 4.8 分大幅提升至 6.2 分（满分 7 分），驱动用户数实现翻倍增长。',
       ],
       gallery: [
-        { src: '/images/work-7.webp', caption: 'SQL 编辑器' },
-        { src: '/images/work-3.webp', caption: '数据表格重构' },
-        { src: '/images/work-5.webp', caption: '任务流编辑器' },
-        { src: '/images/work-6.webp', caption: '暗黑模式' },
-      ],
-    },
-  },
-  designagent: {
-    en: {
-      tags: ['Prototype', 'Design Agent', 'Demo'],
-      paragraphs: [
-        'Design Agent (Demo) prototypes how generative assistants sit beside the canvas—suggesting variants, constraints, and rationale without taking over the file.',
-        'The demo prioritizes reversible actions, visible prompts, and a tight loop between “ask” and “inspect diff” so reviewers stay in control.',
-      ],
-      gallery: [
-        { src: '/images/work-4.webp', caption: 'Canvas + assistant — variants beside the file.' },
-        { src: '/images/work-2.jpg', caption: 'Visible prompts — exploring options without losing context.' },
-        { src: '/images/work-7.webp', caption: 'Diff review — tight ask → inspect loop.' },
-        { src: '/images/work-5.webp', caption: 'Constraints & rationale — why the suggestion fits.' },
-      ],
-    },
-    zh: {
-      tags: ['原型', '设计智能体', '演示'],
-      paragraphs: [
-        'Design Agent（演示）探索生成式助手如何与画板并存——在建议方案、约束与依据的同时，不剥夺设计师对文件的掌控。',
-        '演示强调可撤销操作、可见的提示词，以及「提问」与「查看差异」之间的紧凑闭环，便于评审者把握节奏。',
-      ],
-      gallery: [
-        { src: '/images/work-4.webp', caption: '画板与助手 — 方案与文件并排。' },
-        { src: '/images/work-2.jpg', caption: '提示词可见 — 探索选项且不丢上下文。' },
-        { src: '/images/work-7.webp', caption: '差异检视 — 提问到查看的紧凑闭环。' },
-        { src: '/images/work-5.webp', caption: '约束与依据 — 说明方案为何成立。' },
+        { src: '/images/datadevelop-sql-editor.jpg', caption: 'SQL 编辑器布局' },
+        { src: '/images/datadevelop-table-spec.jpg', caption: '数据表格重构交互细节' },
+        { src: '/images/datadevelop-workflow.jpg', caption: '任务流编辑器画布细节' },
+        { src: '/images/datadevelop-darkmode.jpg', caption: '暗黑模式' },
       ],
     },
   },

@@ -50,6 +50,7 @@ function processSseDataLine(payload: string, onDelta: (delta: string) => void): 
  */
 export async function sendDeepseekChatStream(
   systemPrompt: string,
+  siteCorpus: string,
   history: ChatTurn[],
   onDelta: (delta: string) => void,
 ): Promise<void> {
@@ -58,7 +59,10 @@ export async function sendDeepseekChatStream(
   }
 
   const url = `${apiBase()}/v1/chat/completions`
-  const messages = [{ role: 'system' as const, content: systemPrompt }, ...history]
+  const systemBody = siteCorpus.trim()
+    ? `${systemPrompt}\n\n---\n\n${siteCorpus.trim()}`
+    : systemPrompt
+  const messages = [{ role: 'system' as const, content: systemBody }, ...history]
 
   const res = await fetch(url, {
     method: 'POST',
@@ -120,6 +124,7 @@ export async function sendDeepseekChatStream(
  */
 export async function sendDeepseekChat(
   systemPrompt: string,
+  siteCorpus: string,
   history: ChatTurn[],
 ): Promise<string> {
   if (!hasDeepseekClientKey()) {
@@ -127,7 +132,10 @@ export async function sendDeepseekChat(
   }
 
   const url = `${apiBase()}/v1/chat/completions`
-  const messages = [{ role: 'system' as const, content: systemPrompt }, ...history]
+  const systemBody = siteCorpus.trim()
+    ? `${systemPrompt}\n\n---\n\n${siteCorpus.trim()}`
+    : systemPrompt
+  const messages = [{ role: 'system' as const, content: systemBody }, ...history]
 
   const res = await fetch(url, {
     method: 'POST',

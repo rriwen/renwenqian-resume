@@ -1,7 +1,9 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useLanguage } from '../i18n/LanguageContext'
 import { hasDeepseekClientKey, sendDeepseekChatStream, type ChatTurn } from '../lib/deepseekChat'
+import { buildSiteCorpus } from '../lib/siteCorpus'
+import { LanguageSwitcher } from './LanguageSwitcher'
 
 function isChatHash() {
   return window.location.hash === '#chat'
@@ -9,8 +11,55 @@ function isChatHash() {
 
 type Line = { id: string; role: 'user' | 'assistant'; content: string }
 
+const CHAT_THREAD_STORAGE_KEY = 'as4x-chat-thread-v1'
+
 function lineId() {
   return `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`
+}
+
+/** 展示时去掉模型常用的 Markdown 加粗标记 **…** */
+function stripAssistantBoldMarkers(text: string): string {
+  let s = text
+  let prev = ''
+  while (s !== prev) {
+    prev = s
+    s = s.replace(/\*\*([\s\S]+?)\*\*/g, '$1')
+  }
+  return s.replace(/\*\*/g, '')
+}
+
+function parseStoredLines(raw: string | null): Line[] {
+  if (!raw) return []
+  try {
+    const data = JSON.parse(raw) as unknown
+    if (!Array.isArray(data)) return []
+    return data.filter((item): item is Line => {
+      if (!item || typeof item !== 'object') return false
+      const o = item as Record<string, unknown>
+      return (
+        typeof o.id === 'string' &&
+        (o.role === 'user' || o.role === 'assistant') &&
+        typeof o.content === 'string'
+      )
+    })
+  } catch {
+    return []
+  }
+}
+
+function loadThreadFromStorage(): Line[] {
+  try {
+    return parseStoredLines(sessionStorage.getItem(CHAT_THREAD_STORAGE_KEY))
+  } catch {
+    return []
+  }
+}
+
+/** 发给模型的多轮上下文：跳过空内容的占位行，避免丢历史或格式异常 */
+function linesToChatTurns(lines: Line[]): ChatTurn[] {
+  return lines
+    .filter((l) => l.content.trim().length > 0)
+    .map(({ role, content }) => ({ role, content }))
 }
 
 /** Buffer API chunks and reveal a few characters per tick (slightly slower, smoother streaming UX). */
@@ -18,10 +67,13 @@ const STREAM_REVEAL_MS = 55
 const STREAM_REVEAL_CHARS = 10
 
 export function ChatbotOverlay() {
-  const { m } = useLanguage()
+  const { m, locale } = useLanguage()
   const navigate = useNavigate()
+  const siteCorpus = useMemo(() => buildSiteCorpus(locale), [locale])
   const [open, setOpen] = useState(isChatHash)
-  const [messages, setMessages] = useState<Line[]>([])
+  const [messages, setMessages] = useState<Line[]>(loadThreadFromStorage)
+  const messagesRef = useRef(messages)
+  messagesRef.current = messages
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -68,6 +120,14 @@ export function ChatbotOverlay() {
     if (messages.length > 0) setQuickOpen(false)
   }, [messages.length])
 
+  useEffect(() => {
+    try {
+      sessionStorage.setItem(CHAT_THREAD_STORAGE_KEY, JSON.stringify(messages))
+    } catch {
+      /* 无痕模式或配额 */
+    }
+  }, [messages])
+
   const apiReady = hasDeepseekClientKey()
   const canSend = !loading && input.trim().length > 0 && apiReady
 
@@ -77,13 +137,14 @@ export function ChatbotOverlay() {
     if (!apiReady) return
 
     const userLine: Line = { id: lineId(), role: 'user', content: trimmed }
-    const next = [...messages, userLine]
+    const prev = messagesRef.current
+    const next = [...prev, userLine]
     setMessages(next)
     setInput('')
     setLoading(true)
     setError(null)
 
-    const turns: ChatTurn[] = next.map(({ role, content }) => ({ role, content }))
+    const turns: ChatTurn[] = linesToChatTurns(next)
     const assistantId = lineId()
 
     setMessages((curr) => [...curr, { id: assistantId, role: 'assistant', content: '' }])
@@ -137,7 +198,7 @@ export function ChatbotOverlay() {
       })
 
     try {
-      await sendDeepseekChatStream(m.chatbot.systemPrompt, turns, (delta) => {
+      await sendDeepseekChatStream(m.chatbot.systemPrompt, siteCorpus, turns, (delta) => {
         receivedChunk = true
         pending += delta
         ensureStreamPump()
@@ -276,6 +337,17 @@ export function ChatbotOverlay() {
       </button>
 
       <div
+        style={{
+          position: 'absolute',
+          top: 'max(1rem, env(safe-area-inset-top))',
+          right: 'clamp(1rem, 4vw, 1.5rem)',
+          zIndex: 2,
+        }}
+      >
+        <LanguageSwitcher />
+      </div>
+
+      <div
         className="chatbot-scroll"
         style={{
           flex: 1,
@@ -333,7 +405,7 @@ export function ChatbotOverlay() {
                       <div className="chatbot-msg-ai">
                         <span className="chatbot-msg-ai-branch" aria-hidden />
                         <div className="chatbot-msg-ai-text">
-                          {line.content}
+                          {stripAssistantBoldMarkers(line.content)}
                           {streamThinking ? (
                             <span className="chatbot-thinking"> {m.chatbot.thinking}</span>
                           ) : null}

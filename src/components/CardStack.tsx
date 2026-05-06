@@ -2,6 +2,7 @@ import { Fragment, useCallback, useEffect, useRef, useState } from 'react'
 import type { Project } from '../data/projects'
 import { playCardStackAdvance, playCardStackTick, unlockStackAudio } from '../audio/stackAudio'
 import { useLanguage } from '../i18n/LanguageContext'
+import { isGifSrc } from '../lib/isGifSrc'
 
 type Props = {
   projects: Project[]
@@ -276,6 +277,8 @@ export function CardStack({ projects, activeIndex, onActiveChange, onOpenProject
             ? 'cubic-bezier(0.2, 0.85, 0.15, 1)'
             : easeOut
 
+          const gifCover = isGifSrc(p.image)
+
           return (
             <Fragment key={p.id}>
               <div
@@ -291,13 +294,15 @@ export function CardStack({ projects, activeIndex, onActiveChange, onOpenProject
                   transitionDuration: transitionMs,
                   transitionTimingFunction: transitionEasing,
                   background: '#111',
-                  willChange: isDragging && isActive ? 'transform' : 'auto',
+                  willChange: gifCover ? 'auto' : isDragging && isActive ? 'transform' : 'auto',
                 }}
               >
                 <img
                   src={p.image}
                   alt=""
                   draggable={false}
+                  loading={gifCover ? 'eager' : undefined}
+                  decoding="async"
                   style={{
                     width: '100%',
                     height: '100%',

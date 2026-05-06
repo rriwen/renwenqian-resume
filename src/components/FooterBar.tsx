@@ -54,14 +54,26 @@ export function FooterBar({ projects, viewMode, onViewMode, activeIndex, onActiv
         <a
           href="#chat"
           style={{
-            display: 'inline-block',
-            fontSize: '0.78rem',
-            letterSpacing: '0.14em',
-            textDecoration: 'none',
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            boxSizing: 'border-box',
+            minHeight: 32,
+            height: 32,
+            padding: '0 10px',
             marginTop: 12,
             marginBottom: '0.45rem',
+            fontSize: '0.72rem',
+            letterSpacing: '0.1em',
             fontWeight: 600,
+            lineHeight: 1,
             whiteSpace: 'nowrap',
+            color: 'inherit',
+            textDecoration: 'none',
+            background: 'transparent',
+            border: '1px solid rgba(10,10,10,0.22)',
+            borderRadius: 4,
+            cursor: 'pointer',
           }}
         >
           {m.footer.botLink}
