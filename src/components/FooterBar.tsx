@@ -1,6 +1,6 @@
 import type { Project } from '../data/projects'
 import { useLanguage } from '../i18n/LanguageContext'
-import { IconGrid, IconStack } from './Icons'
+import { IconFourPointStar, IconGrid, IconStack } from './Icons'
 
 type ViewMode = 'stack' | 'grid'
 
@@ -57,6 +57,7 @@ export function FooterBar({ projects, viewMode, onViewMode, activeIndex, onActiv
             display: 'inline-flex',
             alignItems: 'center',
             justifyContent: 'center',
+            gap: 6,
             boxSizing: 'border-box',
             minHeight: 32,
             height: 32,
@@ -76,6 +77,9 @@ export function FooterBar({ projects, viewMode, onViewMode, activeIndex, onActiv
             cursor: 'pointer',
           }}
         >
+          <span style={{ display: 'flex', flexShrink: 0, opacity: 0.92 }}>
+            <IconFourPointStar size={16} />
+          </span>
           {m.footer.botLink}
         </a>
       </div>

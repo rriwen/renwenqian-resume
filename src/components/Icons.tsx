@@ -58,6 +58,15 @@ export function IconGlobe({ size = 16 }: { size?: number }) {
   )
 }
 
+/** 面性四芒星（扁平填充） */
+export function IconFourPointStar({ size = 14 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+      <path d="M12 2.25 L14.18 9.07 L21.25 11.18 L14.18 13.3 L12 21.75 L9.82 13.3 L2.75 11.18 L9.82 9.07 Z" />
+    </svg>
+  )
+}
+
 export function IconStack({ size = 22 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden>
