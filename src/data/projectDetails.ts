@@ -118,6 +118,7 @@ const details: Record<string, { en: ProjectDetailBlock; zh: ProjectDetailBlock }
         'OceanBase Datapilot brings AI-assisted workflows into the database operator’s daily toolkit—bridging complex metadata, diagnostics, and natural-language intent.',
         'The project focused on progressive disclosure for expert users, consistent language across SQL and conversational entry points, and states that stay legible under load and partial failures.',
       ],
+      externalUrl: 'https://datapilot-rho-gilt.vercel.app/',
       gallery: [
         {
           src: '/images/datapilot-metric-layer-data.png',
@@ -180,6 +181,7 @@ const details: Record<string, { en: ProjectDetailBlock; zh: ProjectDetailBlock }
         '通过客户拜访发现，指标层的配置过程仍存在理解成本与操作门槛，成为产品从「可用」走向「好用」的核心瓶颈。用户需要理解技术语义、手动映射字段，配置成本高，直接影响自助使用率。',
         '产品二期正在计划引入自然语言交互，用户通过对话式描述直接生成指标配置，降低学习成本与操作步骤；同时探索模板化配置、智能推荐等设计策略，进一步平滑上手体验，提升易用性体验。',
       ],
+      externalUrl: 'https://datapilot-rho-gilt.vercel.app/',
       gallery: [
         { src: '/images/datapilot-metric-layer-data.png', caption: '指标层数据管理' },
         { src: '/images/datapilot-metric-layer-modeling.png', caption: '指标层数据建模' },

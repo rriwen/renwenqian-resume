@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react'
+import { getAboutContent, renderMarkdownInline } from '../content/about'
 import { useLanguage } from '../i18n/LanguageContext'
 
 const TIMELINE_IDS = ['about-2026', 'work-oceanbase', 'work-ecidi', 'work-puhuai', 'education-njupt'] as const
@@ -29,8 +30,6 @@ const bodyText: CSSProperties = {
 }
 
 const anchorTarget: CSSProperties = { scrollMarginTop: 'var(--header-clearance)' }
-
-const statBold: CSSProperties = { fontWeight: 700 }
 
 const workMeta: CSSProperties = {
   margin: 0,
@@ -96,9 +95,19 @@ const contactLink: CSSProperties = {
   paddingBottom: 2,
 }
 
+function getContactHref(label: string, value: string): string | null {
+  const normalized = label.toLowerCase()
+  if (!value) return null
+  if (normalized.includes('mail') || label.includes('邮件')) return `mailto:${value}`
+  if (normalized.includes('phone') || normalized.includes('wechat') || label.includes('电话') || label.includes('微信')) {
+    return `tel:${value}`
+  }
+  return null
+}
+
 export function About() {
   const { m, locale } = useLanguage()
-  const contactLabelSep = locale === 'zh' ? ' ： ' : ': '
+  const about = useMemo(() => getAboutContent(locale), [locale])
   const [activeTimelineId, setActiveTimelineId] = useState<TimelineId>('about-2026')
   const scrollOffsetRef = useRef(0)
 
@@ -168,184 +177,187 @@ export function About() {
     }
   }, [])
 
-  const w = m.about.work
-  const edu = m.about.education
+  const oceanbase = about.work[0]
+  const ecidi = about.work[1]
+  const puhuai = about.work[2]
+  const edu = about.education
+
+  if (!oceanbase || !ecidi || !puhuai) {
+    throw new Error('About markdown is missing one or more work entries')
+  }
 
   return (
     <>
-    <main
-      style={{
-        minHeight: '100dvh',
-        padding: 'var(--header-clearance) clamp(1rem, 4vw, 2.5rem) 4rem',
-        maxWidth: 900,
-        margin: '0 auto',
-      }}
-    >
-      <div id="about-2026" style={{ ...anchorTarget, position: 'relative', marginBottom: '1.5rem' }}>
-        <h2 style={{ margin: 0, fontSize: '2.25rem', fontWeight: 700 }}>{m.about.iDo}</h2>
-      </div>
-
-      <div style={aboutIntroColumn}>
-        <p style={bodyText}>
-          {m.about.body1IntroBold ? (
-            <>
-              {m.about.body1IntroBold.beforeName1}
-              <strong style={{ fontWeight: 700 }}>{m.about.body1IntroBold.name1}</strong>
-              {m.about.body1IntroBold.betweenNames}
-              <strong style={{ fontWeight: 700 }}>{m.about.body1IntroBold.name2}</strong>
-              {m.about.body1IntroBold.afterName2}
-            </>
-          ) : (
-            m.about.body1
-          )}
-        </p>
-        <p style={bodyText}>{m.about.body2}</p>
-        <p style={{ ...bodyText, marginBottom: '2rem' }}>
-          {m.about.body3a}
-          <span style={statBold}>75%</span>
-          {m.about.body3b}
-          <span style={statBold}>30%</span>
-          {m.about.body3c}
-          <span style={statBold}>20%</span>
-          {m.about.body3d}
-        </p>
-      </div>
-
-      <section
-        id="experience"
-        style={{ ...anchorTarget, marginTop: '2.75rem', paddingTop: '2rem', borderTop: '1px solid rgba(10,10,10,0.12)' }}
+      <main
+        style={{
+          minHeight: '100dvh',
+          padding: 'var(--header-clearance) clamp(1rem, 4vw, 2.5rem) 4rem',
+          maxWidth: 900,
+          margin: '0 auto',
+        }}
       >
-        <article id="work-oceanbase" style={{ ...anchorTarget, marginTop: '2.25rem' }}>
-          <div style={workArticleProse}>
-            <header style={workArticleHeader}>
-              <h3 style={workArticleTitle}>{w.oceanbase.role}</h3>
-              <p style={{ ...workArticleMeta, marginBottom: 4 }}>{w.oceanbase.meta}</p>
-              <p style={{ ...workArticlePeriod, marginBottom: 0 }}>
-                <span aria-hidden="true">{'>'} </span>
-                {w.oceanbase.period}
-              </p>
-            </header>
-            <ul style={workArticleList}>
-              {w.oceanbase.highlights.map((item, i, arr) => (
-                <li key={i} style={{ marginBottom: i < arr.length - 1 ? '0.65rem' : 0 }}>
-                  <strong style={{ fontWeight: 700 }}>{item.keyword}</strong>
-                  {item.detail}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </article>
-
-        <article id="work-ecidi" style={{ ...anchorTarget, marginTop: '2.5rem', paddingTop: '2rem', borderTop: '1px solid rgba(10,10,10,0.08)' }}>
-          <div style={workArticleProse}>
-            <header style={workArticleHeader}>
-              <h3 style={workArticleTitle}>{w.ecidi.role}</h3>
-              <p style={{ ...workArticleMeta, marginBottom: 4 }}>{w.ecidi.meta}</p>
-              <p style={{ ...workArticlePeriod, marginBottom: 0 }}>
-                <span aria-hidden="true">{'>'} </span>
-                {w.ecidi.period}
-              </p>
-            </header>
-            <ul style={workArticleList}>
-              <li style={{ marginBottom: '0.65rem' }}>{w.ecidi.li1}</li>
-              <li style={{ marginBottom: '0.65rem' }}>{w.ecidi.li2}</li>
-              <li style={{ marginBottom: 0 }}>{w.ecidi.li3}</li>
-            </ul>
-          </div>
-        </article>
-
-        <article id="work-puhuai" style={{ ...anchorTarget, marginTop: '2.5rem', paddingTop: '2rem', borderTop: '1px solid rgba(10,10,10,0.08)' }}>
-          <div style={workArticleProse}>
-            <header style={workArticleHeader}>
-              <h3 style={workArticleTitle}>{w.puhuai.role}</h3>
-              <p style={{ ...workArticleMeta, marginBottom: 4 }}>{w.puhuai.meta}</p>
-              <p style={{ ...workArticlePeriod, marginBottom: 0 }}>
-                <span aria-hidden="true">{'>'} </span>
-                {w.puhuai.period}
-              </p>
-            </header>
-            <ul style={workArticleList}>
-              <li style={{ marginBottom: '0.65rem' }}>{w.puhuai.li1}</li>
-              <li style={{ marginBottom: 0 }}>{w.puhuai.li2}</li>
-            </ul>
-          </div>
-        </article>
-      </section>
-
-      <section
-        id="education"
-        style={{ ...anchorTarget, marginTop: '2.75rem', paddingTop: '2rem', borderTop: '1px solid rgba(10,10,10,0.12)' }}
-      >
-        <article id="education-njupt" style={{ ...anchorTarget, marginTop: '2.25rem' }}>
-          <div style={workArticleProse}>
-            <header style={workArticleHeader}>
-              <h3 style={workArticleTitle}>{edu.njupt.role}</h3>
-              <p style={{ ...workArticlePeriod, marginBottom: 0 }}>
-                <span aria-hidden="true">{'>'} </span>
-                {edu.njupt.period}
-              </p>
-            </header>
-            <ul style={{ ...workArticleList, marginTop: '1rem', marginBottom: 0 }}>
-              {edu.njupt.items.map((item, i, arr) => (
-                <li key={i} style={{ marginBottom: i < arr.length - 1 ? '0.65rem' : 0 }}>
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </article>
-      </section>
-
-      <section
-        id="about-contact"
-        style={{ ...anchorTarget, marginTop: '2.75rem', paddingTop: '2rem', borderTop: '1px solid rgba(10,10,10,0.12)' }}
-      >
-        <div style={workArticleProse}>
-          <h3 style={workArticleTitle}>{m.about.contactCta.title}</h3>
-          <ul style={{ ...workArticleList, marginTop: '1rem', marginBottom: 0 }}>
-            <li style={{ marginBottom: '0.65rem' }}>
-              {m.about.contactCta.wechatPhoneLabel}
-              {contactLabelSep}
-              <a href={`tel:${m.about.contactCta.phone}`} style={contactLink}>
-                {m.about.contactCta.phone}
-              </a>
-            </li>
-            <li style={{ marginBottom: 0 }}>
-              {m.about.contactCta.emailLabel}
-              {contactLabelSep}
-              <a href={`mailto:${m.about.contactCta.email}`} style={contactLink}>
-                {m.about.contactCta.email}
-              </a>
-            </li>
-          </ul>
+        <div id="about-2026" style={{ ...anchorTarget, position: 'relative', marginBottom: '1.5rem' }}>
+          <h2 style={{ margin: 0, fontSize: '2.25rem', fontWeight: 700 }}>{renderMarkdownInline(about.heading)}</h2>
         </div>
-      </section>
-    </main>
 
-    <nav className="about-timeline-nav" aria-label={m.about.timeline.navAria}>
-      <ul className="about-timeline-list">
-        {timelineEntries.map(({ id, label, timePoint }) => (
-          <li key={id} className="about-timeline-item">
-            <a
-              href={`#${id}`}
-              className={activeTimelineId === id ? 'about-timeline-link active' : 'about-timeline-link'}
-              aria-label={`${label}, ${timePoint}`}
-              onClick={(e) => {
-                e.preventDefault()
-                document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-                window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}#${id}`)
-                setActiveTimelineId(id)
-              }}
+        <div style={aboutIntroColumn}>
+          {about.introParagraphs.map((paragraph, index) => (
+            <p
+              key={`${index}-${paragraph.slice(0, 24)}`}
+              style={{ ...bodyText, marginBottom: index === about.introParagraphs.length - 1 ? '2rem' : '1rem' }}
             >
-              <span className="about-timeline-tip" aria-hidden>
-                {timePoint}
-              </span>
-              <span className="about-timeline-tick" aria-hidden />
-            </a>
-          </li>
-        ))}
-      </ul>
-    </nav>
+              {renderMarkdownInline(paragraph)}
+            </p>
+          ))}
+        </div>
+
+        <section
+          id="experience"
+          style={{ ...anchorTarget, marginTop: '2.75rem', paddingTop: '2rem', borderTop: '1px solid rgba(10,10,10,0.12)' }}
+        >
+          <article id="work-oceanbase" style={{ ...anchorTarget, marginTop: '2.25rem' }}>
+            <div style={workArticleProse}>
+              <header style={workArticleHeader}>
+                <h3 style={workArticleTitle}>{renderMarkdownInline(oceanbase.title)}</h3>
+                <p style={{ ...workArticleMeta, marginBottom: 4 }}>{renderMarkdownInline(oceanbase.meta)}</p>
+                <p style={{ ...workArticlePeriod, marginBottom: 0 }}>
+                  <span aria-hidden="true">{'>'} </span>
+                  {renderMarkdownInline(oceanbase.period)}
+                </p>
+              </header>
+              <ul style={workArticleList}>
+                {oceanbase.bullets.map((item, i, arr) => (
+                  <li key={i} style={{ marginBottom: i < arr.length - 1 ? '0.65rem' : 0 }}>
+                    {renderMarkdownInline(item)}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </article>
+
+          <article
+            id="work-ecidi"
+            style={{ ...anchorTarget, marginTop: '2.5rem', paddingTop: '2rem', borderTop: '1px solid rgba(10,10,10,0.08)' }}
+          >
+            <div style={workArticleProse}>
+              <header style={workArticleHeader}>
+                <h3 style={workArticleTitle}>{renderMarkdownInline(ecidi.title)}</h3>
+                <p style={{ ...workArticleMeta, marginBottom: 4 }}>{renderMarkdownInline(ecidi.meta)}</p>
+                <p style={{ ...workArticlePeriod, marginBottom: 0 }}>
+                  <span aria-hidden="true">{'>'} </span>
+                  {renderMarkdownInline(ecidi.period)}
+                </p>
+              </header>
+              <ul style={workArticleList}>
+                {ecidi.bullets.map((item, i, arr) => (
+                  <li key={i} style={{ marginBottom: i < arr.length - 1 ? '0.65rem' : 0 }}>
+                    {renderMarkdownInline(item)}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </article>
+
+          <article
+            id="work-puhuai"
+            style={{ ...anchorTarget, marginTop: '2.5rem', paddingTop: '2rem', borderTop: '1px solid rgba(10,10,10,0.08)' }}
+          >
+            <div style={workArticleProse}>
+              <header style={workArticleHeader}>
+                <h3 style={workArticleTitle}>{renderMarkdownInline(puhuai.title)}</h3>
+                <p style={{ ...workArticleMeta, marginBottom: 4 }}>{renderMarkdownInline(puhuai.meta)}</p>
+                <p style={{ ...workArticlePeriod, marginBottom: 0 }}>
+                  <span aria-hidden="true">{'>'} </span>
+                  {renderMarkdownInline(puhuai.period)}
+                </p>
+              </header>
+              <ul style={workArticleList}>
+                {puhuai.bullets.map((item, i, arr) => (
+                  <li key={i} style={{ marginBottom: i < arr.length - 1 ? '0.65rem' : 0 }}>
+                    {renderMarkdownInline(item)}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </article>
+        </section>
+
+        <section
+          id="education"
+          style={{ ...anchorTarget, marginTop: '2.75rem', paddingTop: '2rem', borderTop: '1px solid rgba(10,10,10,0.12)' }}
+        >
+          <article id="education-njupt" style={{ ...anchorTarget, marginTop: '2.25rem' }}>
+            <div style={workArticleProse}>
+              <header style={workArticleHeader}>
+                <h3 style={workArticleTitle}>{renderMarkdownInline(edu.title)}</h3>
+                <p style={{ ...workArticlePeriod, marginBottom: 0 }}>
+                  <span aria-hidden="true">{'>'} </span>
+                  {renderMarkdownInline(edu.period)}
+                </p>
+              </header>
+              <ul style={{ ...workArticleList, marginTop: '1rem', marginBottom: 0 }}>
+                {edu.items.map((item, i, arr) => (
+                  <li key={i} style={{ marginBottom: i < arr.length - 1 ? '0.65rem' : 0 }}>
+                    {renderMarkdownInline(item)}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </article>
+        </section>
+
+        <section
+          id="about-contact"
+          style={{ ...anchorTarget, marginTop: '2.75rem', paddingTop: '2rem', borderTop: '1px solid rgba(10,10,10,0.12)' }}
+        >
+          <div style={workArticleProse}>
+            <h3 style={workArticleTitle}>{renderMarkdownInline(about.contact.title)}</h3>
+            <ul style={{ ...workArticleList, marginTop: '1rem', marginBottom: 0 }}>
+              {about.contact.items.map((item, i, arr) => {
+                const href = getContactHref(item.label, item.value)
+                return (
+                  <li key={`${item.label}-${i}`} style={{ marginBottom: i < arr.length - 1 ? '0.65rem' : 0 }}>
+                    {renderMarkdownInline(item.label)}
+                    {locale === 'zh' ? ' ： ' : ': '}
+                    {href ? (
+                      <a href={href} style={contactLink}>
+                        {renderMarkdownInline(item.value)}
+                      </a>
+                    ) : (
+                      renderMarkdownInline(item.value)
+                    )}
+                  </li>
+                )
+              })}
+            </ul>
+          </div>
+        </section>
+      </main>
+
+      <nav className="about-timeline-nav" aria-label={m.about.timeline.navAria}>
+        <ul className="about-timeline-list">
+          {timelineEntries.map(({ id, label, timePoint }) => (
+            <li key={id} className="about-timeline-item">
+              <a
+                href={`#${id}`}
+                className={activeTimelineId === id ? 'about-timeline-link active' : 'about-timeline-link'}
+                aria-label={`${label}, ${timePoint}`}
+                onClick={(e) => {
+                  e.preventDefault()
+                  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                  window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}#${id}`)
+                  setActiveTimelineId(id)
+                }}
+              >
+                <span className="about-timeline-tip" aria-hidden>
+                  {timePoint}
+                </span>
+                <span className="about-timeline-tick" aria-hidden />
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
     </>
   )
 }

@@ -1,22 +1,7 @@
 import { projects } from '../data/projects'
 import { getProjectDetail, type ProjectDetailBlock, type ProjectDetailParagraph } from '../data/projectDetails'
-import { translations, type Locale, type Messages } from '../i18n/translations'
-
-/** 与 About 页 body3 中硬编码数据一致 */
-const ABOUT_BODY3_STATS = ['75%', '30%', '20%'] as const
-
-function body1Plain(m: Messages): string {
-  if (m.about.body1IntroBold) {
-    const b = m.about.body1IntroBold
-    return `${b.beforeName1}${b.name1}${b.betweenNames}${b.name2}${b.afterName2}`
-  }
-  return m.about.body1
-}
-
-function aboutBody3WithStats(m: Messages): string {
-  const [a, b, c] = ABOUT_BODY3_STATS
-  return `${m.about.body3a}${a}${m.about.body3b}${b}${m.about.body3c}${c}${m.about.body3d}`
-}
+import { getAboutContent, stripMarkdownInline } from '../content/about'
+import { translations, type Locale } from '../i18n/translations'
 
 function paragraphToText(p: ProjectDetailParagraph): string {
   if (typeof p === 'string') return p
@@ -68,37 +53,40 @@ function section(locale: Locale, zh: string, en: string): string {
   return locale === 'zh' ? zh : en
 }
 
-function serializeAboutWork(m: Messages, locale: Locale): string {
-  const w = m.about.work
+function serializeAbout(locale: Locale): string {
+  const about = getAboutContent(locale)
   const lines: string[] = []
 
-  lines.push(`### ${w.oceanbase.role}`)
-  lines.push(w.oceanbase.meta)
-  lines.push(`> ${w.oceanbase.period}`)
-  for (const h of w.oceanbase.highlights) {
-    lines.push(`- ${h.keyword}${h.detail}`)
+  lines.push(`### ${about.heading}`)
+  for (const paragraph of about.introParagraphs) {
+    lines.push(stripMarkdownInline(paragraph))
   }
   lines.push('')
 
-  lines.push(`### ${w.ecidi.role}`)
-  lines.push(w.ecidi.meta)
-  lines.push(`> ${w.ecidi.period}`)
-  lines.push(`- ${w.ecidi.li1}`)
-  lines.push(`- ${w.ecidi.li2}`)
-  lines.push(`- ${w.ecidi.li3}`)
+  lines.push(`#### ${section(locale, '工作经历', 'Experience')}`)
+  for (const entry of about.work) {
+    lines.push(`### ${entry.title}`)
+    lines.push(stripMarkdownInline(entry.meta))
+    lines.push(`> ${stripMarkdownInline(entry.period)}`)
+    for (const bullet of entry.bullets) {
+      lines.push(`- ${stripMarkdownInline(bullet)}`)
+    }
+    lines.push('')
+  }
   lines.push('')
 
-  lines.push(`### ${w.puhuai.role}`)
-  lines.push(w.puhuai.meta)
-  lines.push(`> ${w.puhuai.period}`)
-  lines.push(`- ${w.puhuai.li1}`)
-  lines.push(`- ${w.puhuai.li2}`)
+  lines.push(`#### ${section(locale, '教育', 'Education')}`)
+  lines.push(`### ${about.education.title}`)
+  lines.push(`> ${stripMarkdownInline(about.education.period)}`)
+  for (const item of about.education.items) {
+    lines.push(`- ${stripMarkdownInline(item)}`)
+  }
   lines.push('')
 
-  lines.push(`### ${section(locale, '教育', 'Education')}: ${m.about.education.njupt.role}`)
-  lines.push(`> ${m.about.education.njupt.period}`)
-  for (const item of m.about.education.njupt.items) {
-    lines.push(`- ${item}`)
+  lines.push(`#### ${section(locale, '联系', 'Contact')}`)
+  lines.push(`### ${about.contact.title}`)
+  for (const item of about.contact.items) {
+    lines.push(`- ${item.label}: ${item.value}`)
   }
 
   return lines.join('\n')
@@ -131,12 +119,7 @@ export function buildSiteCorpus(locale: Locale): string {
   lines.push('')
 
   lines.push(`## ${section(locale, '关于页', 'About page')}`)
-  lines.push(`### ${m.about.iDo}`)
-  lines.push(body1Plain(m))
-  lines.push(m.about.body2)
-  lines.push(aboutBody3WithStats(m))
-  lines.push('')
-  lines.push(serializeAboutWork(m, locale))
+  lines.push(serializeAbout(locale))
   lines.push('')
 
   lines.push(`## ${section(locale, '作品与项目详情', 'Projects & case studies')}`)

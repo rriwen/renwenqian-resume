@@ -36,6 +36,7 @@ export type Messages = {
     body3b: string
     body3c: string
     body3d: string
+    body4: string
     work: {
       oceanbase: {
         role: string
@@ -174,6 +175,8 @@ export const translations: Record<Locale, Messages> = {
       body3b: ', lifting user satisfaction by ',
       body3c: ', and cutting technical support cost by ',
       body3d: '.',
+      body4:
+        'I also explore AI-assisted R&D collaboration workflows: turning product-design best practices into reusable design Skills and interaction standards, and building efficiency plugins that automate design-to-code handoff and visual QA—freeing ~15% of baseline team capacity.',
       work: {
         oceanbase: {
           role: 'Senior Experience Designer',
@@ -335,21 +338,24 @@ export const translations: Record<Locale, Messages> = {
     about: {
       title: '关于 | REN WENQIAN',
       iDo: '我做过什么',
-      body1: '我是 任文倩，也可以叫我 泗澄，一名懂 AI、懂用户、懂数据、能落地的产品设计师。',
+      body1:
+        '我是任文倩，一名聚焦 AI 产品化与 AI 工作流优化的产品设计师，2 年 AI 产品设计经验，以产品经理和体验设计师的双重角色主导 AI 产品落地。',
       body1IntroBold: {
-        beforeName1: '我是 ',
+        beforeName1: '我是',
         name1: '任文倩',
-        betweenNames: '，也可以叫我 ',
-        name2: '泗澄',
-        afterName2: '，一名懂 AI、懂用户、懂数据、能落地的产品设计师。',
+        betweenNames:
+          '，一名聚焦 AI 产品化与 AI 工作流优化的产品设计师，2 年 AI 产品设计经验，以产品经理和体验设计师的双重角色主导 AI 产品落地',
+        name2: '',
+        afterName2: '。',
       },
       body2:
-        '主导过 Agent 记忆插件、智能问数等 AI 产品设计，擅长把 AI 技术转化为对用户或 Agent 友好的产品功能和交互，用数据驱动体验决策，也自己造插件工具来优化设计工作流。',
+        '深度实践 MaaS 平台商业化、Agent 记忆机制、PowerRAG、ChatBI 等方向。主导 MaaS 模型服务平台设计，参与 0 到 1 商业化计价体系搭建；负责 OpenClaw 记忆插件、智能问数等产品孵化与设计，将 Agent 记忆、NL2SQL 等技术转化为用户可感知的 AI 产品功能。',
       body3a:
-        '负责过数据库运维、数据开发工具等产品体验，通过搭建体验度量体系发现关键断点，针对性优化信息架构与操作流程，让产品自助使用率从15%提升到',
-      body3b: '，用户满意度提高',
-      body3c: '，技术支持成本降低',
-      body3d: '。',
+        '在体验度量与数据驱动有扎实积累，推动产品自助使用率从 15% 提升至 ',
+      body3b: '，用户满意度提升 ',
+      body3c: '，技术支持成本降低 ',
+      body3d: '。沉淀可复用设计 Skill 与交互规范，释放团队 15% 基础产能。',
+      body4: '',
       work: {
         oceanbase: {
           role: '高级体验设计师',
@@ -357,24 +363,24 @@ export const translations: Record<Locale, Messages> = {
           meta: '蚂蚁集团 · OceanBase ,  负责 AI 产品探索落地和数据开发管控产品体验',
           highlights: [
             {
+              keyword: 'AI 产品规划与商业化',
+              detail:
+                '：主导 MaaS 模型服务平台的产品设计，参与从 0 到 1 的商业化计价体系搭建，设计按不同供应商、不同模型 Token 的定价模型，构建从免费额度、用量包到企业定制套餐的完整售卖体系，探索 AI 能力对外变现路径；',
+            },
+            {
               keyword: 'AI 产品探索与落地',
               detail:
-                '：主导多个 AI 产品（OpenClaw 记忆插件、智能问数、SQL 生成补全） 0 到 1 孵化落地和持续迭代；负责业务洞察与产品方案探索，快速将技术能力转化为对用户或 Agent 友好的功能；通过设计可视化执行过程建立用户信任并推动上线，核心场景下用户对生成结果的采纳率从 18% 提升至 60%；',
+                '：定义 Agent 产品演进方向，连接技术实现、用户需求与业务目标，制定可落地的迭代路径；主导 OpenClaw 记忆插件、智能问数、SQL 生成补全、PowerRAG 等多款 AI 产品从 0 到 1 的孵化落地与持续迭代。通过可视化执行过程建立用户信任，核心场景下采纳率从 18% 提升至 60%；',
+            },
+            {
+              keyword: '体验度量与数据驱动',
+              detail:
+                '：结合用户研究、埋点与 AI 洞察形成设计验证闭环，推动编辑器矩阵标准化交互重构，产品自助使用率从 15% 提升至 75%，用户满意度提升 30%，技术支持成本降低 20%，用户数翻倍；',
             },
             {
               keyword: 'AI 设计系统沉淀',
               detail:
-                '：基于业务实践，沉淀团队 AI 产品设计资产与规范，包括 Prompt 输入、思维链、消息卡片等可复用组件及交互模式，在多条产品线中复用率超过 70%，显著提升跨产品设计一致性；',
-            },
-            {
-              keyword: '数据开发产品体验',
-              detail:
-                '：通过体验地图与设计冲刺，将运维平台核心自助率从 15% 提升至 75% 以上，成本降低 20%；主导编辑器矩阵标准化交互重构和暗黑模式，满意度 4.8→6.2（7 分制），用户数翻倍。全过程结合用户研究、埋点与 AI 洞察形成设计验证闭环。',
-            },
-            {
-              keyword: '工具与跨团队协同',
-              detail:
-                '：推动内部设计工具链的 AI 化升级，自研团队提效插件，将前端还原设计稿、还原度验收等重复工作实现 AI 自动化，释放团队约 15% 的基础产能。',
+                '：系统性沉淀 AI 产品交互规范，包括 Prompt 输入、思维链、消息卡片等可复用组件及交互模式；建立设计 Skill 与 design.md 机制进行前端一致性约束。同时推动内部设计工具链 AI 化升级，自研提效插件，实现还原设计稿、还原度验收等重复工作自动化，释放团队约 15% 基础产能。',
             },
           ],
         },
