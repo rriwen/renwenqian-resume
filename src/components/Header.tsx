@@ -1,24 +1,26 @@
 import { Link, useLocation } from 'react-router-dom'
-import { projects } from '../data/projects'
 import { useLanguage } from '../i18n/LanguageContext'
 import { LanguageSwitcher } from './LanguageSwitcher'
-import { VariableProximityName } from './VariableProximityName'
+import { IconCommentSquare, IconContrast } from './Icons'
 
-export function Header() {
+type HeaderProps = { dark: boolean; onToggleTheme: () => void }
+
+export function Header({ dark, onToggleTheme }: HeaderProps) {
   const { pathname } = useLocation()
-  const { m } = useLanguage()
-  const projectPathMatch = pathname.startsWith('/project/')
+  const { m, locale } = useLanguage()
   const isHome = pathname === '/'
+  const isArticle = pathname.startsWith('/blog/')
 
   return (
     <header
+      className={isArticle ? 'site-header site-header--article' : 'site-header'}
       style={{
         position: 'fixed',
         left: 0,
         right: 0,
         top: 0,
         zIndex: 50,
-        backgroundColor: isHome ? 'rgba(255, 255, 255, 0)' : 'rgba(255, 255, 255, 1)',
+        backgroundColor: isHome ? 'var(--page-bg)' : isArticle ? 'var(--blog-hero-bg)' : 'var(--page-bg)',
         paddingLeft: '1.5rem',
         paddingRight: '1.5rem',
         paddingTop: '16px',
@@ -29,7 +31,7 @@ export function Header() {
         style={{
           display: 'flex',
           width: '100%',
-          alignItems: 'flex-start',
+          alignItems: 'center',
           justifyContent: 'space-between',
           gap: '1rem',
           textTransform: 'uppercase',
@@ -38,14 +40,9 @@ export function Header() {
           lineHeight: 1.25,
         }}
       >
-        <Link to="/" style={{ flexShrink: 0 }}>
-          <p style={{ margin: 0, lineHeight: 1.25 }}>
-            <VariableProximityName text={m.header.name} />
-          </p>
-          <p style={{ margin: '0.35rem 0 0', opacity: 0.65, fontWeight: 400 }}>{m.header.role}</p>
-        </Link>
-
-        <nav aria-label={m.header.navAria} style={{ flexShrink: 0 }}>
+        <div className="header-left-group">
+          <Link to="/" className="header-logo">Design.4x</Link>
+          <nav aria-label={m.header.navAria}>
           <ul
             style={{
               margin: 0,
@@ -54,103 +51,30 @@ export function Header() {
               display: 'flex',
               flexDirection: 'row',
               alignItems: 'center',
-              justifyContent: 'flex-end',
-              gap: '1.25rem',
+              justifyContent: 'flex-start',
+              gap: '1.2rem',
             }}
           >
-            <li>
-              <Link
-                to="/"
-                style={{
-                  display: 'inline-block',
-                  fontWeight: 500,
-                  borderBottom: pathname === '/' ? '1px solid currentColor' : '1px solid transparent',
-                }}
-              >
-                {m.header.home}
-              </Link>
-            </li>
-            <li className="header-nav-dropdown">
-              <button
-                type="button"
-                className="header-nav-dropdown-trigger"
-                aria-haspopup="menu"
-                aria-controls="header-projects-menu"
-                id="header-projects-trigger"
-                style={{
-                  display: 'inline-block',
-                  fontWeight: 500,
-                  borderBottom: projectPathMatch ? '1px solid currentColor' : '1px solid transparent',
-                  background: 'none',
-                  cursor: 'pointer',
-                  color: 'inherit',
-                  textTransform: 'inherit',
-                  letterSpacing: 'inherit',
-                }}
-              >
-                {m.header.projects}
-              </button>
-              <div className="header-nav-dropdown-panel" role="presentation">
-                <div className="header-nav-dropdown-panel-inner">
-                  <ul
-                    id="header-projects-menu"
-                    className="header-nav-dropdown-list"
-                    role="menu"
-                    aria-label={m.header.projectsMenuAria}
-                  >
-                    {projects.map((p) => {
-                      const projectActive = pathname === `/project/${p.slug}`
-                      return (
-                        <li key={p.id} role="none">
-                          <Link
-                            role="menuitem"
-                            to={`/project/${p.slug}`}
-                            className={
-                              projectActive
-                                ? 'header-nav-dropdown-link header-nav-dropdown-link--active'
-                                : 'header-nav-dropdown-link'
-                            }
-                            aria-current={projectActive ? 'page' : undefined}
-                          >
-                            {p.title}
-                          </Link>
-                        </li>
-                      )
-                    })}
-                  </ul>
-                </div>
-              </div>
-            </li>
+            <li><Link to="/" className={pathname === '/' ? 'header-menu-link is-active' : 'header-menu-link'}>{m.header.home}</Link></li>
             <li>
               <Link
                 to="/about"
-                style={{
-                  display: 'inline-block',
-                  fontWeight: 500,
-                  borderBottom: pathname === '/about' ? '1px solid currentColor' : '1px solid transparent',
-                }}
+                className={pathname === '/about' ? 'header-menu-link is-active' : 'header-menu-link'}
               >
-                {m.header.about}
+                {locale === 'zh' ? '关于我' : 'About me'}
               </Link>
             </li>
-            <li>
-              <a
-                href="#contact"
-                onClick={(e) => {
-                  e.preventDefault()
-                  window.history.pushState(null, '', '#contact')
-                  window.dispatchEvent(new HashChangeEvent('hashchange'))
-                }}
-                style={{ fontWeight: 500 }}
-              >
-                {m.header.contact}
-              </a>
-            </li>
-            <li style={{ marginLeft: '0.15rem' }}>
-              <LanguageSwitcher />
-            </li>
+            <li><Link to="/blog" className={pathname.startsWith('/blog') ? 'header-menu-link is-active' : 'header-menu-link'}>{locale === 'zh' ? '博客' : 'Journal'}</Link></li>
+            <li><Link to="/photography" className={pathname === '/photography' ? 'header-menu-link is-active' : 'header-menu-link'}>{locale === 'zh' ? '摄影' : 'Photo'}</Link></li>
           </ul>
-        </nav>
+          </nav>
+        </div>
+
+        <div className="header-actions">
+          <a href="#chat" className="header-control header-chat-link" onClick={(e) => { e.preventDefault(); window.history.pushState(null, '', '#chat'); window.dispatchEvent(new HashChangeEvent('hashchange')) }}><IconCommentSquare size={14} /><span>{locale === 'zh' ? '和我聊聊' : 'Chat with me'}</span></a>
+          <span className="header-control header-language-control"><LanguageSwitcher /></span>
+          <button type="button" className="header-control theme-toggle" onClick={onToggleTheme} aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'} title={dark ? 'Light mode' : 'Dark mode'}><IconContrast size={15} /></button>
+        </div>
       </div>
     </header>
   )

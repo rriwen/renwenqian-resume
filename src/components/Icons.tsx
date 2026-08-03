@@ -67,6 +67,51 @@ export function IconFourPointStar({ size = 14 }: { size?: number }) {
   )
 }
 
+export function IconBot({ size = 14 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <rect x="4" y="7" width="16" height="13" rx="4" />
+      <path d="M12 3v4M8 13h.01M16 13h.01M8 17h8" />
+    </svg>
+  )
+}
+
+export function IconMessageCircle({ size = 14 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="M20 11.5a7.5 7.5 0 0 1-7.5 7.5H7l-3.5 2 .9-3.8A7.5 7.5 0 1 1 20 11.5Z" />
+      <path d="M8 12h.01M12 12h.01M16 12h.01" />
+    </svg>
+  )
+}
+
+export function IconChatDots({ size = 14 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="M18.5 16.5a6.5 6.5 0 0 0-5.5-10H8a6.5 6.5 0 0 0-3.4 12l-.6 3 3-1.3a6.5 6.5 0 0 0 5.5-.2" />
+      <path d="M15 13.5h.01M18 13.5h.01M12 13.5h.01" />
+    </svg>
+  )
+}
+
+export function IconCommentSquare({ size = 14 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="M5 4h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H11l-5 3v-3H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z" />
+      <path d="M8 10h.01M12 10h.01M16 10h.01" />
+    </svg>
+  )
+}
+
+export function IconContrast({ size = 15 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" aria-hidden>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 3a9 9 0 0 1 0 18V3Z" fill="currentColor" stroke="none" />
+    </svg>
+  )
+}
+
 export function IconStack({ size = 22 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden>

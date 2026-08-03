@@ -12,6 +12,7 @@ export const projects: Project[] = [
   { id: 3, slug: 'aidesignsystem', title: 'AI Design System', image: '/images/aidesignsystem-hero.jpg' },
   { id: 4, slug: 'databaseops', title: 'Database Ops platform', image: '/images/databaseops-hero.jpg' },
   { id: 5, slug: 'datadevelop', title: 'Data Development Tools', image: '/images/datadevelop-hero.jpg' },
+  { id: 6, slug: 'designops', title: 'Design Ops Toolkit', image: '/images/work-1.webp' },
 ]
 
 export function getProjectBySlug(slug: string | undefined): Project | undefined {

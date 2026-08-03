@@ -113,7 +113,8 @@ export function ProjectDetail() {
       style={{
         minHeight: '100dvh',
         padding: 'var(--header-clearance) 2.5rem 4rem',
-        width: 900,
+        width: 'min(900px, 100%)',
+        boxSizing: 'border-box',
         margin: '0 auto',
       }}
     >

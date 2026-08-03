@@ -405,6 +405,18 @@ const details: Record<string, { en: ProjectDetailBlock; zh: ProjectDetailBlock }
       ],
     },
   },
+  designops: {
+    en: {
+      tags: ['Design Operations', 'Workflow', 'Product Design'],
+      paragraphs: ['A lightweight toolkit for turning design standards into repeatable team workflows.', 'I explored how handoff, visual QA, and reusable patterns can reduce friction between design and engineering.'],
+      gallery: [{ src: '/images/work-1.webp', caption: 'Design operations toolkit' }],
+    },
+    zh: {
+      tags: ['设计效能', '工作流', '产品设计'],
+      paragraphs: ['一套将设计规范转化为可复用团队工作流的轻量工具。', '探索如何通过交付、视觉检查和可复用模式，减少设计与研发之间的协作摩擦。'],
+      gallery: [{ src: '/images/work-1.webp', caption: '设计效能工具' }],
+    },
+  },
 }
 
 export function getProjectDetail(slug: string, locale: Locale): ProjectDetailBlock | undefined {

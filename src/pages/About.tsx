@@ -191,13 +191,14 @@ export function About() {
       <main
         style={{
           minHeight: '100dvh',
-          padding: 'var(--header-clearance) clamp(1rem, 4vw, 2.5rem) 4rem',
-          maxWidth: 900,
-          margin: '0 auto',
+          padding: '10rem 5vw 4rem',
+          width: '100%',
+          maxWidth: 'none',
+          margin: 0,
         }}
       >
         <div id="about-2026" style={{ ...anchorTarget, position: 'relative', marginBottom: '1.5rem' }}>
-          <h2 style={{ margin: 0, fontSize: '2.25rem', fontWeight: 700 }}>{renderMarkdownInline(about.heading)}</h2>
+          <h2 style={{ margin: 0, fontSize: '28px', fontWeight: 700 }}>{renderMarkdownInline(about.heading)}</h2>
         </div>
 
         <div style={aboutIntroColumn}>

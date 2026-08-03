@@ -4,6 +4,7 @@ import { useLanguage } from '../i18n/LanguageContext'
 import { hasDeepseekClientKey, sendDeepseekChatStream, type ChatTurn } from '../lib/deepseekChat'
 import { buildSiteCorpus } from '../lib/siteCorpus'
 import { LanguageSwitcher } from './LanguageSwitcher'
+import { IconContrast } from './Icons'
 
 function isChatHash() {
   return window.location.hash === '#chat'
@@ -66,7 +67,7 @@ function linesToChatTurns(lines: Line[]): ChatTurn[] {
 const STREAM_REVEAL_MS = 55
 const STREAM_REVEAL_CHARS = 10
 
-export function ChatbotOverlay() {
+export function ChatbotOverlay({ dark, onToggleTheme }: { dark: boolean; onToggleTheme: () => void }) {
   const { m, locale } = useLanguage()
   const navigate = useNavigate()
   const siteCorpus = useMemo(() => buildSiteCorpus(locale), [locale])
@@ -305,7 +306,7 @@ export function ChatbotOverlay() {
         position: 'fixed',
         inset: 0,
         zIndex: 205,
-        background: '#fff',
+        background: 'var(--page-bg)',
         display: 'flex',
         flexDirection: 'column',
         paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))',
@@ -337,6 +338,7 @@ export function ChatbotOverlay() {
       </button>
 
       <div
+        className="chatbot-overlay-actions"
         style={{
           position: 'absolute',
           top: 'max(1rem, env(safe-area-inset-top))',
@@ -345,6 +347,7 @@ export function ChatbotOverlay() {
         }}
       >
         <LanguageSwitcher />
+        <button type="button" className="chatbot-theme-toggle" onClick={onToggleTheme} aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'} title={dark ? 'Light mode' : 'Dark mode'}><IconContrast size={15} /></button>
       </div>
 
       <div
@@ -418,6 +421,7 @@ export function ChatbotOverlay() {
             </div>
 
             <div className="chatbot-composer">
+              <button type="button" className="chatbot-scroll-bottom" onClick={() => listRef.current?.scrollTo({ top: listRef.current.scrollHeight, behavior: 'smooth' })} aria-label={locale === 'zh' ? '滚动到底部' : 'Scroll to bottom'} title={locale === 'zh' ? '滚动到底部' : 'Scroll to bottom'}>↓</button>
               <button
                 type="button"
                 className="chatbot-composer-plus"
