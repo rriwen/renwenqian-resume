@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useLanguage } from '../i18n/LanguageContext'
-import { formatBlogDate, getBlogPosts } from '../lib/blog'
+import { getBlogPosts } from '../lib/blog'
 
 export function BlogIndex() {
   const { locale } = useLanguage()
@@ -26,8 +26,9 @@ export function BlogIndex() {
         {posts.map((post) => (
           <article className="blog-list-item" key={post.slug}>
             <Link to={`/blog/${post.slug}`} className="blog-list-link">
-              <time dateTime={post.date}>{formatBlogDate(post.date, locale)}</time>
-              <h2>{post.title}</h2>
+              <div className="blog-list-copy">
+                <h2>{post.title}</h2>
+              </div>
               <p className="blog-list-type">{post.category}</p>
             </Link>
           </article>

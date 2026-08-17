@@ -2,7 +2,7 @@ import { createElement, useEffect, useState, type CSSProperties } from 'react'
 import { createPortal } from 'react-dom'
 import { Link, useParams } from 'react-router-dom'
 import { getProjectDetail, type ProjectDetailParagraph } from '../data/projectDetails'
-import { getAdjacentProjects, getProjectBySlug } from '../data/projects'
+import { getAdjacentProjects, getProjectBySlug, getProjectTitle } from '../data/projects'
 import { useLanguage } from '../i18n/LanguageContext'
 import { isGifSrc } from '../lib/isGifSrc'
 
@@ -37,11 +37,11 @@ export function ProjectDetail() {
 
   useEffect(() => {
     if (project) {
-      document.title = `${project.title} | REN WENQIAN`
+      document.title = `${getProjectTitle(project, locale)} | REN WENQIAN`
     } else {
       document.title = m.home.title
     }
-  }, [project, m.home.title])
+  }, [project, locale, m.home.title])
 
   useEffect(() => {
     setLightboxIndex(null)
@@ -79,7 +79,8 @@ export function ProjectDetail() {
 
   if (!project || !detail) {
     return (
-      <main
+        <main
+          className="project-detail-page"
         style={{
           minHeight: '100dvh',
           padding: 'var(--header-clearance) 2.5rem 4rem',
@@ -110,6 +111,7 @@ export function ProjectDetail() {
 
   return (
     <main
+      className="project-detail-page"
       style={{
         minHeight: '100dvh',
         padding: 'var(--header-clearance) 2.5rem 4rem',
@@ -178,7 +180,7 @@ export function ProjectDetail() {
           letterSpacing: '-0.02em',
         }}
       >
-        {project.title}
+        {getProjectTitle(project, locale)}
       </h1>
 
       <p
@@ -406,7 +408,7 @@ export function ProjectDetail() {
                       color: 'inherit',
                     }}
                   >
-                    {prevProject.title}
+                    {getProjectTitle(prevProject, locale)}
                   </Link>
                 </>
               ) : null}
@@ -436,7 +438,7 @@ export function ProjectDetail() {
                       color: 'inherit',
                     }}
                   >
-                    {nextProject.title}
+                    {getProjectTitle(nextProject, locale)}
                   </Link>
                 </>
               ) : null}

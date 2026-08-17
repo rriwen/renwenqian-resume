@@ -421,7 +421,6 @@ export function ChatbotOverlay({ dark, onToggleTheme }: { dark: boolean; onToggl
             </div>
 
             <div className="chatbot-composer">
-              <button type="button" className="chatbot-scroll-bottom" onClick={() => listRef.current?.scrollTo({ top: listRef.current.scrollHeight, behavior: 'smooth' })} aria-label={locale === 'zh' ? '滚动到底部' : 'Scroll to bottom'} title={locale === 'zh' ? '滚动到底部' : 'Scroll to bottom'}>↓</button>
               <button
                 type="button"
                 className="chatbot-composer-plus"

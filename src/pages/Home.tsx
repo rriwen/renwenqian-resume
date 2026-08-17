@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { projects, type Project } from '../data/projects'
+import { getProjectTitle, projects, type Project } from '../data/projects'
 import { useLanguage } from '../i18n/LanguageContext'
 
 type ViewMode = 'stack' | 'grid'
@@ -20,12 +20,13 @@ export function Home(_props: Props) {
     ? '一直在做AI、效率、生产力工具，感谢关注。'
     : 'working on AI, productivity, and efficiency tools. Thanks for following along.'
   const categories = locale === 'zh' ? ['全部', '人工智能', '工具应用', '网页服务', '设计系统'] : ['All', 'AI', 'Tools', 'Web', 'Design systems']
-  const projectCategory = [1, 1, 4, 2, 2]
-  const projectSubtags = locale === 'zh' ? ['记忆插件', '数据分析', 'AgentUI', '数据库运维', '数据开发'] : ['Memory plugin', 'Analytics', 'Agent UI', 'Database ops', 'Data development']
+  const projectTags = locale === 'zh'
+    ? [['AI Native', '数据报表', '交互设计'], ['Demo', '可观测性', '产品设计'], ['全栈设计'], ['设计系统', 'Agent UI'], ['工具应用', '数据库开发'], ['工具应用', '数据库运维']]
+    : [['AI Native', 'Data Reporting', 'Interaction Design'], ['Demo', 'Observability', 'Product Design'], ['Full-stack Design'], ['Design System', 'Agent UI'], ['Tools', 'Database Development'], ['Tools', 'Database Operations']]
   const selected = useMemo(() => {
-    const all = projects.slice(0, 5).map((project, index) => ({ project, index }))
+    const all = projects.map((project, index) => ({ project, index }))
     if (category === 'all') return all
-    const groups = [[0, 1, 2], [1, 3, 4, 5], [0, 1, 2, 3, 4, 5], [2]]
+    const groups = [[0, 1, 2], [4, 5], [0, 1, 2, 3, 4, 5], [3]]
     const group = groups[Number(category) - 1] ?? []
     return all.filter((item) => group.includes(item.index))
   }, [category, categories])
@@ -34,7 +35,17 @@ export function Home(_props: Props) {
     <main className="home-redesign">
       <section className="home-hero">
         <h1>{locale === 'zh' ? <>你好，我是任文倩 <span className="home-wave" aria-hidden="true">👋🏻</span></> : "Hi, I'm Ren Wenqian."}</h1>
-        <p className="home-intro">{locale === 'zh' ? <>{intro}<br />我是一名产品设计师，始终专注于 AI、效率工具与生产力产品设计，感谢关注。</> : <>{intro}<br />{sub}</>}</p>
+        <p className="home-intro">
+          {locale === 'zh' ? (
+            <>
+              产品设计师，专注于 AI、效率工具与生产力产品设计
+              <br />
+              也可以叫我 泗澄 或 4X，欢迎来到我的个人网站
+            </>
+          ) : (
+            <>{intro} {sub}</>
+          )}
+        </p>
         <div className="home-hero-meta"><span>{locale === 'zh' ? '中国杭州' : 'Hangzhou, China'}</span><span>{locale === 'zh' ? '产品设计师' : 'Product designer'}</span><span>E/INFP</span></div>
       </section>
 
@@ -61,21 +72,23 @@ export function Home(_props: Props) {
         <div className="products-grid">
           {selected.map(({ project, index }) => {
             const descriptions = locale === 'zh' ? [
-              '面向 Agent 的长期记忆与知识管理工具，让复杂信息可以被理解、调用和持续积累。',
               '面向数据团队的智能分析与问答体验，帮助用户更快得到可信的业务洞察。',
+              '面向 Agent 运行与治理的工作台，帮助团队观察、调试和持续优化 Agent 任务。',
+              '面向 Agent 的长期记忆与知识管理工具，让复杂信息可以被理解、调用和持续积累。',
               '将 AI 能力沉淀为可复用的设计模式，探索更高效的设计与研发协作。',
-              '将设计规范、交付流程与视觉检查整合成一套团队效率工具，减少重复工作。',
               '面向复杂数据开发场景，重新梳理从建模到发布的全链路体验。',
+              '将设计规范、交付流程与视觉检查整合成一套团队效率工具，减少重复工作。',
               '通过体验诊断和协作工具，帮助团队更稳定地交付高质量产品。',
             ] : [
-              'A memory and knowledge tool for Agents, making complex information easier to understand and reuse.',
               'An intelligent analytics experience that helps data teams reach trustworthy insights faster.',
+              'An operations workspace for observing, debugging, and continuously improving Agent tasks.',
+              'A memory and knowledge tool for Agents, making complex information easier to understand and reuse.',
               'A reusable AI design language for more efficient design and engineering collaboration.',
-              'A design operations toolkit that brings standards, handoff, and visual QA into one workflow.',
               'A clearer end-to-end experience for complex data development and publishing workflows.',
+              'A design operations toolkit that brings standards, handoff, and visual QA into one workflow.',
               'Experience diagnostics and collaboration tools for more consistent product delivery.',
             ]
-            return <article className="product-card" key={project.id}><button className="product-card-link" onClick={() => openProject(project)}><div className="product-card-media"><img src={project.image} alt="" /></div><div className="product-card-copy"><h3>{project.title}</h3><p>{descriptions[index]}</p><div className="product-tags"><span>{categories[projectCategory[index]]}</span><span>{projectSubtags[index]}</span></div></div></button></article>
+            return <article className="product-card" key={project.id}><button className="product-card-link" onClick={() => openProject(project)}><div className="product-card-media"><img src={project.image} alt="" /></div><div className="product-card-copy"><h3>{getProjectTitle(project, locale)}</h3><p>{descriptions[index]}</p><div className="product-tags">{projectTags[index].map((tag) => <span key={tag}>{tag}</span>)}</div></div></button></article>
           })}
         </div>
       </section>

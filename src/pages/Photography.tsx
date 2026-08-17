@@ -56,6 +56,13 @@ export function Photography() {
 
   const profile = feed?.profile ?? EMPTY_FEED.profile
   const items = feed?.items ?? []
+  const sortedItems = [...items].sort((a, b) => {
+    const dateValue = (caption: string) => {
+      const match = caption.match(/(\d{4})\.(\d{1,2})/)
+      return match ? Number(match[1]) * 100 + Number(match[2]) : -1
+    }
+    return dateValue(b.caption) - dateValue(a.caption)
+  })
 
   return (
     <main className="photography-page">
@@ -76,7 +83,10 @@ export function Photography() {
         </section>
       ) : items.length === 0 ? null : (
         <section className="photography-grid" aria-label={locale === 'zh' ? '照片' : 'Photographs'}>
-          {items.map((item, index) => (
+          <div className="photography-item photography-item-placeholder" aria-label="To Be Continued...">
+            <span>To Be Continued...</span>
+          </div>
+          {sortedItems.map((item, index) => (
             <a
               className="photography-item"
               href={item.permalink}

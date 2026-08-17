@@ -1,19 +1,29 @@
 import { Link, useLocation } from 'react-router-dom'
+import { useEffect, useState } from 'react'
 import { useLanguage } from '../i18n/LanguageContext'
 import { LanguageSwitcher } from './LanguageSwitcher'
-import { IconCommentSquare, IconContrast } from './Icons'
+import { IconClose, IconCommentSquare, IconContrast, IconMenu } from './Icons'
 
 type HeaderProps = { dark: boolean; onToggleTheme: () => void }
 
 export function Header({ dark, onToggleTheme }: HeaderProps) {
   const { pathname } = useLocation()
   const { m, locale } = useLanguage()
+  const [isScrolled, setIsScrolled] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
   const isHome = pathname === '/'
   const isArticle = pathname.startsWith('/blog/')
 
+  useEffect(() => {
+    const updateScrollState = () => setIsScrolled(window.scrollY > 0)
+    updateScrollState()
+    window.addEventListener('scroll', updateScrollState, { passive: true })
+    return () => window.removeEventListener('scroll', updateScrollState)
+  }, [])
+
   return (
     <header
-      className={isArticle ? 'site-header site-header--article' : 'site-header'}
+      className={`${isArticle ? 'site-header site-header--article' : 'site-header'}${isScrolled ? ' site-header--scrolled' : ''}`}
       style={{
         position: 'fixed',
         left: 0,
@@ -41,8 +51,9 @@ export function Header({ dark, onToggleTheme }: HeaderProps) {
         }}
       >
         <div className="header-left-group">
+          <button type="button" className="mobile-menu-button" aria-label={menuOpen ? 'Close menu' : 'Open menu'} aria-expanded={menuOpen} onClick={() => setMenuOpen((open) => !open)}>{menuOpen ? <IconClose size={16} /> : <IconMenu size={17} />}</button>
           <Link to="/" className="header-logo">Design.4x</Link>
-          <nav aria-label={m.header.navAria}>
+          <nav className={menuOpen ? 'mobile-nav-open' : ''} aria-label={m.header.navAria}>
           <ul
             style={{
               margin: 0,

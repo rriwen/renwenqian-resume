@@ -21,7 +21,7 @@ export function FooterBar({ projects, viewMode, onViewMode, activeIndex, onActiv
       style={{
         flexShrink: 0,
         width: '100%',
-        minWidth: 1024,
+        minWidth: 0,
         zIndex: 120,
         padding: '1.1rem 1.5rem max(0.65rem, env(safe-area-inset-bottom))',
         pointerEvents: 'none',

@@ -417,6 +417,24 @@ const details: Record<string, { en: ProjectDetailBlock; zh: ProjectDetailBlock }
       gallery: [{ src: '/images/work-1.webp', caption: '设计效能工具' }],
     },
   },
+  agentops: {
+    en: {
+      tags: ['Agent Operations', 'Observability', 'AI Product'],
+      paragraphs: [
+        'AgentOps is a workspace for operating AI Agents in production, from task visibility to debugging and iteration.',
+        'The experience brings run status, execution context, and failure recovery into one workflow so teams can improve Agent reliability over time.',
+      ],
+      gallery: [{ src: '/images/work-6.webp', caption: 'AgentOps workspace concept' }],
+    },
+    zh: {
+      tags: ['Agent 运维', '可观测性', 'AI 产品'],
+      paragraphs: [
+        'AgentOps 是面向 AI Agent 生产运行的工作台，覆盖任务可见性、调试和持续迭代。',
+        '通过统一呈现运行状态、执行上下文和失败恢复路径，帮助团队持续提升 Agent 的稳定性与可控性。',
+      ],
+      gallery: [{ src: '/images/work-6.webp', caption: 'AgentOps 工作台概念' }],
+    },
+  },
 }
 
 export function getProjectDetail(slug: string, locale: Locale): ProjectDetailBlock | undefined {

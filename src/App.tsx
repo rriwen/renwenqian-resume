@@ -1,5 +1,5 @@
 import { lazy, Suspense, useEffect, useState } from 'react'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom'
 import { ChatbotOverlay } from './components/ChatbotOverlay'
 import { ContactOverlay } from './components/ContactOverlay'
 import { Header } from './components/Header'
@@ -14,6 +14,16 @@ const BlogPost = lazy(() => import('./pages/BlogPost').then((module) => ({ defau
 const Photography = lazy(() => import('./pages/Photography').then((module) => ({ default: module.Photography })))
 
 type HomeViewMode = 'stack' | 'grid'
+
+function ScrollToTop() {
+  const { pathname, search } = useLocation()
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
+  }, [pathname, search])
+
+  return null
+}
 
 export default function App() {
   const [viewMode, setViewMode] = useState<HomeViewMode>('stack')
@@ -33,6 +43,7 @@ export default function App() {
     <LanguageProvider>
       <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <div style={{ minHeight: '100dvh' }}>
+          <ScrollToTop />
           <Header dark={dark} onToggleTheme={() => setDark((value) => !value)} />
           <div className="site-content">
             <Suspense fallback={<main className="route-loading">Loading...</main>}>

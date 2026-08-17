@@ -54,17 +54,24 @@ function toPost(path: string, source: string): BlogPost | null {
 
   const filename = path.split('/').pop()?.replace(/\.md$/, '') ?? ''
   const slug = meta.slug || filename
-  if (!meta.title || !meta.date || !meta.excerpt || !meta.cover || !slug) {
+  if (!meta.title || !slug) {
     throw new Error(`Blog frontmatter is incomplete: ${path}`)
   }
+
+  const dateFromFilename = filename.match(/^\d{4}-\d{2}-\d{2}/)?.[0] || ''
+  const firstParagraph = content
+    .split(/\r?\n\s*\r?\n/)
+    .map((part) => part.trim())
+    .find((part) => part && !part.startsWith('#') && !part.startsWith('```')) || ''
+  const excerpt = meta.excerpt || firstParagraph.replace(/[*_`>\[\]]/g, '').slice(0, 180)
 
   return {
     slug,
     title: meta.title,
-    date: meta.date,
+    date: meta.date || dateFromFilename,
     category: meta.category || 'Notes',
-    excerpt: meta.excerpt,
-    cover: meta.cover,
+    excerpt,
+    cover: meta.cover || '',
     coverAlt: meta.coverAlt || meta.title,
     featured: Boolean(meta.featured),
     readingMinutes: meta.readingMinutes || estimateReadingMinutes(content),
@@ -86,6 +93,7 @@ export function getBlogPost(slug?: string) {
 }
 
 export function formatBlogDate(date: string, locale: 'zh' | 'en') {
+  if (!date) return ''
   return new Intl.DateTimeFormat(locale === 'zh' ? 'zh-CN' : 'en-US', {
     year: 'numeric',
     month: locale === 'zh' ? 'long' : 'short',

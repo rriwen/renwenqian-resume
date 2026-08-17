@@ -30,6 +30,18 @@ export type AboutEducationEntry = {
   items: string[]
 }
 
+export type AboutProjectEntry = {
+  title: string
+  role: string
+  period: string
+  content: string
+  goal: string
+  responsibilities: string[]
+  achievements: string[]
+  responsibilitiesOrdered: boolean
+  achievementsOrdered: boolean
+}
+
 export type AboutContactSection = {
   title: string
   items: AboutContactItem[]
@@ -39,6 +51,7 @@ export type AboutContent = {
   heading: string
   introParagraphs: string[]
   work: AboutWorkEntry[]
+  projects: AboutProjectEntry[]
   education: AboutEducationEntry
   contact: AboutContactSection
 }
@@ -164,6 +177,86 @@ function parseContactItem(line: string): AboutContactItem {
   }
 }
 
+function parseProjectArticle(lines: string[]): AboutProjectEntry {
+  let role = ''
+  let period = ''
+  let content = ''
+  let goal = ''
+  const contentLines: string[] = []
+  let section: 'responsibilities' | 'achievements' | null = null
+  const responsibilities: string[] = []
+  const achievements: string[] = []
+  let responsibilitiesOrdered = false
+  let achievementsOrdered = false
+
+  for (const rawLine of lines) {
+    const line = rawLine.trim()
+    if (!line) continue
+
+    if (line.startsWith('>')) {
+      const value = line.slice(1).trim()
+      const metadata = value.split('|').map((item) => item.trim()).filter(Boolean)
+      if (metadata.length > 1) {
+        if (!role) role = metadata[0]
+        if (!period) period = metadata[1]
+      } else if (!role) role = value
+      else if (!period) period = value
+      continue
+    }
+
+    const contentMatch = line.match(/^(?:\*\*)?(?:内容|项目背景|Content|Project background)[:：]?(?:\*\*)?\s*(.*)$/i)
+    if (contentMatch) {
+      content = contentMatch[1].trim()
+      section = null
+      continue
+    }
+
+    const goalMatch = line.match(/^(?:\*\*)?(?:目标|项目目标|Goal|Project goal)[:：]?(?:\*\*)?\s*(.*)$/i)
+    if (goalMatch) {
+      goal = goalMatch[1].trim()
+      section = null
+      continue
+    }
+
+    if (/^(?:\*\*)?(?:我主要负责|主要负责|负责|Responsibilities)[:：]?(?:\*\*)?\s*$/.test(line)) {
+      section = 'responsibilities'
+      continue
+    }
+
+    if (/^(?:\*\*)?(?:业绩|成果|Achievements)[:：]?(?:\*\*)?\s*$/.test(line)) {
+      section = 'achievements'
+      continue
+    }
+
+    const bulletMatch = line.match(/^(?:-\s+|\d+[.)]\s+)(.*)$/)
+    if (bulletMatch && section) {
+      if (/^\d+[.)]\s+/.test(line)) {
+        if (section === 'responsibilities') responsibilitiesOrdered = true
+        else achievementsOrdered = true
+      }
+      if (section === 'responsibilities') responsibilities.push(bulletMatch[1].trim())
+      else achievements.push(bulletMatch[1].trim())
+      continue
+    }
+
+    if (!section && !content) contentLines.push(line)
+  }
+
+  if (!content) content = contentLines.join(' ').trim()
+
+  return {
+    title: '',
+    role,
+    period,
+    content,
+    goal,
+    responsibilities,
+    achievements,
+    responsibilitiesOrdered,
+    achievementsOrdered,
+  }
+}
+
 export function stripMarkdownInline(text: string): string {
   return text
     .replace(/\*\*(.+?)\*\*/g, '$1')
@@ -199,10 +292,11 @@ export function getAboutContent(locale: Locale): AboutContent {
   const sections = splitSections(firstSectionIndex >= 0 ? introLines.slice(firstSectionIndex) : [])
 
   const workSection = sections[0]
-  const educationSection = sections[1]
-  const contactSection = sections[2]
+  const projectSection = sections[1]
+  const educationSection = sections[2]
+  const contactSection = sections[3]
 
-  if (!workSection || !educationSection || !contactSection) {
+  if (!workSection || !projectSection || !educationSection || !contactSection) {
     throw new Error(`About markdown is missing one or more sections for locale: ${locale}`)
   }
 
@@ -216,6 +310,11 @@ export function getAboutContent(locale: Locale): AboutContent {
     }
   })
 
+  const projects = splitArticles(projectSection.lines).map((article) => ({
+    ...parseProjectArticle(article.lines),
+    title: article.title,
+  }))
+
   const educationArticles = splitArticles(educationSection.lines)
   const educationArticle = educationArticles[0]
   if (!educationArticle) {
@@ -227,6 +326,7 @@ export function getAboutContent(locale: Locale): AboutContent {
     heading: stripMarkdownInline(headingLine.slice(2).trim()),
     introParagraphs,
     work: workArticles,
+    projects,
     education: {
       title: educationArticle.title,
       period: parsedEducation.period,

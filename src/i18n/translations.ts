@@ -79,6 +79,7 @@ export type Messages = {
       present: { label: string; timePoint: string }
       oceanbase: { label: string; timePoint: string }
       ecidi: { label: string; timePoint: string }
+      leishu: { label: string; timePoint: string }
       puhuai: { label: string; timePoint: string }
       education: { label: string; timePoint: string }
     }
@@ -249,6 +250,7 @@ export const translations: Record<Locale, Messages> = {
         present: { label: 'Now', timePoint: '2026' },
         oceanbase: { label: 'OceanBase', timePoint: '2021' },
         ecidi: { label: 'ECIDI', timePoint: '2019' },
+        leishu: { label: 'Leishu', timePoint: '2019' },
         puhuai: { label: 'Puhuai', timePoint: '2016' },
         education: { label: 'Education', timePoint: '2012' },
       },
@@ -427,7 +429,8 @@ export const translations: Record<Locale, Messages> = {
         navAria: '本页经历时间轴导航',
         present: { label: '当前', timePoint: '2026' },
         oceanbase: { label: 'OceanBase', timePoint: '2021' },
-        ecidi: { label: '华东院', timePoint: '2019' },
+        ecidi: { label: '华东院', timePoint: '2020' },
+        leishu: { label: '雷数', timePoint: '2019' },
         puhuai: { label: '浦槐', timePoint: '2016' },
         education: { label: '教育', timePoint: '2012' },
       },

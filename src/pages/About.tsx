@@ -2,8 +2,15 @@ import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react'
 import { getAboutContent, renderMarkdownInline } from '../content/about'
 import { useLanguage } from '../i18n/LanguageContext'
 
-const TIMELINE_IDS = ['about-2026', 'work-oceanbase', 'work-ecidi', 'work-puhuai', 'education-njupt'] as const
+const TIMELINE_IDS = [
+  'about-2026',
+  'experience',
+  'projects',
+  'education',
+  'about-contact',
+] as const
 type TimelineId = (typeof TIMELINE_IDS)[number]
+type TimelineEntry = { id: TimelineId; label: string; timePoint: string }
 
 function measureHeaderClearancePx(): number {
   const probe = document.createElement('div')
@@ -109,19 +116,36 @@ export function About() {
   const { m, locale } = useLanguage()
   const about = useMemo(() => getAboutContent(locale), [locale])
   const [activeTimelineId, setActiveTimelineId] = useState<TimelineId>('about-2026')
+  const [projectsExpanded, setProjectsExpanded] = useState(false)
+  const [educationExpanded, setEducationExpanded] = useState(false)
   const scrollOffsetRef = useRef(0)
 
-  const timelineEntries = useMemo(
-    () =>
-      [
-        { id: 'about-2026' as const, ...m.about.timeline.present },
-        { id: 'work-oceanbase' as const, ...m.about.timeline.oceanbase },
-        { id: 'work-ecidi' as const, ...m.about.timeline.ecidi },
-        { id: 'work-puhuai' as const, ...m.about.timeline.puhuai },
-        { id: 'education-njupt' as const, ...m.about.timeline.education },
-      ] satisfies { id: TimelineId; label: string; timePoint: string }[],
-    [m.about.timeline],
-  )
+  const timelineEntries = useMemo<TimelineEntry[]>(() => {
+    const labels =
+      locale === 'zh'
+        ? {
+            intro: '简介',
+            experience: '工作经历',
+            projects: '项目经历',
+            education: '教育经历',
+            contact: '联系方式',
+          }
+        : {
+            intro: 'About',
+            experience: 'Experience',
+            projects: 'Projects',
+            education: 'Education',
+            contact: 'Contact',
+          }
+
+    return [
+      { id: 'about-2026', label: labels.intro, timePoint: labels.intro },
+      { id: 'experience', label: labels.experience, timePoint: labels.experience },
+      { id: 'projects', label: labels.projects, timePoint: labels.projects },
+      { id: 'education', label: labels.education, timePoint: labels.education },
+      { id: 'about-contact', label: labels.contact, timePoint: labels.contact },
+    ]
+  }, [locale])
 
   useEffect(() => {
     document.title = m.about.title
@@ -179,16 +203,18 @@ export function About() {
 
   const oceanbase = about.work[0]
   const ecidi = about.work[1]
-  const puhuai = about.work[2]
+  const leishu = about.work[2]
+  const puhuai = about.work[3]
   const edu = about.education
 
-  if (!oceanbase || !ecidi || !puhuai) {
+  if (!oceanbase || !ecidi || !leishu || !puhuai) {
     throw new Error('About markdown is missing one or more work entries')
   }
 
   return (
     <>
       <main
+        className="about-page"
         style={{
           minHeight: '100dvh',
           padding: '10rem 5vw 4rem',
@@ -214,8 +240,11 @@ export function About() {
 
         <section
           id="experience"
-          style={{ ...anchorTarget, marginTop: '2.75rem', paddingTop: '2rem', borderTop: '1px solid rgba(10,10,10,0.12)' }}
+          style={{ ...anchorTarget, marginTop: '4rem', paddingTop: '2rem' }}
         >
+          <h2 style={{ margin: '0 0 2rem', fontSize: '28px', fontWeight: 700 }}>
+            {locale === 'zh' ? '工作经历' : 'Experience'}
+          </h2>
           <article id="work-oceanbase" style={{ ...anchorTarget, marginTop: '2.25rem' }}>
             <div style={workArticleProse}>
               <header style={workArticleHeader}>
@@ -238,7 +267,7 @@ export function About() {
 
           <article
             id="work-ecidi"
-            style={{ ...anchorTarget, marginTop: '2.5rem', paddingTop: '2rem', borderTop: '1px solid rgba(10,10,10,0.08)' }}
+            style={{ ...anchorTarget, marginTop: '2.5rem', paddingTop: '2rem' }}
           >
             <div style={workArticleProse}>
               <header style={workArticleHeader}>
@@ -260,8 +289,31 @@ export function About() {
           </article>
 
           <article
+            id="work-leishu"
+            style={{ ...anchorTarget, marginTop: '2.5rem', paddingTop: '2rem' }}
+          >
+            <div style={workArticleProse}>
+              <header style={workArticleHeader}>
+                <h3 style={workArticleTitle}>{renderMarkdownInline(leishu.title)}</h3>
+                <p style={{ ...workArticleMeta, marginBottom: 4 }}>{renderMarkdownInline(leishu.meta)}</p>
+                <p style={{ ...workArticlePeriod, marginBottom: 0 }}>
+                  <span aria-hidden="true">{'>'} </span>
+                  {renderMarkdownInline(leishu.period)}
+                </p>
+              </header>
+              <ul style={workArticleList}>
+                {leishu.bullets.map((item, i, arr) => (
+                  <li key={i} style={{ marginBottom: i < arr.length - 1 ? '0.65rem' : 0 }}>
+                    {renderMarkdownInline(item)}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </article>
+
+          <article
             id="work-puhuai"
-            style={{ ...anchorTarget, marginTop: '2.5rem', paddingTop: '2rem', borderTop: '1px solid rgba(10,10,10,0.08)' }}
+            style={{ ...anchorTarget, marginTop: '2.5rem', paddingTop: '2rem' }}
           >
             <div style={workArticleProse}>
               <header style={workArticleHeader}>
@@ -284,35 +336,154 @@ export function About() {
         </section>
 
         <section
-          id="education"
-          style={{ ...anchorTarget, marginTop: '2.75rem', paddingTop: '2rem', borderTop: '1px solid rgba(10,10,10,0.12)' }}
+          id="projects"
+          style={{ ...anchorTarget, marginTop: '2.75rem', paddingTop: '2rem' }}
         >
-          <article id="education-njupt" style={{ ...anchorTarget, marginTop: '2.25rem' }}>
-            <div style={workArticleProse}>
-              <header style={workArticleHeader}>
-                <h3 style={workArticleTitle}>{renderMarkdownInline(edu.title)}</h3>
-                <p style={{ ...workArticlePeriod, marginBottom: 0 }}>
-                  <span aria-hidden="true">{'>'} </span>
-                  {renderMarkdownInline(edu.period)}
+          <h2 style={{ margin: `0 0 ${projectsExpanded ? '2rem' : '0'}`, fontSize: '28px', fontWeight: 700 }}>
+            <button
+              type="button"
+              className="about-section-toggle"
+              aria-expanded={projectsExpanded}
+              aria-controls="projects-content"
+              onClick={() => setProjectsExpanded((expanded) => !expanded)}
+            >
+              <span>{locale === 'zh' ? '项目经历' : 'Projects'}</span>
+              <span className={`about-section-toggle-icon${projectsExpanded ? ' is-expanded' : ''}`} aria-hidden="true" />
+            </button>
+          </h2>
+          <div id="projects-content" hidden={!projectsExpanded}>
+            {about.projects.map((project, index) => (
+              <article
+                key={`${project.title}-${index}`}
+                id={`project-${index + 1}`}
+                style={{ ...anchorTarget, marginTop: index === 0 ? 0 : '5rem' }}
+              >
+              <div style={workArticleProse}>
+                <header
+                  style={{
+                    ...workArticleHeader,
+                    gap: '0.35rem',
+                  }}
+                >
+                  <h3 style={{ ...workArticleTitle, marginBottom: 0 }}>{renderMarkdownInline(project.title)}</h3>
+                  <div style={{ display: 'flex', alignItems: 'baseline', gap: '1rem', flexWrap: 'wrap' }}>
+                    <span style={workArticleMeta}>{renderMarkdownInline(project.role)}</span>
+                    <span style={{ ...workArticlePeriod, margin: 0 }}>{renderMarkdownInline(project.period)}</span>
+                  </div>
+                </header>
+
+                <p style={{ ...bodyText, marginTop: '1.5rem', marginBottom: '1.25rem' }}>
+                  {renderMarkdownInline(project.content)}
                 </p>
-              </header>
-              <ul style={{ ...workArticleList, marginTop: '1rem', marginBottom: 0 }}>
-                {edu.items.map((item, i, arr) => (
-                  <li key={i} style={{ marginBottom: i < arr.length - 1 ? '0.65rem' : 0 }}>
-                    {renderMarkdownInline(item)}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </article>
+
+                {project.goal ? (
+                  <p style={{ ...bodyText, marginBottom: '1.25rem' }}>
+                    <strong>{locale === 'zh' ? '目标：' : 'Goal: '}</strong>
+                    {renderMarkdownInline(project.goal)}
+                  </p>
+                ) : null}
+
+                <div>
+                  <p style={{ ...bodyText, marginBottom: '0.5rem' }}>
+                    <strong>{locale === 'zh' ? '我主要负责：' : 'Responsibilities: '}</strong>
+                  </p>
+                  {project.responsibilities.length > 0 ? (
+                    project.responsibilitiesOrdered ? (
+                      <ol style={{ ...workArticleList, marginTop: 0 }}>
+                        {project.responsibilities.map((item, itemIndex) => (
+                          <li key={itemIndex} style={{ marginBottom: itemIndex < project.responsibilities.length - 1 ? '0.55rem' : 0 }}>
+                            {renderMarkdownInline(item)}
+                          </li>
+                        ))}
+                      </ol>
+                    ) : (
+                      <ul style={{ ...workArticleList, marginTop: 0 }}>
+                        {project.responsibilities.map((item, itemIndex) => (
+                          <li key={itemIndex} style={{ marginBottom: itemIndex < project.responsibilities.length - 1 ? '0.55rem' : 0 }}>
+                            {renderMarkdownInline(item)}
+                          </li>
+                        ))}
+                      </ul>
+                    )
+                  ) : null}
+                </div>
+
+                <div style={{ marginTop: '1.5rem' }}>
+                  <p style={{ ...bodyText, marginBottom: '0.5rem' }}>
+                    <strong>{locale === 'zh' ? '业绩：' : 'Achievements: '}</strong>
+                  </p>
+                  {project.achievements.length > 0 ? (
+                    project.achievementsOrdered ? (
+                      <ol style={{ ...workArticleList, marginTop: 0 }}>
+                        {project.achievements.map((item, itemIndex) => (
+                          <li key={itemIndex} style={{ marginBottom: itemIndex < project.achievements.length - 1 ? '0.55rem' : 0 }}>
+                            {renderMarkdownInline(item)}
+                          </li>
+                        ))}
+                      </ol>
+                    ) : (
+                      <ul style={{ ...workArticleList, marginTop: 0 }}>
+                        {project.achievements.map((item, itemIndex) => (
+                          <li key={itemIndex} style={{ marginBottom: itemIndex < project.achievements.length - 1 ? '0.55rem' : 0 }}>
+                            {renderMarkdownInline(item)}
+                          </li>
+                        ))}
+                      </ul>
+                    )
+                  ) : null}
+                </div>
+              </div>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section
+          id="education"
+          style={{ ...anchorTarget, marginTop: '2.75rem', paddingTop: '2rem' }}
+        >
+          <h2 style={{ margin: `0 0 ${educationExpanded ? '2rem' : '0'}`, fontSize: '28px', fontWeight: 700 }}>
+            <button
+              type="button"
+              className="about-section-toggle"
+              aria-expanded={educationExpanded}
+              aria-controls="education-content"
+              onClick={() => setEducationExpanded((expanded) => !expanded)}
+            >
+              <span>{locale === 'zh' ? '教育经历' : 'Education'}</span>
+              <span className={`about-section-toggle-icon${educationExpanded ? ' is-expanded' : ''}`} aria-hidden="true" />
+            </button>
+          </h2>
+          <div id="education-content" hidden={!educationExpanded}>
+            <article id="education-njupt" style={{ ...anchorTarget, marginTop: '2.25rem' }}>
+              <div style={workArticleProse}>
+                <header style={workArticleHeader}>
+                  <h3 style={workArticleTitle}>{renderMarkdownInline(edu.title)}</h3>
+                  <p style={{ ...workArticlePeriod, marginBottom: 0 }}>
+                    <span aria-hidden="true">{'>'} </span>
+                    {renderMarkdownInline(edu.period)}
+                  </p>
+                </header>
+                <ul style={{ ...workArticleList, marginTop: '1rem', marginBottom: 0 }}>
+                  {edu.items.map((item, i, arr) => (
+                    <li key={i} style={{ marginBottom: i < arr.length - 1 ? '0.65rem' : 0 }}>
+                      {renderMarkdownInline(item)}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </article>
+          </div>
         </section>
 
         <section
           id="about-contact"
-          style={{ ...anchorTarget, marginTop: '2.75rem', paddingTop: '2rem', borderTop: '1px solid rgba(10,10,10,0.12)' }}
+          style={{ ...anchorTarget, marginTop: '2.75rem', paddingTop: '2rem' }}
         >
           <div style={workArticleProse}>
-            <h3 style={workArticleTitle}>{renderMarkdownInline(about.contact.title)}</h3>
+            <h2 style={{ margin: '0 0 2rem', fontSize: '28px', fontWeight: 700 }}>
+              {locale === 'zh' ? '联系方式' : 'Contact'}
+            </h2>
             <ul style={{ ...workArticleList, marginTop: '1rem', marginBottom: 0 }}>
               {about.contact.items.map((item, i, arr) => {
                 const href = getContactHref(item.label, item.value)
@@ -338,7 +509,7 @@ export function About() {
       <nav className="about-timeline-nav" aria-label={m.about.timeline.navAria}>
         <ul className="about-timeline-list">
           {timelineEntries.map(({ id, label, timePoint }) => (
-            <li key={id} className="about-timeline-item">
+            <li key={id} className="about-timeline-item about-timeline-item-section">
               <a
                 href={`#${id}`}
                 className={activeTimelineId === id ? 'about-timeline-link active' : 'about-timeline-link'}
