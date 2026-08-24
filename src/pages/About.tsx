@@ -5,8 +5,6 @@ import { useLanguage } from '../i18n/LanguageContext'
 const TIMELINE_IDS = [
   'about-2026',
   'experience',
-  'projects',
-  'education',
   'about-contact',
 ] as const
 type TimelineId = (typeof TIMELINE_IDS)[number]
@@ -141,8 +139,6 @@ export function About() {
     return [
       { id: 'about-2026', label: labels.intro, timePoint: labels.intro },
       { id: 'experience', label: labels.experience, timePoint: labels.experience },
-      { id: 'projects', label: labels.projects, timePoint: labels.projects },
-      { id: 'education', label: labels.education, timePoint: labels.education },
       { id: 'about-contact', label: labels.contact, timePoint: labels.contact },
     ]
   }, [locale])
@@ -249,9 +245,9 @@ export function About() {
             <div style={workArticleProse}>
               <header style={workArticleHeader}>
                 <h3 style={workArticleTitle}>{renderMarkdownInline(oceanbase.title)}</h3>
-                <p style={{ ...workArticleMeta, marginBottom: 4 }}>{renderMarkdownInline(oceanbase.meta)}</p>
-                <p style={{ ...workArticlePeriod, marginBottom: 0 }}>
-                  <span aria-hidden="true">{'>'} </span>
+                <p style={{ ...workArticleMeta, marginBottom: 0 }}>
+                  {renderMarkdownInline(oceanbase.meta)}
+                  <span aria-hidden="true"> {'|'} </span>
                   {renderMarkdownInline(oceanbase.period)}
                 </p>
               </header>
@@ -272,9 +268,9 @@ export function About() {
             <div style={workArticleProse}>
               <header style={workArticleHeader}>
                 <h3 style={workArticleTitle}>{renderMarkdownInline(ecidi.title)}</h3>
-                <p style={{ ...workArticleMeta, marginBottom: 4 }}>{renderMarkdownInline(ecidi.meta)}</p>
-                <p style={{ ...workArticlePeriod, marginBottom: 0 }}>
-                  <span aria-hidden="true">{'>'} </span>
+                <p style={{ ...workArticleMeta, marginBottom: 0 }}>
+                  {renderMarkdownInline(ecidi.meta)}
+                  <span aria-hidden="true"> {'|'} </span>
                   {renderMarkdownInline(ecidi.period)}
                 </p>
               </header>
@@ -295,13 +291,13 @@ export function About() {
             <div style={workArticleProse}>
               <header style={workArticleHeader}>
                 <h3 style={workArticleTitle}>{renderMarkdownInline(leishu.title)}</h3>
-                <p style={{ ...workArticleMeta, marginBottom: 4 }}>{renderMarkdownInline(leishu.meta)}</p>
-                <p style={{ ...workArticlePeriod, marginBottom: 0 }}>
-                  <span aria-hidden="true">{'>'} </span>
+                <p style={{ ...workArticleMeta, marginBottom: 0 }}>
+                  {renderMarkdownInline(leishu.meta)}
+                  <span aria-hidden="true"> {'|'} </span>
                   {renderMarkdownInline(leishu.period)}
                 </p>
               </header>
-              <ul style={workArticleList}>
+              <ul style={{ ...workArticleList, listStyle: 'none', paddingLeft: 0 }}>
                 {leishu.bullets.map((item, i, arr) => (
                   <li key={i} style={{ marginBottom: i < arr.length - 1 ? '0.65rem' : 0 }}>
                     {renderMarkdownInline(item)}
@@ -318,13 +314,13 @@ export function About() {
             <div style={workArticleProse}>
               <header style={workArticleHeader}>
                 <h3 style={workArticleTitle}>{renderMarkdownInline(puhuai.title)}</h3>
-                <p style={{ ...workArticleMeta, marginBottom: 4 }}>{renderMarkdownInline(puhuai.meta)}</p>
-                <p style={{ ...workArticlePeriod, marginBottom: 0 }}>
-                  <span aria-hidden="true">{'>'} </span>
+                <p style={{ ...workArticleMeta, marginBottom: 0 }}>
+                  {renderMarkdownInline(puhuai.meta)}
+                  <span aria-hidden="true"> {'|'} </span>
                   {renderMarkdownInline(puhuai.period)}
                 </p>
               </header>
-              <ul style={workArticleList}>
+              <ul style={{ ...workArticleList, listStyle: 'none', paddingLeft: 0 }}>
                 {puhuai.bullets.map((item, i, arr) => (
                   <li key={i} style={{ marginBottom: i < arr.length - 1 ? '0.65rem' : 0 }}>
                     {renderMarkdownInline(item)}
@@ -337,6 +333,7 @@ export function About() {
 
         <section
           id="projects"
+          hidden
           style={{ ...anchorTarget, marginTop: '2.75rem', paddingTop: '2rem' }}
         >
           <h2 style={{ margin: `0 0 ${projectsExpanded ? '2rem' : '0'}`, fontSize: '28px', fontWeight: 700 }}>
@@ -440,6 +437,7 @@ export function About() {
 
         <section
           id="education"
+          hidden
           style={{ ...anchorTarget, marginTop: '2.75rem', paddingTop: '2rem' }}
         >
           <h2 style={{ margin: `0 0 ${educationExpanded ? '2rem' : '0'}`, fontSize: '28px', fontWeight: 700 }}>
@@ -502,6 +500,13 @@ export function About() {
                 )
               })}
             </ul>
+            <a
+              className="about-resume-download"
+              href="/任文倩的简历_AI产品设计师.pdf"
+              download="任文倩的简历_AI产品设计师.pdf"
+            >
+              {locale === 'zh' ? '下载简历' : 'Download résumé'}
+            </a>
           </div>
         </section>
       </main>

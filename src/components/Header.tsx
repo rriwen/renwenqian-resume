@@ -63,7 +63,7 @@ export function Header({ dark, onToggleTheme }: HeaderProps) {
               flexDirection: 'row',
               alignItems: 'center',
               justifyContent: 'flex-start',
-              gap: '1.2rem',
+              gap: '1.5rem',
             }}
           >
             <li><Link to="/" className={pathname === '/' ? 'header-menu-link is-active' : 'header-menu-link'}>{m.header.home}</Link></li>

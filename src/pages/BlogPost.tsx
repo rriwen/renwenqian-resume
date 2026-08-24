@@ -109,7 +109,6 @@ export function BlogPost() {
         <aside className="blog-post-sidebar">
           {tableOfContents.length > 0 ? (
             <nav className="blog-post-toc" aria-label={locale === 'zh' ? '文章目录' : 'Table of contents'}>
-              <p className="blog-post-toc-label">{locale === 'zh' ? '目录' : 'Contents'}</p>
               <ol>
                 {tableOfContents.map((item) => (
                   <li key={item.id} className={`blog-post-toc-level-${item.level}`}>

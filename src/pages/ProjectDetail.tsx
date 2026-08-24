@@ -255,8 +255,14 @@ export function ProjectDetail() {
         </p>
       ))}
 
-      {detail.highlightBullets?.length
-        ? createElement(
+      {detail.highlightBullets?.length ? (
+        <>
+          {detail.highlightBulletsIntro ? (
+            <p style={{ ...body, marginBottom: '0.65rem' }}>
+              <strong style={{ fontWeight: 700 }}>{detail.highlightBulletsIntro}</strong>
+            </p>
+          ) : null}
+          {createElement(
             detail.highlightBulletsOrdered ? 'ol' : 'ul',
             {
               style: {
@@ -276,8 +282,9 @@ export function ProjectDetail() {
                 {item.text}
               </li>
             )),
-          )
-        : null}
+          )}
+        </>
+      ) : null}
 
       {detail.afterHighlightBullets ? (
         <p style={body}>{detail.afterHighlightBullets}</p>

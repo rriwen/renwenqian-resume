@@ -549,6 +549,37 @@ button {
 }
 :root[data-theme='dark'] .about-timeline-link:focus-visible { box-shadow: 0 0 0 2px var(--text); }
 
+.about-resume-download {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1.75rem;
+  min-height: 32px;
+  padding: 0 0.8rem;
+  border: 1px solid rgba(10,10,10,.28);
+  border-radius: 999px;
+  color: var(--text);
+  background: transparent;
+  font-size: .68rem;
+  line-height: 1;
+  letter-spacing: .04em;
+  text-decoration: none;
+  transition: background-color 0.18s ease, color 0.18s ease, transform 0.18s ease;
+}
+
+:root[data-theme='dark'] .about-resume-download {
+  border-color: rgba(241,241,235,.28);
+}
+
+.about-resume-download:hover {
+  color: var(--page-bg);
+  background: var(--text);
+}
+
+.about-resume-download:active {
+  transform: translateY(1px);
+}
+
 /* Chatbot overlay — welcome (no messages): headline + list + input, vertically centered */
 .chatbot-stack--welcome {
   width: 100%;
@@ -995,10 +1026,8 @@ button {
   grid-column: 2;
   grid-row: 1;
   align-self: start;
-  position: fixed;
-  top: calc(7rem + 2rem);
-  right: 32px;
-  width: 240px;
+  position: sticky;
+  top: 7rem;
   margin-left: 0;
   z-index: 2;
 }
@@ -1069,6 +1098,7 @@ button {
   line-height: 1.25;
   letter-spacing: 0;
 }
+.blog-markdown > h2:first-child { margin-top: 0; }
 .blog-markdown h3 {
   scroll-margin-top: 7rem;
   margin: 2.75rem 0 1rem;
@@ -1304,7 +1334,7 @@ button {
 .photography-grid {
   display: grid;
   grid-auto-flow: dense;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;
 }
 
@@ -1320,9 +1350,9 @@ button {
   display: grid;
   place-items: center;
   aspect-ratio: 3 / 4;
-  border: 1px dashed var(--muted);
-  color: var(--muted);
-  font-size: 1rem;
+  border: 1px dashed color-mix(in srgb, var(--muted) 38%, transparent);
+  color: color-mix(in srgb, var(--muted) 65%, transparent);
+  font-size: 0.78rem;
   line-height: 1.5;
   text-align: center;
 }
@@ -1342,7 +1372,7 @@ button {
   display: block;
   padding: 16px 0;
   color: var(--text);
-  font-size: 1rem;
+  font-size: 0.82rem;
   line-height: 1.5;
   white-space: normal;
 }
@@ -1517,5 +1547,5 @@ button {
   .blog-markdown blockquote { font-size: 1.15rem; line-height: 1.7; }
   .blog-list-link h2 { white-space: normal; overflow: visible; text-overflow: clip; line-height: 1.45; }
   .blog-list-link { grid-template-columns: minmax(0, 1fr) auto; align-items: start; }
-  .photography-caption { font-size: .9rem; line-height: 1.55; }
+  .photography-caption { font-size: .78rem; line-height: 1.55; }
 }
