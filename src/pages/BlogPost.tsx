@@ -76,7 +76,10 @@ export function BlogPost() {
   const { slug } = useParams<{ slug: string }>()
   const { locale } = useLanguage()
   const post = getBlogPost(slug)
-  const related = getBlogPosts().filter((item) => item.slug !== slug).slice(0, 3)
+  const allPosts = getBlogPosts()
+  const currentIndex = allPosts.findIndex((item) => item.slug === slug)
+  const previousPost = currentIndex >= 0 ? allPosts[(currentIndex - 1 + allPosts.length) % allPosts.length] : undefined
+  const nextPost = currentIndex >= 0 ? allPosts[(currentIndex + 1) % allPosts.length] : undefined
   const tableOfContents = post ? getTableOfContents(post.content) : []
 
   useEffect(() => {
@@ -173,19 +176,15 @@ export function BlogPost() {
         <Link to="/blog">{locale === 'zh' ? '查看全部文章' : 'All articles'} →</Link>
       </footer>
 
-      {related.length > 0 ? (
-        <section className="blog-related" aria-labelledby="related-title">
-          <h2 id="related-title">{locale === 'zh' ? '继续阅读' : 'Keep reading'}</h2>
-          <div className="blog-related-grid">
-            {related.map((item) => (
-              <Link to={`/blog/${item.slug}`} key={item.slug}>
-                {item.cover ? <img src={item.cover} alt="" /> : null}
-                <p>{item.category}</p>
-                <h3>{item.title}</h3>
-              </Link>
-            ))}
+      {previousPost || nextPost ? (
+        <nav className="blog-post-adjacent" aria-label={locale === 'zh' ? '文章导航' : 'Article navigation'}>
+          <div>
+            {previousPost ? <><span>{locale === 'zh' ? '上一个' : 'Previous'}</span><Link to={`/blog/${previousPost.slug}`}>{previousPost.title}</Link></> : null}
           </div>
-        </section>
+          <div className="is-next">
+            {nextPost ? <><span>{locale === 'zh' ? '下一个' : 'Next'}</span><Link to={`/blog/${nextPost.slug}`}>{nextPost.title}</Link></> : null}
+          </div>
+        </nav>
       ) : null}
     </main>
   )

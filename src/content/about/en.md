@@ -53,22 +53,22 @@ Shanghai Puhuai Technology.
 
 > Jun 2025 – Now
 
-Project background: Under an AI Native collaboration model, the intelligent analytics Q&A product moved from technical validation toward commercialization. Early versions could generate SQL and reports, but accuracy, explainability, and trust remained insufficient, limiting user adoption.
+Project background: The intelligent analytics Q&A product moved from technical validation toward commercialization. Early versions could generate SQL and reports, but metric understanding, dimension matching, time recognition, and result explanation remained inconsistent. Output formats were also limited, making it harder to support detail analysis, monitoring, and business presentation scenarios.
 
-Project goal: Improve the understandability, controllability, and trustworthiness of AI results, and move the product from internal validation into commercial delivery.
+Project goal: Improve answer accuracy, understandability, and controllability; support richer outputs including multidimensional tables, dashboards, and data walls; and move the product from internal validation into commercial delivery.
 
 Responsibilities:
 
-- Led the Agent conversation and report-generation experience from question input and intent recognition through metric confirmation, task execution, and result feedback.
-- Worked with the team to improve semantic parsing, metric and dimension matching, time-range recognition, tool routing, and SQL-result validation around high-frequency failure points.
-- Designed task states, execution steps, error feedback, explanations, and human intervention so users could understand Agent progress, tools, data, and evidence.
-- Identified execution problems from customer feedback and incubated an Agent observability product covering task tracking, node states, tool calls, errors, duration analysis, and result evaluation.
+- Led the Agent conversation experience from question input and intent recognition through metric, dimension, and time confirmation, task execution, result generation, and multi-turn revision.
+- Designed result applications for detail analysis, recurring monitoring, and business presentation, including multidimensional tables, dashboards, and data walls.
+- Worked with algorithm, data, and engineering teams to improve semantic parsing, metric and dimension matching, time recognition, output-form recognition, tool routing, and SQL-result validation around high-frequency failure points.
+- Designed task states, execution steps, error feedback, explanations, and parameter editing so users could understand and correct AI results.
+- Identified execution problems from customer delivery and failed tasks, then incubated an Agent observability product covering task tracking, node states, tool calls, errors, duration analysis, and result evaluation.
 
 Achievements:
 
-- Raised adoption of AI-generated results from 15% to 60% through improvements to parsing, matching, tool calls, validation, and feedback
+- Raised adoption of AI-generated results from 15% to 60% through improvements to Agent conversation, confirmation, validation, and feedback.
 - Moved the product from technical validation and internal pilots into commercial delivery for 5+ paying customers.
-- Incubated observability capabilities from user feedback to support future issue diagnosis and iteration
 
 ### AI Design Engineering
 

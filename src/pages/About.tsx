@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react'
-import { getAboutContent, renderMarkdownInline } from '../content/about'
+import { getAboutContent, renderMarkdownInline, type AboutContent } from '../content/about'
 import { useLanguage } from '../i18n/LanguageContext'
 
 const TIMELINE_IDS = [
@@ -110,11 +110,69 @@ function getContactHref(label: string, value: string): string | null {
   return null
 }
 
+function ProjectCards({ projects, locale }: { projects: AboutContent['projects']; locale: string }) {
+  const [expandedProjects, setExpandedProjects] = useState<Set<number>>(new Set())
+
+  return (
+    <div className="about-project-cards">
+      {projects.map((project, index) => (
+        <article key={`${project.title}-${index}`} className="about-project-card">
+          <button
+            type="button"
+            className="about-project-card-toggle"
+            aria-expanded={expandedProjects.has(index)}
+            aria-controls={`project-${index + 1}-content`}
+            onClick={() =>
+              setExpandedProjects((current) => {
+                const next = new Set(current)
+                if (next.has(index)) next.delete(index)
+                else next.add(index)
+                return next
+              })
+            }
+          >
+            <span className="about-project-card-heading">
+              <strong>{renderMarkdownInline(project.title)}</strong>
+              <span className="about-project-card-meta">
+                {renderMarkdownInline(project.role)}
+                <span aria-hidden="true"> {'|'} </span>
+                {renderMarkdownInline(project.period)}
+              </span>
+            </span>
+            <span className={`about-section-toggle-icon${expandedProjects.has(index) ? ' is-expanded' : ''}`} aria-hidden="true" />
+          </button>
+          <div id={`project-${index + 1}-content`} hidden={!expandedProjects.has(index)} className="about-project-card-content" style={workArticleProse}>
+            <p style={{ ...bodyText, marginTop: 0, marginBottom: '1.25rem' }}>{renderMarkdownInline(project.content)}</p>
+            {project.goal ? (
+              <p style={{ ...bodyText, marginBottom: '1.25rem' }}>
+                <strong>{locale === 'zh' ? '目标：' : 'Goal: '}</strong>
+                {renderMarkdownInline(project.goal)}
+              </p>
+            ) : null}
+            <p style={{ ...bodyText, marginBottom: '0.5rem' }}><strong>{locale === 'zh' ? '我主要负责：' : 'Responsibilities: '}</strong></p>
+            {project.responsibilities.length > 0 ? (
+              <ul style={{ ...workArticleList, marginTop: 0 }}>
+                {project.responsibilities.map((item, itemIndex) => <li key={itemIndex} style={{ marginBottom: itemIndex < project.responsibilities.length - 1 ? '0.55rem' : 0 }}>{renderMarkdownInline(item)}</li>)}
+              </ul>
+            ) : null}
+            <p style={{ ...bodyText, margin: '1.5rem 0 0.5rem' }}><strong>{locale === 'zh' ? '业绩：' : 'Achievements: '}</strong></p>
+            {project.achievements.length > 0 ? (
+              <ul style={{ ...workArticleList, marginTop: 0, marginBottom: 0 }}>
+                {project.achievements.map((item, itemIndex) => <li key={itemIndex} style={{ marginBottom: itemIndex < project.achievements.length - 1 ? '0.55rem' : 0 }}>{renderMarkdownInline(item)}</li>)}
+              </ul>
+            ) : null}
+          </div>
+        </article>
+      ))}
+    </div>
+  )
+}
+
 export function About() {
   const { m, locale } = useLanguage()
   const about = useMemo(() => getAboutContent(locale), [locale])
   const [activeTimelineId, setActiveTimelineId] = useState<TimelineId>('about-2026')
-  const [projectsExpanded, setProjectsExpanded] = useState(false)
+  const [expandedProjects, setExpandedProjects] = useState<Set<number>>(new Set())
   const [educationExpanded, setEducationExpanded] = useState(false)
   const scrollOffsetRef = useRef(0)
 
@@ -251,7 +309,7 @@ export function About() {
                   {renderMarkdownInline(oceanbase.period)}
                 </p>
               </header>
-              <ul style={workArticleList}>
+              <ul style={{ ...workArticleList, marginBottom: '1rem' }}>
                 {oceanbase.bullets.map((item, i, arr) => (
                   <li key={i} style={{ marginBottom: i < arr.length - 1 ? '0.65rem' : 0 }}>
                     {renderMarkdownInline(item)}
@@ -260,6 +318,8 @@ export function About() {
               </ul>
             </div>
           </article>
+
+          <ProjectCards projects={about.projects} locale={locale} />
 
           <article
             id="work-ecidi"
@@ -334,44 +394,47 @@ export function About() {
         <section
           id="projects"
           hidden
-          style={{ ...anchorTarget, marginTop: '2.75rem', paddingTop: '2rem' }}
+          style={{ ...anchorTarget, marginTop: '4rem', paddingTop: '2rem' }}
         >
-          <h2 style={{ margin: `0 0 ${projectsExpanded ? '2rem' : '0'}`, fontSize: '28px', fontWeight: 700 }}>
-            <button
-              type="button"
-              className="about-section-toggle"
-              aria-expanded={projectsExpanded}
-              aria-controls="projects-content"
-              onClick={() => setProjectsExpanded((expanded) => !expanded)}
-            >
-              <span>{locale === 'zh' ? '项目经历' : 'Projects'}</span>
-              <span className={`about-section-toggle-icon${projectsExpanded ? ' is-expanded' : ''}`} aria-hidden="true" />
-            </button>
+          <h2 style={{ margin: '0 0 2rem', fontSize: '28px', fontWeight: 700 }}>
+            {locale === 'zh' ? '项目经历' : 'Projects'}
           </h2>
-          <div id="projects-content" hidden={!projectsExpanded}>
+          <div className="about-project-cards">
             {about.projects.map((project, index) => (
               <article
                 key={`${project.title}-${index}`}
                 id={`project-${index + 1}`}
-                style={{ ...anchorTarget, marginTop: index === 0 ? 0 : '5rem' }}
+                className="about-project-card"
               >
-              <div style={workArticleProse}>
-                <header
-                  style={{
-                    ...workArticleHeader,
-                    gap: '0.35rem',
-                  }}
+                <button
+                  type="button"
+                  className="about-project-card-toggle"
+                  aria-expanded={expandedProjects.has(index)}
+                  aria-controls={`project-${index + 1}-content`}
+                  onClick={() =>
+                    setExpandedProjects((current) => {
+                      const next = new Set(current)
+                      if (next.has(index)) next.delete(index)
+                      else next.add(index)
+                      return next
+                    })
+                  }
                 >
-                  <h3 style={{ ...workArticleTitle, marginBottom: 0 }}>{renderMarkdownInline(project.title)}</h3>
-                  <div style={{ display: 'flex', alignItems: 'baseline', gap: '1rem', flexWrap: 'wrap' }}>
-                    <span style={workArticleMeta}>{renderMarkdownInline(project.role)}</span>
-                    <span style={{ ...workArticlePeriod, margin: 0 }}>{renderMarkdownInline(project.period)}</span>
-                  </div>
-                </header>
+                  <span className="about-project-card-heading">
+                    <strong>{renderMarkdownInline(project.title)}</strong>
+                    <span className="about-project-card-meta">
+                      {renderMarkdownInline(project.role)}
+                      <span aria-hidden="true"> {'|'} </span>
+                      {renderMarkdownInline(project.period)}
+                    </span>
+                  </span>
+                  <span className={`about-section-toggle-icon${expandedProjects.has(index) ? ' is-expanded' : ''}`} aria-hidden="true" />
+                </button>
 
-                <p style={{ ...bodyText, marginTop: '1.5rem', marginBottom: '1.25rem' }}>
+                <div id={`project-${index + 1}-content`} hidden={!expandedProjects.has(index)} className="about-project-card-content" style={workArticleProse}>
+                  <p style={{ ...bodyText, marginTop: 0, marginBottom: '1.25rem' }}>
                   {renderMarkdownInline(project.content)}
-                </p>
+                  </p>
 
                 {project.goal ? (
                   <p style={{ ...bodyText, marginBottom: '1.25rem' }}>
@@ -429,7 +492,7 @@ export function About() {
                     )
                   ) : null}
                 </div>
-              </div>
+                </div>
               </article>
             ))}
           </div>
@@ -500,13 +563,6 @@ export function About() {
                 )
               })}
             </ul>
-            <a
-              className="about-resume-download"
-              href="/任文倩的简历_AI产品设计师.pdf"
-              download="任文倩的简历_AI产品设计师.pdf"
-            >
-              {locale === 'zh' ? '下载简历' : 'Download résumé'}
-            </a>
           </div>
         </section>
       </main>

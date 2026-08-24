@@ -2,7 +2,7 @@ import { createElement, useEffect, useState, type CSSProperties } from 'react'
 import { createPortal } from 'react-dom'
 import { Link, useParams } from 'react-router-dom'
 import { getProjectDetail, type ProjectDetailParagraph } from '../data/projectDetails'
-import { getAdjacentProjects, getProjectBySlug, getProjectTitle } from '../data/projects'
+import { getAdjacentProjects, getProjectBySlug, getProjectTitle, projects } from '../data/projects'
 import { useLanguage } from '../i18n/LanguageContext'
 import { isGifSrc } from '../lib/isGifSrc'
 
@@ -33,7 +33,6 @@ export function ProjectDetail() {
   const detail = project ? getProjectDetail(project.slug, locale) : undefined
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
   const [lightboxIntrinsic, setLightboxIntrinsic] = useState<{ w: number; h: number } | null>(null)
-  const [heroIntrinsic, setHeroIntrinsic] = useState<{ w: number; h: number } | null>(null)
 
   useEffect(() => {
     if (project) {
@@ -46,10 +45,6 @@ export function ProjectDetail() {
   useEffect(() => {
     setLightboxIndex(null)
   }, [slug])
-
-  useEffect(() => {
-    setHeroIntrinsic(null)
-  }, [project?.image])
 
   const galleryLen = detail?.gallery.length ?? 0
 
@@ -107,11 +102,17 @@ export function ProjectDetail() {
     )
   }
 
-  const { prev: prevProject, next: nextProject } = getAdjacentProjects(project.slug)
+  if (project.slug === 'datapilot') {
+    return <DataPilotCaseStudy project={project} locale={locale} />
+  }
+
+  const adjacent = getAdjacentProjects(project.slug)
+  const prevProject = adjacent.prev ?? projects[projects.length - 1]
+  const nextProject = adjacent.next
 
   return (
     <main
-      className="project-detail-page"
+      className="project-detail-page project-detail-standard-page"
       style={{
         minHeight: '100dvh',
         padding: 'var(--header-clearance) 2.5rem 4rem',
@@ -142,6 +143,7 @@ export function ProjectDetail() {
           overflow: 'hidden',
           marginBottom: '2.25rem',
           width: '100%',
+          aspectRatio: '2 / 1',
           background: '#eaeaea',
           border: '1px solid rgba(10, 10, 10, 0.04)',
           boxSizing: 'border-box',
@@ -154,17 +156,10 @@ export function ProjectDetail() {
           alt=""
           loading={isGifSrc(project.image) ? 'eager' : undefined}
           decoding="async"
-          onLoad={(e) => {
-            const { naturalWidth, naturalHeight } = e.currentTarget
-            if (naturalWidth > 0 && naturalHeight > 0) {
-              setHeroIntrinsic({ w: naturalWidth, h: naturalHeight })
-            }
-          }}
           style={{
-            maxWidth: heroIntrinsic ? `min(100%, ${heroIntrinsic.w}px)` : '100%',
-            width: heroIntrinsic ? 'auto' : '100%',
-            height: 'auto',
-            objectFit: 'contain',
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
             objectPosition: 'center top',
             display: 'block',
           }}
@@ -617,6 +612,164 @@ export function ProjectDetail() {
           </div>,
           document.body,
         )}
+    </main>
+  )
+}
+
+type DataPilotCaseStudyProps = {
+  project: NonNullable<ReturnType<typeof getProjectBySlug>>
+  locale: 'zh' | 'en'
+}
+
+function DataPilotCaseStudy({ project, locale }: DataPilotCaseStudyProps) {
+  const isZh = locale === 'zh'
+  const { prev: prevProject, next: nextProject } = getAdjacentProjects(project.slug)
+  const sections = isZh
+    ? [
+        {
+          id: 'overview',
+          index: '01',
+          title: '项目概览',
+          intro: '',
+          body: '智能问数从技术验证进入商业化探索阶段，目标是让企业用户通过自然语言完成数据查询，并将结果生成多维表格、仪表盘和数据大屏。我主要负责 Agent 对话体验，设计从问题输入、意图识别、参数确认到结果生成的完整流程。',
+          stats: ['采纳率 15% → 60%', '5+ 家付费客户交付'],
+          images: [{ src: project.image, caption: 'DataPilot 产品入口与问数结果概览' }],
+        },
+        {
+          id: 'goals',
+          index: '02',
+          title: '目标与范围',
+          intro: '解决“问得准”和“结果可用”',
+          body: '项目目标分为两部分：一是提升指标、维度、时间范围和查询结果的准确性；二是丰富结果应用形式，让用户可以根据场景生成多维表格、仪表盘或数据大屏，而不只是得到一次性的图表答案。',
+          bullets: ['准确理解用户的分析目标', '减少指标、维度和时间解析偏差', '支持不同数据展示和持续使用场景'],
+          images: [{ src: '/images/datapilot-metric-layer-data.png', caption: '指标与字段信息是 Agent 理解问题的基础' }],
+        },
+        {
+          id: 'problems',
+          index: '03',
+          title: '问题拆解',
+          intro: '从“查询结果不稳定”定位到具体对话节点',
+          body: '通过客户反馈、失败案例和交付过程中的问题记录，我将问题拆解到 Agent 的执行链路中。用户说“看一下华东销售情况”时，系统需要同时判断销售额还是销量、华东对应哪个区域层级，以及默认的时间范围。任何一个判断出错，最终结果都可能失去参考价值。',
+          bullets: ['语义解析：用户表达与系统意图不一致', '指标 / 维度匹配：同一业务词存在多个口径', '时间识别：自然语言时间无法直接用于查询', '结果形态：用户需要的是明细、看板还是展示大屏'],
+          images: [
+            { src: '/images/datapilot-metric-layer-data.png', caption: '数据字段与指标口径' },
+            { src: '/images/datapilot-metric-layer-modeling.png', caption: '指标、维度和数据关系' },
+          ],
+        },
+        {
+          id: 'conversation',
+          index: '04',
+          title: 'Agent 工作流',
+          intro: '把自然语言问题转化为可确认、可继续调整的任务',
+          body: '我负责设计 Agent 对话主流程：问题输入后，先识别分析目标，再提取指标、维度和时间范围；当信息存在歧义时，提供结构化确认；确认后执行查询并生成对应结果。用户还可以继续通过对话修改时间、筛选条件或展示方式。',
+          bullets: ['输入问题', '解析指标、维度与时间', '判断结果形态', '必要时补充确认', '生成结果并支持继续调整'],
+          images: [{ src: '/images/datapilot-ai-serial-execution.png', caption: 'Agent 从问题理解到结果生成的连续执行流程' }],
+        },
+        {
+          id: 'accuracy',
+          index: '05',
+          title: '准确率与结果应用',
+          intro: '让问数结果既准确，也能进入具体工作场景',
+          body: '我先整理典型失败案例，再判断问题应该通过对话确认、指标配置、解析规则还是执行校验解决。例如，“收入”匹配到多个业务指标时，Agent 展示指标定义供用户选择；“最近三个月”无法确定口径时，转换成具体日期范围并允许用户修改。同时根据用户后续工作设计不同结果形态：明细分析使用多维表格，持续监控使用仪表盘，业务展示使用数据大屏。',
+          bullets: ['语义解析：增加意图澄清与候选确认', '指标与时间：展示业务口径并转换为明确范围', '结果应用：支持多维表格、仪表盘和数据大屏', '多轮修改：只更新用户改动的参数，不重置整个任务'],
+          images: [
+            { src: '/images/datapilot-ai-serial-execution.png', caption: '串行执行中的指标确认与结果校验' },
+            { src: '/images/datapilot-ai-parallel-execution.png', caption: '并行处理不同分析任务，减少等待和重复操作' },
+          ],
+        },
+        {
+          id: 'observability',
+          index: '06',
+          title: '可观测产品孵化',
+          intro: '从“答案不对”定位到具体执行节点',
+          body: '在客户交付过程中，很多反馈只有“答案不对”或“任务太慢”，仅查看最终结果无法判断问题发生在意图识别、指标匹配、时间解析、工具调用还是 SQL 校验。我将问数任务拆解为可追踪节点，并独立规划任务追踪、节点状态、工具调用、异常定位、耗时分析和结果评估能力，后续孵化 Agent 可观测产品。',
+          bullets: ['任务列表：查看成功率、失败任务和平均耗时', '任务详情：呈现完整执行时间线和节点状态', '异常定位：记录输入、输出、工具和错误原因', '结果评估：跟踪结果是否被修改和采纳'],
+          images: [{ src: '/images/datapilot-ai-parallel-execution.png', caption: 'Agent 多任务执行与问题定位场景' }],
+        },
+        {
+          id: 'delivery',
+          index: '07',
+          title: '客户交付与结果',
+          intro: '将交付中的共性问题转化为标准产品能力',
+          body: '在 5+ 家付费客户交付过程中，我持续收集指标口径、时间范围、结果解释和展示形式相关反馈，并区分通用问题、行业差异和个性化需求。通用问题进入产品迭代，行业差异通过配置和业务词典解决，个性化需求则结合复用价值评估。',
+          stats: ['结果采纳率 15% → 60%', '5+ 家付费客户', '从技术验证进入商业化交付'],
+          images: [{ src: project.image, caption: '面向业务用户的问数与数据应用场景' }],
+        },
+        {
+          id: 'role',
+          index: '08',
+          title: '后续优化方向',
+          intro: '下一步需要继续验证不同场景下的使用效果',
+          body: '当前结果主要反映整体采纳率变化，后续可以进一步拆分不同客户、问题类型和结果形态，判断哪些场景适合自动执行，哪些场景需要保留人工确认，并持续观察用户对多维表格、仪表盘和数据大屏的实际使用情况。',
+          bullets: ['补充不同业务场景下的采纳率和修改率', '区分查询结果与数据应用生成的使用效果', '减少低风险问题中的确认步骤', '完善多轮对话中的上下文保留和参数修改'],
+          images: [{ src: '/images/datapilot-ai-parallel-execution.png', caption: '多任务协同与结果生成场景' }],
+        },
+      ]
+    : [
+        {
+          id: 'overview', index: '01', title: 'Overview', intro: '',
+          body: 'Datapilot moved from technical validation toward commercial exploration. I owned the Agent conversation experience, from question input and intent recognition to confirmation and result generation across tables, dashboards, and data walls.', stats: ['Adoption 15% → 60%', '5+ paid customer deliveries', 'Tables / dashboards / data walls'], images: [{ src: project.image, caption: 'DataPilot product overview' }],
+        },
+        {
+          id: 'goals', index: '02', title: 'Goals & scope', intro: 'Improve answer accuracy and make results usable beyond one-off answers', body: 'The product goals were to improve metric, dimension, time, and query accuracy, while supporting richer output formats for analysis, monitoring, and presentation.', bullets: ['Understand the user’s analysis goal', 'Reduce parsing and matching errors', 'Support different data-use scenarios'], images: [{ src: '/images/datapilot-metric-layer-data.png', caption: 'Metric and field context' }],
+        },
+        {
+          id: 'problems', index: '03', title: 'Problem framing', intro: 'Map unstable results to specific conversation nodes', body: 'I grouped customer feedback and failed cases across the Agent workflow. A request such as “show East China sales” requires the system to resolve the metric, region level, and time range before it can produce a useful result.', bullets: ['Intent parsing', 'Metric and dimension matching', 'Time interpretation', 'Output format selection'], images: [{ src: '/images/datapilot-metric-layer-data.png', caption: 'Metric context' }, { src: '/images/datapilot-metric-layer-modeling.png', caption: 'Metric relationships' }],
+        },
+        {
+          id: 'conversation', index: '04', title: 'Agent conversation flow', intro: 'Turn natural language into a confirmable and editable task', body: 'I designed the main conversation flow: identify the analysis goal, extract metrics, dimensions, and time, confirm only when ambiguity is meaningful, then generate and refine the result through follow-up conversation.', bullets: ['Input', 'Parse', 'Confirm', 'Generate', 'Refine'], images: [{ src: '/images/datapilot-ai-serial-execution.png', caption: 'Conversation and execution flow' }],
+        },
+        {
+          id: 'accuracy', index: '05', title: 'Accuracy and result applications', intro: 'Make results accurate and usable in real workflows', body: 'I organized failure cases and aligned the response: use confirmation for ambiguous metrics, convert natural-language time into explicit ranges, and preserve context when users revise one parameter. I also mapped output formats to user goals: tables for detail analysis, dashboards for recurring monitoring, and data walls for business presentation.', bullets: ['Intent clarification and metric definitions', 'Explicit time ranges and validation', 'Tables, dashboards, and data walls', 'Context-preserving revisions'], images: [{ src: '/images/datapilot-ai-serial-execution.png', caption: 'Serial execution' }, { src: '/images/datapilot-ai-parallel-execution.png', caption: 'Parallel execution' }],
+        },
+        {
+          id: 'observability', index: '06', title: 'Observability product incubation', intro: 'Trace “wrong answer” back to an execution node', body: 'During customer delivery, feedback often came as “the answer is wrong” or “the task is slow.” I decomposed the task into traceable nodes, then incubated an Agent observability product with task tracking, node states, tool calls, error diagnosis, duration analysis, and result evaluation.', bullets: ['Task list and success metrics', 'Execution timeline and node details', 'Inputs, outputs, tools, and error causes', 'Result edits and adoption signals'], images: [{ src: '/images/datapilot-ai-parallel-execution.png', caption: 'Agent execution and diagnosis' }],
+        },
+        {
+          id: 'delivery', index: '07', title: 'Delivery & outcome', intro: 'Turn recurring delivery issues into reusable product capabilities', body: 'Across 5+ paid customer deliveries, I categorized feedback into general product issues, industry-specific configuration, and one-off requests. General issues were fed back into the core experience and validated through subsequent delivery.', stats: ['Adoption 15% → 60%', '5+ paid customer deliveries', 'Technical validation → commercial delivery'], images: [{ src: project.image, caption: 'Business-facing query experience' }],
+        },
+        {
+          id: 'role', index: '08', title: 'What could improve', intro: 'Continue validating performance across different use cases', body: 'The current result mainly reflects overall adoption. Next, I would break it down by customer, question type, and output format to understand which scenarios can be automated and where confirmation is still needed, while tracking actual use of tables, dashboards, and data walls.', bullets: ['Measure adoption and edit rates by scenario', 'Separate query success from application usage', 'Reduce confirmation steps for low-risk requests', 'Improve context retention across multi-turn revisions'], images: [{ src: '/images/datapilot-ai-parallel-execution.png', caption: 'Multi-task result generation' }],
+        },
+      ]
+
+  return (
+    <main className="datapilot-case-page">
+      <div className="datapilot-case-shell">
+        <Link to="/" className="datapilot-back">{isZh ? '返回' : 'Back'}</Link>
+        <header className="datapilot-case-hero">
+          <h1>{isZh ? 'AI 智能问数' : 'AI analytics Q&A and data application experience'}</h1>
+          <p className="datapilot-hero-copy">{isZh ? '围绕问数准确性和应用丰富度，设计从自然语言提问到多维表格、仪表盘和数据大屏生成的 Agent 对话流程。' : 'Designing the Agent conversation flow from natural-language questions to tables, dashboards, and data walls.'}</p>
+          <div className="datapilot-meta"><span>我的角色：产品设计师</span><span>产品阶段：技术验证 → 商业化交付</span><span>周期：持续迭代</span></div>
+        </header>
+        <div className="datapilot-case-layout">
+          <article className="datapilot-case-content">
+            {sections.map((section) => (
+              <section className="datapilot-module" id={section.id} key={section.id}>
+                <div className="datapilot-module-heading"><span>{section.index}</span><h2>{section.title}</h2></div>
+                {section.intro ? <h3>{section.intro}</h3> : null}
+                <p>{section.body}</p>
+                {'stats' in section && section.stats ? <div className="datapilot-stat-row">{section.stats.map((stat) => <strong key={stat}>{stat}</strong>)}</div> : null}
+                {'bullets' in section && section.bullets ? <ul className="datapilot-bullets">{section.bullets.map((bullet) => <li key={bullet}>{bullet}</li>)}</ul> : null}
+                <div className={`datapilot-evidence ${section.images.length > 1 ? 'is-multi' : 'is-single'}`}>
+                  {section.images.map((image) => <figure key={image.src + image.caption}><div className="datapilot-image-placeholder" role="img" aria-label={image.caption} /><figcaption>{image.caption}</figcaption></figure>)}
+                </div>
+              </section>
+            ))}
+            <nav className="datapilot-adjacent" aria-label={isZh ? '项目导航' : 'Project navigation'}>
+              <div>
+                {prevProject ? <><span>{isZh ? '上一个' : 'Previous'}</span><Link to={`/project/${prevProject.slug}`}>{getProjectTitle(prevProject, locale)}</Link></> : null}
+              </div>
+              <div className="is-next">
+                {nextProject ? <><span>{isZh ? '下一个' : 'Next'}</span><Link to={`/project/${nextProject.slug}`}>{getProjectTitle(nextProject, locale)}</Link></> : null}
+              </div>
+            </nav>
+          </article>
+          <aside className="datapilot-toc" aria-label={isZh ? '案例目录' : 'Case study contents'}>
+            <nav>{sections.map((section) => <a href={`#${section.id}`} key={section.id}>{section.title}</a>)}</nav>
+          </aside>
+        </div>
+      </div>
     </main>
   )
 }

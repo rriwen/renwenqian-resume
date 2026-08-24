@@ -53,7 +53,7 @@ export function Header({ dark, onToggleTheme }: HeaderProps) {
         <div className="header-left-group">
           <button type="button" className="mobile-menu-button" aria-label={menuOpen ? 'Close menu' : 'Open menu'} aria-expanded={menuOpen} onClick={() => setMenuOpen((open) => !open)}>{menuOpen ? <IconClose size={16} /> : <IconMenu size={17} />}</button>
           <Link to="/" className="header-logo">Design.4x</Link>
-          <nav className={menuOpen ? 'mobile-nav-open' : ''} aria-label={m.header.navAria}>
+          <nav className={menuOpen ? 'mobile-nav-open' : ''} aria-label={m.header.navAria} onClick={() => setMenuOpen(false)}>
           <ul
             style={{
               margin: 0,
@@ -72,7 +72,7 @@ export function Header({ dark, onToggleTheme }: HeaderProps) {
                 to="/about"
                 className={pathname === '/about' ? 'header-menu-link is-active' : 'header-menu-link'}
               >
-                {locale === 'zh' ? '关于我' : 'About me'}
+                {locale === 'zh' ? '关于' : 'About'}
               </Link>
             </li>
             <li><Link to="/blog" className={pathname.startsWith('/blog') ? 'header-menu-link is-active' : 'header-menu-link'}>{locale === 'zh' ? '博客' : 'Journal'}</Link></li>

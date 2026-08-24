@@ -141,59 +141,16 @@ const details: Record<string, { en: ProjectDetailBlock; zh: ProjectDetailBlock }
       ],
     },
     zh: {
-      tags: ['AI 数据分析', 'Web 应用', 'B 端'],
+      tags: ['AI 数据分析', 'B 端产品', '商业化探索'],
       paragraphs: [
         [
-          { text: '项目背景：', bold: true },
-          { text: '智能问数从技术验证进入商业化探索，但早期生成结果在准确性、解释性和可信度上仍有不足，用户采纳意愿较低。' },
-        ],
-        [
-          { text: '项目目标：', bold: true },
-          { text: '提升 AI 结果的可理解性、可干预性和可信度，推动产品从内部验证走向商业化交付。' },
+          { text: '智能问数从技术验证走向商业化时，真正的障碍不是“能不能生成答案”，而是企业用户不敢直接使用：他们看不见 Agent 如何理解问题、如何选择指标和数据，也无法在出错后修正任务。我将一次性的答案页改造成可追踪的任务过程，在指标 / 时间确认、工具调用、SQL 校验和结果解释等关键节点提供可见状态与人工干预；同时把客户反馈沉淀为任务追踪、异常定位和结果评估能力，形成从发现问题到验证优化的闭环。最终结果采纳率从 15% 提升至 60%，并支持 5+ 家付费客户完成交付。' },
         ],
       ],
-      responsibilities: {
-        intro: '我主要负责：',
-        items: [
-          {
-            title: '问数体验',
-            body: '主导 Agent 对话与报表生成，串联问题输入、意图识别、指标确认、任务执行与结果反馈。',
-          },
-          {
-            title: '准确率优化',
-            body: '聚焦失败节点，协同优化语义解析、指标与维度匹配、时间识别、工具路由及 SQL 校验。',
-          },
-          {
-            title: '过程可解释设计',
-            body: '建立任务状态、执行步骤、异常反馈、结果解释和人工干预机制，明确 Agent 进度、工具、数据来源与生成依据。',
-          },
-          {
-            title: 'Agent 可观测产品孵化',
-            body: '从客户反馈中定位执行链路问题，独立孵化任务追踪、节点状态、工具调用、异常定位、耗时分析和结果评估能力。',
-          },
-        ],
-      },
-      highlightBullets: [
-        {
-          keyword: '采纳率 15% → 60%',
-          text: '通过语义解析、指标匹配、工具调用、结果校验和反馈机制优化，显著提升 AI 结果采纳率。',
-        },
-        {
-          keyword: '完成 5+ 家付费客户交付',
-          text: '推动产品从技术验证、内部试点进入商业化落地。',
-        },
-        {
-          keyword: '孵化 Agent 可观测产品',
-          text: '将共性反馈转化为问题定位与效果迭代能力。',
-        },
-      ],
-      highlightBulletsIntro: '业绩：',
+      highlightBullets: [],
       externalUrl: 'https://datapilot-rho-gilt.vercel.app/',
       gallery: [
-        { src: '/images/datapilot-metric-layer-data.png', caption: '指标层数据管理' },
-        { src: '/images/datapilot-metric-layer-modeling.png', caption: '指标层数据建模' },
-        { src: '/images/datapilot-ai-serial-execution.png', caption: 'AI 串行执行可视化' },
-        { src: '/images/datapilot-ai-parallel-execution.png', caption: 'AI 并行执行可视化(延展)' },
+        { src: '/images/datapilot-ai-serial-execution.png', caption: '核心图占位：展示 Agent 从问题理解、指标确认到 SQL 校验与结果解释的完整执行链路。' },
       ],
     },
   },

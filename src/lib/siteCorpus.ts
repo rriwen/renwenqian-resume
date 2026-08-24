@@ -2,6 +2,7 @@ import { projects } from '../data/projects'
 import { getProjectDetail, type ProjectDetailBlock, type ProjectDetailParagraph } from '../data/projectDetails'
 import { getAboutContent, stripMarkdownInline } from '../content/about'
 import { translations, type Locale } from '../i18n/translations'
+import { getBlogPosts } from './blog'
 
 function paragraphToText(p: ProjectDetailParagraph): string {
   if (typeof p === 'string') return p
@@ -51,6 +52,18 @@ function serializeProjectBlock(block: ProjectDetailBlock): string {
 
 function section(locale: Locale, zh: string, en: string): string {
   return locale === 'zh' ? zh : en
+}
+
+function stripMarkdownBlock(text: string): string {
+  return text
+    .replace(/^```[\s\S]*?```$/gm, '')
+    .replace(/^#{1,6}\s+/gm, '')
+    .replace(/^[-*+]\s+/gm, '')
+    .replace(/^>\s?/gm, '')
+    .replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1')
+    .replace(/[*_`]/g, '')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim()
 }
 
 function serializeAbout(locale: Locale): string {
@@ -131,6 +144,16 @@ export function buildSiteCorpus(locale: Locale): string {
     } else {
       lines.push(section(locale, '（无详情文案）', '(No detail copy)'))
     }
+    lines.push('')
+  }
+
+  lines.push('')
+  lines.push(`## ${section(locale, '博客文章', 'Blog posts')}`)
+  for (const post of getBlogPosts()) {
+    lines.push(`### ${post.title}`)
+    lines.push(`${post.category} | ${post.date}`)
+    if (post.excerpt) lines.push(post.excerpt)
+    if (post.content) lines.push(stripMarkdownBlock(post.content))
     lines.push('')
   }
 
