@@ -113,11 +113,11 @@ const details: Record<string, { en: ProjectDetailBlock; zh: ProjectDetailBlock }
       ],
     },
   },
-  datapilot: {
+  dataagent: {
     en: {
       tags: ['Web App', 'Data Product', 'B2B'],
       paragraphs: [
-        'OceanBase Datapilot brings AI-assisted workflows into the database operator’s daily toolkit—bridging complex metadata, diagnostics, and natural-language intent.',
+        'DataAgent brings AI-assisted analytics into the enterprise team’s daily toolkit—bridging complex metrics, data context, and natural-language intent.',
         'The project focused on progressive disclosure for expert users, consistent language across SQL and conversational entry points, and states that stay legible under load and partial failures.',
       ],
       externalUrl: 'https://datapilot-rho-gilt.vercel.app/',

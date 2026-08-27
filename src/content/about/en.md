@@ -1,6 +1,6 @@
 # What I Do
 
-For the past two years, I have focused on AI productization, intelligent analytics Q&A, and AI-assisted design workflows, bringing both product management and experience design perspectives. I contribute to product capability planning based on business goals, user research, and customer feedback, and work with cross-functional teams to take AI products from 0 to 1 and refine the experience.
+For the past five years, I have focused on AI products, intelligent analytics Q&A, data tools, and design engineering, bringing both product planning and experience design perspectives. I contribute to product capability planning based on business goals, user research, and customer feedback, and work with cross-functional teams to take products from 0 to 1 and refine the experience.
 
 I understand Agent task execution, semantic-layer parsing, tool calling, and result-feedback design. I turn AI capabilities into human-AI interaction flows that are understandable, interruptible, and trustworthy.
 
@@ -8,15 +8,17 @@ I have hands-on experience delivering Design Systems, Design Tokens, UI engineer
 
 ## Experience
 
-### Senior Experience Designer
+### Senior Product Experience Designer
 
 Ant Group · OceanBase, AI product capability planning, core experience design, and design engineering
 
 > Jul 2021 – Now
 
 - **AI product exploration & delivery**: Led multiple AI products from 0 to 1 (OpenClaw memory plugin, intelligent analytics Q&A, SQL generation & completion); owned business insight and solution discovery, turning capabilities into user- and Agent-friendly features quickly. Used visual execution flows to build trust and ship; in core scenarios adoption of generated results rose from 18% to 60%.
+- **Growth design**: Designed the business-growth funnel from official-website acquisition and first use through registration and paid conversion. Shaped landing pages, product entry points, first-task guidance, and key registration moments; established funnel metrics to identify drop-off and progressively improve paid conversion.
+- **Agent product experience design**: Owned user flows, interaction architecture, and UI for AI products and complex database development and operations tools. Owned the collaboration journey between people and Agents, along with status feedback and intervention mechanisms throughout task execution, improving task completion rate, result accuracy, and issue diagnosis efficiency.
 - **AI design system**: Grounded in practice, built team AI product assets and patterns — reusable components and interaction models for prompt input, chain-of-thought, message cards, and more — reused across product lines at 70%+, improving cross-product consistency.
-- **Data development product experience**: Combined interviews and behavioral data to find bottlenecks; for data change, SQL checks, and other core flows, redesigned the dev control platform, change approvals, and SQL-check experiences and shipped. Core-journey self-service rose from 15% to 75%; satisfaction from 4.8 to 6.2 (out of 7); supported doubling user scale.
+- **Data development product experience**: Combined interviews and behavioral data to find bottlenecks; for data change, SQL checks, and other core flows, redesigned the dev control platform, change approvals, and SQL-check experiences and shipped. Improved self-service across the database operations platform, raised satisfaction for the data development product, and doubled user scale.
 - **Tooling & cross-team collaboration**: Drove AI upgrades to internal design tooling; built team efficiency plugins to automate design handoff and visual QA with AI, freeing ~15% of baseline capacity.
 
 ### Product Designer
@@ -53,9 +55,9 @@ Shanghai Puhuai Technology.
 
 > Jun 2025 – Now
 
-Project background: The intelligent analytics Q&A product moved from technical validation toward commercialization. Early versions could generate SQL and reports, but metric understanding, dimension matching, time recognition, and result explanation remained inconsistent. Output formats were also limited, making it harder to support detail analysis, monitoring, and business presentation scenarios.
+Project background: The intelligent analytics Q&A product moved from technical validation toward commercialization. Early versions could generate SQL and reports, but metric, dimension, and time interpretation remained unstable. Users could not reliably judge whether an answer was trustworthy, and had few ways to correct it when something went wrong, resulting in low adoption in core scenarios. Output formats were also limited, making it harder to support detail analysis, monitoring, and business presentation needs.
 
-Project goal: Improve answer accuracy, understandability, and controllability; support richer outputs including multidimensional tables, dashboards, and data walls; and move the product from internal validation into commercial delivery.
+Project goal: Support commercial delivery by improving result adoption and task completion in core scenarios, reducing the cost of manual correction and explanation, and expanding output applications such as tables, dashboards, and data walls.
 
 Responsibilities:
 
@@ -63,7 +65,7 @@ Responsibilities:
 - Designed result applications for detail analysis, recurring monitoring, and business presentation, including multidimensional tables, dashboards, and data walls.
 - Worked with algorithm, data, and engineering teams to improve semantic parsing, metric and dimension matching, time recognition, output-form recognition, tool routing, and SQL-result validation around high-frequency failure points.
 - Designed task states, execution steps, error feedback, explanations, and parameter editing so users could understand and correct AI results.
-- Identified execution problems from customer delivery and failed tasks, then incubated an Agent observability product covering task tracking, node states, tool calls, errors, duration analysis, and result evaluation.
+- Designed the growth funnel around commercialization, connecting acquisition from the official website with first use, registration, and paid conversion. Shaped landing pages and product entry points, first-task guidance, value feedback, and registration moments, then worked with marketing, product, and sales to reduce drop-off and improve the path from discovery to payment.
 
 Achievements:
 
@@ -93,13 +95,13 @@ Achievements:
 - Reduced a single visual acceptance cycle from at least two person-days to minutes through automation
 
 
-### Data Development Products
+### Database Operations & Development Product Matrix
 
 > Experience Designer
 
 > Jan 2022 – Jun 2024
 
-Project background: The company aimed to make database operations self-serve in “three steps, five minutes,” but ordering, data migration, and change approvals still relied heavily on technical support, with only 15% self-service. Separate data-development editors also felt inconsistent and dated, hurting efficiency and retention.
+Project background: The company aimed to make database operations self-serve in “three steps, five minutes,” but ordering, data migration, and change approvals still relied heavily on technical support, with only 15% self-service. At the same time, inconsistent data-development editor experiences affected development efficiency and user retention.
 
 Goal: Raise core-flow self-service to the “three steps, five minutes” target, reduce support cost, and improve consistency, professionalism, satisfaction, and platform stickiness across the editor matrix.
 
