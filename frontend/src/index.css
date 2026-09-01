@@ -536,6 +536,9 @@ h1, h2, h3, h4 { letter-spacing: -0.02em; }
   color: #006dff;
   font-weight: 750;
 }
+.odc-logo > span { display: grid; gap: .2rem; line-height: 1.05; }
+.odc-logo > span strong { font-size: 1em; font-weight: 650; letter-spacing: .015em; }
+.odc-logo > span b { font-size: .68em; letter-spacing: .12em; }
 :root[data-theme='dark'] .product-card-agentops .product-card-media {
   color: #eeeeee;
   background: color-mix(in srgb, var(--page-bg) 96%, var(--text) 4%);
