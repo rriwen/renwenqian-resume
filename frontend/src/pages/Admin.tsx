@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useState, type DragEvent, type FormEvent } from "react";
 import { Link } from "react-router-dom";
 import {
   createManagedContent,
@@ -34,7 +34,6 @@ export function Admin() {
   const [items, setItems] = useState<ManagedContent[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null);
   const filter: ContentKind = "blog";
-  const [query, setQuery] = useState("");
   const [saved, setSaved] = useState(true);
   const [preview, setPreview] = useState(false);
   const [notice, setNotice] = useState("");
@@ -43,6 +42,8 @@ export function Admin() {
   const [showToken, setShowToken] = useState(false);
   const [authLoading, setAuthLoading] = useState(false);
   const [view, setView] = useState<"list" | "editor">("list");
+  const [draggedId, setDraggedId] = useState<string | null>(null);
+  const [dropTarget, setDropTarget] = useState<{ id: string; after: boolean } | null>(null);
   const active = items.find((item) => item.id === activeId);
 
   useEffect(() => {
@@ -72,11 +73,7 @@ export function Admin() {
     }
   };
   const visible = items
-    .filter(
-      (item) =>
-        item.kind === filter &&
-        item.title.toLowerCase().includes(query.toLowerCase()),
-    )
+    .filter((item) => item.kind === filter)
     .sort((a, b) => a.sortOrder - b.sortOrder);
   const update = (patch: Partial<ManagedContent>) => {
     if (!active) return;
@@ -158,18 +155,11 @@ export function Admin() {
     }
     window.setTimeout(() => setNotice(""), 2200);
   };
-  const move = async (item: ManagedContent, direction: -1 | 1) => {
-    if (query) return;
-    const ordered = items
-      .filter((content) => content.kind === filter)
-      .sort((a, b) => a.sortOrder - b.sortOrder);
-    const index = ordered.findIndex((content) => content.id === item.id);
-    const target = index + direction;
-    if (index < 0 || target < 0 || target >= ordered.length) return;
-    [ordered[index], ordered[target]] = [ordered[target], ordered[index]];
+  const saveOrder = async (ordered: ManagedContent[]) => {
     const positions = new Map(
       ordered.map((content, position) => [content.id, position]),
     );
+    const previous = items;
     const next = items.map((content) =>
       positions.has(content.id)
         ? { ...content, sortOrder: positions.get(content.id)! }
@@ -181,10 +171,45 @@ export function Admin() {
       await saveManagedContent(next, adminToken);
       setNotice("排序已保存，前台展示顺序已更新");
     } catch (error) {
-      setItems(items);
+      setItems(previous);
       setNotice(error instanceof Error ? error.message : "排序保存失败");
     }
     window.setTimeout(() => setNotice(""), 2200);
+  };
+  const move = async (item: ManagedContent, direction: -1 | 1) => {
+    const ordered = items
+      .filter((content) => content.kind === filter)
+      .sort((a, b) => a.sortOrder - b.sortOrder);
+    const index = ordered.findIndex((content) => content.id === item.id);
+    const target = index + direction;
+    if (index < 0 || target < 0 || target >= ordered.length) return;
+    [ordered[index], ordered[target]] = [ordered[target], ordered[index]];
+    await saveOrder(ordered);
+  };
+  const startDrag = (event: DragEvent<HTMLElement>, item: ManagedContent) => {
+    setDraggedId(item.id);
+    event.dataTransfer.effectAllowed = "move";
+    event.dataTransfer.setData("text/plain", item.id);
+  };
+  const dragOver = (event: DragEvent<HTMLElement>, item: ManagedContent) => {
+    event.preventDefault();
+    if (!draggedId || draggedId === item.id) return;
+    const bounds = event.currentTarget.getBoundingClientRect();
+    setDropTarget({ id: item.id, after: event.clientY > bounds.top + bounds.height / 2 });
+    event.dataTransfer.dropEffect = "move";
+  };
+  const drop = async (event: DragEvent<HTMLElement>, item: ManagedContent) => {
+    event.preventDefault();
+    const sourceId = draggedId || event.dataTransfer.getData("text/plain");
+    const ordered = [...visible];
+    const sourceIndex = ordered.findIndex((content) => content.id === sourceId);
+    if (sourceIndex < 0 || sourceId === item.id) return;
+    const [source] = ordered.splice(sourceIndex, 1);
+    const targetIndex = ordered.findIndex((content) => content.id === item.id);
+    ordered.splice(targetIndex + (dropTarget?.after ? 1 : 0), 0, source);
+    setDraggedId(null);
+    setDropTarget(null);
+    await saveOrder(ordered);
   };
 
   if (!adminToken)
@@ -226,7 +251,6 @@ export function Admin() {
     );
 
   const openModule = () => {
-    setQuery("");
     setPreview(false);
     setView("list");
   };
@@ -252,28 +276,10 @@ export function Admin() {
       {view === "list" ? (
         <section className="admin-list-page">
           <header>
-            <div>
-              <p>博客文章</p>
-              <h3>博客管理</h3>
-            </div>
             <button onClick={() => create(filter)}>
               <Icon name="plus" /> 新建文章
             </button>
           </header>
-          <div className="admin-list-tools">
-            <label>
-              搜索
-              <input
-                value={query}
-                onChange={(event) => setQuery(event.target.value)}
-                placeholder="输入标题搜索…"
-              />
-            </label>
-            <span>
-              {query ? "清除搜索后可调整排序 · " : "使用箭头调整前台顺序 · "}共{" "}
-              {visible.length} 条内容
-            </span>
-          </div>
           <div className="admin-table">
             <div className="admin-table-head">
               <span>标题</span>
@@ -283,7 +289,15 @@ export function Admin() {
               <span>排序与操作</span>
             </div>
             {visible.map((item, index) => (
-              <article key={item.id}>
+              <article
+                key={item.id}
+                draggable
+                className={`${draggedId === item.id ? "is-dragging" : ""}${dropTarget?.id === item.id ? ` is-drop-${dropTarget.after ? "after" : "before"}` : ""}`}
+                onDragStart={(event) => startDrag(event, item)}
+                onDragOver={(event) => dragOver(event, item)}
+                onDrop={(event) => void drop(event, item)}
+                onDragEnd={() => { setDraggedId(null); setDropTarget(null); }}
+              >
                 <button
                   className="admin-table-title"
                   onClick={() => edit(item)}
@@ -302,7 +316,7 @@ export function Admin() {
                 <div>
                   <button
                     className="admin-sort-button"
-                    disabled={Boolean(query) || index === 0}
+                    disabled={index === 0}
                     onClick={() => move(item, -1)}
                     aria-label={`上移 ${item.title}`}
                   >
@@ -310,7 +324,7 @@ export function Admin() {
                   </button>
                   <button
                     className="admin-sort-button"
-                    disabled={Boolean(query) || index === visible.length - 1}
+                    disabled={index === visible.length - 1}
                     onClick={() => move(item, 1)}
                     aria-label={`下移 ${item.title}`}
                   >

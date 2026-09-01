@@ -296,6 +296,12 @@
 .admin-table article > div button.is-danger { color: #a13d34; }
 .admin-table article > div button.admin-sort-button { width: 30px; padding: 6px 0; font-size: .78rem; }
 .admin-table article > div button:disabled { cursor: not-allowed; opacity: .28; }
+.admin-table article[draggable="true"] { position: relative; cursor: grab; transition: background-color .16s ease, opacity .16s ease; }
+.admin-table article[draggable="true"]:active { cursor: grabbing; }
+.admin-table article.is-dragging { opacity: .4; }
+.admin-table article.is-drop-before::before, .admin-table article.is-drop-after::after { content: ''; position: absolute; z-index: 2; right: 0; left: 0; height: 2px; background: #181818; pointer-events: none; }
+.admin-table article.is-drop-before::before { top: -1px; }
+.admin-table article.is-drop-after::after { bottom: -1px; }
 .admin-list-empty { padding: 70px 0; color: #85857f; font-size: .76rem; text-align: center; }
 .admin-v2-editor { min-height: calc(100dvh - 64px); }
 .admin-v2-editor .admin-topbar { top: 64px; }
@@ -537,8 +543,8 @@ h1, h2, h3, h4 { letter-spacing: -0.02em; }
   font-weight: 750;
 }
 .odc-logo > span { display: grid; gap: .2rem; line-height: 1.05; }
-.odc-logo > span strong { font-size: 1em; font-weight: 650; letter-spacing: .015em; }
-.odc-logo > span b { font-size: .68em; letter-spacing: .12em; }
+.odc-logo > span strong { color: currentColor; font-size: .72em; font-weight: 550; letter-spacing: .06em; }
+.odc-logo > span b { color: currentColor; font-size: 1em; font-weight: 700; letter-spacing: .08em; }
 :root[data-theme='dark'] .product-card-agentops .product-card-media {
   color: #eeeeee;
   background: color-mix(in srgb, var(--page-bg) 96%, var(--text) 4%);
