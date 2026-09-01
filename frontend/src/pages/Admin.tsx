@@ -13,8 +13,6 @@ import { getInitialManagedContent } from "../lib/contentSeed";
 import { RichTextEditor } from "../components/RichTextEditor";
 import { CoverImageUploader } from "../components/CoverImageUploader";
 
-const labels = { blog: "博客文章", project: "项目经历", about: "关于我" };
-
 function Icon({
   name,
 }: {
@@ -35,7 +33,7 @@ function Icon({
 export function Admin() {
   const [items, setItems] = useState<ManagedContent[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null);
-  const [filter, setFilter] = useState<ContentKind>("project");
+  const filter: ContentKind = "blog";
   const [query, setQuery] = useState("");
   const [saved, setSaved] = useState(true);
   const [preview, setPreview] = useState(false);
@@ -60,15 +58,11 @@ export function Admin() {
     setAuthLoading(true);
     setNotice("");
     try {
-      const databaseItems = await getManagedContent(token);
+      const databaseItems = await getManagedContent(token, "blog");
       const initial = getInitialManagedContent(databaseItems);
       setAdminToken(token);
       setItems(initial);
-      setActiveId(
-        initial.find((item) => item.kind === "project")?.id ??
-          initial[0]?.id ??
-          null,
-      );
+      setActiveId(initial[0]?.id ?? null);
       if (!databaseItems.length)
         setNotice("现有内容已载入，保存或发布时将导入数据库");
     } catch (error) {
@@ -136,7 +130,6 @@ export function Admin() {
     };
     setItems((current) => [item, ...current]);
     setActiveId(item.id);
-    setFilter(kind);
     setSaved(false);
     setPreview(false);
     setView("editor");
@@ -232,8 +225,7 @@ export function Admin() {
       </main>
     );
 
-  const openModule = (kind: "project" | "blog") => {
-    setFilter(kind);
+  const openModule = () => {
     setQuery("");
     setPreview(false);
     setView("list");
@@ -246,20 +238,7 @@ export function Admin() {
           DESIGN.4X
         </Link>
         <nav aria-label="后台模块">
-          {(
-            [
-              ["project", "项目"],
-              ["blog", "博客"],
-            ] as const
-          ).map(([kind, text]) => (
-            <button
-              key={kind}
-              className={filter === kind ? "is-active" : ""}
-              onClick={() => openModule(kind)}
-            >
-              {text}
-            </button>
-          ))}
+          <button className="is-active" onClick={openModule}>博客</button>
         </nav>
         <Link to="/" className="admin-v2-site-link">
           查看网站 ↗
@@ -274,11 +253,11 @@ export function Admin() {
         <section className="admin-list-page">
           <header>
             <div>
-              <p>{labels[filter]}</p>
-              <h3>{filter === "project" ? "项目管理" : "博客管理"}</h3>
+              <p>博客文章</p>
+              <h3>博客管理</h3>
             </div>
             <button onClick={() => create(filter)}>
-              <Icon name="plus" /> 新建{filter === "project" ? "项目" : "文章"}
+              <Icon name="plus" /> 新建文章
             </button>
           </header>
           <div className="admin-list-tools">
@@ -355,12 +334,10 @@ export function Admin() {
             <button
               className="admin-editor-back"
               onClick={() =>
-                active.kind === "about"
-                  ? openModule("project")
-                  : setView("list")
+                active.kind === "about" ? openModule() : setView("list")
               }
             >
-              ← {active.kind === "about" ? "返回项目" : "返回列表"}
+              ← 返回列表
             </button>
             <div>
               <span className={`admin-status is-${active.status}`} />

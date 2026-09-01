@@ -25,7 +25,7 @@ export function BlogIndex() {
         </p>
       </header>
 
-      <section className="blog-list" aria-label={locale === 'zh' ? '文章列表' : 'Articles'}>
+      <section className={`blog-list${loading ? ' is-loading' : ''}`} aria-label={locale === 'zh' ? '文章列表' : 'Articles'}>
         {loading ? <div className="content-loading-list" aria-label="正在加载文章"><i /><i /><i /><i /></div> : null}
         {!loading ? posts.map((post) => (
           <article className="blog-list-item" key={post.slug}>
