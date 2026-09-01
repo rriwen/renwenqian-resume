@@ -16,6 +16,9 @@ export function getManagedContent(adminToken: string, kind?: ContentKind) {
 export function saveManagedContent(items: ManagedContent[], adminToken: string) {
   return request<ManagedContent[]>('/api/content', { method: 'PUT', headers: { 'content-type': 'application/json', 'x-admin-token': adminToken }, body: JSON.stringify({ items }) })
 }
+export function deleteManagedContent(id: string, adminToken: string) {
+  return request<{ deleted: boolean }>(`/api/content?id=${encodeURIComponent(id)}`, { method: 'DELETE', headers: { 'x-admin-token': adminToken } })
+}
 export function getPublishedContent(kind?: ContentKind) {
   return request<ManagedContent[]>(`/api/content?status=published${kind ? `&kind=${kind}` : ''}`)
 }

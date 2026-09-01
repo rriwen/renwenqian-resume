@@ -40,6 +40,12 @@ export default async function handler(req: ApiRequest, res: ApiResponse) {
       })
       res.status(200).json(items); return
     }
+    if (req.method === 'DELETE') {
+      const id = typeof req.query.id === 'string' ? req.query.id : ''
+      if (!id) { res.status(400).json({ error: 'Missing content id' }); return }
+      await sql!`DELETE FROM content_items WHERE id = ${id}`
+      res.status(200).json({ deleted: true }); return
+    }
     res.status(405).json({ error: 'Method not allowed' })
   } catch (error) { res.status(500).json({ error: error instanceof Error ? error.message : 'Database error' }) }
 }
