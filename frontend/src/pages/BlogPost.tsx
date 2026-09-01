@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import { Link, useParams } from 'react-router-dom'
 import remarkGfm from 'remark-gfm'
@@ -16,6 +16,24 @@ function getTableOfContents(content: string) {
       title: match[2],
       id: `blog-section-${index}`,
     }))
+}
+
+function prepareManagedHtml(content: string) {
+  if (typeof document === 'undefined') return { html: content, toc: [] as ReturnType<typeof getTableOfContents> }
+  const documentNode = new DOMParser().parseFromString(content, 'text/html')
+  documentNode.body.querySelectorAll('p').forEach((paragraph) => {
+    const match = paragraph.textContent?.trim().match(/^(#{2,3})\s+(.+)$/)
+    if (!match) return
+    const heading = documentNode.createElement(match[1].length === 2 ? 'h2' : 'h3')
+    heading.textContent = match[2]
+    paragraph.replaceWith(heading)
+  })
+  const toc = Array.from(documentNode.body.querySelectorAll('h2, h3')).map((heading, index) => {
+    const id = `blog-section-${index}`
+    heading.id = id
+    return { level: Number(heading.tagName.slice(1)), title: heading.textContent?.trim() || `Section ${index + 1}`, id }
+  })
+  return { html: documentNode.body.innerHTML, toc }
 }
 
 function highlightCode(source: string, language?: string) {
@@ -83,7 +101,8 @@ export function BlogPost() {
   const currentIndex = allPosts.findIndex((item) => item.slug === slug)
   const previousPost = currentIndex >= 0 ? allPosts[(currentIndex - 1 + allPosts.length) % allPosts.length] : undefined
   const nextPost = currentIndex >= 0 ? allPosts[(currentIndex + 1) % allPosts.length] : undefined
-  const tableOfContents = post && post.format !== 'html' ? getTableOfContents(post.content) : []
+  const preparedHtml = useMemo(() => post?.format === 'html' ? prepareManagedHtml(post.content) : null, [post])
+  const tableOfContents = post ? (preparedHtml?.toc ?? getTableOfContents(post.content)) : []
 
   useEffect(() => {
     document.title = post ? `${post.title} | REN WENQIAN` : 'Blog | REN WENQIAN'
@@ -117,6 +136,7 @@ export function BlogPost() {
         <aside className="blog-post-sidebar">
           {tableOfContents.length > 0 ? (
             <nav className="blog-post-toc" aria-label={locale === 'zh' ? '文章目录' : 'Table of contents'}>
+              <p className="blog-post-toc-label">{locale === 'zh' ? '目录' : 'Contents'}</p>
               <ol>
                 {tableOfContents.map((item) => (
                   <li key={item.id} className={`blog-post-toc-level-${item.level}`}>
@@ -129,7 +149,8 @@ export function BlogPost() {
         </aside>
 
         <article className="blog-markdown">
-          {post.format === 'html' ? <div className="managed-rich-content" dangerouslySetInnerHTML={{ __html: post.content }} /> :
+          {tableOfContents.length > 0 ? <details className="blog-post-toc-mobile"><summary>{locale === 'zh' ? '文章目录' : 'Table of contents'}</summary><ol>{tableOfContents.map((item) => <li key={item.id} className={`blog-post-toc-level-${item.level}`}><a href={`#${item.id}`}>{item.title}</a></li>)}</ol></details> : null}
+          {post.format === 'html' ? <div className="managed-rich-content" dangerouslySetInnerHTML={{ __html: preparedHtml?.html ?? post.content }} /> :
           (() => {
             let headingIndex = 0
             const headingId = () => tableOfContents[headingIndex++]?.id

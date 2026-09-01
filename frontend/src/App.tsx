@@ -8,8 +8,8 @@ import { LanguageProvider } from './i18n/LanguageContext'
 import { About } from './pages/About'
 import { Home } from './pages/Home'
 import { ProjectDetail } from './pages/ProjectDetail'
-import { Admin } from './pages/Admin'
 
+const Admin = lazy(() => import('./pages/Admin').then((module) => ({ default: module.Admin })))
 const BlogIndex = lazy(() => import('./pages/BlogIndex').then((module) => ({ default: module.BlogIndex })))
 const BlogPost = lazy(() => import('./pages/BlogPost').then((module) => ({ default: module.BlogPost })))
 const Photography = lazy(() => import('./pages/Photography').then((module) => ({ default: module.Photography })))

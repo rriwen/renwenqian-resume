@@ -13,10 +13,12 @@ async function ensureTable() {
     status TEXT NOT NULL CHECK (status IN ('draft','published')), title TEXT NOT NULL,
     slug TEXT NOT NULL, category TEXT NOT NULL DEFAULT '', excerpt TEXT NOT NULL DEFAULT '',
     cover TEXT NOT NULL DEFAULT '', content TEXT NOT NULL DEFAULT '',
+    sort_order INTEGER NOT NULL DEFAULT 0,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(), updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     UNIQUE(kind, slug)
   )`
   await sql`ALTER TABLE content_items DROP CONSTRAINT IF EXISTS content_items_kind_check`
+  await sql`ALTER TABLE content_items ADD COLUMN IF NOT EXISTS sort_order INTEGER NOT NULL DEFAULT 0`
 }
 
 export default async function handler(req: ApiRequest, res: ApiResponse) {
@@ -27,7 +29,7 @@ export default async function handler(req: ApiRequest, res: ApiResponse) {
       const kind = typeof req.query.kind === 'string' ? req.query.kind : ''
       const status = typeof req.query.status === 'string' ? req.query.status : ''
       if (status !== 'published' && (!process.env.ADMIN_TOKEN || req.headers['x-admin-token'] !== process.env.ADMIN_TOKEN)) { res.status(401).json({ error: 'Unauthorized' }); return }
-      const rows = await sql!`SELECT id, kind, status, title, slug, category, excerpt, cover, content, created_at AS "createdAt", updated_at AS "updatedAt" FROM content_items WHERE (${kind} = '' OR kind = ${kind}) AND (${status} = '' OR status = ${status}) ORDER BY updated_at DESC`
+      const rows = await sql!`SELECT id, kind, status, title, slug, category, excerpt, cover, content, sort_order AS "sortOrder", created_at AS "createdAt", updated_at AS "updatedAt" FROM content_items WHERE (${kind} = '' OR kind = ${kind}) AND (${status} = '' OR status = ${status}) ORDER BY sort_order ASC, updated_at DESC`
       res.status(200).json(rows); return
     }
     const token = req.headers['x-admin-token']
@@ -36,7 +38,7 @@ export default async function handler(req: ApiRequest, res: ApiResponse) {
       const body = req.body as { items?: Array<Record<string, string>> }
       const items = body.items ?? []
       await sql!.begin(async (transaction) => {
-        for (const item of items) await transaction`INSERT INTO content_items (id, kind, status, title, slug, category, excerpt, cover, content, created_at, updated_at) VALUES (${item.id}, ${item.kind}, ${item.status}, ${item.title}, ${item.slug}, ${item.category}, ${item.excerpt}, ${item.cover}, ${item.content}, ${item.createdAt}, ${item.updatedAt}) ON CONFLICT (id) DO UPDATE SET kind=EXCLUDED.kind, status=EXCLUDED.status, title=EXCLUDED.title, slug=EXCLUDED.slug, category=EXCLUDED.category, excerpt=EXCLUDED.excerpt, cover=EXCLUDED.cover, content=EXCLUDED.content, updated_at=EXCLUDED.updated_at`
+        for (const item of items) await transaction`INSERT INTO content_items (id, kind, status, title, slug, category, excerpt, cover, content, sort_order, created_at, updated_at) VALUES (${item.id}, ${item.kind}, ${item.status}, ${item.title}, ${item.slug}, ${item.category}, ${item.excerpt}, ${item.cover}, ${item.content}, ${Number(item.sortOrder) || 0}, ${item.createdAt}, ${item.updatedAt}) ON CONFLICT (id) DO UPDATE SET kind=EXCLUDED.kind, status=EXCLUDED.status, title=EXCLUDED.title, slug=EXCLUDED.slug, category=EXCLUDED.category, excerpt=EXCLUDED.excerpt, cover=EXCLUDED.cover, content=EXCLUDED.content, sort_order=EXCLUDED.sort_order, updated_at=EXCLUDED.updated_at`
       })
       res.status(200).json(items); return
     }

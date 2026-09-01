@@ -60,16 +60,17 @@ function projectHtml(slug: string) {
 export function getInitialManagedContent(existing: ManagedContent[]) {
   const now = new Date().toISOString()
   const slugs = new Set(existing.map((item) => `${item.kind}:${item.slug}`))
-  const blogs: ManagedContent[] = getStaticBlogPosts().filter((post) => !slugs.has(`blog:${post.slug}`)).map((post) => ({
+  const blogs: ManagedContent[] = getStaticBlogPosts().filter((post) => !slugs.has(`blog:${post.slug}`)).map((post, index) => ({
     id: `seed-blog-${post.slug}`, kind: 'blog', status: 'published', title: post.title, slug: post.slug,
     category: post.category, excerpt: post.excerpt, cover: post.cover, content: markdownToHtml(post.content),
+    sortOrder: existing.filter((item) => item.kind === 'blog').length + index,
     createdAt: post.date ? `${post.date}T00:00:00.000Z` : now, updatedAt: post.date ? `${post.date}T00:00:00.000Z` : now,
   }))
-  const projectItems: ManagedContent[] = projects.filter((project) => !slugs.has(`project:${project.slug}`)).map((project) => {
+  const projectItems: ManagedContent[] = projects.filter((project) => !slugs.has(`project:${project.slug}`)).map((project, index) => {
     const detail = getProjectDetail(project.slug, 'zh')
     const plain = detail?.paragraphs.map((paragraph) => typeof paragraph === 'string' ? paragraph : paragraph.map((run) => run.text).join('')).join(' ') || ''
-    return { id: `seed-project-${project.slug}`, kind: 'project', status: 'published', title: project.title, slug: project.slug, category: detail?.tags.join(' · ') || '项目经历', excerpt: plain.slice(0, 160), cover: project.image, content: projectHtml(project.slug), createdAt: now, updatedAt: now }
+    return { id: `seed-project-${project.slug}`, kind: 'project', status: 'published', title: project.title, slug: project.slug, category: detail?.tags.join(' · ') || '项目经历', excerpt: plain.slice(0, 160), cover: project.image, content: projectHtml(project.slug), sortOrder: existing.filter((item) => item.kind === 'project').length + index, createdAt: now, updatedAt: now }
   })
-  const aboutItems: ManagedContent[] = slugs.has('about:about-zh') ? [] : [{ id: 'seed-about-zh', kind: 'about', status: 'published', title: '关于我', slug: 'about-zh', category: '关于我', excerpt: '个人简介、工作经历、项目经历、教育经历与联系方式。', cover: '', content: markdownToHtml(aboutZhSource), createdAt: now, updatedAt: now }]
+  const aboutItems: ManagedContent[] = slugs.has('about:about-zh') ? [] : [{ id: 'seed-about-zh', kind: 'about', status: 'published', title: '关于我', slug: 'about-zh', category: '关于我', excerpt: '个人简介、工作经历、项目经历、教育经历与联系方式。', cover: '', content: markdownToHtml(aboutZhSource), sortOrder: 0, createdAt: now, updatedAt: now }]
   return [...existing, ...projectItems, ...aboutItems, ...blogs]
 }

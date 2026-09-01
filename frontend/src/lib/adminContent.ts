@@ -1,6 +1,6 @@
 export type ContentKind = 'blog' | 'project' | 'about'
 export type ContentStatus = 'draft' | 'published'
-export type ManagedContent = { id: string; kind: ContentKind; status: ContentStatus; title: string; slug: string; category: string; excerpt: string; cover: string; content: string; createdAt: string; updatedAt: string }
+export type ManagedContent = { id: string; kind: ContentKind; status: ContentStatus; title: string; slug: string; category: string; excerpt: string; cover: string; content: string; sortOrder: number; createdAt: string; updatedAt: string }
 
 async function request<T>(url: string, init?: RequestInit): Promise<T> {
   const response = await fetch(url, init)
@@ -24,6 +24,6 @@ export function getPublishedContent(kind?: ContentKind) {
 }
 export function createManagedContent(kind: ContentKind): ManagedContent {
   const now = new Date().toISOString()
-  return { id: crypto.randomUUID(), kind, status: 'draft', title: '', slug: '', category: kind === 'blog' ? '设计思考' : kind === 'about' ? '关于我' : '项目经历', excerpt: '', cover: '', content: '<h2>从这里开始</h2><p>写下你的内容…</p>', createdAt: now, updatedAt: now }
+  return { id: crypto.randomUUID(), kind, status: 'draft', title: '', slug: '', category: kind === 'blog' ? '设计思考' : kind === 'about' ? '关于我' : '项目经历', excerpt: '', cover: '', content: '<h2>从这里开始</h2><p>写下你的内容…</p>', sortOrder: 0, createdAt: now, updatedAt: now }
 }
 export function slugify(value: string) { return value.trim().toLowerCase().replace(/[^a-z0-9\u4e00-\u9fa5]+/g, '-').replace(/^-|-$/g, '') || `content-${Date.now()}` }

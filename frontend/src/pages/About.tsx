@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react'
 import { getAboutContent, renderMarkdownInline, type AboutContent } from '../content/about'
 import { useLanguage } from '../i18n/LanguageContext'
-import { usePublishedContent } from '../lib/useManagedContent'
 
 const TIMELINE_IDS = [
   'about-2026',
@@ -171,8 +170,6 @@ function ProjectCards({ projects, locale }: { projects: AboutContent['projects']
 
 export function About() {
   const { m, locale } = useLanguage()
-  const { items: managedAboutItems, loading: aboutLoading } = usePublishedContent('about')
-  const managedAbout = managedAboutItems.find((item) => item.slug === 'about-zh')
   const about = useMemo(() => getAboutContent(locale), [locale])
   const [activeTimelineId, setActiveTimelineId] = useState<TimelineId>('about-2026')
   const [expandedProjects, setExpandedProjects] = useState<Set<number>>(new Set())
@@ -267,10 +264,6 @@ export function About() {
   if (!oceanbase || !ecidi || !leishu || !puhuai) {
     throw new Error('About markdown is missing one or more work entries')
   }
-
-  if (locale === 'zh' && aboutLoading) return <main className="content-detail-loading" aria-label="正在加载关于我"><i /><i /><i /><i /></main>
-
-  if (locale === 'zh' && managedAbout) return <main className="managed-about-page"><header><span>{managedAbout.category}</span><h1>{managedAbout.title}</h1>{managedAbout.excerpt ? <p>{managedAbout.excerpt}</p> : null}</header><article className="managed-rich-content" dangerouslySetInnerHTML={{ __html: managedAbout.content }} /></main>
 
   return (
     <>

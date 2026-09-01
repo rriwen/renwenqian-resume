@@ -4,8 +4,8 @@ import { defineConfig, loadEnv } from 'vite'
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
   const deepseekKey = env.VITE_DEEPSEEK_API_KEY ?? ''
-
   return {
+    envDir: '..',
     plugins: [react()],
     build: { outDir: '../dist', emptyOutDir: true },
     server: {
@@ -21,9 +21,7 @@ export default defineConfig(({ mode }) => {
           rewrite: (path) => path.replace(/^\/deepseek/, ''),
           configure: (proxy) => {
             proxy.on('proxyReq', (proxyReq) => {
-              if (deepseekKey) {
-                proxyReq.setHeader('Authorization', `Bearer ${deepseekKey}`)
-              }
+              if (deepseekKey) proxyReq.setHeader('Authorization', `Bearer ${deepseekKey}`)
             })
           },
         },
