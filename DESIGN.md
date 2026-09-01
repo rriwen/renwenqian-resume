@@ -32,8 +32,9 @@ npm run preview
 | `/blog/:slug` | `BlogPost` | Markdown 文章、目录、相关文章 |
 | `/photography` | `Photography` | Instagram 摄影内容 |
 | `/project/:slug` | `ProjectDetail` | 项目详情、画廊和相邻项目导航 |
+| `/admin` | `Admin` | 项目经历与博客内容管理、富文本编辑和发布 |
 
-`src/App.tsx` 负责路由、主题状态、全局 Header/Footer、聊天与联系浮层。博客和摄影页面采用懒加载。
+`frontend/src/App.tsx` 负责路由、主题状态、全局 Header/Footer、聊天与联系浮层。博客和摄影页面采用懒加载。
 
 ## 组件职责
 
@@ -46,7 +47,7 @@ npm run preview
 
 ## 视觉系统
 
-全局样式位于 `src/index.css`。优先使用以下 CSS 变量，不要在页面中重复定义主题颜色：
+全局样式位于 `frontend/src/index.css`。优先使用以下 CSS 变量，不要在页面中重复定义主题颜色：
 
 - `--page-bg`：页面背景
 - `--surface`：控件或内容表面
@@ -71,12 +72,23 @@ npm run preview
 
 ## 内容与数据
 
-- 项目基础数据：`src/data/projects.ts`
-- 项目详情数据：`src/data/projectDetails.ts`
-- 翻译资源：`src/i18n/translations.ts`
-- 摄影数据：`public/data/instagram.json`
-- 博客内容：`src/content/blog/`
-- 静态图片：`public/images/`
+- 项目基础数据：`frontend/src/data/projects.ts`
+- 项目详情数据：`frontend/src/data/projectDetails.ts`
+- 翻译资源：`frontend/src/i18n/translations.ts`
+- 摄影数据：`frontend/public/data/instagram.json`
+- 博客内容：`frontend/src/content/blog/`
+- 静态图片：`frontend/public/images/`
+
+### 内容管理数据库
+
+后台内容通过根目录 `api/content.ts` 写入 PostgreSQL。该目录是 Vercel 强制要求的 Serverless 路由入口；其余后端工具与迁移脚本位于 `backend/`，前端代码全部位于 `frontend/`。内容不使用浏览器本地存储。配置时复制 `.env.example` 并设置：
+
+- `POSTGRES_URL`：PostgreSQL 连接字符串，生产环境建议使用 Vercel Marketplace 中的 Neon。
+- `ADMIN_TOKEN`：后台保存与发布时使用的管理密钥。
+
+API 会在第一次请求时自动创建 `content_items` 表。数据库为空时，`/admin` 会把项目内现有的项目经历与 Markdown 博客载入编辑器；第一次保存或发布时，会将整批现有内容导入数据库。公开页面只读取 `published` 状态的数据库内容，并在数据库尚未初始化时使用仓库中的静态内容兜底。
+
+本地使用 `npm run dev` 时，Vite 会将 `/api` 代理到线上数据库 API，因此 `localhost:5173/admin` 可直接管理同一个 Neon 数据库。需要在本地运行完整 Serverless Function 时使用 `npm run dev:full`。
 
 图片应使用明确的 `alt` 文本（装饰图可为空），大图使用懒加载；项目和博客详情中的媒体应保持原始比例并避免撑破容器。
 

@@ -4,12 +4,16 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc --noEmit && vite build",
-    "preview": "vite preview"
+    "dev": "vite frontend --config frontend/vite.config.ts",
+    "dev:full": "vercel dev",
+    "build": "tsc --noEmit && vite build frontend --config frontend/vite.config.ts",
+    "preview": "vite preview frontend --config frontend/vite.config.ts",
+    "db:migrate": "tsx backend/scripts/migrate-content.ts",
+    "db:migrate:about": "tsx backend/scripts/migrate-about.ts"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",
+    "postgres": "^3.4.9",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-markdown": "^10.1.0",
@@ -18,9 +22,11 @@
     "yaml": "^2.9.0"
   },
   "devDependencies": {
+    "@types/node": "^26.4.0",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.3",
+    "tsx": "^4.23.13",
     "typescript": "~5.6.2",
     "vite": "^5.4.10"
   }

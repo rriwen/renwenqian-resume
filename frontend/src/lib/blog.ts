@@ -11,6 +11,7 @@ export type BlogPost = {
   featured: boolean
   readingMinutes: number
   content: string
+  format?: 'markdown' | 'html'
 }
 
 type BlogFrontmatter = {
@@ -87,6 +88,8 @@ const posts = Object.entries(markdownFiles)
 export function getBlogPosts() {
   return posts
 }
+
+export function getStaticBlogPosts() { return posts }
 
 export function getBlogPost(slug?: string) {
   return posts.find((post) => post.slug === slug)

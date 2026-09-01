@@ -5,6 +5,7 @@ import { getProjectDetail, type ProjectDetailParagraph } from '../data/projectDe
 import { getAdjacentProjects, getProjectBySlug, getProjectTitle, projects } from '../data/projects'
 import { useLanguage } from '../i18n/LanguageContext'
 import { isGifSrc } from '../lib/isGifSrc'
+import { usePublishedContent } from '../lib/useManagedContent'
 
 const body: CSSProperties = {
   margin: '0 0 1rem',
@@ -30,17 +31,21 @@ export function ProjectDetail() {
   const { slug } = useParams<{ slug: string }>()
   const { locale, m } = useLanguage()
   const project = getProjectBySlug(slug)
+  const { items: managedProjects, loading: managedLoading } = usePublishedContent('project')
+  const managedProject = managedProjects.find((item) => item.slug === slug)
   const detail = project ? getProjectDetail(project.slug, locale) : undefined
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
   const [lightboxIntrinsic, setLightboxIntrinsic] = useState<{ w: number; h: number } | null>(null)
 
   useEffect(() => {
-    if (project) {
+    if (managedProject) {
+      document.title = `${managedProject.title} | REN WENQIAN`
+    } else if (project) {
       document.title = `${getProjectTitle(project, locale)} | REN WENQIAN`
     } else {
       document.title = m.home.title
     }
-  }, [project, locale, m.home.title])
+  }, [project, managedProject, locale, m.home.title])
 
   useEffect(() => {
     setLightboxIndex(null)
@@ -71,6 +76,12 @@ export function ProjectDetail() {
       window.removeEventListener('keydown', onKey)
     }
   }, [lightboxIndex, galleryLen])
+
+  if (managedLoading) return <main className="content-detail-loading" aria-label="正在加载内容"><i /><i /><i /><i /></main>
+
+  if (managedProject) {
+    return <main className="managed-project-page"><Link to="/" className="project-detail-back-link">{m.workDetail.back}</Link>{managedProject.cover ? <img className="managed-project-cover" src={managedProject.cover} alt="" /> : null}<p className="managed-project-kicker">{managedProject.category}</p><h1>{managedProject.title}</h1>{managedProject.excerpt ? <p className="managed-project-excerpt">{managedProject.excerpt}</p> : null}<article className="managed-rich-content" dangerouslySetInnerHTML={{ __html: managedProject.content }} /></main>
+  }
 
   if (!project || !detail) {
     return (

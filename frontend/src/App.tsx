@@ -8,6 +8,7 @@ import { LanguageProvider } from './i18n/LanguageContext'
 import { About } from './pages/About'
 import { Home } from './pages/Home'
 import { ProjectDetail } from './pages/ProjectDetail'
+import { Admin } from './pages/Admin'
 
 const BlogIndex = lazy(() => import('./pages/BlogIndex').then((module) => ({ default: module.BlogIndex })))
 const BlogPost = lazy(() => import('./pages/BlogPost').then((module) => ({ default: module.BlogPost })))
@@ -23,6 +24,29 @@ function ScrollToTop() {
   }, [pathname, search])
 
   return null
+}
+
+function AppFrame({ dark, onToggleTheme, viewMode, onViewMode }: { dark: boolean; onToggleTheme: () => void; viewMode: HomeViewMode; onViewMode: (value: HomeViewMode) => void }) {
+  const { pathname } = useLocation()
+  const isAdmin = pathname.startsWith('/admin')
+  return <div style={{ minHeight: '100dvh' }}>
+    <ScrollToTop />
+    {!isAdmin ? <Header dark={dark} onToggleTheme={onToggleTheme} /> : null}
+    <div className={isAdmin ? undefined : 'site-content'}>
+      <Suspense fallback={<main className="route-loading">Loading...</main>}>
+        <Routes>
+          <Route path="/" element={<Home viewMode={viewMode} onViewMode={onViewMode} />} />
+          <Route path="/blog" element={<BlogIndex />} />
+          <Route path="/blog/:slug" element={<BlogPost />} />
+          <Route path="/photography" element={<Photography />} />
+          <Route path="/project/:slug" element={<ProjectDetail />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/admin" element={<Admin />} />
+        </Routes>
+      </Suspense>
+    </div>
+    {!isAdmin ? <><SiteFooter /><ChatbotOverlay dark={dark} onToggleTheme={onToggleTheme} /><ContactOverlay /></> : null}
+  </div>
 }
 
 export default function App() {
@@ -42,25 +66,7 @@ export default function App() {
   return (
     <LanguageProvider>
       <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-        <div style={{ minHeight: '100dvh' }}>
-          <ScrollToTop />
-          <Header dark={dark} onToggleTheme={() => setDark((value) => !value)} />
-          <div className="site-content">
-            <Suspense fallback={<main className="route-loading">Loading...</main>}>
-              <Routes>
-                <Route path="/" element={<Home viewMode={viewMode} onViewMode={setViewMode} />} />
-                <Route path="/blog" element={<BlogIndex />} />
-                <Route path="/blog/:slug" element={<BlogPost />} />
-                <Route path="/photography" element={<Photography />} />
-                <Route path="/project/:slug" element={<ProjectDetail />} />
-                <Route path="/about" element={<About />} />
-              </Routes>
-            </Suspense>
-          </div>
-          <SiteFooter />
-          <ChatbotOverlay dark={dark} onToggleTheme={() => setDark((value) => !value)} />
-          <ContactOverlay />
-        </div>
+        <AppFrame dark={dark} onToggleTheme={() => setDark((value) => !value)} viewMode={viewMode} onViewMode={setViewMode} />
       </BrowserRouter>
     </LanguageProvider>
   )

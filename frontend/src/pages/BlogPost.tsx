@@ -4,6 +4,7 @@ import { Link, useParams } from 'react-router-dom'
 import remarkGfm from 'remark-gfm'
 import { useLanguage } from '../i18n/LanguageContext'
 import { getBlogPost, getBlogPosts } from '../lib/blog'
+import { usePublishedContent } from '../lib/useManagedContent'
 
 function getTableOfContents(content: string) {
   return content
@@ -75,16 +76,20 @@ function BlogCodeBlock({ children, locale }: { children?: React.ReactNode; local
 export function BlogPost() {
   const { slug } = useParams<{ slug: string }>()
   const { locale } = useLanguage()
-  const post = getBlogPost(slug)
+  const { items: managed, loading, failed } = usePublishedContent('blog')
+  const managedPost = managed.find((item) => item.slug === slug)
+  const post = managedPost ? { ...managedPost, date: managedPost.updatedAt.slice(0, 10), coverAlt: managedPost.title, featured: false, readingMinutes: Math.max(1, Math.ceil(managedPost.content.replace(/<[^>]+>/g, '').length / 300)), format: 'html' as const } : failed ? getBlogPost(slug) : undefined
   const allPosts = getBlogPosts()
   const currentIndex = allPosts.findIndex((item) => item.slug === slug)
   const previousPost = currentIndex >= 0 ? allPosts[(currentIndex - 1 + allPosts.length) % allPosts.length] : undefined
   const nextPost = currentIndex >= 0 ? allPosts[(currentIndex + 1) % allPosts.length] : undefined
-  const tableOfContents = post ? getTableOfContents(post.content) : []
+  const tableOfContents = post && post.format !== 'html' ? getTableOfContents(post.content) : []
 
   useEffect(() => {
     document.title = post ? `${post.title} | REN WENQIAN` : 'Blog | REN WENQIAN'
   }, [post])
+
+  if (loading) return <main className="content-detail-loading" aria-label="正在加载内容"><i /><i /><i /><i /></main>
 
   if (!post) {
     return (
@@ -124,7 +129,8 @@ export function BlogPost() {
         </aside>
 
         <article className="blog-markdown">
-          {(() => {
+          {post.format === 'html' ? <div className="managed-rich-content" dangerouslySetInnerHTML={{ __html: post.content }} /> :
+          (() => {
             let headingIndex = 0
             const headingId = () => tableOfContents[headingIndex++]?.id
             return (
@@ -171,10 +177,6 @@ export function BlogPost() {
           })()}
         </article>
       </div>
-
-      <footer className="blog-post-footer">
-        <Link to="/blog">{locale === 'zh' ? '查看全部文章' : 'All articles'} →</Link>
-      </footer>
 
       {previousPost || nextPost ? (
         <nav className="blog-post-adjacent" aria-label={locale === 'zh' ? '文章导航' : 'Article navigation'}>

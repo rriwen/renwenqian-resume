@@ -7,8 +7,14 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins: [react()],
+    build: { outDir: '../dist', emptyOutDir: true },
     server: {
       proxy: {
+        '/api': {
+          target: 'https://www.rriwen4x.me',
+          changeOrigin: true,
+          secure: true,
+        },
         '/deepseek': {
           target: 'https://api.deepseek.com',
           changeOrigin: true,

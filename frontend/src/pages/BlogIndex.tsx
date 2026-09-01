@@ -2,10 +2,13 @@ import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useLanguage } from '../i18n/LanguageContext'
 import { getBlogPosts } from '../lib/blog'
+import { usePublishedContent } from '../lib/useManagedContent'
 
 export function BlogIndex() {
   const { locale } = useLanguage()
-  const posts = getBlogPosts()
+  const { items: managed, loading, failed } = usePublishedContent('blog')
+  const managedSlugs = new Set(managed.map((item) => item.slug))
+  const posts = [...managed.map((item) => ({ ...item, date: item.updatedAt.slice(0, 10), coverAlt: item.title, featured: false, readingMinutes: 1, format: 'html' as const })), ...(failed ? getBlogPosts().filter((item) => !managedSlugs.has(item.slug)) : [])]
 
   useEffect(() => {
     document.title = `${locale === 'zh' ? '博客' : 'Journal'} | REN WENQIAN`
@@ -23,7 +26,8 @@ export function BlogIndex() {
       </header>
 
       <section className="blog-list" aria-label={locale === 'zh' ? '文章列表' : 'Articles'}>
-        {posts.map((post) => (
+        {loading ? <div className="content-loading-list" aria-label="正在加载文章"><i /><i /><i /><i /></div> : null}
+        {!loading ? posts.map((post) => (
           <article className="blog-list-item" key={post.slug}>
             <Link to={`/blog/${post.slug}`} className="blog-list-link">
               <div className="blog-list-copy">
@@ -32,7 +36,7 @@ export function BlogIndex() {
               <p className="blog-list-type">{post.category}</p>
             </Link>
           </article>
-        ))}
+        )) : null}
       </section>
     </main>
   )
