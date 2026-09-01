@@ -8,7 +8,7 @@ export type Project = {
 }
 
 export const projects: Project[] = [
-  { id: 1, slug: 'dataagent', title: 'DataAgent', titleEn: 'DataAgent', image: '/images/datapilot-hero.png' },
+  { id: 1, slug: 'dataagent', title: 'AI 智能问数', titleEn: 'DataAgent', image: '/images/datapilot-hero.png' },
   { id: 2, slug: 'agentops', title: 'Agent 可观测产品', titleEn: 'Agent Observability', image: '/images/work-6.webp' },
   { id: 3, slug: 'Memory', title: 'Agent 记忆插件', titleEn: 'Agent Memory Plugin', image: '/images/memory-m0-hero.jpg' },
   { id: 4, slug: 'aidesignsystem', title: 'AI 设计系统', titleEn: 'AI Design System', image: '/images/aidesignsystem-hero.jpg' },

@@ -19,12 +19,16 @@ export function SiteFooter() {
           <div>
             <h3>{locale === 'zh' ? '产品' : 'Products'}</h3>
             {projects.slice(0, 5).map((project) => (
-              <Link key={project.id} to={`/project/${project.slug}`}>{getProjectTitle(project, locale)}</Link>
+              <Link key={project.id} to={`/project/${project.slug}`}>
+                {locale === 'zh' && project.slug === 'dataagent'
+                  ? 'AI 智能问数'
+                  : getProjectTitle(project, locale)}
+              </Link>
             ))}
           </div>
           <div>
             <h3>{locale === 'zh' ? '关于我' : 'About me'}</h3>
-            <p>{locale === 'zh' ? '产品设计师，专注于 AI 产品、数据工具与复杂系统体验。' : 'Product designer focused on AI products, data tools, and complex systems.'}</p>
+            <p>{locale === 'zh' ? '产品设计师，专注于 AI 产品、数据工具与复杂系统体验' : 'Product designer focused on AI products, data tools, and complex systems.'}</p>
             <a href="mailto:rriwen@gmail.com">rriwen@gmail.com</a>
             <a href="tel:18362976211">18362976211</a>
             <a href="#chat">{locale === 'zh' ? '和我聊聊 ↗' : 'Chat with me ↗'}</a>

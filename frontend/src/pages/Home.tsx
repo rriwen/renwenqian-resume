@@ -2,10 +2,48 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getProjectTitle, projects, type Project } from "../data/projects";
 import { useLanguage } from "../i18n/LanguageContext";
-import { usePublishedContent } from "../lib/useManagedContent";
 
 type ViewMode = "stack" | "grid";
 type Props = { viewMode: ViewMode; onViewMode: (m: ViewMode) => void };
+
+function TypeWords({ words, className = "" }: { words: string[]; className?: string }) {
+  const [wordIndex, setWordIndex] = useState(0);
+  const [text, setText] = useState("");
+  const [deleting, setDeleting] = useState(false);
+
+  useEffect(() => {
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reducedMotion) {
+      setText(words[0]);
+      return;
+    }
+
+    const word = words[wordIndex];
+    let delay = deleting ? 70 : 120;
+    if (!deleting && text === word) delay = 1500;
+    if (deleting && text === "") delay = 320;
+
+    const timer = window.setTimeout(() => {
+      if (!deleting && text === word) {
+        setDeleting(true);
+      } else if (deleting && text === "") {
+        setDeleting(false);
+        setWordIndex((current) => (current + 1) % words.length);
+      } else {
+        setText(word.slice(0, text.length + (deleting ? -1 : 1)));
+      }
+    }, delay);
+
+    return () => window.clearTimeout(timer);
+  }, [deleting, text, wordIndex, words]);
+
+  return (
+    <span className={`home-type-word${className ? ` ${className}` : ""}`} aria-hidden="true">
+      <span>{text}</span>
+      <span className="home-type-cursor" />
+    </span>
+  );
+}
 
 function AsciiField() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -47,8 +85,8 @@ function AsciiField() {
       const cell = 10;
       const time = frame * 0.018;
       const cx = width * 0.5;
-      const cy = height * (0.43 + Math.sin(time * 0.55) * 0.025);
-      const scale = Math.min(width, height) * 0.5;
+      const cy = height * (0.48 + Math.sin(time * 0.55) * 0.02);
+      const scale = Math.min(width, height) * 0.46;
       const tentacleBases = [-0.62, -0.32, 0, 0.32, 0.62];
       const tentacleLengths = [0.48, 0.74, 0.58, 0.82, 0.52];
 
@@ -138,11 +176,6 @@ function AsciiField() {
 export function Home(_props: Props) {
   const { locale } = useLanguage();
   const navigate = useNavigate();
-  const {
-    items: managedProjects,
-    loading: projectsLoading,
-    failed: projectsFailed,
-  } = usePublishedContent("project");
   const [category, setCategory] = useState("all");
   useEffect(() => {
     document.title = "DESIGN.4x";
@@ -180,33 +213,7 @@ export function Home(_props: Props) {
           ["Tools", "Database Development"],
           ["Tools", "Database Operations"],
         ];
-  const effectiveProjects = useMemo(() => {
-    if (!managedProjects.length) return projectsFailed ? projects : [];
-    const projectBySlug = new Map(
-      projects.map((project) => [project.slug, project]),
-    );
-    return managedProjects.map((managed, index) => {
-      const project = projectBySlug.get(managed.slug);
-      return project
-        ? {
-            ...project,
-            title: managed.title,
-            titleEn: managed.title,
-            image: managed.cover || project.image,
-          }
-        : {
-            id: 1000 + index,
-            slug: managed.slug,
-            title: managed.title,
-            titleEn: managed.title,
-            image: managed.cover,
-          };
-    });
-  }, [managedProjects]);
-  const managedBySlug = useMemo(
-    () => new Map(managedProjects.map((item) => [item.slug, item])),
-    [managedProjects],
-  );
+  const effectiveProjects = projects;
   const selected = useMemo(() => {
     const all = effectiveProjects.map((project, index) => ({ project, index }));
     if (category === "all") return all;
@@ -286,28 +293,14 @@ export function Home(_props: Props) {
           </div>
         </div>
         <div className="products-grid">
-          {projectsLoading ? (
-            <div className="project-loading-grid" aria-label="正在加载项目">
-              <i />
-              <i />
-              <i />
-              <i />
-              <i />
-              <i />
-            </div>
-          ) : null}
-          {!projectsLoading
-            ? selected.map(({ project, index }) => {
-                const managed = managedBySlug.get(project.slug);
+          {selected.map(({ project, index }) => {
                 const defaultIndex = projects.findIndex(
                   (item) => item.slug === project.slug,
                 );
-                const tags = managed?.category
-                  ? managed.category.split(/\s*[·,，]\s*/).filter(Boolean)
-                  : projectTags[defaultIndex >= 0 ? defaultIndex : index] || [];
+                const tags = projectTags[defaultIndex >= 0 ? defaultIndex : index] || [];
                 return (
                   <article
-                    className={`product-card${project.slug === "agentops" ? " product-card-agentops" : ""}${project.slug === "Memory" ? " product-card-memory" : ""}${project.slug === "aidesignsystem" ? " product-card-design-system" : ""}${project.slug === "datadevelop" ? " product-card-odc" : ""}${project.slug === "databaseops" ? " product-card-oceanbase" : ""}`}
+                    className={`product-card${project.slug === "dataagent" ? " product-card-datapilot" : ""}${project.slug === "agentops" ? " product-card-agentops" : ""}${project.slug === "Memory" ? " product-card-memory" : ""}${project.slug === "aidesignsystem" ? " product-card-design-system" : ""}${project.slug === "datadevelop" ? " product-card-odc" : ""}${project.slug === "databaseops" ? " product-card-oceanbase" : ""}`}
                     key={project.id}
                   >
                     <button
@@ -316,7 +309,11 @@ export function Home(_props: Props) {
                     >
                       <div className="product-card-media">
                         <img src={project.image} alt="" />
-                        {project.slug === "agentops" ? (
+                        {project.slug === "dataagent" ? (
+                          <div className="datapilot-logo" aria-label="OceanBase DataPilot">
+                            <img src="/images/oceanbase-logo.svg" alt="OceanBase" />
+                          </div>
+                        ) : project.slug === "agentops" ? (
                           <div className="agentops-logo" aria-label="AgentOps">
                             <svg
                               className="agentops-logo-mark"
@@ -375,13 +372,19 @@ export function Home(_props: Props) {
                               viewBox="0 0 48 48"
                               aria-hidden="true"
                             >
+                              <defs>
+                                <linearGradient id="design-system-gradient" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+                                  <stop stopColor="#0096fe" />
+                                  <stop offset="1" stopColor="#c49ffe" />
+                                </linearGradient>
+                              </defs>
                               <rect
                                 x="5"
                                 y="5"
                                 width="15"
                                 height="15"
                                 rx="2"
-                                fill="currentColor"
+                                fill="url(#design-system-gradient)"
                               />
                               <rect
                                 x="28"
@@ -389,7 +392,7 @@ export function Home(_props: Props) {
                                 width="15"
                                 height="15"
                                 rx="2"
-                                fill="currentColor"
+                                fill="url(#design-system-gradient)"
                                 opacity=".72"
                               />
                               <rect
@@ -398,12 +401,12 @@ export function Home(_props: Props) {
                                 width="15"
                                 height="15"
                                 rx="2"
-                                fill="currentColor"
+                                fill="url(#design-system-gradient)"
                                 opacity=".72"
                               />
                               <path
                                 d="M20 12.5h8M12.5 20v8M20 35.5h8M35.5 20v8"
-                                stroke="currentColor"
+                                stroke="url(#design-system-gradient)"
                                 strokeWidth="3"
                                 strokeLinecap="round"
                               />
@@ -413,7 +416,7 @@ export function Home(_props: Props) {
                                 width="15"
                                 height="15"
                                 rx="2"
-                                fill="currentColor"
+                                fill="url(#design-system-gradient)"
                               />
                             </svg>
                             <span>
@@ -456,8 +459,7 @@ export function Home(_props: Props) {
                     </button>
                   </article>
                 );
-              })
-            : null}
+              })}
         </div>
       </section>
 
@@ -465,62 +467,58 @@ export function Home(_props: Props) {
         className="home-perspective"
         aria-labelledby="product-perspective-title"
       >
-        <header className="home-perspective-heading">
-          <p>
-            {locale === "zh" ? "产品设计观点" : "Product design perspective"}
-          </p>
-          <span aria-hidden="true">01 — 03</span>
-        </header>
         <div className="home-perspective-intro">
-          <h2 id="product-perspective-title">
-            {locale === "zh"
-              ? "设计不是把界面做得更满，而是让正确的事情更容易发生。"
-              : "Design is not about filling the interface. It is about making the right things easier to happen."}
+          <h2
+            id="product-perspective-title"
+            aria-label={locale === "zh" ? "让正确、可控、持续的设计更容易发生" : "Make correct, controllable, and sustainable design easier to happen"}
+          >
+            {locale === "zh" ? (
+              <span className="home-perspective-title-line">让<TypeWords words={["正确", "可控", "持续"]} />的设计更容易发生</span>
+            ) : (
+              <span className="home-perspective-title-line">Make<TypeWords className="is-en" words={["Correct", "Controllable", "Sustainable"]} />Design Easier to Happen</span>
+            )}
           </h2>
         </div>
         <div className="home-perspective-list">
           <article>
-            <span>01</span>
             <div>
               <h3>
                 {locale === "zh"
-                  ? "先理解问题，再表达答案"
-                  : "Understand the problem before expressing the answer"}
+                  ? "找对问题再设计答案"
+                  : "Find the right problem before designing the answer"}
               </h3>
               <p>
                 {locale === "zh"
-                  ? "好的产品设计从真实情境出发。先看清用户、业务与技术之间的约束，再决定界面应该呈现什么，而不是从一个漂亮的页面开始。"
-                  : "Good product design begins with real context. Understand the constraints between users, business, and technology before deciding what the interface should show."}
+                  ? "从用户反馈与行为数据中找准问题，在用户、业务与技术之间验证解法"
+                  : "Use feedback and behavioral data to find the right problem and validate solutions across user, business, and technical needs"}
               </p>
             </div>
           </article>
           <article>
-            <span>02</span>
             <div>
               <h3>
                 {locale === "zh"
-                  ? "复杂留给系统，清晰交给用户"
-                  : "Keep complexity in the system and clarity with the user"}
+                  ? "复杂系统清晰可控"
+                  : "Complex systems made clear and controllable"}
               </h3>
               <p>
                 {locale === "zh"
-                  ? "设计的价值不是隐藏所有复杂度，而是建立恰当的信息层级与反馈，让用户始终知道发生了什么、为什么发生，以及下一步可以做什么。"
-                  : "Design does not hide all complexity. It creates the right hierarchy and feedback so people know what happened, why it happened, and what they can do next."}
+                  ? "梳理 Agent 与专业工具的信息、流程与反馈，让用户理解系统如何工作并能在关键节点确认、调整或纠正"
+                  : "Clarify the information, flows, and feedback in agents and professional tools so users understand how the system works and can intervene when needed"}
               </p>
             </div>
           </article>
           <article>
-            <span>03</span>
             <div>
               <h3>
                 {locale === "zh"
-                  ? "把设计当作持续演进的系统"
-                  : "Treat design as an evolving system"}
+                  ? "让一次设计变为持续能力"
+                  : "Turn each design into lasting capability"}
               </h3>
               <p>
                 {locale === "zh"
-                  ? "产品不会在上线时完成。通过真实使用、数据与反馈持续校准，让每一次迭代既解决当下问题，也为下一次变化留下空间。"
-                  : "A product is not finished at launch. Real usage, data, and feedback should keep shaping it while every iteration leaves room for what comes next."}
+                  ? "将有效方案沉淀为规范、组件与工程约束，让好的设计持续复用"
+                  : "Turn effective solutions into standards, components, and engineering constraints so good design can be reused"}
               </p>
             </div>
           </article>

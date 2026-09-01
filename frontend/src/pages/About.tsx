@@ -22,10 +22,10 @@ function measureHeaderClearancePx(): number {
 }
 
 /** 与 ProjectDetail 正文列同宽 */
-const proseColumn: CSSProperties = { maxWidth: 720 }
+const proseColumn: CSSProperties = { maxWidth: 760 }
 
 /** 简介段落列宽（浏览器预览调宽） */
-const aboutIntroColumn: CSSProperties = { maxWidth: 720 }
+const aboutIntroColumn: CSSProperties = { maxWidth: 760 }
 
 const bodyText: CSSProperties = {
   margin: '0 0 1rem',
@@ -41,7 +41,7 @@ const workMeta: CSSProperties = {
   fontSize: '0.88rem',
   opacity: 0.72,
   lineHeight: 1.45,
-  maxWidth: 720,
+  maxWidth: 760,
 }
 
 const workPeriod: CSSProperties = {
@@ -81,7 +81,7 @@ const workArticleMeta: CSSProperties = {
 
 const workArticleProse: CSSProperties = {
   ...proseColumn,
-  maxWidth: 720,
+  maxWidth: 760,
 }
 
 const workArticleList: CSSProperties = {

@@ -102,7 +102,9 @@ export function BlogPost() {
   const previousPost = currentIndex >= 0 ? allPosts[(currentIndex - 1 + allPosts.length) % allPosts.length] : undefined
   const nextPost = currentIndex >= 0 ? allPosts[(currentIndex + 1) % allPosts.length] : undefined
   const preparedHtml = useMemo(() => post?.format === 'html' ? prepareManagedHtml(post.content) : null, [post])
-  const tableOfContents = post ? (preparedHtml?.toc ?? getTableOfContents(post.content)) : []
+  const allHeadings = post ? (preparedHtml?.toc ?? getTableOfContents(post.content)) : []
+  const topHeadingLevel = allHeadings.length ? Math.min(...allHeadings.map((item) => item.level)) : 0
+  const tableOfContents = allHeadings.filter((item) => item.level === topHeadingLevel)
 
   useEffect(() => {
     document.title = post ? `${post.title} | REN WENQIAN` : 'Blog | REN WENQIAN'
@@ -136,7 +138,6 @@ export function BlogPost() {
         <aside className="blog-post-sidebar">
           {tableOfContents.length > 0 ? (
             <nav className="blog-post-toc" aria-label={locale === 'zh' ? '文章目录' : 'Table of contents'}>
-              <p className="blog-post-toc-label">{locale === 'zh' ? '目录' : 'Contents'}</p>
               <ol>
                 {tableOfContents.map((item) => (
                   <li key={item.id} className={`blog-post-toc-level-${item.level}`}>
@@ -153,7 +154,7 @@ export function BlogPost() {
           {post.format === 'html' ? <div className="managed-rich-content" dangerouslySetInnerHTML={{ __html: preparedHtml?.html ?? post.content }} /> :
           (() => {
             let headingIndex = 0
-            const headingId = () => tableOfContents[headingIndex++]?.id
+            const headingId = () => allHeadings[headingIndex++]?.id
             return (
           <ReactMarkdown
             remarkPlugins={[remarkGfm]}

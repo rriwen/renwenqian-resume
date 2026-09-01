@@ -5,7 +5,6 @@ import { getProjectDetail, type ProjectDetailParagraph } from '../data/projectDe
 import { getAdjacentProjects, getProjectBySlug, getProjectTitle, projects } from '../data/projects'
 import { useLanguage } from '../i18n/LanguageContext'
 import { isGifSrc } from '../lib/isGifSrc'
-import { usePublishedContent } from '../lib/useManagedContent'
 
 const body: CSSProperties = {
   margin: '0 0 1rem',
@@ -30,22 +29,18 @@ function renderParagraphContent(para: ProjectDetailParagraph) {
 export function ProjectDetail() {
   const { slug } = useParams<{ slug: string }>()
   const { locale, m } = useLanguage()
-  const project = getProjectBySlug(slug)
-  const { items: managedProjects, loading: managedLoading } = usePublishedContent('project')
-  const managedProject = managedProjects.find((item) => item.slug === slug)
+  const project = getProjectBySlug(slug === 'ai-智能问数' ? 'dataagent' : slug)
   const detail = project ? getProjectDetail(project.slug, locale) : undefined
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
   const [lightboxIntrinsic, setLightboxIntrinsic] = useState<{ w: number; h: number } | null>(null)
 
   useEffect(() => {
-    if (managedProject) {
-      document.title = `${managedProject.title} | REN WENQIAN`
-    } else if (project) {
+    if (project) {
       document.title = `${getProjectTitle(project, locale)} | REN WENQIAN`
     } else {
       document.title = m.home.title
     }
-  }, [project, managedProject, locale, m.home.title])
+  }, [project, locale, m.home.title])
 
   useEffect(() => {
     setLightboxIndex(null)
@@ -76,12 +71,6 @@ export function ProjectDetail() {
       window.removeEventListener('keydown', onKey)
     }
   }, [lightboxIndex, galleryLen])
-
-  if (managedLoading) return <main className="content-detail-loading" aria-label="正在加载内容"><i /><i /><i /><i /></main>
-
-  if (managedProject) {
-    return <main className="managed-project-page"><Link to="/" className="project-detail-back-link">{m.workDetail.back}</Link>{managedProject.cover ? <img className="managed-project-cover" src={managedProject.cover} alt="" /> : null}<p className="managed-project-kicker">{managedProject.category}</p><h1>{managedProject.title}</h1>{managedProject.excerpt ? <p className="managed-project-excerpt">{managedProject.excerpt}</p> : null}<article className="managed-rich-content" dangerouslySetInnerHTML={{ __html: managedProject.content }} /></main>
-  }
 
   if (!project || !detail) {
     return (
@@ -636,33 +625,26 @@ function DataPilotCaseStudy({ project, locale }: DataPilotCaseStudyProps) {
   const isZh = locale === 'zh'
   const { prev: prevProject, next: nextProject } = getAdjacentProjects(project.slug)
   const [activePart, setActivePart] = useState<'experience' | 'growth'>('experience')
+  const [activeSectionId, setActiveSectionId] = useState('overview')
   const sections = isZh
     ? [
         {
           id: 'overview',
           index: '01',
-          title: '项目概览',
-          intro: '',
-          body: '智能问数从技术验证进入商业化交付时，核心问题不是“能不能生成答案”，而是用户为什么不敢采纳答案。早期版本在指标口径、时间范围和执行过程上不够稳定，用户无法判断结果是否可信，出错后也缺少修正路径。作为产品体验负责人，我围绕“让 AI 结果可被信任和使用”负责问题定义、优先级判断、Agent 对话流程和跨团队落地：先把一次性答案改造成可确认、可追踪、可修正的任务，再扩展结果形态。',
-          stats: ['结果采纳率 15% → 60%', '5+ 家付费客户交付'],
-          images: [{ src: project.image, caption: 'DataAgent 产品入口与问数结果概览' }],
+          title: '项目目标',
+          intro: '从“生成答案”转向“让结果可信并进入工作流”',
+          body: '智能问数从技术验证进入商业化交付后，产品开始关注用户为何不敢采纳答案。早期版本在指标口径和执行过程上不够稳定，用户难以判断结果是否可信，出错后也缺少修正路径。因此目标分两层：先减少指标与维度的口径偏差，让结果可确认、可追踪、可修正；再让结果进入真实工作流，支持分析、监控、汇报和决策。\n\n设计策略围绕“理解—确认—修正—使用”展开：生成前展示 Agent 对问题和业务口径的理解，只在关键歧义处询问；执行中呈现节点与状态，让结果可以回查；出现偏差时保留上下文，通过对话局部修改；结果确认后继续生成多维表格、仪表盘或数据大屏，承接后续任务。',
+          bullets: ['数据分析师：检查口径、修改参数并继续分析', '业务人员：用自然语言完成高频经营查询', '管理者：将结果用于监控、汇报和决策'],
+          images: [{ src: '/images/dataagent-target-users-scenarios.png', caption: '' }],
         },
         {
-          id: 'goals',
+          id: 'accuracy',
           index: '02',
-          title: '判断与目标',
-          intro: '解决“问得准”和“结果可用”',
-          body: '我的判断是，当前最优先的问题不是继续增加图表类型，而是降低用户采纳错误结果的风险。项目目标分为两层：第一层是让用户相信并修正 AI 结果，提升指标、维度、时间范围和查询结果的准确性；第二层是让结果进入真实工作流。',
-          bullets: ['业务人员：用自然语言完成高频经营查询', '数据分析师：检查口径、修改参数并继续分析', '管理者：将结果用于监控、汇报和决策', '减少指标、维度和时间解析偏差', '支持不同数据展示和持续使用场景'],
-          images: [{ src: '/images/datapilot-metric-layer-data.png', caption: '指标与字段信息是 Agent 理解问题的基础' }],
-        },
-        {
-          id: 'problems',
-          index: '03',
-          title: '问题与优先级',
-          intro: '从“查询结果不稳定”定位到具体对话节点',
-          body: '通过客户反馈、失败案例和交付过程中的问题记录，我先按“理解错误、执行错误、结果不可用”分类，再拆解到 Agent 的执行链路中。用户说“看一下华东销售情况”时，系统需要同时判断销售额还是销量、华东对应哪个区域层级、默认的时间范围，以及是否需要调用特定工具或 Skill。基于问题频率、客户影响和实现成本，我优先解决直接影响结果采纳的指标口径、时间范围和执行可见性问题，再扩展低频查询和更多结果形态。',
-          bullets: ['语义解析：用户表达与系统意图不一致', '指标 / 维度匹配：同一业务词存在多个口径', '时间识别：自然语言时间无法直接用于查询', '工具 / Skill 调用：选择错误、参数不完整或调用顺序不当', '结果形态：用户需要的是明细、看板还是展示大屏', '优先级判断：按问题频率、客户影响和实现成本排序'],
+          title: '准确率优化',
+          intro: '先判断错误发生在哪个节点，再选择对应方案',
+          body: '准确率问题不能只归因于模型。一次问数会经过意图理解、口径匹配、工具调用和结果返回，任一节点出错都会影响最终结果。\n\n定位时，先收集用户纠正、低评分和查询失败的案例，再按相同输入重放任务。逐步对照每个节点的输入、解析结果、调用参数和最终数据，找到首次出现偏差的位置。\n\n确认错误节点后，再选择追问确认、口径选择、调用校验或结果回查等方案，避免用增加确认步骤解决所有问题。',
+          bullets: ['意图理解：用户问“华东销售怎么样”，先追问要看趋势、排名还是异常，再进入分析', '指标与维度：用户输入“收入”时，同时展示营业收入、回款金额等候选定义，由用户确认口径', '工具调用：生成经营看板前校验查询与制图工具的参数和顺序，失败时直接标出异常节点', '结果校验：结果页保留“营业收入｜华东区域”等查询条件与执行记录，方便核对和回查'],
+          related: true,
           images: [
             { src: '/images/datapilot-metric-layer-data.png', caption: '数据字段与指标口径' },
             { src: '/images/datapilot-metric-layer-modeling.png', caption: '指标、维度和数据关系' },
@@ -670,37 +652,38 @@ function DataPilotCaseStudy({ project, locale }: DataPilotCaseStudyProps) {
         },
         {
           id: 'conversation',
-          index: '04',
+          index: '03',
           title: '工作流优化',
-          intro: '把自然语言问题转化为可确认、可执行、可继续调整的任务',
-          body: '我负责设计 Agent 对话主流程，并根据风险和歧义程度做取舍：低风险请求直接执行，高风险或关键参数不明确时先结构化确认；工具或 Skill 调用前检查选择和参数，调用中展示节点状态，失败后给出原因和重试方式。用户可以在执行中修改时间、筛选条件或展示方式，系统只更新变更部分并继续任务。',
-          bullets: ['输入问题并识别分析目标', '解析指标、维度与时间', '按风险决定直接执行或补充确认', '校验工具 / Skill 选择、参数与调用顺序', '展示执行状态、错误原因和重试方式', '生成结果并支持中途修改后继续执行'],
+          intro: '让确认、执行、反馈和修正形成连续任务',
+          body: '参数明确时直接执行；出现关键歧义时，在对话中插入确认卡片。卡片集中展示已识别的指标、维度和筛选条件，候选口径用单选项呈现，用户确认后从当前节点继续。\n\n执行阶段使用步骤列表展示“理解问题—匹配口径—查询数据—生成结果”。当前步骤持续显示处理中状态，已完成步骤收起，用户仍可展开查看工具与参数，减少等待时的不确定感。\n\n结果中的筛选条件和展示方式支持原位修改。提交后只重跑受影响的节点，并保留上一版结果用于对照。失败信息出现在对应步骤下方，说明原因，同时提供修改参数、重试和返回上一步三个入口。',
+          bullets: ['确认卡片：集中核对指标、维度和筛选条件', '执行步骤：显示当前进度，按需展开工具与参数', '原位修正：保留上下文，只重跑受影响的节点', '结果对照：修改后保留上一版结果，方便判断变化', '错误恢复：在出错节点提供修改、重试和返回入口'],
           images: [{ src: '/images/datapilot-ai-serial-execution.png', caption: 'Agent 从问题理解到结果生成的连续执行流程' }],
         },
         {
-          id: 'accuracy',
-          index: '05',
-          title: '准确率与应用',
-          intro: '让问数结果既准确，也能进入具体工作场景',
-          body: '我先整理典型失败案例，再判断问题应该通过对话确认、指标配置、解析规则还是执行校验解决。例如，“收入”匹配到多个业务指标时，Agent 展示指标定义供用户选择；“最近三个月”无法确定口径时，转换成具体日期范围并允许用户修改；工具或 Skill 调用失败时，展示执行节点、调用状态和错误原因，允许用户修改参数后继续执行。同时根据用户后续工作设计不同结果形态：明细分析使用多维表格，持续监控使用仪表盘，业务展示使用数据大屏。',
-          bullets: ['语义解析：增加意图澄清与候选确认', '指标与时间：展示业务口径并转换为明确范围', '结果应用：支持多维表格、仪表盘和数据大屏', '多轮修改：只更新用户改动的参数，不重置整个任务'], related: true,
-          images: [
-            { src: '/images/datapilot-ai-serial-execution.png', caption: '串行执行中的指标确认与结果校验' },
-            { src: '/images/datapilot-ai-parallel-execution.png', caption: '并行处理不同分析任务，减少等待和重复操作' },
+          id: 'applications',
+          index: '04',
+          title: '应用扩展',
+          intro: '根据后续任务选择合适的结果形态',
+          body: '应用生成可预览、可撤销，因此让 Agent 先完成可逆的规划与生成，只在目标缺失或存在明显歧义时询问用户。用户负责说明应用用途和关键取舍，Agent 负责组织字段、图表和内容顺序，减少逐步确认带来的打断。\n\n选择应用类型后，Agent 自动继承问数中的数据来源、指标、维度和筛选条件，并展示这些生成依据。若无法判断使用对象、查看方式或后续任务，再用简短问题补齐信息，避免基于错误假设继续生成。\n\n用户通过自然语言提出修改后，Agent 先复述要求并说明影响范围，再局部更新受影响的模块。系统同步检查数据与图表匹配、关键指标和画布范围，并保留上一版本与撤销入口。不同应用承接的任务不同，人与 Agent 的协作问题也会随之变化。',
+          applicationTypes: [
+            { title: '多维表格', scene: '用户把问数结果继续生成包含字段、视图和计算规则的业务分析表，并在后续分析中持续调整。', problem: '一句“生成门店经营表”同时包含用途和结构要求，Agent 对行粒度、字段关系和计算口径的理解不可见。草案偏离预期后，用户也难以判断一句修改会影响哪些字段与视图。', solution: '先展示 Agent 对用途、数据粒度和字段关系的理解，仅追问有歧义的部分。收到“改为每个门店一行”等要求后，先返回修改摘要和影响范围，再局部更新，并保留撤销入口。', screenshot: '多维表格生成结果截图' },
+            { title: '仪表盘', scene: '业务负责人把分析结果生成周期性监控页面，用于查看指标变化、发现异常并继续追查。', problem: '“关注经营异常”需要被转换成页面大纲、指标优先级和图表组合。若 Agent 直接生成完整页面，用户很难判断它是否理解了监控目标；使用“这张图”等指代修改时也容易产生歧义。', solution: '先给出页面大纲和推荐模块，再生成仪表盘。每个模块显示名称、所回答的问题和数据口径；用户按模块名称提出调整，Agent 复述修改目标后局部更新，并提供重新生成与撤销。', screenshot: '仪表盘生成结果截图' },
+            { title: '数据大屏', scene: '管理者把经营分析生成用于会议、汇报或业务现场展示的大屏，需要快速传达核心结论。', problem: '“更有重点”“更适合汇报”等视觉意图缺少明确指向。Agent 可能同时改动内容、版式和色彩，扩大修改范围，甚至破坏已经确认的叙事顺序。', solution: '先用选项确认受众、屏幕比例和核心结论，再生成叙事大纲与整屏预览。为各区域命名，用户通过名称提出修改；Agent 先说明将调整的内容，只更新对应区域，并保留上一版本。', screenshot: '数据大屏生成结果截图' },
           ],
+          images: [],
         },
         {
           id: 'delivery',
-          index: '06',
+          index: '05',
           title: '交付结果',
           intro: '将交付中的共性问题转化为标准产品能力',
-          body: '在 5+ 家付费客户交付过程中，我持续收集指标口径、时间范围、结果解释和展示形式相关反馈，并区分通用问题、行业差异和个性化需求。通用问题进入产品迭代，行业差异通过配置和业务词典解决，个性化需求则结合复用价值评估。我将失败案例整理为问题优先级和验收标准，推动产品、算法、研发和交付团队统一方案，并跟进上线后的数据验证。这里的“采纳率”指用户直接使用或继续编辑 AI 结果，并将其用于实际业务的任务比例；当前为整体结果，后续仍需按客户、问题类型和结果形态拆分验证。',
+          body: '在 5+ 家付费客户交付过程中，指标口径、结果解释和展示形式相关反馈被持续收集，并区分为通用问题、行业差异和个性化需求。通用问题进入产品迭代，行业差异通过配置和业务词典解决，个性化需求结合复用价值评估。失败案例进一步转化为问题优先级和验收标准，推动产品、算法、研发和交付团队统一方案，并跟进上线后的数据验证。这里的“采纳率”指用户直接使用或继续编辑 AI 结果，并将其用于实际业务的任务比例；当前为整体结果，后续仍需按客户、问题类型和结果形态拆分验证。',
           stats: ['结果采纳率 15% → 60%', '5+ 家付费客户', '从技术验证进入商业化交付'],
           images: [{ src: project.image, caption: '面向业务用户的问数与数据应用场景' }],
         },
         {
           id: 'role',
-          index: '07',
+          index: '06',
           title: '后续验证',
           intro: '下一步需要继续验证不同场景下的使用效果',
           body: '当前结果主要反映整体采纳率变化，后续可以进一步拆分不同客户、问题类型和结果形态，判断哪些场景适合自动执行，哪些场景需要保留人工确认，并持续观察用户对多维表格、仪表盘和数据大屏的实际使用情况。',
@@ -736,14 +719,14 @@ function DataPilotCaseStudy({ project, locale }: DataPilotCaseStudyProps) {
   const growthSections = isZh
     ? [
         {
-          id: 'growth-research', index: '01', title: '市场背景', intro: '海外 SaaS 商业化仍在探索',
-          body: 'AI 智能问数的产品能力已经可以交付，但面向海外 SaaS 市场的商业化还在探索。当前需要验证的不是“能不能做出结果”，而是海外用户是谁、什么场景最容易感知价值、用户如何开始试用，以及是否愿意从试用进入付费讨论。为此，我先通过竞品、用户场景和客户反馈收敛优先验证的目标用户与首个任务。',
+          id: 'growth-research', index: '01', title: '市场背景', intro: '',
+          body: 'AI 智能问数的产品能力已经可以交付，但面向海外 SaaS 市场的商业化还在探索。当前需要验证的不是“能不能做出结果”，而是海外用户是谁、什么场景最容易感知价值、用户如何开始试用，以及是否愿意从试用进入付费讨论。竞品、用户场景和客户反馈被用于收敛优先验证的目标用户与首个任务。',
           bullets: ['市场问题：AI Data Agent 产品定位相似，用户难以快速理解差异', '用户问题：不同角色对分析、监控、协作和交付的期待不同', '商业问题：尚无真实线上漏斗数据，需要先建立可验证假设', '调研输出：目标场景、官网叙事和首个试用任务'],
           images: [{ src: project.image, caption: '占位图：展示竞品定位、目标用户和优先验证场景的对比关系' }],
         },
         {
           id: 'growth-context', index: '02', title: '判断与策略', intro: '先验证定位和首次价值，再讨论注册与付费',
-          body: '我的判断是，当前最需要验证的不是注册按钮的位置，而是用户能否在几分钟内理解产品、完成一次有效问数并看到可继续使用的结果。因此将官网作为市场验证入口，把首个任务作为价值验证节点，先降低理解和开始使用的成本，再承接注册、试用和销售沟通。首轮路径设计为“官网落地页 → 免费体验对话 → 注册获取 AI 积分 → 简单试用并生成报表等应用 → 引导付费”，每一步先让用户获得足够价值，再增加下一步转化要求。',
+          body: '当前最需要验证的不是注册按钮的位置，而是用户能否在几分钟内理解产品、完成一次有效问数并看到可继续使用的结果。因此将官网作为市场验证入口，把首个任务作为价值验证节点，先降低理解和开始使用的成本，再承接注册、试用和销售沟通。首轮路径设计为“官网落地页 → 免费体验对话 → 注册获取 AI 积分 → 简单试用并生成报表等应用 → 引导付费”，每一步先让用户获得足够价值，再增加下一步转化要求。',
           bullets: ['定位取舍：用一个高频业务场景表达产品，而不是罗列全部能力', '入口取舍：让访客直接进入与场景匹配的首次任务', '注册承接：在免费对话产生兴趣后，用 AI 积分引导注册', '价值取舍：优先让用户生成报表等可复用结果', '转化取舍：在用户感知价值后再引导付费'],
           images: [{ src: project.image, caption: '占位图：展示官网叙事、产品入口和首次任务之间的承接关系' }],
         },
@@ -758,7 +741,7 @@ function DataPilotCaseStudy({ project, locale }: DataPilotCaseStudyProps) {
         },
         {
           id: 'growth-validation', index: '04', title: '模拟验证', intro: '在没有真实流量时，先验证路径假设而不是虚构转化结果',
-          body: '我建立了从官网访问、产品启动、首个任务完成、注册到付费的漏斗框架，并通过 AI 模拟用户路径、访谈假设和客户反馈推演可能的流失原因。当前这些是商业化探索中的验证工具，不代表真实线上转化结果；后续需要接入埋点和销售数据，再判断哪些触点真正有效。',
+          body: '从官网访问、产品启动、首个任务完成、注册到付费的漏斗框架被用于验证完整路径，并结合 AI 模拟用户路径、访谈假设和客户反馈推演可能的流失原因。当前这些是商业化探索中的验证工具，不代表真实线上转化结果；后续需要接入埋点和销售数据，再判断哪些触点真正有效。',
           stats: ['AI 模拟：获客 → 首次使用 → 注册 → 付费', '商业化探索阶段', '待真实数据验证'],
           images: [{ src: project.image, caption: '占位图：展示 AI 模拟的获客、首次使用、注册和付费漏斗，以及待接入的真实数据节点' }],
         },
@@ -807,14 +790,36 @@ function DataPilotCaseStudy({ project, locale }: DataPilotCaseStudyProps) {
 
   const visibleSections = activePart === 'experience' ? sections : growthSections
 
+  useEffect(() => {
+    const sectionIds = visibleSections.map((section) => section.id)
+    const updateActiveSection = () => {
+      let current = sectionIds[0]
+      for (const id of sectionIds) {
+        const element = document.getElementById(id)
+        if (element && element.getBoundingClientRect().top <= 120) current = id
+      }
+      setActiveSectionId(current)
+    }
+
+    setActiveSectionId(sectionIds[0])
+    updateActiveSection()
+    window.addEventListener('scroll', updateActiveSection, { passive: true })
+    window.addEventListener('resize', updateActiveSection)
+    return () => {
+      window.removeEventListener('scroll', updateActiveSection)
+      window.removeEventListener('resize', updateActiveSection)
+    }
+  }, [activePart])
+
   return (
     <main className="datapilot-case-page">
       <div className="datapilot-case-shell">
         <Link to="/" className="datapilot-back">{isZh ? '返回' : 'Back'}</Link>
         <header className="datapilot-case-hero">
           <h1>{isZh ? 'AI 智能问数' : 'DataAgent'}</h1>
-          <p className="datapilot-hero-copy">{isZh ? 'AI 智能问数项目围绕两条并行主线展开：一条是让 AI 结果可理解、可确认、可修正，推动产品价值交付；另一条是在商业化探索阶段，通过 AI 模拟验证市场定位、首次使用和付费漏斗。' : 'DataAgent is organized around two parallel tracks: making AI results understandable, confirmable, and editable for product value delivery; and exploring market positioning, first use, and payment funnels through AI simulation.'}</p>
-          <div className="datapilot-meta"><span>我的角色：产品体验负责人</span><span>产品阶段：技术验证 → 商业化交付</span><span>周期：持续迭代</span></div>
+          <p className="datapilot-hero-copy">{isZh ? 'AI 智能问数是一款面向业务分析场景的自然语言数据产品。产品将业务数据、指标口径与语义知识加工为 AI 可理解的上下文，提升问数结果的准确性，并支持从查询结果继续生成报表、仪表盘等数据应用。' : 'DataAgent is a natural-language analytics product for business scenarios. It turns business data, metric definitions, and semantic knowledge into AI-readable context for more accurate answers, then supports continued creation of reports, dashboards, and other data applications.'}</p>
+          <p className="datapilot-hero-copy is-secondary">{isZh ? '项目沿两条主线推进：一是让 AI 结果可理解、可确认、可修正，推动产品从技术验证走向价值交付；二是在商业化探索阶段，通过 AI 模拟验证市场定位、首次使用与付费路径。' : 'The project followed two tracks: making AI results understandable, confirmable, and editable as the product moved from technical validation to value delivery; and using AI simulation to explore market positioning, first use, and payment paths.'}</p>
+          <div className="datapilot-meta"><span>角色：产品体验负责人</span><span>阶段：技术验证 → 商业化交付</span><span>周期：持续迭代</span><a className="datapilot-demo-link" href="https://dataagent-demo.vercel.app/" target="_blank" rel="noreferrer">{isZh ? '查看 Demo' : 'View demo'} ↗</a></div>
         </header>
         <div className="datapilot-part-tabs" role="tablist" aria-label={isZh ? '案例内容切换' : 'Case study sections'}>
           <button type="button" role="tab" aria-selected={activePart === 'experience'} className={activePart === 'experience' ? 'is-active' : ''} onClick={() => setActivePart('experience')}>
@@ -830,13 +835,24 @@ function DataPilotCaseStudy({ project, locale }: DataPilotCaseStudyProps) {
               <section className="datapilot-module" id={section.id} key={section.id}>
                 <div className="datapilot-module-heading"><span>{section.index}</span><h2>{section.title}</h2></div>
                 {section.intro ? <h3>{section.intro}</h3> : null}
-                <p>{section.body}</p>
+                {section.body.split('\n\n').map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+                {'applicationTypes' in section && section.applicationTypes ? <div className="datapilot-application-types">{section.applicationTypes.map((item) => <section key={item.title}>
+                  <h4>{item.title}</h4>
+                  <p><strong>用户场景</strong>{item.scene}</p>
+                  <p><strong>体验问题</strong>{item.problem}</p>
+                  <p><strong>解决思路</strong>{item.solution}</p>
+                  <div className="datapilot-application-screenshot" role="img" aria-label={item.screenshot}><span>{item.screenshot}</span></div>
+                </section>)}</div> : null}
                 {'related' in section && section.related ? <p className="datapilot-related-link">{isZh ? '可观测产品孵化由交付问题延展而来，详见' : 'The observability product grew from delivery problems; see'} <Link to="/project/agentops">{isZh ? 'Agent 可观测产品' : 'Agent observability product'}</Link>。</p> : null}
                 {'stats' in section && section.stats ? <div className="datapilot-stat-row">{section.stats.map((stat) => <strong key={stat}>{stat}</strong>)}</div> : null}
-                {'bullets' in section && section.bullets ? <ul className="datapilot-bullets">{section.bullets.map((bullet) => <li key={bullet}>{bullet}</li>)}</ul> : null}
-                <div className={`datapilot-evidence ${section.images.length > 1 ? 'is-multi' : 'is-single'}`}>
-                  {section.images.map((image) => <figure key={image.src + image.caption}><div className="datapilot-image-placeholder" role="img" aria-label={image.caption} /><figcaption>{image.caption}</figcaption></figure>)}
-                </div>
+                {'bullets' in section && section.bullets && section.id !== 'overview' ? <ul className="datapilot-bullets">{section.bullets.map((bullet) => {
+                  const separator = section.id === 'accuracy' ? bullet.indexOf('：') : -1
+                  return <li key={bullet}>{separator > -1 ? <><strong>{bullet.slice(0, separator)}</strong>{bullet.slice(separator)}</> : bullet}</li>
+                })}</ul> : null}
+                {section.images.length ? <div className={`datapilot-evidence ${section.images.length > 1 ? 'is-multi' : 'is-single'}`}>
+                  {section.images.map((image) => <figure key={image.src + image.caption}>{image.src === '/images/dataagent-target-users-scenarios.png' ? <img className="datapilot-evidence-image" src={image.src} alt="业务人员、数据分析师和管理者的目标用户与使用场景示意图" /> : <div className="datapilot-image-placeholder" role="img" aria-label={image.caption} />}{image.caption ? <figcaption>{image.caption}</figcaption> : null}</figure>)}
+                </div> : null}
+                {'bullets' in section && section.bullets && section.id === 'overview' ? <ul className="datapilot-bullets">{section.bullets.map((bullet) => <li key={bullet}>{bullet}</li>)}</ul> : null}
               </section>
             ))}
             <nav className="datapilot-adjacent" aria-label={isZh ? '项目导航' : 'Project navigation'}>
@@ -848,11 +864,28 @@ function DataPilotCaseStudy({ project, locale }: DataPilotCaseStudyProps) {
               </div>
             </nav>
           </article>
-          <aside className="datapilot-toc" aria-label={isZh ? '案例目录' : 'Case study contents'}>
-            <nav>{visibleSections.map((section) => <a href={`#${section.id}`} key={section.id}>{section.title}</a>)}</nav>
-          </aside>
         </div>
       </div>
+      <nav className="about-timeline-nav datapilot-anchor-nav" aria-label={isZh ? '案例目录' : 'Case study contents'}>
+        <ul className="about-timeline-list">
+          {visibleSections.map((section) => <li key={section.id} className="about-timeline-item about-timeline-item-section">
+            <a
+              href={`#${section.id}`}
+              className={activeSectionId === section.id ? 'about-timeline-link active' : 'about-timeline-link'}
+              aria-label={section.title}
+              onClick={(event) => {
+                event.preventDefault()
+                document.getElementById(section.id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}#${section.id}`)
+                setActiveSectionId(section.id)
+              }}
+            >
+              <span className="about-timeline-tip" aria-hidden>{section.title}</span>
+              <span className="about-timeline-tick" aria-hidden />
+            </a>
+          </li>)}
+        </ul>
+      </nav>
     </main>
   )
 }
