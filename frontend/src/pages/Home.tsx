@@ -186,11 +186,11 @@ export function Home(_props: Props) {
   const intro =
     locale === "zh"
       ? "也可以叫我泗澄或 4X，欢迎来到我的个人网站。"
-      : "Welcome to my personal site. A brief intro — I'm a product designer";
+      : "I'm a product designer focused on AI and productivity tools.";
   const sub =
     locale === "zh"
       ? "一直在做AI、效率、生产力工具，感谢关注。"
-      : "working on AI, productivity, and efficiency tools. Thanks for following along.";
+      : "I make complex workflows simple and intuitive.";
   const categories =
     locale === "zh"
       ? ["全部", "人工智能", "工具应用", "网页服务", "设计系统"]
@@ -470,12 +470,12 @@ export function Home(_props: Props) {
         <div className="home-perspective-intro">
           <h2
             id="product-perspective-title"
-            aria-label={locale === "zh" ? "让正确、可控、持续的设计更容易发生" : "Make correct, controllable, and sustainable design easier to happen"}
+            aria-label={locale === "zh" ? "让正确、可控、持续的设计更容易发生" : "Design for clarity, control, and scale"}
           >
             {locale === "zh" ? (
               <span className="home-perspective-title-line">让<TypeWords words={["正确", "可控", "持续"]} />的设计更容易发生</span>
             ) : (
-              <span className="home-perspective-title-line">Make<TypeWords className="is-en" words={["Correct", "Controllable", "Sustainable"]} />Design Easier to Happen</span>
+              <span className="home-perspective-title-line">Design for<TypeWords className="is-en" words={["Clarity", "Control", "Scale"]} /></span>
             )}
           </h2>
         </div>
@@ -485,12 +485,12 @@ export function Home(_props: Props) {
               <h3>
                 {locale === "zh"
                   ? "找对问题再设计答案"
-                  : "Find the right problem before designing the answer"}
+                  : "Solve The Right Problem"}
               </h3>
               <p>
                 {locale === "zh"
                   ? "从用户反馈与行为数据中找准问题，在用户、业务与技术之间验证解法"
-                  : "Use feedback and behavioral data to find the right problem and validate solutions across user, business, and technical needs"}
+                  : "Use research and data to define the problem and balance user needs, business goals, and technical feasibility."}
               </p>
             </div>
           </article>
@@ -499,12 +499,12 @@ export function Home(_props: Props) {
               <h3>
                 {locale === "zh"
                   ? "复杂系统清晰可控"
-                  : "Complex systems made clear and controllable"}
+                  : "Make Complexity Manageable"}
               </h3>
               <p>
                 {locale === "zh"
                   ? "梳理 Agent 与专业工具的信息、流程与反馈，让用户理解系统如何工作并能在关键节点确认、调整或纠正"
-                  : "Clarify the information, flows, and feedback in agents and professional tools so users understand how the system works and can intervene when needed"}
+                  : "Make AI agents and complex tools easy to understand, with clear workflows and control at key moments."}
               </p>
             </div>
           </article>
@@ -513,12 +513,12 @@ export function Home(_props: Props) {
               <h3>
                 {locale === "zh"
                   ? "让一次设计变为持续能力"
-                  : "Turn each design into lasting capability"}
+                  : "Build For Reuse"}
               </h3>
               <p>
                 {locale === "zh"
                   ? "将有效方案沉淀为规范、组件与工程约束，让好的设计持续复用"
-                  : "Turn effective solutions into standards, components, and engineering constraints so good design can be reused"}
+                  : "Turn proven solutions into reusable components, design standards, and implementation guidelines."}
               </p>
             </div>
           </article>

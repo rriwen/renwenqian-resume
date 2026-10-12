@@ -181,6 +181,8 @@ function parseProjectArticle(lines: string[]): AboutProjectEntry {
   let role = ''
   let period = ''
   let content = ''
+  let readingContent = false
+  let readingGoal = false
   let goal = ''
   const contentLines: string[] = []
   let section: 'responsibilities' | 'achievements' | null = null
@@ -191,7 +193,7 @@ function parseProjectArticle(lines: string[]): AboutProjectEntry {
 
   for (const rawLine of lines) {
     const line = rawLine.trim()
-    if (!line) continue
+    if (!line) { if (readingContent) contentLines.push(''); if (readingGoal) goal += '\n'; continue }
 
     if (line.startsWith('>')) {
       const value = line.slice(1).trim()
@@ -206,24 +208,32 @@ function parseProjectArticle(lines: string[]): AboutProjectEntry {
 
     const contentMatch = line.match(/^(?:\*\*)?(?:内容|项目背景|Content|Project background)[:：]?(?:\*\*)?\s*(.*)$/i)
     if (contentMatch) {
-      content = contentMatch[1].trim()
+      contentLines.push(rawLine)
+      readingContent = true
+      readingGoal = false
       section = null
       continue
     }
 
     const goalMatch = line.match(/^(?:\*\*)?(?:目标|项目目标|Goal|Project goal)[:：]?(?:\*\*)?\s*(.*)$/i)
     if (goalMatch) {
+      readingContent = false
+      readingGoal = true
       goal = goalMatch[1].trim()
       section = null
       continue
     }
 
     if (/^(?:\*\*)?(?:我主要负责|主要负责|负责|Responsibilities)[:：]?(?:\*\*)?\s*$/.test(line)) {
+      readingContent = false
+      readingGoal = false
       section = 'responsibilities'
       continue
     }
 
     if (/^(?:\*\*)?(?:业绩|成果|Achievements)[:：]?(?:\*\*)?\s*$/.test(line)) {
+      readingContent = false
+      readingGoal = false
       section = 'achievements'
       continue
     }
@@ -239,10 +249,11 @@ function parseProjectArticle(lines: string[]): AboutProjectEntry {
       continue
     }
 
-    if (!section && !content) contentLines.push(line)
+    if (readingContent) contentLines.push(rawLine)
+    if (readingGoal) goal += '\n' + rawLine
   }
 
-  if (!content) content = contentLines.join(' ').trim()
+  if (!content) content = contentLines.join('\n').trim()
 
   return {
     title: '',

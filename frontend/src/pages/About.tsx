@@ -1,3 +1,4 @@
+import ReactMarkdown from 'react-markdown'
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react'
 import { getAboutContent, renderMarkdownInline, type AboutContent } from '../content/about'
 import { useLanguage } from '../i18n/LanguageContext'
@@ -32,6 +33,14 @@ const bodyText: CSSProperties = {
   fontSize: '0.95rem',
   lineHeight: 1.7,
   opacity: 0.88,
+}
+
+function ProjectBackground({ content }: { content: string }) {
+  return <ReactMarkdown components={{
+    p: ({ children }) => <p style={{ ...bodyText, marginTop: 0, marginBottom: '1.25rem' }}>{children}</p>,
+    ul: ({ children }) => <ul style={{ ...workArticleList, marginTop: 0, marginBottom: '1.25rem' }}>{children}</ul>,
+    li: ({ children }) => <li style={{ marginBottom: '.55rem' }}>{children}</li>,
+  }}>{content}</ReactMarkdown>
 }
 
 const anchorTarget: CSSProperties = { scrollMarginTop: 'var(--header-clearance)' }
@@ -142,12 +151,9 @@ function ProjectCards({ projects, locale }: { projects: AboutContent['projects']
             <span className={`about-section-toggle-icon${expandedProjects.has(index) ? ' is-expanded' : ''}`} aria-hidden="true" />
           </button>
           <div id={`project-${index + 1}-content`} hidden={!expandedProjects.has(index)} className="about-project-card-content" style={workArticleProse}>
-            <p style={{ ...bodyText, marginTop: 0, marginBottom: '1.25rem' }}>{renderMarkdownInline(project.content)}</p>
+            <ProjectBackground content={project.content} />
             {project.goal ? (
-              <p style={{ ...bodyText, marginBottom: '1.25rem' }}>
-                <strong>{locale === 'zh' ? '目标：' : 'Goal: '}</strong>
-                {renderMarkdownInline(project.goal)}
-              </p>
+              <ProjectBackground content={`**${locale === 'zh' ? '目标：' : 'Goal: '}** ${project.goal}`} />
             ) : null}
             <p style={{ ...bodyText, marginBottom: '0.5rem' }}><strong>{locale === 'zh' ? '我主要负责：' : 'Responsibilities: '}</strong></p>
             {project.responsibilities.length > 0 ? (
@@ -432,15 +438,10 @@ export function About() {
                 </button>
 
                 <div id={`project-${index + 1}-content`} hidden={!expandedProjects.has(index)} className="about-project-card-content" style={workArticleProse}>
-                  <p style={{ ...bodyText, marginTop: 0, marginBottom: '1.25rem' }}>
-                  {renderMarkdownInline(project.content)}
-                  </p>
+                  <ProjectBackground content={project.content} />
 
                 {project.goal ? (
-                  <p style={{ ...bodyText, marginBottom: '1.25rem' }}>
-                    <strong>{locale === 'zh' ? '目标：' : 'Goal: '}</strong>
-                    {renderMarkdownInline(project.goal)}
-                  </p>
+                  <ProjectBackground content={`**${locale === 'zh' ? '目标：' : 'Goal: '}** ${project.goal}`} />
                 ) : null}
 
                 <div>

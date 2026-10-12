@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { useLanguage } from '../i18n/LanguageContext'
 import { LanguageSwitcher } from './LanguageSwitcher'
 import { IconClose, IconCommentSquare, IconContrast, IconMenu } from './Icons'
+import { projects, getProjectTitle } from '../data/projects'
 
 type HeaderProps = { dark: boolean; onToggleTheme: () => void }
 
@@ -11,8 +12,11 @@ export function Header({ dark, onToggleTheme }: HeaderProps) {
   const { m, locale } = useLanguage()
   const [isScrolled, setIsScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [projectsOpen, setProjectsOpen] = useState(false)
   const isHome = pathname === '/'
   const isArticle = pathname.startsWith('/blog/')
+
+  useEffect(() => { setProjectsOpen(false); setMenuOpen(false) }, [pathname])
 
   useEffect(() => {
     const updateScrollState = () => setIsScrolled(window.scrollY > 0)
@@ -53,7 +57,7 @@ export function Header({ dark, onToggleTheme }: HeaderProps) {
         <div className="header-left-group">
           <button type="button" className="mobile-menu-button" aria-label={menuOpen ? 'Close menu' : 'Open menu'} aria-expanded={menuOpen} onClick={() => setMenuOpen((open) => !open)}>{menuOpen ? <IconClose size={16} /> : <IconMenu size={17} />}</button>
           <Link to="/" className="header-logo">Design.4x</Link>
-          <nav className={menuOpen ? 'mobile-nav-open' : ''} aria-label={m.header.navAria} onClick={() => setMenuOpen(false)}>
+          <nav className={menuOpen ? 'mobile-nav-open' : ''} aria-label={m.header.navAria} onClick={(event) => { if ((event.target as HTMLElement).closest('a')) { setMenuOpen(false); setProjectsOpen(false) } }}>
           <ul
             style={{
               margin: 0,
@@ -74,6 +78,16 @@ export function Header({ dark, onToggleTheme }: HeaderProps) {
               >
                 {locale === 'zh' ? '关于' : 'About'}
               </Link>
+            </li>
+            <li className="header-projects" onMouseEnter={() => setProjectsOpen(true)} onMouseLeave={() => setProjectsOpen(false)} onBlur={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setProjectsOpen(false) }} onKeyDown={(event) => { if (event.key === 'Escape') { setProjectsOpen(false); event.currentTarget.querySelector('button')?.focus() } }}>
+              <button type="button" className={`header-menu-link header-projects-trigger${pathname.startsWith('/project/') ? ' is-active' : ''}`} aria-expanded={projectsOpen} aria-controls="header-project-list" onClick={() => setProjectsOpen((open) => !open)}>
+                {locale === 'zh' ? '产品' : 'PRODUCTS'}
+              </button>
+              <ul id="header-project-list" className="header-project-list" hidden={!projectsOpen}>
+                {projects.map((project) => (
+                  <li key={project.id}><Link to={`/project/${project.slug}`} aria-current={pathname === `/project/${project.slug}` ? 'page' : undefined}>{getProjectTitle(project, locale)}</Link></li>
+                ))}
+              </ul>
             </li>
             <li><Link to="/blog" className={pathname.startsWith('/blog') ? 'header-menu-link is-active' : 'header-menu-link'}>{locale === 'zh' ? '博客' : 'Journal'}</Link></li>
             <li><Link to="/photography" className={pathname === '/photography' ? 'header-menu-link is-active' : 'header-menu-link'}>{locale === 'zh' ? '摄影' : 'Photo'}</Link></li>

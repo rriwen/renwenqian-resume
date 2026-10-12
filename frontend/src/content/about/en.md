@@ -1,51 +1,51 @@
 # What I Do
 
-For the past five years, I have focused on AI products, intelligent analytics Q&A, data tools, and design engineering, bringing both product planning and experience design perspectives. I contribute to product capability planning based on business goals, user research, and customer feedback, and work with cross-functional teams to take products from 0 to 1 and refine the experience.
+I design AI products, analytics tools, and data platforms. Over the past five years, I have combined product strategy with UX design, using research and customer feedback to take new products from concept to launch.
 
-I understand Agent task execution, semantic-layer parsing, tool calling, and result-feedback design. I turn AI capabilities into human-AI interaction flows that are understandable, interruptible, and trustworthy.
+I design AI workflows that help people understand what agents are doing, check results, and step in when needed. My work covers task execution, semantic parsing, tool use, and feedback.
 
-I have hands-on experience delivering Design Systems, Design Tokens, UI engineering, and AI-assisted design and development workflows. I work with Figma, Google Stitch, Codex, and Cursor, and have a foundation in HTML, CSS, and JavaScript.
+I build design systems and connect design with frontend development through tokens, reusable components, and AI-assisted workflows. My tools include Figma, Google Stitch, Codex, and Cursor, backed by a working knowledge of HTML, CSS, and JavaScript.
 
 ## Experience
 
-### Senior Product Experience Designer
+### Senior Experience Designer
 
-Ant Group · OceanBase, AI product capability planning, core experience design, and design engineering
+Ant Group · OceanBase
 
-> Jul 2021 – Now
+> Jul 2021 – Present
 
-- **AI product exploration & delivery**: Led multiple AI products from 0 to 1 (OpenClaw memory plugin, intelligent analytics Q&A, SQL generation & completion); owned business insight and solution discovery, turning capabilities into user- and Agent-friendly features quickly. Used visual execution flows to build trust and ship; in core scenarios adoption of generated results rose from 18% to 60%.
-- **Growth design**: Designed the business-growth funnel from official-website acquisition and first use through registration and paid conversion. Shaped landing pages, product entry points, first-task guidance, and key registration moments; established funnel metrics to identify drop-off and progressively improve paid conversion.
-- **Agent product experience design**: Owned user flows, interaction architecture, and UI for AI products and complex database development and operations tools. Owned the collaboration journey between people and Agents, along with status feedback and intervention mechanisms throughout task execution, improving task completion rate, result accuracy, and issue diagnosis efficiency.
-- **AI design system**: Grounded in practice, built team AI product assets and patterns — reusable components and interaction models for prompt input, chain-of-thought, message cards, and more — reused across product lines at 70%+, improving cross-product consistency.
-- **Data development product experience**: Combined interviews and behavioral data to find bottlenecks; for data change, SQL checks, and other core flows, redesigned the dev control platform, change approvals, and SQL-check experiences and shipped. Improved self-service across the database operations platform, raised satisfaction for the data development product, and doubled user scale.
-- **Tooling & cross-team collaboration**: Drove AI upgrades to internal design tooling; built team efficiency plugins to automate design handoff and visual QA with AI, freeing ~15% of baseline capacity.
+- **AI product strategy & delivery**: Took AI products from concept to launch, including an OpenClaw memory plugin, conversational analytics, and SQL generation and completion. Defined product opportunities and designed clear execution flows, increasing adoption of AI-generated results from 18% to 60% in core scenarios.
+- **Growth design**: Designed the journey from website discovery to first use, registration, and paid conversion. Improved landing pages, onboarding, and signup flows, using funnel metrics to identify drop-off.
+- **Agent experience design**: Designed workflows and interfaces for AI products and database tools. Made agent progress, results, and intervention points clear to improve task completion, accuracy, and troubleshooting.
+- **AI design systems**: Built reusable patterns for prompt input, reasoning displays, and message cards. Achieved over 70% reuse across product lines, improving consistency.
+- **Data tools**: Used interviews and usage data to improve data changes, approvals, and SQL checks. Increased self-service and satisfaction across database tools and doubled the user base.
+- **Design tooling & collaboration**: Built AI-assisted plugins for design handoff and visual QA, freeing up around 15% of team capacity.
 
 ### Product Designer
 
-ECIDI subsidiary, responsible for product design of the provincial smart land acquisition platform in Yunnan.
+ECIDI subsidiary · Yunnan smart land acquisition platform
 
 > Sep 2020 – Jun 2021
 
-- Used user interviews and shadowing to uncover business needs, shipped interactive prototypes quickly, and aligned government, experts, and suppliers to launch within six months — digitizing core processes end-to-end and cutting average handling time by 50%.
-- For complex surveying methods and acquisition rules, designed and shipped a modular, configurable rules-engine tool so operations staff could adjust parameters flexibly, raising per-case handling efficiency by 40%.
-- Rolled out cross-team collaboration and design standards, aligned external vendors on delivery criteria, safeguarded quality on large government projects, and shortened iteration cycles.
+- Conducted interviews and field research, developed prototypes, and aligned government teams, specialists, and vendors to launch within six months. Digitized core workflows and reduced average processing time by 50%.
+- Designed a configurable rules engine for complex surveying and land acquisition requirements, improving processing efficiency by 40%.
+- Established design standards and vendor acceptance criteria to improve delivery quality and shorten iteration cycles.
 
 ### Interaction Designer
 
-Hangzhou Leishu Technology.
+Hangzhou Leishu Technology
 
 > May 2019 – Jul 2020
 
-- Responsible for interaction design across ToB and ToG projects such as Fengning OA and Luneng Football, plus data integration and data visualization products, covering business discovery, information architecture, interactive prototypes, delivery QA, and ongoing iteration.
+- Designed enterprise and government products, including Fengning OA, Luneng Football, and data integration and visualization tools. Covered discovery, information architecture, prototyping, and delivery QA.
 
 ### Product Designer
 
-Shanghai Puhuai Technology.
+Shanghai Puhuai Technology
 
 > Sep 2016 – Apr 2019
 
-- Responsible for end-to-end design of a VR panorama image community across VR, Web, and App; tracked VR industry trends, studied user behavior through A/B tests, surveys, and usability testing, used competitive research to uncover VR design opportunities, and ran community growth and promotion that reached ~200k users / ~1M visits, ranked top 5 on VR app charts, and earned multiple features on Oculus, Daydream, Xiaomi, and other platforms.
+- Led design for a panoramic VR photo community across VR, web, and mobile. Used A/B testing, surveys, usability testing, and competitive research to guide improvements. Helped grow the community to 200,000 users and 1 million visits; the app reached the top five on VR app charts and was featured on Oculus, Daydream, and Xiaomi.
 
 ## Projects
 
@@ -129,7 +129,7 @@ Achievements:
 
 ## Contact
 
-### Feel free to contact me
+### Get in touch
 
 - WeChat / Phone: 18362976211
 - Email: rriwen@gmail.com
