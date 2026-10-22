@@ -31,7 +31,7 @@ export function SiteFooter() {
             <h3>{locale === 'zh' ? '导航' : 'Navigation'}</h3>
             <Link to="/">{locale === 'zh' ? '首页' : 'Home'}</Link>
             <Link to="/about">{locale === 'zh' ? '关于' : 'About'}</Link>
-            <Link to="/blog">{locale === 'zh' ? '博客' : 'Journal'}</Link>
+            <a href="https://app.notion.com/p/rriwen/Hi-I-m-4x-204195a9bba880f787b4dc0eec18a101?source=copy_link" target="_blank" rel="noopener noreferrer">{locale === 'zh' ? '博客' : 'Blog'} <span className="external-link-icon" aria-hidden="true">↗</span></a>
             <Link to="/photography">{locale === 'zh' ? '摄影' : 'Photography'}</Link>
           </div>
         </div>

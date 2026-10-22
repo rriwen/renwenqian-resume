@@ -1,0 +1,40 @@
+/* Identical typography for Markdown, published HTML and the rich-text editor. */
+.prose { min-width: 0; color: var(--text); font-family: var(--font-sans); font-size: var(--text-prose); line-height: var(--leading-body); overflow-wrap: anywhere; }
+.prose :where(h1, h2, h3, h4) { scroll-margin-top: var(--header-clearance); margin: var(--space-12) 0 var(--space-5); font-weight: var(--weight-semibold); line-height: var(--leading-heading); letter-spacing: -.02em; }
+.prose :where(h1, h2) { font-size: var(--text-section); }
+.prose :where(h3) { font-size: var(--text-xl); }
+.prose :where(h4) { font-size: var(--text-lg); }
+.prose > :first-child { margin-top: 0; }
+.prose :where(p) { margin: 0 0 var(--paragraph-gap); line-height: var(--leading-body); }
+.prose :where(strong) { font-weight: var(--weight-semibold); }
+.prose :where(a) { color: var(--text); text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 4px; }
+.prose :where(a:hover) { color: var(--accent); }
+.prose :where(ul, ol) { margin: 0 0 var(--paragraph-gap); padding-left: var(--space-6); }
+.prose :where(li) { margin-bottom: var(--space-2); }
+.prose :where(li > p) { margin-bottom: var(--space-2); }
+.prose :where(blockquote) { margin: var(--space-8) 0; border-left: 2px solid var(--control-border); padding-left: var(--space-5); color: var(--muted); }
+.prose :where(blockquote > :last-child) { margin-bottom: 0; }
+.prose :where(figure) { max-width: 100%; margin: var(--space-10) 0; }
+.prose :where(img) { display: block; max-width: 100%; height: auto; margin-block: var(--space-8); }
+.prose :where(figure img) { margin: 0; }
+.prose :where(figcaption) { margin-top: var(--space-3); color: var(--muted); font-size: var(--text-xs); line-height: var(--leading-ui); }
+.prose :where(code) { padding: .15em .35em; border: 1px solid var(--rule); border-radius: var(--radius-sm); background: var(--subtle); font-family: var(--font-mono); font-size: .875em; }
+.prose :where(pre) { max-width: 100%; margin: var(--space-8) 0; overflow: auto; padding: var(--space-5); border: 1px solid var(--rule); border-radius: var(--radius-md); background: var(--subtle); color: var(--text); font-family: var(--font-mono); font-size: var(--text-sm); line-height: var(--leading-body); tab-size: 2; white-space: pre; overflow-wrap: normal; }
+.prose :where(pre code) { display: block; padding: 0; border: 0; background: transparent; font-size: inherit; }
+.prose :where(table) { display: block; width: 100%; max-width: 100%; overflow-x: auto; margin: var(--space-8) 0; border-collapse: collapse; font-size: var(--text-sm); line-height: var(--leading-ui); text-align: left; }
+.prose :where(th, td) { min-width: 8rem; padding: var(--space-3) var(--space-4); border: 1px solid var(--rule); vertical-align: top; }
+.prose :where(th) { background: var(--subtle); font-weight: var(--weight-semibold); }
+.prose :where(hr) { margin-block: var(--space-8); border: 0; border-top: 1px solid var(--rule); }
+.blog-markdown-table-wrap { max-width: 100%; overflow-x: auto; }
+.blog-code-block { margin: var(--space-8) 0; }
+.blog-code-block pre { margin: 0; max-height: 18rem; overflow-x: auto; overflow-y: hidden; }
+.blog-code-block.is-expanded pre { max-height: none; }
+.blog-code-toggle { width: 100%; min-height: var(--control-height); padding: var(--space-2); border: 1px solid var(--rule); border-top: 0; border-radius: 0 0 var(--radius-md) var(--radius-md); background: var(--subtle); color: var(--muted); font-size: var(--text-sm); }
+.blog-code-toggle:hover { color: var(--text); background: var(--hover-bg); }
+.blog-token-comment { color: var(--code-comment); }
+.blog-token-string { color: var(--code-string); }
+.blog-token-number { color: var(--code-number); }
+.blog-token-property { color: var(--code-property); }
+.blog-token-punctuation { color: var(--muted); }
+code[data-language='yaml'] .blog-token-property, code[data-language='yml'] .blog-token-property { color: var(--code-keyword); }
+code[data-language='json'] .blog-token-property { color: var(--code-json); }

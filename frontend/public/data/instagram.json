@@ -3,12 +3,39 @@
     "username": "design.4x",
     "url": "https://www.instagram.com/design.4x/"
   },
-  "syncedAt": "2026-08-02T00:00:00+08:00",
+  "syncedAt": "2026-10-19T05:51:23.000Z",
   "items": [
+    {
+      "id": "DeqSJYto0Gl",
+      "caption": "2026.10 禾木",
+      "timestamp": "2026-10-19T03:23:20.000Z",
+      "alt": "禾木秋日山坡上的金黄色树林与远山",
+      "mediaType": "IMAGE",
+      "permalink": "https://www.instagram.com/design.4x/p/DeqSJYto0Gl/",
+      "image": "/images/instagram/DeqSJYto0Gl.jpg"
+    },
+    {
+      "id": "DeqSEWjIXaZ",
+      "caption": "2026.10 白哈巴",
+      "timestamp": "2026-10-19T03:22:51.000Z",
+      "alt": "白哈巴村庄、秋色树林与山坡的上下拼接风景照片",
+      "mediaType": "IMAGE",
+      "permalink": "https://www.instagram.com/design.4x/p/DeqSEWjIXaZ/",
+      "image": "/images/instagram/DeqSEWjIXaZ.jpg"
+    },
+    {
+      "id": "DeqR-CGotH3",
+      "caption": "2026.09 天山天池",
+      "timestamp": "2026-10-19T03:21:59.000Z",
+      "alt": "阳光下波光粼粼的天山天池与远处雪山",
+      "mediaType": "IMAGE",
+      "permalink": "https://www.instagram.com/design.4x/p/DeqR-CGotH3/",
+      "image": "/images/instagram/DeqR-CGotH3.jpg"
+    },
     {
       "id": "Db2zK8FmVpP",
       "caption": "2023.11 四姑娘山",
-      "mediaType": "IMAGE",
+      "mediaType": "CAROUSEL_ALBUM",
       "permalink": "https://www.instagram.com/design.4x/p/Db2zK8FmVpP/",
       "timestamp": "2026-08-10T00:00:00+08:00",
       "image": "/images/instagram/Db2zK8FmVpP.jpg",
@@ -17,7 +44,7 @@
     {
       "id": "Db2y0w2GQqL",
       "caption": "2023.12 成都",
-      "mediaType": "IMAGE",
+      "mediaType": "CAROUSEL_ALBUM",
       "permalink": "https://www.instagram.com/design.4x/p/Db2y0w2GQqL/",
       "timestamp": "2026-08-10T00:00:00+08:00",
       "image": "/images/instagram/Db2y0w2GQqL.jpg",
@@ -53,7 +80,7 @@
     {
       "id": "Db2xMkyGVr3",
       "caption": "2026.02 普吉岛",
-      "mediaType": "IMAGE",
+      "mediaType": "CAROUSEL_ALBUM",
       "permalink": "https://www.instagram.com/design.4x/p/Db2xMkyGVr3/",
       "timestamp": "2026-08-10T00:00:00+08:00",
       "image": "/images/instagram/Db2xMkyGVr3.jpg",

@@ -12,25 +12,21 @@
     "db:migrate:about": "tsx backend/scripts/migrate-about.ts"
   },
   "dependencies": {
-    "@tiptap/extension-image": "^3.30.6",
-    "@tiptap/extension-link": "^3.30.6",
-    "@tiptap/pm": "^3.30.6",
-    "@tiptap/react": "^3.30.6",
-    "@tiptap/starter-kit": "^3.30.6",
     "@vercel/analytics": "^2.0.1",
     "postgres": "^3.4.9",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-dropzone": "^20.1.1",
     "react-markdown": "^10.1.0",
     "react-router-dom": "^6.28.0",
     "remark-gfm": "^4.0.1",
+    "three": "^0.186.1",
     "yaml": "^2.9.0"
   },
   "devDependencies": {
     "@types/node": "^26.4.0",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
+    "@types/three": "^0.186.0",
     "@vitejs/plugin-react": "^4.3.3",
     "tsx": "^4.23.13",
     "typescript": "~5.6.2",

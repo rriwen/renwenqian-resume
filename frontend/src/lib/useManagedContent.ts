@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { getPublishedContent, type ContentKind, type ManagedContent } from './adminContent'
+import { getPublishedContent, type ContentKind, type ManagedContent } from './publishedContent'
 
 export function usePublishedContent(kind: ContentKind) {
   const [items, setItems] = useState<ManagedContent[]>([])

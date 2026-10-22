@@ -23,44 +23,48 @@ function measureHeaderClearancePx(): number {
 }
 
 /** 与 ProjectDetail 正文列同宽 */
-const proseColumn: CSSProperties = { maxWidth: 760 }
+const proseColumn: CSSProperties = { maxWidth: 'var(--detail-prose-width)' }
 
 /** 简介段落列宽（浏览器预览调宽） */
-const aboutIntroColumn: CSSProperties = { maxWidth: 760 }
+const aboutIntroColumn: CSSProperties = { maxWidth: 'var(--detail-prose-width)' }
 
 const bodyText: CSSProperties = {
-  margin: '0 0 1rem',
-  fontSize: '0.95rem',
-  lineHeight: 1.7,
-  opacity: 0.88,
+  margin: '0 0 var(--paragraph-gap)',
+  fontSize: 'var(--text-base)',
+  lineHeight: 'var(--leading-body)',
+  color: 'var(--project-body-text, var(--text))',
 }
 
-function ProjectBackground({ content }: { content: string }) {
-  return <ReactMarkdown components={{
-    p: ({ children }) => <p style={{ ...bodyText, marginTop: 0, marginBottom: '1.25rem' }}>{children}</p>,
-    ul: ({ children }) => <ul style={{ ...workArticleList, marginTop: 0, marginBottom: '1.25rem' }}>{children}</ul>,
-    li: ({ children }) => <li style={{ marginBottom: '.55rem' }}>{children}</li>,
-  }}>{content}</ReactMarkdown>
+function ProjectBackground({ content, label }: { content: string; label: string }) {
+  const text = content.replace(/^(?:\*\*)?(?:项目背景|背景|内容|Project background|Content)[:：]?(?:\*\*)?\s*/i, '')
+  return <>
+    <p style={{ ...bodyText, marginBottom: 'var(--space-2)' }}><strong>{label}</strong></p>
+    <ReactMarkdown components={{
+    p: ({ children }) => <p style={{ ...bodyText, color: 'var(--text)', marginTop: 0, marginBottom: 'var(--space-5)' }}>{children}</p>,
+    ul: ({ children }) => <ul style={{ ...workArticleList, marginTop: 0, marginBottom: 'var(--space-5)' }}>{children}</ul>,
+    li: ({ children }) => <li style={{ marginBottom: 'var(--space-2)' }}>{children}</li>,
+  }}>{text}</ReactMarkdown>
+  </>
 }
 
 const anchorTarget: CSSProperties = { scrollMarginTop: 'var(--header-clearance)' }
 
 const workMeta: CSSProperties = {
   margin: 0,
-  fontSize: '0.88rem',
-  opacity: 0.72,
-  lineHeight: 1.45,
-  maxWidth: 760,
+  fontSize: 'var(--text-sm)',
+  color: 'var(--muted)',
+  lineHeight: 'var(--leading-ui)',
+  maxWidth: 'var(--detail-prose-width)',
 }
 
 const workPeriod: CSSProperties = {
   margin: 0,
-  marginBottom: '0.4rem',
-  fontSize: '0.8rem',
+  marginBottom: 'var(--space-2)',
+  fontSize: 'var(--text-sm)',
   fontWeight: 600,
   letterSpacing: '0.05em',
-  opacity: 0.55,
-  lineHeight: 1.4,
+  color: 'var(--muted)',
+  lineHeight: 'var(--leading-ui)',
 }
 
 /** 与 work-oceanbase 一致：职位 → > 时间段 → meta */
@@ -72,15 +76,15 @@ const workArticleHeader: CSSProperties = {
 const workArticleTitle: CSSProperties = {
   margin: 0,
   marginBottom: 8,
-  fontSize: '1.05rem',
-  fontWeight: 700,
+  fontSize: 'var(--text-lg)',
+  fontWeight: 600,
 }
 
 const workArticlePeriod: CSSProperties = {
   ...workPeriod,
   margin: 0,
   marginBottom: 4,
-  opacity: 0.4,
+  color: 'var(--muted)',
 }
 
 const workArticleMeta: CSSProperties = {
@@ -90,15 +94,15 @@ const workArticleMeta: CSSProperties = {
 
 const workArticleProse: CSSProperties = {
   ...proseColumn,
-  maxWidth: 760,
+  maxWidth: 'var(--detail-prose-width)',
 }
 
 const workArticleList: CSSProperties = {
-  margin: '1rem 0 0',
-  paddingLeft: '1.15rem',
-  fontSize: '0.95rem',
-  lineHeight: 1.7,
-  opacity: 0.88,
+  margin: 'var(--space-4) 0 0',
+  paddingLeft: 'var(--space-5)',
+  fontSize: 'var(--text-base)',
+  lineHeight: 'var(--leading-body)',
+  color: 'var(--project-body-text, var(--text))',
 }
 
 /** 与 ContactOverlay 邮件链接一致 */
@@ -151,20 +155,17 @@ function ProjectCards({ projects, locale }: { projects: AboutContent['projects']
             <span className={`about-section-toggle-icon${expandedProjects.has(index) ? ' is-expanded' : ''}`} aria-hidden="true" />
           </button>
           <div id={`project-${index + 1}-content`} hidden={!expandedProjects.has(index)} className="about-project-card-content" style={workArticleProse}>
-            <ProjectBackground content={project.content} />
-            {project.goal ? (
-              <ProjectBackground content={`**${locale === 'zh' ? '目标：' : 'Goal: '}** ${project.goal}`} />
-            ) : null}
-            <p style={{ ...bodyText, marginBottom: '0.5rem' }}><strong>{locale === 'zh' ? '我主要负责：' : 'Responsibilities: '}</strong></p>
+            <ProjectBackground label={locale === 'zh' ? (project.title === 'AI 智能问数' ? '背景目标' : '背景与目标') : 'Background and goal'} content={[project.content.trim(), project.goal.trim()].filter(Boolean).join(' ')} />
+            <p style={{ ...bodyText, marginBottom: 'var(--space-2)' }}><strong>{locale === 'zh' ? (project.title === 'AI 智能问数' ? '我的职责' : '我主要负责') : 'Responsibilities'}</strong></p>
             {project.responsibilities.length > 0 ? (
               <ul style={{ ...workArticleList, marginTop: 0 }}>
-                {project.responsibilities.map((item, itemIndex) => <li key={itemIndex} style={{ marginBottom: itemIndex < project.responsibilities.length - 1 ? '0.55rem' : 0 }}>{renderMarkdownInline(item)}</li>)}
+                {project.responsibilities.map((item, itemIndex) => <li key={itemIndex} style={{ marginBottom: itemIndex < project.responsibilities.length - 1 ? 'var(--space-2)' : 0 }}>{renderMarkdownInline(item)}</li>)}
               </ul>
             ) : null}
-            <p style={{ ...bodyText, margin: '1.5rem 0 0.5rem' }}><strong>{locale === 'zh' ? '业绩：' : 'Achievements: '}</strong></p>
+            <p style={{ ...bodyText, margin: 'var(--space-6) 0 var(--space-2)' }}><strong>{locale === 'zh' ? (project.title === 'AI 智能问数' ? '业绩成果' : '业绩') : 'Achievements'}</strong></p>
             {project.achievements.length > 0 ? (
-              <ul style={{ ...workArticleList, marginTop: 0, marginBottom: 0 }}>
-                {project.achievements.map((item, itemIndex) => <li key={itemIndex} style={{ marginBottom: itemIndex < project.achievements.length - 1 ? '0.55rem' : 0 }}>{renderMarkdownInline(item)}</li>)}
+              <ul className="about-project-achievements" style={{ ...workArticleList, marginTop: 0, marginBottom: 0 }}>
+                {project.achievements.map((item, itemIndex) => <li key={itemIndex} style={{ marginBottom: itemIndex < project.achievements.length - 1 ? 'var(--space-2)' : 0 }}>{renderMarkdownInline(item)}</li>)}
               </ul>
             ) : null}
           </div>
@@ -274,24 +275,17 @@ export function About() {
   return (
     <>
       <main
-        className="about-page"
-        style={{
-          minHeight: '100dvh',
-          padding: '10rem 5vw 4rem',
-          width: '100%',
-          maxWidth: 'none',
-          margin: 0,
-        }}
+        className="page-shell about-page"
       >
-        <div id="about-2026" style={{ ...anchorTarget, position: 'relative', marginBottom: '1.5rem' }}>
-          <h2 style={{ margin: 0, fontSize: '28px', fontWeight: 700 }}>{renderMarkdownInline(about.heading)}</h2>
+        <div id="about-2026" style={{ ...anchorTarget, position: 'relative', marginBottom: 'var(--space-6)' }}>
+          <h1 className="page-title">{renderMarkdownInline(about.heading)}</h1>
         </div>
 
         <div style={aboutIntroColumn}>
           {about.introParagraphs.map((paragraph, index) => (
             <p
               key={`${index}-${paragraph.slice(0, 24)}`}
-              style={{ ...bodyText, marginBottom: index === about.introParagraphs.length - 1 ? '2rem' : '1rem' }}
+              style={{ ...bodyText, marginBottom: index === about.introParagraphs.length - 1 ? 'var(--space-8)' : 'var(--space-4)' }}
             >
               {renderMarkdownInline(paragraph)}
             </p>
@@ -300,12 +294,12 @@ export function About() {
 
         <section
           id="experience"
-          style={{ ...anchorTarget, marginTop: '4rem', paddingTop: '2rem' }}
+          style={{ ...anchorTarget, marginTop: 'var(--section-gap)' }}
         >
-          <h2 style={{ margin: '0 0 2rem', fontSize: '28px', fontWeight: 700 }}>
+          <h2 style={{ margin: '0 0 var(--space-8)', fontSize: 'var(--text-section)', fontWeight: 600 }}>
             {locale === 'zh' ? '工作经历' : 'Experience'}
           </h2>
-          <article id="work-oceanbase" style={{ ...anchorTarget, marginTop: '2.25rem' }}>
+          <article id="work-oceanbase" style={{ ...anchorTarget, marginTop: 'var(--space-8)' }}>
             <div style={workArticleProse}>
               <header style={workArticleHeader}>
                 <h3 style={workArticleTitle}>{renderMarkdownInline(oceanbase.title)}</h3>
@@ -315,9 +309,9 @@ export function About() {
                   {renderMarkdownInline(oceanbase.period)}
                 </p>
               </header>
-              <ul style={{ ...workArticleList, marginBottom: '1rem' }}>
+              <ul style={{ ...workArticleList, marginBottom: 'var(--space-4)' }}>
                 {oceanbase.bullets.map((item, i, arr) => (
-                  <li key={i} style={{ marginBottom: i < arr.length - 1 ? '0.65rem' : 0 }}>
+                  <li key={i} style={{ marginBottom: i < arr.length - 1 ? 'var(--space-3)' : 0 }}>
                     {renderMarkdownInline(item)}
                   </li>
                 ))}
@@ -329,7 +323,7 @@ export function About() {
 
           <article
             id="work-ecidi"
-            style={{ ...anchorTarget, marginTop: '2.5rem', paddingTop: '2rem' }}
+            style={{ ...anchorTarget, marginTop: 'var(--space-10)', paddingTop: 'var(--space-8)' }}
           >
             <div style={workArticleProse}>
               <header style={workArticleHeader}>
@@ -342,7 +336,7 @@ export function About() {
               </header>
               <ul style={workArticleList}>
                 {ecidi.bullets.map((item, i, arr) => (
-                  <li key={i} style={{ marginBottom: i < arr.length - 1 ? '0.65rem' : 0 }}>
+                  <li key={i} style={{ marginBottom: i < arr.length - 1 ? 'var(--space-3)' : 0 }}>
                     {renderMarkdownInline(item)}
                   </li>
                 ))}
@@ -352,7 +346,7 @@ export function About() {
 
           <article
             id="work-leishu"
-            style={{ ...anchorTarget, marginTop: '2.5rem', paddingTop: '2rem' }}
+            style={{ ...anchorTarget, marginTop: 'var(--space-10)', paddingTop: 'var(--space-8)' }}
           >
             <div style={workArticleProse}>
               <header style={workArticleHeader}>
@@ -365,7 +359,7 @@ export function About() {
               </header>
               <ul style={{ ...workArticleList, listStyle: 'none', paddingLeft: 0 }}>
                 {leishu.bullets.map((item, i, arr) => (
-                  <li key={i} style={{ marginBottom: i < arr.length - 1 ? '0.65rem' : 0 }}>
+                  <li key={i} style={{ marginBottom: i < arr.length - 1 ? 'var(--space-3)' : 0 }}>
                     {renderMarkdownInline(item)}
                   </li>
                 ))}
@@ -375,7 +369,7 @@ export function About() {
 
           <article
             id="work-puhuai"
-            style={{ ...anchorTarget, marginTop: '2.5rem', paddingTop: '2rem' }}
+            style={{ ...anchorTarget, marginTop: 'var(--space-10)', paddingTop: 'var(--space-8)' }}
           >
             <div style={workArticleProse}>
               <header style={workArticleHeader}>
@@ -388,7 +382,7 @@ export function About() {
               </header>
               <ul style={{ ...workArticleList, listStyle: 'none', paddingLeft: 0 }}>
                 {puhuai.bullets.map((item, i, arr) => (
-                  <li key={i} style={{ marginBottom: i < arr.length - 1 ? '0.65rem' : 0 }}>
+                  <li key={i} style={{ marginBottom: i < arr.length - 1 ? 'var(--space-3)' : 0 }}>
                     {renderMarkdownInline(item)}
                   </li>
                 ))}
@@ -400,9 +394,9 @@ export function About() {
         <section
           id="projects"
           hidden
-          style={{ ...anchorTarget, marginTop: '4rem', paddingTop: '2rem' }}
+          style={{ ...anchorTarget, marginTop: 'var(--section-gap)' }}
         >
-          <h2 style={{ margin: '0 0 2rem', fontSize: '28px', fontWeight: 700 }}>
+          <h2 style={{ margin: '0 0 var(--space-8)', fontSize: 'var(--text-section)', fontWeight: 600 }}>
             {locale === 'zh' ? '项目经历' : 'Projects'}
           </h2>
           <div className="about-project-cards">
@@ -438,21 +432,17 @@ export function About() {
                 </button>
 
                 <div id={`project-${index + 1}-content`} hidden={!expandedProjects.has(index)} className="about-project-card-content" style={workArticleProse}>
-                  <ProjectBackground content={project.content} />
-
-                {project.goal ? (
-                  <ProjectBackground content={`**${locale === 'zh' ? '目标：' : 'Goal: '}** ${project.goal}`} />
-                ) : null}
+                  <ProjectBackground label={locale === 'zh' ? (project.title === 'AI 智能问数' ? '背景目标' : '背景与目标') : 'Background and goal'} content={[project.content.trim(), project.goal.trim()].filter(Boolean).join(' ')} />
 
                 <div>
-                  <p style={{ ...bodyText, marginBottom: '0.5rem' }}>
-                    <strong>{locale === 'zh' ? '我主要负责：' : 'Responsibilities: '}</strong>
+                  <p style={{ ...bodyText, marginBottom: 'var(--space-2)' }}>
+                    <strong>{locale === 'zh' ? (project.title === 'AI 智能问数' ? '我的职责' : '我主要负责') : 'Responsibilities'}</strong>
                   </p>
                   {project.responsibilities.length > 0 ? (
                     project.responsibilitiesOrdered ? (
                       <ol style={{ ...workArticleList, marginTop: 0 }}>
                         {project.responsibilities.map((item, itemIndex) => (
-                          <li key={itemIndex} style={{ marginBottom: itemIndex < project.responsibilities.length - 1 ? '0.55rem' : 0 }}>
+                          <li key={itemIndex} style={{ marginBottom: itemIndex < project.responsibilities.length - 1 ? 'var(--space-2)' : 0 }}>
                             {renderMarkdownInline(item)}
                           </li>
                         ))}
@@ -460,7 +450,7 @@ export function About() {
                     ) : (
                       <ul style={{ ...workArticleList, marginTop: 0 }}>
                         {project.responsibilities.map((item, itemIndex) => (
-                          <li key={itemIndex} style={{ marginBottom: itemIndex < project.responsibilities.length - 1 ? '0.55rem' : 0 }}>
+                          <li key={itemIndex} style={{ marginBottom: itemIndex < project.responsibilities.length - 1 ? 'var(--space-2)' : 0 }}>
                             {renderMarkdownInline(item)}
                           </li>
                         ))}
@@ -469,23 +459,23 @@ export function About() {
                   ) : null}
                 </div>
 
-                <div style={{ marginTop: '1.5rem' }}>
-                  <p style={{ ...bodyText, marginBottom: '0.5rem' }}>
-                    <strong>{locale === 'zh' ? '业绩：' : 'Achievements: '}</strong>
+                <div style={{ marginTop: 'var(--space-6)' }}>
+                  <p style={{ ...bodyText, marginBottom: 'var(--space-2)' }}>
+                    <strong>{locale === 'zh' ? (project.title === 'AI 智能问数' ? '业绩成果' : '业绩') : 'Achievements'}</strong>
                   </p>
                   {project.achievements.length > 0 ? (
                     project.achievementsOrdered ? (
-                      <ol style={{ ...workArticleList, marginTop: 0 }}>
+                      <ol className="about-project-achievements" style={{ ...workArticleList, marginTop: 0 }}>
                         {project.achievements.map((item, itemIndex) => (
-                          <li key={itemIndex} style={{ marginBottom: itemIndex < project.achievements.length - 1 ? '0.55rem' : 0 }}>
+                          <li key={itemIndex} style={{ marginBottom: itemIndex < project.achievements.length - 1 ? 'var(--space-2)' : 0 }}>
                             {renderMarkdownInline(item)}
                           </li>
                         ))}
                       </ol>
                     ) : (
-                      <ul style={{ ...workArticleList, marginTop: 0 }}>
+                      <ul className="about-project-achievements" style={{ ...workArticleList, marginTop: 0 }}>
                         {project.achievements.map((item, itemIndex) => (
-                          <li key={itemIndex} style={{ marginBottom: itemIndex < project.achievements.length - 1 ? '0.55rem' : 0 }}>
+                          <li key={itemIndex} style={{ marginBottom: itemIndex < project.achievements.length - 1 ? 'var(--space-2)' : 0 }}>
                             {renderMarkdownInline(item)}
                           </li>
                         ))}
@@ -502,9 +492,9 @@ export function About() {
         <section
           id="education"
           hidden
-          style={{ ...anchorTarget, marginTop: '2.75rem', paddingTop: '2rem' }}
+          style={{ ...anchorTarget, marginTop: 'var(--space-12)', paddingTop: 'var(--space-8)' }}
         >
-          <h2 style={{ margin: `0 0 ${educationExpanded ? '2rem' : '0'}`, fontSize: '28px', fontWeight: 700 }}>
+          <h2 style={{ margin: `0 0 ${educationExpanded ? 'var(--space-8)' : '0'}`, fontSize: 'var(--text-section)', fontWeight: 600 }}>
             <button
               type="button"
               className="about-section-toggle"
@@ -517,7 +507,7 @@ export function About() {
             </button>
           </h2>
           <div id="education-content" hidden={!educationExpanded}>
-            <article id="education-njupt" style={{ ...anchorTarget, marginTop: '2.25rem' }}>
+            <article id="education-njupt" style={{ ...anchorTarget, marginTop: 'var(--space-8)' }}>
               <div style={workArticleProse}>
                 <header style={workArticleHeader}>
                   <h3 style={workArticleTitle}>{renderMarkdownInline(edu.title)}</h3>
@@ -526,9 +516,9 @@ export function About() {
                     {renderMarkdownInline(edu.period)}
                   </p>
                 </header>
-                <ul style={{ ...workArticleList, marginTop: '1rem', marginBottom: 0 }}>
+                <ul style={{ ...workArticleList, marginTop: 'var(--space-4)', marginBottom: 0 }}>
                   {edu.items.map((item, i, arr) => (
-                    <li key={i} style={{ marginBottom: i < arr.length - 1 ? '0.65rem' : 0 }}>
+                    <li key={i} style={{ marginBottom: i < arr.length - 1 ? 'var(--space-3)' : 0 }}>
                       {renderMarkdownInline(item)}
                     </li>
                   ))}
@@ -540,17 +530,17 @@ export function About() {
 
         <section
           id="about-contact"
-          style={{ ...anchorTarget, marginTop: '2.75rem', paddingTop: '2rem' }}
+          style={{ ...anchorTarget, marginTop: 'var(--space-12)', paddingTop: 'var(--space-8)' }}
         >
           <div style={workArticleProse}>
-            <h2 style={{ margin: '0 0 2rem', fontSize: '28px', fontWeight: 700 }}>
+            <h2 style={{ margin: '0 0 var(--space-8)', fontSize: 'var(--text-section)', fontWeight: 600 }}>
               {locale === 'zh' ? '联系方式' : 'Contact'}
             </h2>
-            <ul style={{ ...workArticleList, marginTop: '1rem', marginBottom: 0 }}>
+            <ul style={{ ...workArticleList, marginTop: 'var(--space-4)', marginBottom: 0 }}>
               {about.contact.items.map((item, i, arr) => {
                 const href = getContactHref(item.label, item.value)
                 return (
-                  <li key={`${item.label}-${i}`} style={{ marginBottom: i < arr.length - 1 ? '0.65rem' : 0 }}>
+                  <li key={`${item.label}-${i}`} style={{ marginBottom: i < arr.length - 1 ? 'var(--space-3)' : 0 }}>
                     {renderMarkdownInline(item.label)}
                     {locale === 'zh' ? ' ： ' : ': '}
                     {href ? (

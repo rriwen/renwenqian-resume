@@ -15,7 +15,7 @@ export function BlogIndex() {
   }, [locale])
 
   return (
-    <main className="blog-index">
+    <main className="page-shell blog-index">
       <header className="blog-index-intro">
         <h1>{locale === 'zh' ? '记录正在发生的思考' : 'Notes from work and life'}</h1>
         <p>
@@ -26,7 +26,8 @@ export function BlogIndex() {
       </header>
 
       <section className={`blog-list${loading ? ' is-loading' : ''}`} aria-label={locale === 'zh' ? '文章列表' : 'Articles'}>
-        {loading ? <div className="content-loading-list" aria-label="正在加载文章"><i /><i /><i /><i /></div> : null}
+        {loading ? <div className="content-loading-list" aria-label={locale === 'zh' ? '正在加载文章' : 'Loading articles'}><i /><i /><i /><i /></div> : null}
+        {!loading && posts.length === 0 ? <p className="empty-state">{locale === 'zh' ? '暂时没有文章。' : 'No articles yet.'}</p> : null}
         {!loading ? posts.map((post) => (
           <article className="blog-list-item" key={post.slug}>
             <Link to={`/blog/${post.slug}`} className="blog-list-link">

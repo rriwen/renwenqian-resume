@@ -10,23 +10,6 @@ type StreamChunk = {
   error?: { message?: string }
 }
 
-function apiBase(): string {
-  return import.meta.env.DEV ? '/deepseek' : 'https://api.deepseek.com'
-}
-
-function authHeaders(): HeadersInit {
-  const headers: Record<string, string> = { 'Content-Type': 'application/json' }
-  if (!import.meta.env.DEV) {
-    const key = import.meta.env.VITE_DEEPSEEK_API_KEY
-    if (key) headers.Authorization = `Bearer ${key}`
-  }
-  return headers
-}
-
-export function hasDeepseekClientKey(): boolean {
-  return Boolean(import.meta.env.VITE_DEEPSEEK_API_KEY?.trim())
-}
-
 function processSseDataLine(payload: string, onDelta: (delta: string) => void): void {
   if (payload === '[DONE]') return
   let json: StreamChunk
@@ -54,11 +37,7 @@ export async function sendDeepseekChatStream(
   history: ChatTurn[],
   onDelta: (delta: string) => void,
 ): Promise<void> {
-  if (!hasDeepseekClientKey()) {
-    throw new Error('MISSING_API_KEY')
-  }
-
-  const url = `${apiBase()}/v1/chat/completions`
+  const url = '/api/chat'
   const systemBody = siteCorpus.trim()
     ? `${systemPrompt}\n\n---\n\n${siteCorpus.trim()}`
     : systemPrompt
@@ -66,7 +45,7 @@ export async function sendDeepseekChatStream(
 
   const res = await fetch(url, {
     method: 'POST',
-    headers: authHeaders(),
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       model: 'deepseek-chat',
       messages,
@@ -120,18 +99,14 @@ export async function sendDeepseekChatStream(
 
 /**
  * Non-streaming chat completion (OpenAI-compatible DeepSeek API).
- * In dev, Vite proxies `/deepseek` and attaches the key from env on the server side.
+ * The server attaches the API key; no credentials are sent by the browser.
  */
 export async function sendDeepseekChat(
   systemPrompt: string,
   siteCorpus: string,
   history: ChatTurn[],
 ): Promise<string> {
-  if (!hasDeepseekClientKey()) {
-    throw new Error('MISSING_API_KEY')
-  }
-
-  const url = `${apiBase()}/v1/chat/completions`
+  const url = '/api/chat'
   const systemBody = siteCorpus.trim()
     ? `${systemPrompt}\n\n---\n\n${siteCorpus.trim()}`
     : systemPrompt
@@ -139,7 +114,7 @@ export async function sendDeepseekChat(
 
   const res = await fetch(url, {
     method: 'POST',
-    headers: authHeaders(),
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       model: 'deepseek-chat',
       messages,

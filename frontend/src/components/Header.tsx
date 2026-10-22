@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useLanguage } from '../i18n/LanguageContext'
 import { LanguageSwitcher } from './LanguageSwitcher'
 import { IconClose, IconCommentSquare, IconContrast, IconMenu } from './Icons'
@@ -13,8 +13,8 @@ export function Header({ dark, onToggleTheme }: HeaderProps) {
   const [isScrolled, setIsScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const [projectsOpen, setProjectsOpen] = useState(false)
-  const isHome = pathname === '/'
-  const isArticle = pathname.startsWith('/blog/')
+  const menuButtonRef = useRef<HTMLButtonElement>(null)
+  const hasHoverNavigation = () => window.matchMedia('(min-width: 901px) and (hover: hover)').matches
 
   useEffect(() => { setProjectsOpen(false); setMenuOpen(false) }, [pathname])
 
@@ -27,49 +27,14 @@ export function Header({ dark, onToggleTheme }: HeaderProps) {
 
   return (
     <header
-      className={`${isArticle ? 'site-header site-header--article' : 'site-header'}${isScrolled ? ' site-header--scrolled' : ''}`}
-      style={{
-        position: 'fixed',
-        left: 0,
-        right: 0,
-        top: 0,
-        zIndex: 50,
-        backgroundColor: isHome ? 'var(--page-bg)' : isArticle ? 'var(--blog-hero-bg)' : 'var(--page-bg)',
-        paddingLeft: '1.5rem',
-        paddingRight: '1.5rem',
-        paddingTop: '16px',
-        paddingBottom: '16px',
-      }}
+      className={`site-header${isScrolled ? " site-header--scrolled" : ""}`}
     >
-      <div
-        style={{
-          display: 'flex',
-          width: '100%',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: '1rem',
-          textTransform: 'uppercase',
-          letterSpacing: '0.08em',
-          fontSize: '0.75rem',
-          lineHeight: 1.25,
-        }}
-      >
+      <div className="header-inner">
         <div className="header-left-group">
-          <button type="button" className="mobile-menu-button" aria-label={menuOpen ? 'Close menu' : 'Open menu'} aria-expanded={menuOpen} onClick={() => setMenuOpen((open) => !open)}>{menuOpen ? <IconClose size={16} /> : <IconMenu size={17} />}</button>
+          <button ref={menuButtonRef} type="button" className="mobile-menu-button" aria-label={menuOpen ? 'Close menu' : 'Open menu'} aria-controls="site-navigation" aria-expanded={menuOpen} onClick={() => setMenuOpen((open) => !open)}>{menuOpen ? <IconClose size={16} /> : <IconMenu size={17} />}</button>
           <Link to="/" className="header-logo">Design.4x</Link>
-          <nav className={menuOpen ? 'mobile-nav-open' : ''} aria-label={m.header.navAria} onClick={(event) => { if ((event.target as HTMLElement).closest('a')) { setMenuOpen(false); setProjectsOpen(false) } }}>
-          <ul
-            style={{
-              margin: 0,
-              padding: 0,
-              listStyle: 'none',
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'flex-start',
-              gap: '1.5rem',
-            }}
-          >
+          <nav id="site-navigation" className={menuOpen ? 'mobile-nav-open' : ''} aria-label={m.header.navAria} onClick={(event) => { if ((event.target as HTMLElement).closest('a')) { setMenuOpen(false); setProjectsOpen(false) } }} onKeyDown={(event) => { if (event.key === 'Escape' && menuOpen) { setMenuOpen(false); setProjectsOpen(false); menuButtonRef.current?.focus() } }}>
+          <ul className="header-nav-list">
             <li><Link to="/" className={pathname === '/' ? 'header-menu-link is-active' : 'header-menu-link'}>{m.header.home}</Link></li>
             <li>
               <Link
@@ -79,8 +44,8 @@ export function Header({ dark, onToggleTheme }: HeaderProps) {
                 {locale === 'zh' ? '关于' : 'About'}
               </Link>
             </li>
-            <li className="header-projects" onMouseEnter={() => setProjectsOpen(true)} onMouseLeave={() => setProjectsOpen(false)} onBlur={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setProjectsOpen(false) }} onKeyDown={(event) => { if (event.key === 'Escape') { setProjectsOpen(false); event.currentTarget.querySelector('button')?.focus() } }}>
-              <button type="button" className={`header-menu-link header-projects-trigger${pathname.startsWith('/project/') ? ' is-active' : ''}`} aria-expanded={projectsOpen} aria-controls="header-project-list" onClick={() => setProjectsOpen((open) => !open)}>
+            <li className="header-projects" onMouseEnter={() => { if (hasHoverNavigation()) setProjectsOpen(true) }} onMouseLeave={() => { if (hasHoverNavigation()) setProjectsOpen(false) }} onBlur={(event) => { if (!event.currentTarget.contains(event.relatedTarget)) setProjectsOpen(false) }} onKeyDown={(event) => { if (event.key === 'Escape' && projectsOpen) { event.stopPropagation(); setProjectsOpen(false); event.currentTarget.querySelector('button')?.focus() } }}>
+              <button type="button" className={`header-menu-link header-projects-trigger${pathname.startsWith('/project/') ? ' is-active' : ''}`} aria-expanded={projectsOpen} aria-controls="header-project-list" onClick={(event) => setProjectsOpen((open) => event.detail > 0 && hasHoverNavigation() ? true : !open)}>
                 {locale === 'zh' ? '产品' : 'PRODUCTS'}
               </button>
               <ul id="header-project-list" className="header-project-list" hidden={!projectsOpen}>
@@ -89,14 +54,14 @@ export function Header({ dark, onToggleTheme }: HeaderProps) {
                 ))}
               </ul>
             </li>
-            <li><Link to="/blog" className={pathname.startsWith('/blog') ? 'header-menu-link is-active' : 'header-menu-link'}>{locale === 'zh' ? '博客' : 'Journal'}</Link></li>
             <li><Link to="/photography" className={pathname === '/photography' ? 'header-menu-link is-active' : 'header-menu-link'}>{locale === 'zh' ? '摄影' : 'Photo'}</Link></li>
+            <li><a href="https://app.notion.com/p/rriwen/Hi-I-m-4x-204195a9bba880f787b4dc0eec18a101?source=copy_link" className="header-menu-link" target="_blank" rel="noopener noreferrer">{locale === 'zh' ? '博客' : 'Blog'} <span className="external-link-icon" aria-hidden="true">↗</span></a></li>
           </ul>
           </nav>
         </div>
 
         <div className="header-actions">
-          <a href="#chat" className="header-control header-chat-link" onClick={(e) => { e.preventDefault(); window.history.pushState(null, '', '#chat'); window.dispatchEvent(new HashChangeEvent('hashchange')) }}><IconCommentSquare size={14} /><span>{locale === 'zh' ? '和我聊聊' : 'Chat with me'}</span></a>
+          <a href="#chat" className="header-control header-chat-link" aria-label={locale === 'zh' ? '和我聊聊' : 'Chat with me'} onClick={(e) => { e.preventDefault(); window.history.pushState(null, '', '#chat'); window.dispatchEvent(new HashChangeEvent('hashchange')) }}><IconCommentSquare size={14} /><span>{locale === 'zh' ? '和我聊聊' : 'Chat with me'}</span></a>
           <span className="header-control header-language-control"><LanguageSwitcher /></span>
           <button type="button" className="header-control theme-toggle" onClick={onToggleTheme} aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'} title={dark ? 'Light mode' : 'Dark mode'}><IconContrast size={15} /></button>
         </div>

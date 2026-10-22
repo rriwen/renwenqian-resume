@@ -1,12 +1,18 @@
 import react from '@vitejs/plugin-react'
 import { defineConfig, loadEnv } from 'vite'
+import { handleChat } from '../api/chat'
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
-  const deepseekKey = env.VITE_DEEPSEEK_API_KEY ?? ''
+  const deepseekKey = env.DEEPSEEK_API_KEY ?? ''
   return {
     envDir: '..',
-    plugins: [react()],
+    plugins: [react(), {
+      name: 'local-chat-api',
+      configureServer(server) {
+        server.middlewares.use('/api/chat', (req, res) => { void handleChat(req, res, deepseekKey) })
+      },
+    }],
     build: { outDir: '../dist', emptyOutDir: true },
     server: {
       proxy: {
@@ -15,16 +21,7 @@ export default defineConfig(({ mode }) => {
           changeOrigin: true,
           secure: true,
         },
-        '/deepseek': {
-          target: 'https://api.deepseek.com',
-          changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/deepseek/, ''),
-          configure: (proxy) => {
-            proxy.on('proxyReq', (proxyReq) => {
-              if (deepseekKey) proxyReq.setHeader('Authorization', `Bearer ${deepseekKey}`)
-            })
-          },
-        },
+
       },
     },
   }

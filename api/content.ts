@@ -23,31 +23,19 @@ async function ensureTable() {
 
 export default async function handler(req: ApiRequest, res: ApiResponse) {
   res.setHeader('Cache-Control', 'no-store')
+  if (req.method !== 'GET') {
+    res.setHeader('Allow', 'GET')
+    res.status(405).json({ error: 'Method not allowed' })
+    return
+  }
+  if (req.query.status && req.query.status !== 'published') {
+    res.status(400).json({ error: 'Only published content is available' })
+    return
+  }
   try {
     await ensureTable()
-    if (req.method === 'GET') {
-      const kind = typeof req.query.kind === 'string' ? req.query.kind : ''
-      const status = typeof req.query.status === 'string' ? req.query.status : ''
-      if (status !== 'published' && (!process.env.ADMIN_TOKEN || req.headers['x-admin-token'] !== process.env.ADMIN_TOKEN)) { res.status(401).json({ error: 'Unauthorized' }); return }
-      const rows = await sql!`SELECT id, kind, status, title, slug, category, excerpt, cover, content, sort_order AS "sortOrder", created_at AS "createdAt", updated_at AS "updatedAt" FROM content_items WHERE (${kind} = '' OR kind = ${kind}) AND (${status} = '' OR status = ${status}) ORDER BY sort_order ASC, updated_at DESC`
-      res.status(200).json(rows); return
-    }
-    const token = req.headers['x-admin-token']
-    if (!process.env.ADMIN_TOKEN || token !== process.env.ADMIN_TOKEN) { res.status(401).json({ error: 'Unauthorized' }); return }
-    if (req.method === 'PUT') {
-      const body = req.body as { items?: Array<Record<string, string>> }
-      const items = body.items ?? []
-      await sql!.begin(async (transaction) => {
-        for (const item of items) await transaction`INSERT INTO content_items (id, kind, status, title, slug, category, excerpt, cover, content, sort_order, created_at, updated_at) VALUES (${item.id}, ${item.kind}, ${item.status}, ${item.title}, ${item.slug}, ${item.category}, ${item.excerpt}, ${item.cover}, ${item.content}, ${Number(item.sortOrder) || 0}, ${item.createdAt}, ${item.updatedAt}) ON CONFLICT (id) DO UPDATE SET kind=EXCLUDED.kind, status=EXCLUDED.status, title=EXCLUDED.title, slug=EXCLUDED.slug, category=EXCLUDED.category, excerpt=EXCLUDED.excerpt, cover=EXCLUDED.cover, content=EXCLUDED.content, sort_order=EXCLUDED.sort_order, updated_at=EXCLUDED.updated_at`
-      })
-      res.status(200).json(items); return
-    }
-    if (req.method === 'DELETE') {
-      const id = typeof req.query.id === 'string' ? req.query.id : ''
-      if (!id) { res.status(400).json({ error: 'Missing content id' }); return }
-      await sql!`DELETE FROM content_items WHERE id = ${id}`
-      res.status(200).json({ deleted: true }); return
-    }
-    res.status(405).json({ error: 'Method not allowed' })
+    const kind = typeof req.query.kind === 'string' ? req.query.kind : ''
+    const rows = await sql!`SELECT id, kind, status, title, slug, category, excerpt, cover, content, sort_order AS "sortOrder", created_at AS "createdAt", updated_at AS "updatedAt" FROM content_items WHERE (${kind} = '' OR kind = ${kind}) AND status = 'published' ORDER BY sort_order ASC, updated_at DESC`
+    res.status(200).json(rows)
   } catch (error) { res.status(500).json({ error: error instanceof Error ? error.message : 'Database error' }) }
 }

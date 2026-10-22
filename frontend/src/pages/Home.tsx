@@ -1,10 +1,12 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getProjectTitle, projects, type Project } from "../data/projects";
 import { useLanguage } from "../i18n/LanguageContext";
 
+const Lanyard = lazy(() => import("../components/Lanyard/Lanyard"));
+
 type ViewMode = "stack" | "grid";
-type Props = { viewMode: ViewMode; onViewMode: (m: ViewMode) => void };
+type Props = { dark: boolean; viewMode: ViewMode; onViewMode: (m: ViewMode) => void };
 
 function TypeWords({ words, className = "" }: { words: string[]; className?: string }) {
   const [wordIndex, setWordIndex] = useState(0);
@@ -45,138 +47,9 @@ function TypeWords({ words, className = "" }: { words: string[]; className?: str
   );
 }
 
-function AsciiField() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const context = canvas.getContext("2d");
-    if (!context) return;
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const glyphs = " .·:—=+*#%@";
-    let frame = 0;
-    let animationFrame = 0;
-    let width = 0;
-    let height = 0;
-
-    const resize = () => {
-      const bounds = canvas.getBoundingClientRect();
-      const ratio = Math.min(window.devicePixelRatio || 1, 2);
-      width = Math.max(1, Math.floor(bounds.width));
-      height = Math.max(1, Math.floor(bounds.height));
-      canvas.width = Math.floor(width * ratio);
-      canvas.height = Math.floor(height * ratio);
-      context.setTransform(ratio, 0, 0, ratio, 0, 0);
-    };
-
-    const render = () => {
-      const styles = getComputedStyle(document.documentElement);
-      const foreground = styles.getPropertyValue("--text").trim() || "#202020";
-      const background =
-        styles.getPropertyValue("--page-bg").trim() || "#ffffff";
-      context.fillStyle = background;
-      context.fillRect(0, 0, width, height);
-      context.fillStyle = foreground;
-      context.font = "10px ui-monospace, SFMono-Regular, Menlo, monospace";
-      context.textAlign = "center";
-      context.textBaseline = "middle";
-
-      const cell = 10;
-      const time = frame * 0.018;
-      const cx = width * 0.5;
-      const cy = height * (0.48 + Math.sin(time * 0.55) * 0.02);
-      const scale = Math.min(width, height) * 0.46;
-      const tentacleBases = [-0.62, -0.32, 0, 0.32, 0.62];
-      const tentacleLengths = [0.48, 0.74, 0.58, 0.82, 0.52];
-
-      for (let y = cell / 2; y < height; y += cell) {
-        for (let x = cell / 2; x < width; x += cell) {
-          const px = (x - cx) / scale;
-          const py = (y - cy) / scale;
-          const bellX = px / 1.08;
-          const absX = Math.abs(bellX);
-          const domeTop =
-            -0.08 - Math.sqrt(Math.max(0, 1 - bellX * bellX)) * 0.84;
-          const bellEdge = 0.12 + Math.cos(bellX * Math.PI * 3) * 0.055;
-          const inBell = absX <= 1 && py >= domeTop && py <= bellEdge;
-          const bellRim = inBell && py > bellEdge - 0.13;
-          const bellTexture =
-            0.58 +
-            Math.sin(bellX * 10 + time) * 0.13 +
-            Math.cos(py * 12 - time * 0.8) * 0.12;
-
-          let tentacleStrength = 0;
-          if (py > 0.08 && py < 1.42) {
-            tentacleBases.forEach((base, index) => {
-              const length = tentacleLengths[index];
-              if (py > length) return;
-              const sway =
-                Math.sin(
-                  py * (4.2 + index * 0.25) - time * 1.8 + index * 1.15,
-                ) *
-                (0.055 + py * 0.035);
-              const taper = 0.078 - Math.min(py, 1) * 0.016;
-              const distance = Math.abs(px - base - sway);
-              if (distance < taper)
-                tentacleStrength = Math.max(
-                  tentacleStrength,
-                  0.9 - (distance / taper) * 0.35,
-                );
-            });
-          }
-
-          const innerArm =
-            py > 0.02 &&
-            py < 0.58 &&
-            absX < 0.42 &&
-            Math.abs(px - Math.sin(py * 6 - time) * 0.09) < 0.16;
-          let value = inBell ? bellTexture : 0;
-          if (bellRim) value = Math.max(value, 0.86);
-          if (innerArm) value = Math.max(value, 0.48);
-          value = Math.max(value, tentacleStrength);
-          if (value < 0.12) continue;
-          const glyph =
-            glyphs[
-              Math.min(glyphs.length - 1, Math.floor(value * glyphs.length))
-            ];
-          context.globalAlpha = 0.02 + Math.pow(value, 1.75) * 0.44;
-          context.fillText(glyph, x, y);
-        }
-      }
-      context.globalAlpha = 1;
-      if (!reduceMotion.matches) {
-        frame += 1;
-        animationFrame = requestAnimationFrame(render);
-      }
-    };
-
-    const observer = new ResizeObserver(() => {
-      resize();
-      cancelAnimationFrame(animationFrame);
-      render();
-    });
-    observer.observe(canvas);
-    return () => {
-      observer.disconnect();
-      cancelAnimationFrame(animationFrame);
-    };
-  }, []);
-
-  return (
-    <canvas
-      ref={canvasRef}
-      className="home-ascii"
-      aria-label="动态 ASCII 水母图形"
-      role="img"
-    />
-  );
-}
-
-export function Home(_props: Props) {
+export function Home({ dark }: Props) {
   const { locale } = useLanguage();
   const navigate = useNavigate();
-  const [category, setCategory] = useState("all");
   useEffect(() => {
     document.title = "DESIGN.4x";
   }, []);
@@ -191,10 +64,6 @@ export function Home(_props: Props) {
     locale === "zh"
       ? "一直在做AI、效率、生产力工具，感谢关注。"
       : "I make complex workflows simple and intuitive.";
-  const categories =
-    locale === "zh"
-      ? ["全部", "人工智能", "工具应用", "网页服务", "设计系统"]
-      : ["All", "AI", "Tools", "Web", "Design systems"];
   const projectTags =
     locale === "zh"
       ? [
@@ -213,17 +82,9 @@ export function Home(_props: Props) {
           ["Tools", "Database Development"],
           ["Tools", "Database Operations"],
         ];
-  const effectiveProjects = projects;
-  const selected = useMemo(() => {
-    const all = effectiveProjects.map((project, index) => ({ project, index }));
-    if (category === "all") return all;
-    const groups = [[0, 1, 2], [4, 5], [0, 1, 2, 3, 4, 5], [3]];
-    const group = groups[Number(category) - 1] ?? [];
-    return all.filter((item) => group.includes(item.index));
-  }, [category, effectiveProjects]);
 
   return (
-    <main className="home-redesign">
+    <main className="page-shell home-redesign">
       <section className="home-hero">
         <div className="home-hero-copy">
           <h1>
@@ -241,9 +102,9 @@ export function Home(_props: Props) {
           <p className="home-intro">
             {locale === "zh" ? (
               <>
-                产品设计师，专注于 AI、效率工具与生产力产品设计
+                产品设计师，也可以叫我 泗澄 或 4X
                 <br />
-                也可以叫我 泗澄 或 4X，欢迎来到我的个人网站
+                专注于 AI 产品、数据工具与复杂系统体验
               </>
             ) : (
               <>
@@ -253,47 +114,27 @@ export function Home(_props: Props) {
           </p>
           <div className="home-hero-meta">
             <span>{locale === "zh" ? "中国杭州" : "Hangzhou, China"}</span>
-            <span>{locale === "zh" ? "产品设计师" : "Product designer"}</span>
             <span>E/INFP</span>
           </div>
         </div>
-        <AsciiField />
+        <div className="home-lanyard" aria-label={locale === "zh" ? "DESIGN.4X 互动挂绳名片，可拖拽或点击翻转" : "Interactive DESIGN.4X badge: drag or click to flip"}>
+          <Suspense fallback={null}>
+            <Lanyard frontImage={dark ? "/images/lanyard/front-dark.svg" : "/images/lanyard/front.svg"} backImage={dark ? "/images/lanyard/back-dark.svg" : "/images/lanyard/back.svg"} intro={true} orientation="landscape" size={0.46} strapLength={0.5} strapColor={dark ? "#4a4d52" : "#252525"} cardColor={dark ? "#1c1e21" : "#f3f6fa"} finish="glossy" breeze={0.15} />
+          </Suspense>
+        </div>
       </section>
 
       <section className="home-work" aria-labelledby="selected-work-title">
         <div className="products-intro">
-          <p className="products-desc" id="selected-work-title">
+          <h2 className="products-desc" id="selected-work-title">
             {locale === "zh"
               ? "打造用户真正需要的产品"
               : "Building products users truly need"}
-          </p>
-          <div
-            className="products-filters"
-            role="tablist"
-            aria-label={locale === "zh" ? "产品分类" : "Product categories"}
-          >
-            {categories.map((label, index) => (
-              <button
-                key={label}
-                type="button"
-                role="tab"
-                aria-selected={
-                  category === (index === 0 ? "all" : String(index))
-                }
-                className={
-                  category === (index === 0 ? "all" : String(index))
-                    ? "is-active"
-                    : ""
-                }
-                onClick={() => setCategory(index === 0 ? "all" : String(index))}
-              >
-                {label}
-              </button>
-            ))}
-          </div>
+          </h2>
+
         </div>
         <div className="products-grid">
-          {selected.map(({ project, index }) => {
+          {projects.map((project, index) => {
                 const defaultIndex = projects.findIndex(
                   (item) => item.slug === project.slug,
                 );
@@ -478,50 +319,6 @@ export function Home(_props: Props) {
               <span className="home-perspective-title-line">Design for<TypeWords className="is-en" words={["Clarity", "Control", "Scale"]} /></span>
             )}
           </h2>
-        </div>
-        <div className="home-perspective-list">
-          <article>
-            <div>
-              <h3>
-                {locale === "zh"
-                  ? "找对问题再设计答案"
-                  : "Solve The Right Problem"}
-              </h3>
-              <p>
-                {locale === "zh"
-                  ? "从用户反馈与行为数据中找准问题，在用户、业务与技术之间验证解法"
-                  : "Use research and data to define the problem and balance user needs, business goals, and technical feasibility."}
-              </p>
-            </div>
-          </article>
-          <article>
-            <div>
-              <h3>
-                {locale === "zh"
-                  ? "复杂系统清晰可控"
-                  : "Make Complexity Manageable"}
-              </h3>
-              <p>
-                {locale === "zh"
-                  ? "梳理 Agent 与专业工具的信息、流程与反馈，让用户理解系统如何工作并能在关键节点确认、调整或纠正"
-                  : "Make AI agents and complex tools easy to understand, with clear workflows and control at key moments."}
-              </p>
-            </div>
-          </article>
-          <article>
-            <div>
-              <h3>
-                {locale === "zh"
-                  ? "让一次设计变为持续能力"
-                  : "Build For Reuse"}
-              </h3>
-              <p>
-                {locale === "zh"
-                  ? "将有效方案沉淀为规范、组件与工程约束，让好的设计持续复用"
-                  : "Turn proven solutions into reusable components, design standards, and implementation guidelines."}
-              </p>
-            </div>
-          </article>
         </div>
       </section>
     </main>

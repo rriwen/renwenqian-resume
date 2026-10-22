@@ -65,7 +65,7 @@ export function Photography() {
   })
 
   return (
-    <main className="photography-page">
+    <main className="page-shell photography-page">
       <header className="photography-heading">
         <div>
           <h1>Life is a Party 🎆</h1>
@@ -81,7 +81,7 @@ export function Photography() {
           <span />
           <span />
         </section>
-      ) : items.length === 0 ? null : (
+      ) : items.length === 0 ? <p className="empty-state">{locale === 'zh' ? '暂时没有照片。' : 'No photographs available yet.'}</p> : (
         <section className="photography-grid" aria-label={locale === 'zh' ? '照片' : 'Photographs'}>
           <div className="photography-item photography-item-placeholder" aria-label="To Be Continued...">
             <span>To Be Continued...</span>

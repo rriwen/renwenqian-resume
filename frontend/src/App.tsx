@@ -1,5 +1,5 @@
 import { lazy, Suspense, useEffect, useState } from 'react'
-import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom'
+import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { ChatbotOverlay } from './components/ChatbotOverlay'
 import { ContactOverlay } from './components/ContactOverlay'
 import { Header } from './components/Header'
@@ -9,7 +9,6 @@ import { About } from './pages/About'
 import { Home } from './pages/Home'
 import { ProjectDetail } from './pages/ProjectDetail'
 
-const Admin = lazy(() => import('./pages/Admin').then((module) => ({ default: module.Admin })))
 const BlogIndex = lazy(() => import('./pages/BlogIndex').then((module) => ({ default: module.BlogIndex })))
 const BlogPost = lazy(() => import('./pages/BlogPost').then((module) => ({ default: module.BlogPost })))
 const Photography = lazy(() => import('./pages/Photography').then((module) => ({ default: module.Photography })))
@@ -27,25 +26,23 @@ function ScrollToTop() {
 }
 
 function AppFrame({ dark, onToggleTheme, viewMode, onViewMode }: { dark: boolean; onToggleTheme: () => void; viewMode: HomeViewMode; onViewMode: (value: HomeViewMode) => void }) {
-  const { pathname } = useLocation()
-  const isAdmin = pathname.startsWith('/admin')
   return <div style={{ minHeight: '100dvh' }}>
     <ScrollToTop />
-    {!isAdmin ? <Header dark={dark} onToggleTheme={onToggleTheme} /> : null}
-    <div className={isAdmin ? undefined : 'site-content'}>
+    <Header dark={dark} onToggleTheme={onToggleTheme} />
+    <div className="site-content">
       <Suspense fallback={<main className="route-loading">Loading...</main>}>
         <Routes>
-          <Route path="/" element={<Home viewMode={viewMode} onViewMode={onViewMode} />} />
+          <Route path="/" element={<Home dark={dark} viewMode={viewMode} onViewMode={onViewMode} />} />
           <Route path="/blog" element={<BlogIndex />} />
           <Route path="/blog/:slug" element={<BlogPost />} />
           <Route path="/photography" element={<Photography />} />
           <Route path="/project/:slug" element={<ProjectDetail />} />
           <Route path="/about" element={<About />} />
-          <Route path="/admin" element={<Admin />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Suspense>
     </div>
-    {!isAdmin ? <><SiteFooter /><ChatbotOverlay dark={dark} onToggleTheme={onToggleTheme} /><ContactOverlay /></> : null}
+    <SiteFooter /><ChatbotOverlay dark={dark} onToggleTheme={onToggleTheme} /><ContactOverlay />
   </div>
 }
 

@@ -206,7 +206,7 @@ function parseProjectArticle(lines: string[]): AboutProjectEntry {
       continue
     }
 
-    const contentMatch = line.match(/^(?:\*\*)?(?:内容|项目背景|Content|Project background)[:：]?(?:\*\*)?\s*(.*)$/i)
+    const contentMatch = line.match(/^(?:\*\*)?(?:内容|项目背景|背景|Content|Project background)[:：]?(?:\*\*)?\s*(.*)$/i)
     if (contentMatch) {
       contentLines.push(rawLine)
       readingContent = true

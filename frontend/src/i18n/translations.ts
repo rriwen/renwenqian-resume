@@ -293,7 +293,7 @@ export const translations: Record<Locale, Messages> = {
       quickPromptContact:
         'How can I get in touch or explore collaboration? What contact options does this site offer?',
       noKeyHint:
-        'Add your DeepSeek API key to a .env file as VITE_DEEPSEEK_API_KEY=… then rebuild. The assistant will work once the key is set.',
+        'Chat service is temporarily unavailable. Please try again later.',
       errorGeneric: 'Something went wrong. Please try again in a moment.',
       thinking: 'Thinking…',
       quickToggleAria: 'Show or hide suggested prompts',

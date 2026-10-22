@@ -1,10 +1,6 @@
-import { useCallback, useEffect, useState, type CSSProperties } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+import { IconClose } from './Icons'
 import { useLanguage } from '../i18n/LanguageContext'
-
-const contactRow: CSSProperties = {
-  display: 'flex',
-  alignItems: 'center',
-}
 
 function isContactHash() {
   return window.location.hash === '#contact'
@@ -47,103 +43,18 @@ export function ContactOverlay() {
   if (!open) return null
 
   return (
-    <div
-      role="dialog"
-      aria-modal="true"
-      aria-label={m.contact.dialogAria}
-      style={{
-        position: 'fixed',
-        inset: 0,
-        zIndex: 200,
-        background: 'rgba(255,255,255,0.72)',
-        backdropFilter: 'blur(10px)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '1.5rem',
-      }}
-      onClick={close}
-    >
-      <div
-        onClick={(e) => e.stopPropagation()}
-        style={{
-          width: '100%',
-          maxWidth: 420,
-          background: '#fff',
-          borderRadius: 14,
-          boxShadow: '0 28px 80px rgba(0,0,0,0.12)',
-          padding: '2rem 2rem 1.75rem',
-          border: '1px solid rgba(0,0,0,0.06)',
-        }}
-      >
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12 }}>
-          <h2
-            style={{
-              margin: 0,
-              fontSize: '0.85rem',
-              letterSpacing: '0.2em',
-              textTransform: 'uppercase',
-              fontWeight: 600,
-            }}
-          >
-            {m.contact.title}
-          </h2>
-          <button
-            type="button"
-            aria-label={m.contact.closeAria}
-            onClick={close}
-            style={{
-              fontSize: '1.25rem',
-              lineHeight: 1,
-              opacity: 0.45,
-              padding: '0 0.25rem',
-            }}
-          >
-            ×
-          </button>
+    <div role="dialog" aria-modal="true" aria-label={m.contact.dialogAria} className="contact-overlay" onClick={close}>
+      <div className="contact-panel" onClick={(event) => event.stopPropagation()}>
+        <div className="contact-heading">
+          <h2>{m.contact.title}</h2>
+          <button type="button" className="icon-button" aria-label={m.contact.closeAria} onClick={close}><IconClose /></button>
         </div>
-        <p style={{ margin: '1.25rem 0 0', fontSize: '0.95rem', lineHeight: 1.6, opacity: 0.85 }}>
-          {m.contact.intro}
-        </p>
-        <div style={{ marginTop: '1.5rem', fontSize: '1rem', lineHeight: 1.75, fontWeight: 600 }}>
-          <div style={contactRow}>
-            <a
-              href="mailto:rriwen@gmail.com"
-              style={{
-                color: 'inherit',
-                textDecoration: 'none',
-                borderBottom: '1px solid currentColor',
-                paddingBottom: 2,
-              }}
-            >
-              rriwen@gmail.com
-            </a>
-          </div>
-          <div style={{ ...contactRow, marginTop: '0.35rem' }} aria-label={m.contact.wechatAria}>
-            18362976211
-          </div>
+        <p>{m.contact.intro}</p>
+        <div className="contact-details">
+          <a href="mailto:rriwen@gmail.com">rriwen@gmail.com</a>
+          <span aria-label={m.contact.wechatAria}>18362976211</span>
         </div>
-        <button
-          type="button"
-          onClick={openChat}
-          style={{
-            marginTop: '1.35rem',
-            width: '100%',
-            padding: '0.65rem 1rem',
-            font: 'inherit',
-            fontSize: '0.78rem',
-            fontWeight: 600,
-            letterSpacing: '0.14em',
-            textTransform: 'none',
-            color: '#0a0a0a',
-            background: 'rgba(10,10,10,0.06)',
-            border: '1px solid rgba(10,10,10,0.12)',
-            borderRadius: 8,
-            cursor: 'pointer',
-          }}
-        >
-          {m.footer.botLink}
-        </button>
+        <button type="button" className="ui-button ui-button--primary" onClick={openChat}>{m.footer.botLink}</button>
       </div>
     </div>
   )

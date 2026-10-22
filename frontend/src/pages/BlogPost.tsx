@@ -110,11 +110,11 @@ export function BlogPost() {
     document.title = post ? `${post.title} | REN WENQIAN` : 'Blog | REN WENQIAN'
   }, [post])
 
-  if (loading) return <main className="content-detail-loading" aria-label="正在加载内容"><i /><i /><i /><i /></main>
+  if (loading) return <main className="content-detail-loading" aria-label={locale === 'zh' ? '正在加载内容' : 'Loading content'}><i /><i /><i /><i /></main>
 
   if (!post) {
     return (
-      <main className="blog-not-found">
+      <main className="page-shell blog-not-found">
         <p>{locale === 'zh' ? '这篇文章不存在或仍在草稿中。' : 'This article is unavailable or still a draft.'}</p>
         <Link to="/blog">{locale === 'zh' ? '返回博客' : 'Back to journal'} →</Link>
       </main>
@@ -123,9 +123,9 @@ export function BlogPost() {
 
   return (
     <main className="blog-post-page">
-      <header className="blog-post-hero">
+      <header className="page-shell blog-post-hero">
         <div className="blog-post-heading">
-          <Link to="/blog" className="blog-post-back">{locale === 'zh' ? '返回' : 'Back'}</Link>
+          <Link to="/blog" className="back-link blog-post-back">{locale === 'zh' ? '返回' : 'Back'}</Link>
           <h1>{post.title}</h1>
           <p className="blog-post-meta">
             <span>{post.readingMinutes} {locale === 'zh' ? '分钟阅读' : 'min read'}</span>
@@ -151,12 +151,12 @@ export function BlogPost() {
 
         <article className="blog-markdown">
           {tableOfContents.length > 0 ? <details className="blog-post-toc-mobile"><summary>{locale === 'zh' ? '文章目录' : 'Table of contents'}</summary><ol>{tableOfContents.map((item) => <li key={item.id} className={`blog-post-toc-level-${item.level}`}><a href={`#${item.id}`}>{item.title}</a></li>)}</ol></details> : null}
-          {post.format === 'html' ? <div className="managed-rich-content" dangerouslySetInnerHTML={{ __html: preparedHtml?.html ?? post.content }} /> :
+          {post.format === 'html' ? <div className="managed-rich-content prose" dangerouslySetInnerHTML={{ __html: preparedHtml?.html ?? post.content }} /> :
           (() => {
             let headingIndex = 0
             const headingId = () => allHeadings[headingIndex++]?.id
             return (
-          <ReactMarkdown
+          <div className="prose"><ReactMarkdown
             remarkPlugins={[remarkGfm]}
             components={{
               h1: ({ children }) => <h1 id={headingId()}>{children}</h1>,
@@ -194,7 +194,7 @@ export function BlogPost() {
             }}
           >
             {post.content}
-          </ReactMarkdown>
+          </ReactMarkdown></div>
             )
           })()}
         </article>

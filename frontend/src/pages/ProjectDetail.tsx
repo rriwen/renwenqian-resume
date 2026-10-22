@@ -7,10 +7,10 @@ import { useLanguage } from '../i18n/LanguageContext'
 import { isGifSrc } from '../lib/isGifSrc'
 
 const body: CSSProperties = {
-  margin: '0 0 1rem',
-  fontSize: '0.95rem',
-  lineHeight: 1.7,
-  opacity: 0.88,
+  margin: '0 0 var(--paragraph-gap)',
+  fontSize: 'var(--text-base)',
+  lineHeight: 'var(--leading-body)',
+  color: 'var(--text)',
 }
 
 function renderParagraphContent(para: ProjectDetailParagraph) {
@@ -75,26 +75,12 @@ export function ProjectDetail() {
   if (!project || !detail) {
     return (
         <main
-          className="project-detail-page"
-        style={{
-          minHeight: '100dvh',
-          padding: 'var(--header-clearance) 2.5rem 4rem',
-          width: 720,
-          margin: '0 auto',
-        }}
+          className="page-shell project-detail-page"
       >
-        <p style={{ ...body, marginTop: '0.5rem' }}>{m.workDetail.notFound}</p>
+        <p style={{ ...body, marginTop: 'var(--space-2)' }}>{m.workDetail.notFound}</p>
         <Link
           to="/"
-          className="project-detail-back-link"
-          style={{
-            display: 'inline-block',
-            marginTop: '1.25rem',
-            fontSize: '0.68rem',
-            letterSpacing: '0.14em',
-            textTransform: 'uppercase',
-            fontWeight: 600,
-          }}
+          className="back-link project-detail-back-link"
         >
           {m.workDetail.back}
         </Link>
@@ -112,45 +98,16 @@ export function ProjectDetail() {
 
   return (
     <main
-      className="project-detail-page project-detail-standard-page"
-      style={{
-        minHeight: '100dvh',
-        padding: 'var(--header-clearance) 2.5rem 4rem',
-        width: 'min(900px, 100%)',
-        boxSizing: 'border-box',
-        margin: '0 auto',
-      }}
+      className="page-shell project-detail-page project-detail-standard-page"
     >
       <Link
         to="/"
-        className="project-detail-back-link"
-        style={{
-          display: 'inline-block',
-          marginBottom: '1.75rem',
-          fontSize: '0.68rem',
-          letterSpacing: '0.14em',
-          textTransform: 'uppercase',
-          fontWeight: 600,
-          opacity: 0.55,
-        }}
+        className="back-link project-detail-back-link"
       >
         {m.workDetail.back}
       </Link>
 
-      <div
-        style={{
-          borderRadius: 8,
-          overflow: 'hidden',
-          marginBottom: '2.25rem',
-          width: '100%',
-          aspectRatio: '2 / 1',
-          background: '#eaeaea',
-          border: '1px solid rgba(10, 10, 10, 0.04)',
-          boxSizing: 'border-box',
-          display: 'flex',
-          justifyContent: 'center',
-        }}
-      >
+      <div className="project-detail-cover">
         <img
           src={project.image}
           alt=""
@@ -166,27 +123,19 @@ export function ProjectDetail() {
         />
       </div>
 
-      <h1
-        style={{
-          margin: '0 0 1.25rem',
-          fontSize: '2.35rem',
-          fontWeight: 700,
-          lineHeight: 1.15,
-          letterSpacing: '-0.02em',
-        }}
-      >
+      <h1 className="page-title">
         {getProjectTitle(project, locale)}
       </h1>
 
       <p
         style={{
-          margin: '0 0 1.75rem',
-          fontSize: '0.68rem',
+          margin: '0 0 var(--space-8)',
+          fontSize: 'var(--text-xs)',
           letterSpacing: '0.1em',
           textTransform: 'uppercase',
           fontWeight: 600,
-          opacity: 0.72,
-          lineHeight: 1.6,
+          color: 'var(--muted)',
+          lineHeight: 'var(--leading-ui)',
         }}
       >
         {detail.tags.join(' · ')}
@@ -199,21 +148,20 @@ export function ProjectDetail() {
       ))}
 
       {detail.responsibilities ? (
-        <section style={{ margin: '0 0 1rem' }}>
-          <p style={{ ...body, marginBottom: '0.65rem' }}>{detail.responsibilities.intro}</p>
+        <section style={{ margin: '0 0 var(--space-4)' }}>
+          <p style={{ ...body, marginBottom: 'var(--space-3)' }}>{detail.responsibilities.intro}</p>
           <ul
             style={{
               margin: 0,
-              paddingLeft: '1.35rem',
+              paddingLeft: 'var(--space-6)',
               listStyleType: 'disc',
-              fontSize: '0.95rem',
-              lineHeight: 1.7,
-              opacity: 0.88,
-              color: 'inherit',
+              fontSize: 'var(--text-base)',
+              lineHeight: 'var(--leading-body)',
+              color: 'var(--text)',
             }}
           >
             {detail.responsibilities.items.map((item, idx) => (
-              <li key={idx} style={{ marginBottom: '1rem' }}>
+              <li key={idx} style={{ marginBottom: 'var(--space-4)' }}>
                 <strong style={{ fontWeight: 700 }}>{item.title}</strong>
                 {item.body ? (
                   <>
@@ -224,13 +172,13 @@ export function ProjectDetail() {
                 {item.nested?.length ? (
                   <ul
                     style={{
-                      margin: '0.5rem 0 0',
-                      paddingLeft: '1.25rem',
+                      margin: 'var(--space-2) 0 0',
+                      paddingLeft: 'var(--space-5)',
                       listStyleType: 'circle',
                     }}
                   >
                     {item.nested.map((sub, j) => (
-                      <li key={j} style={{ marginBottom: '0.55rem' }}>
+                      <li key={j} style={{ marginBottom: 'var(--space-2)' }}>
                         <strong style={{ fontWeight: 700 }}>{sub.title}</strong>
                         {locale === 'zh' ? '：' : ': '}
                         {sub.body}
@@ -253,7 +201,7 @@ export function ProjectDetail() {
       {detail.highlightBullets?.length ? (
         <>
           {detail.highlightBulletsIntro ? (
-            <p style={{ ...body, marginBottom: '0.65rem' }}>
+            <p style={{ ...body, marginBottom: 'var(--space-3)' }}>
               <strong style={{ fontWeight: 700 }}>{detail.highlightBulletsIntro}</strong>
             </p>
           ) : null}
@@ -261,17 +209,16 @@ export function ProjectDetail() {
             detail.highlightBulletsOrdered ? 'ol' : 'ul',
             {
               style: {
-                margin: '0 0 1rem',
-                paddingLeft: detail.highlightBulletsOrdered ? '1.5rem' : '1.2rem',
-                fontSize: '0.95rem',
-                lineHeight: 1.7,
-                opacity: 0.88,
-                color: 'inherit',
+                margin: '0 0 var(--space-4)',
+                paddingLeft: detail.highlightBulletsOrdered ? 'var(--space-6)' : 'var(--space-5)',
+                fontSize: 'var(--text-base)',
+                lineHeight: 'var(--leading-body)',
+                color: 'var(--text)',
                 listStyleType: detail.highlightBulletsOrdered ? 'decimal' : 'disc',
               },
             },
             detail.highlightBullets.map((item, idx) => (
-              <li key={idx} style={{ marginBottom: '0.6rem' }}>
+              <li key={idx} style={{ marginBottom: 'var(--space-2)' }}>
                 <strong style={{ fontWeight: 700 }}>{item.keyword}</strong>
                 {locale === 'zh' ? '：' : ': '}
                 {item.text}
@@ -292,9 +239,9 @@ export function ProjectDetail() {
           rel="noreferrer"
           style={{
             display: 'inline-block',
-            marginTop: '0.5rem',
-            marginBottom: '2.5rem',
-            fontSize: '0.95rem',
+            marginTop: 'var(--space-2)',
+            marginBottom: 'var(--space-10)',
+            fontSize: 'var(--text-base)',
             letterSpacing: '0.1em',
             textTransform: 'uppercase',
             fontWeight: 600,
@@ -308,15 +255,9 @@ export function ProjectDetail() {
 
       <section
         aria-label={m.workDetail.galleryAria}
-        style={{ marginTop: detail.externalUrl ? '1.25rem' : '2.5rem' }}
+        className="project-detail-gallery"
       >
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
-            gap: '0.85rem',
-          }}
-        >
+        <div className="project-detail-gallery-grid">
           {detail.gallery.map((item, idx) => (
             <figure
               key={`${item.src}-${idx}`}
@@ -336,12 +277,12 @@ export function ProjectDetail() {
                   width: '100%',
                   margin: 0,
                   padding: 0,
-                  border: '1px solid rgba(10, 10, 10, 0.04)',
-                  borderRadius: 4,
+                  border: '1px solid var(--rule)',
+                  borderRadius: 'var(--radius-sm)',
                   boxSizing: 'border-box',
                   overflow: 'hidden',
                   cursor: 'zoom-in',
-                  background: '#eaeaea',
+                  background: 'var(--subtle)',
                   aspectRatio: '16 / 9',
                 }}
               >
@@ -355,9 +296,9 @@ export function ProjectDetail() {
               </button>
               <figcaption
                 style={{
-                  fontSize: '0.78rem',
-                  lineHeight: 1.55,
-                  opacity: 0.5,
+                  fontSize: 'var(--text-xs)',
+                  lineHeight: 'var(--leading-ui)',
+                  color: 'var(--muted)',
                   letterSpacing: locale === 'zh' ? '0.01em' : '0.02em',
                 }}
               >
@@ -371,17 +312,13 @@ export function ProjectDetail() {
       {prevProject || nextProject ? (
         <nav
           aria-label={m.workDetail.projectNavAria}
-          style={{
-            marginTop: '120px',
-            paddingTop: '1.75rem',
-            borderTop: '1px solid rgba(10, 10, 10, 0.1)',
-          }}
+          className="project-detail-adjacent"
         >
           <div
             style={{
               display: 'grid',
               gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)',
-              gap: '1.5rem',
+              gap: 'var(--space-6)',
               alignItems: 'start',
             }}
           >
@@ -391,11 +328,11 @@ export function ProjectDetail() {
                   <p
                     style={{
                       margin: '0 0 0.35rem',
-                      fontSize: '0.68rem',
+                      fontSize: 'var(--text-xs)',
                       letterSpacing: locale === 'zh' ? '0.06em' : '0.1em',
                       textTransform: locale === 'zh' ? 'none' : 'uppercase',
                       fontWeight: 600,
-                      opacity: 0.5,
+                      color: 'var(--muted)',
                     }}
                   >
                     {m.workDetail.prevProject}
@@ -404,9 +341,9 @@ export function ProjectDetail() {
                     to={`/project/${prevProject.slug}`}
                     className="project-detail-adjacent-link"
                     style={{
-                      fontSize: '0.95rem',
+                      fontSize: 'var(--text-base)',
                       fontWeight: 600,
-                      lineHeight: 1.4,
+                      lineHeight: 'var(--leading-ui)',
                       color: 'inherit',
                     }}
                   >
@@ -421,11 +358,11 @@ export function ProjectDetail() {
                   <p
                     style={{
                       margin: '0 0 0.35rem',
-                      fontSize: '0.68rem',
+                      fontSize: 'var(--text-xs)',
                       letterSpacing: locale === 'zh' ? '0.06em' : '0.1em',
                       textTransform: locale === 'zh' ? 'none' : 'uppercase',
                       fontWeight: 600,
-                      opacity: 0.5,
+                      color: 'var(--muted)',
                     }}
                   >
                     {m.workDetail.nextProject}
@@ -434,9 +371,9 @@ export function ProjectDetail() {
                     to={`/project/${nextProject.slug}`}
                     className="project-detail-adjacent-link"
                     style={{
-                      fontSize: '0.95rem',
+                      fontSize: 'var(--text-base)',
                       fontWeight: 600,
-                      lineHeight: 1.4,
+                      lineHeight: 'var(--leading-ui)',
                       color: 'inherit',
                     }}
                   >
@@ -460,14 +397,14 @@ export function ProjectDetail() {
               position: 'fixed',
               inset: 0,
               zIndex: 220,
-              background: 'rgba(255,255,255,0.92)',
+              background: 'var(--lightbox-bg)',
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
               justifyContent: 'center',
-              padding: '1.5rem',
-              paddingTop: 'max(0.75rem, env(safe-area-inset-top))',
-              paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))',
+              padding: 'var(--space-6)',
+              paddingTop: 'max(var(--space-3), env(safe-area-inset-top))',
+              paddingBottom: 'max(var(--space-3), env(safe-area-inset-bottom))',
             }}
             onClick={() => setLightboxIndex(null)}
           >
@@ -482,10 +419,10 @@ export function ProjectDetail() {
                 width: 44,
                 height: 44,
                 border: 'none',
-                borderRadius: 4,
-                background: 'rgba(10,10,10,0.06)',
-                color: '#0a0a0a',
-                fontSize: '1.35rem',
+                borderRadius: 'var(--radius-sm)',
+                background: 'var(--hover-bg)',
+                color: 'var(--text)',
+                fontSize: 'var(--text-xl)',
                 lineHeight: 1,
                 cursor: 'pointer',
               }}
@@ -508,10 +445,10 @@ export function ProjectDetail() {
                   width: 44,
                   height: 44,
                   border: 'none',
-                  borderRadius: 4,
-                  background: 'rgba(10,10,10,0.06)',
-                  color: '#0a0a0a',
-                  fontSize: '1.25rem',
+                  borderRadius: 'var(--radius-sm)',
+                  background: 'var(--hover-bg)',
+                  color: 'var(--text)',
+                  fontSize: 'var(--text-xl)',
                   lineHeight: 1,
                   cursor: 'pointer',
                   display: 'flex',
@@ -538,10 +475,10 @@ export function ProjectDetail() {
                   width: 44,
                   height: 44,
                   border: 'none',
-                  borderRadius: 4,
-                  background: 'rgba(10,10,10,0.06)',
-                  color: '#0a0a0a',
-                  fontSize: '1.25rem',
+                  borderRadius: 'var(--radius-sm)',
+                  background: 'var(--hover-bg)',
+                  color: 'var(--text)',
+                  fontSize: 'var(--text-xl)',
                   lineHeight: 1,
                   cursor: 'pointer',
                   display: 'flex',
@@ -559,7 +496,7 @@ export function ProjectDetail() {
                 flexDirection: 'column',
                 alignItems: 'center',
                 gap: '0.85rem',
-                maxWidth: 'min(100%, calc(100vw - 3rem))',
+                maxWidth: 'min(100%, calc(100vw - var(--space-12)))',
                 maxHeight: 'min(calc(100dvh - 5.5rem), 100%)',
                 minHeight: 0,
               }}
@@ -586,8 +523,8 @@ export function ProjectDetail() {
                   objectFit: 'contain',
                   objectPosition: 'center',
                   display: 'block',
-                  borderRadius: 2,
-                  boxShadow: '0 24px 48px rgba(0,0,0,0.12)',
+                  borderRadius: 'var(--radius-sm)',
+                  boxShadow: 'var(--shadow-overlay)',
                   ...(isGifSrc(detail.gallery[lightboxIndex].src)
                     ? {
                         imageRendering: 'smooth',
@@ -600,9 +537,9 @@ export function ProjectDetail() {
                   margin: 0,
                   maxWidth: '42rem',
                   textAlign: 'center',
-                  fontSize: '0.82rem',
-                  lineHeight: 1.55,
-                  color: 'rgba(10,10,10,0.58)',
+                  fontSize: 'var(--text-sm)',
+                  lineHeight: 'var(--leading-ui)',
+                  color: 'var(--muted)',
                   letterSpacing: locale === 'zh' ? '0.01em' : '0.02em',
                 }}
               >
@@ -624,7 +561,7 @@ type DataPilotCaseStudyProps = {
 function DataPilotCaseStudy({ project, locale }: DataPilotCaseStudyProps) {
   const isZh = locale === 'zh'
   const { prev: prevProject, next: nextProject } = getAdjacentProjects(project.slug)
-  const [activePart, setActivePart] = useState<'experience' | 'growth'>('experience')
+  const [activePart, setActivePart] = useState<'experience' | 'poc' | 'growth'>('experience')
   const [activeSectionId, setActiveSectionId] = useState('overview')
   const sections = isZh
     ? [
@@ -788,7 +725,22 @@ function DataPilotCaseStudy({ project, locale }: DataPilotCaseStudyProps) {
         },
       ]
 
-  const visibleSections = activePart === 'experience' ? sections : growthSections
+  const pocSections = [
+    {
+      id: 'poc-validation', index: '01',
+      title: isZh ? '客户场景验证' : 'Customer scenario validation',
+      intro: isZh ? '通过客户 POC 演示验证业务场景价值' : 'Validate business use cases through customer POC demos',
+      body: isZh
+        ? '开展客户 POC 演示与智能生成应用的场景验证，识别服务网点选址等时空分析需求，将客户反馈转化为产品迭代建议。'
+        : 'Conducted customer POC demos and validated scenarios for AI-generated applications, identifying spatiotemporal analysis needs such as service outlet location planning and translating customer feedback into product iteration recommendations.',
+      bullets: isZh
+        ? ['客户演示：围绕实际业务需求开展 POC 演示', '场景验证：识别服务网点选址等时空分析需求', '反馈迭代：将客户反馈转化为产品迭代建议']
+        : ['Customer demos: demonstrate the product against business needs', 'Scenario validation: identify needs such as service outlet location planning', 'Feedback: translate customer input into product iteration recommendations'],
+      images: [],
+    },
+  ]
+
+  const visibleSections = activePart === 'experience' ? sections : activePart === 'poc' ? pocSections : growthSections
 
   useEffect(() => {
     const sectionIds = visibleSections.map((section) => section.id)
@@ -813,20 +765,23 @@ function DataPilotCaseStudy({ project, locale }: DataPilotCaseStudyProps) {
 
   return (
     <main className="datapilot-case-page">
-      <div className="datapilot-case-shell">
-        <Link to="/" className="datapilot-back">{isZh ? '返回' : 'Back'}</Link>
+      <div className="page-shell datapilot-case-shell">
+        <Link to="/" className="back-link datapilot-back">{isZh ? '返回' : 'Back'}</Link>
         <header className="datapilot-case-hero">
           <h1>{isZh ? 'AI 智能问数' : 'DataAgent'}</h1>
           <p className="datapilot-hero-copy">{isZh ? 'AI 智能问数是一款面向业务分析场景的自然语言数据产品。产品将业务数据、指标口径与语义知识加工为 AI 可理解的上下文，提升问数结果的准确性，并支持从查询结果继续生成报表、仪表盘等数据应用。' : 'DataAgent is a natural-language analytics product for business scenarios. It turns business data, metric definitions, and semantic knowledge into AI-readable context for more accurate answers, then supports continued creation of reports, dashboards, and other data applications.'}</p>
-          <p className="datapilot-hero-copy is-secondary">{isZh ? '项目沿两条主线推进：一是让 AI 结果可理解、可确认、可修正，推动产品从技术验证走向价值交付；二是在商业化探索阶段，通过 AI 模拟验证市场定位、首次使用与付费路径。' : 'The project followed two tracks: making AI results understandable, confirmable, and editable as the product moved from technical validation to value delivery; and using AI simulation to explore market positioning, first use, and payment paths.'}</p>
+          <p className="datapilot-hero-copy is-secondary">{isZh ? '项目沿三条主线推进：产品体验设计，让 AI 结果可理解、可确认、可修正；POC 场景验证，通过客户演示与反馈验证业务场景价值；海外 SaaS 探索，通过 AI 模拟验证市场定位、首次使用与付费路径。' : 'The project followed three tracks: product experience design to make AI results understandable, confirmable, and editable; POC scenario validation through customer demos and feedback; and overseas SaaS exploration using AI simulation to validate market positioning, first use, and payment paths.'}</p>
           <div className="datapilot-meta"><span>角色：产品体验负责人</span><span>阶段：技术验证 → 商业化交付</span><span>周期：持续迭代</span><a className="datapilot-demo-link" href="https://dataagent-demo.vercel.app/" target="_blank" rel="noreferrer">{isZh ? '查看 Demo' : 'View demo'} ↗</a></div>
         </header>
         <div className="datapilot-part-tabs" role="tablist" aria-label={isZh ? '案例内容切换' : 'Case study sections'}>
           <button type="button" role="tab" aria-selected={activePart === 'experience'} className={activePart === 'experience' ? 'is-active' : ''} onClick={() => setActivePart('experience')}>
-            {isZh ? '产品价值交付' : 'Product value delivery'}
+            {isZh ? '产品体验设计' : 'Product experience design'}
+          </button>
+          <button type="button" role="tab" aria-selected={activePart === 'poc'} className={activePart === 'poc' ? 'is-active' : ''} onClick={() => setActivePart('poc')}>
+            {isZh ? 'POC 场景验证' : 'POC scenario validation'}
           </button>
           <button type="button" role="tab" aria-selected={activePart === 'growth'} className={activePart === 'growth' ? 'is-active' : ''} onClick={() => setActivePart('growth')}>
-            {isZh ? '市场与商业化' : 'Market & commercialization'}
+            {isZh ? '海外 SaaS 探索' : 'Overseas SaaS exploration'}
           </button>
         </div>
         <div className="datapilot-case-layout">

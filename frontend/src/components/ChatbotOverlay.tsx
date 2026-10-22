@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useLanguage } from '../i18n/LanguageContext'
-import { hasDeepseekClientKey, sendDeepseekChatStream, type ChatTurn } from '../lib/deepseekChat'
+import { sendDeepseekChatStream, type ChatTurn } from '../lib/deepseekChat'
 import { buildSiteCorpus } from '../lib/siteCorpus'
 import { LanguageSwitcher } from './LanguageSwitcher'
 import { IconContrast } from './Icons'
@@ -129,13 +129,11 @@ export function ChatbotOverlay({ dark, onToggleTheme }: { dark: boolean; onToggl
     }
   }, [messages])
 
-  const apiReady = hasDeepseekClientKey()
-  const canSend = !loading && input.trim().length > 0 && apiReady
+  const canSend = !loading && input.trim().length > 0
 
   const submit = async (text: string) => {
     const trimmed = text.trim()
     if (!trimmed || loading) return
-    if (!apiReady) return
 
     const userLine: Line = { id: lineId(), role: 'user', content: trimmed }
     const prev = messagesRef.current
@@ -235,9 +233,9 @@ export function ChatbotOverlay({ dark, onToggleTheme }: { dark: boolean; onToggl
 
   if (!open) return null
 
-  const showKeyHint = !apiReady
+  const showKeyHint = false
 
-  const quickDisabled = !apiReady || loading
+  const quickDisabled = loading
 
   const inWelcome = messages.length === 0
 
@@ -321,17 +319,16 @@ export function ChatbotOverlay({ dark, onToggleTheme }: { dark: boolean; onToggl
           top: 'max(1rem, env(safe-area-inset-top))',
           left: 'clamp(1rem, 4vw, 1.5rem)',
           zIndex: 2,
-          fontSize: '0.72rem',
+          fontSize: 'var(--text-xs)',
           fontWeight: 600,
           letterSpacing: '0.04em',
           textDecoration: 'underline',
           textUnderlineOffset: 4,
           padding: '0.35rem 0',
-          opacity: 0.72,
+          color: 'var(--muted)',
           background: 'none',
           border: 'none',
           cursor: 'pointer',
-          color: 'inherit',
         }}
       >
         {m.chatbot.backHome}
