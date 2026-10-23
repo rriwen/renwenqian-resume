@@ -16,5 +16,5 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["frontend/src", "api"]
+  "include": ["frontend/src", "api", "tests"]
 }

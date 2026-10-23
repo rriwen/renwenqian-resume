@@ -1,11 +1,8 @@
-.DS_Store
 **/.DS_Store
 
-.env
-.env.local
-.env.*.local
-dist
-node_modules
-.vercel
 .env*
-tmp/
+!.env.example
+/dist/
+node_modules/
+/.vercel/
+/tmp/

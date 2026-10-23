@@ -1,8 +1,8 @@
-import { projects } from '../data/projects'
+import { getProjectTitle, projects } from '../data/projects'
 import { getProjectDetail, type ProjectDetailBlock, type ProjectDetailParagraph } from '../data/projectDetails'
+import { getDataPilotContent } from '../data/projects/dataPilot'
 import { getAboutContent, stripMarkdownInline } from '../content/about'
 import { translations, type Locale } from '../i18n/translations'
-import { getBlogPosts } from './blog'
 
 function paragraphToText(p: ProjectDetailParagraph): string {
   if (typeof p === 'string') return p
@@ -35,6 +35,7 @@ function serializeProjectBlock(block: ProjectDetailBlock): string {
   if (block.afterResponsibilities?.length) {
     parts.push(block.afterResponsibilities.join('\n\n'))
   }
+  if (block.highlightBulletsIntro) parts.push(block.highlightBulletsIntro)
   if (block.highlightBullets?.length) {
     block.highlightBullets.forEach((h, i) => {
       const prefix = block.highlightBulletsOrdered ? `${i + 1}.` : '-'
@@ -50,20 +51,33 @@ function serializeProjectBlock(block: ProjectDetailBlock): string {
   return parts.join('\n\n')
 }
 
-function section(locale: Locale, zh: string, en: string): string {
-  return locale === 'zh' ? zh : en
+/** Serialize the same content that the three case-study tabs render. */
+function serializeDataPilot(locale: Locale): string {
+  const content = getDataPilotContent(locale)
+  const lines = [...content.paragraphs, ...content.metadata, `Link: ${content.demoUrl}`]
+  for (const part of Object.values(content.parts)) {
+    lines.push(`#### ${part.title}`)
+    for (const section of part.sections) {
+      lines.push(`##### ${section.title}`)
+      if (section.intro) lines.push(section.intro)
+      lines.push(section.body)
+      for (const application of section.applicationTypes ?? []) {
+        lines.push(application.title)
+        lines.push(`${content.labels.scene}: ${application.scene}`)
+        lines.push(`${content.labels.problem}: ${application.problem}`)
+        lines.push(`${content.labels.solution}: ${application.solution}`)
+      }
+      if (section.related) lines.push(`${content.labels.relatedIntro} ${content.labels.relatedProject} (/project/agentops)`)
+      lines.push(...(section.stats ?? []))
+      lines.push(...(section.bullets ?? []).map((bullet) => `- ${bullet}`))
+      lines.push(...section.images.map((image) => image.caption).filter(Boolean))
+    }
+  }
+  return lines.join('\n\n')
 }
 
-function stripMarkdownBlock(text: string): string {
-  return text
-    .replace(/^```[\s\S]*?```$/gm, '')
-    .replace(/^#{1,6}\s+/gm, '')
-    .replace(/^[-*+]\s+/gm, '')
-    .replace(/^>\s?/gm, '')
-    .replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1')
-    .replace(/[*_`]/g, '')
-    .replace(/\n{3,}/g, '\n\n')
-    .trim()
+function section(locale: Locale, zh: string, en: string): string {
+  return locale === 'zh' ? zh : en
 }
 
 function serializeAbout(locale: Locale): string {
@@ -138,22 +152,14 @@ export function buildSiteCorpus(locale: Locale): string {
   lines.push(`## ${section(locale, '作品与项目详情', 'Projects & case studies')}`)
   for (const p of projects) {
     const detail = getProjectDetail(p.slug, locale)
-    lines.push(`### ${p.title} (slug: ${p.slug})`)
-    if (detail) {
+    lines.push(`### ${getProjectTitle(p, locale)} (slug: ${p.slug})`)
+    if (p.slug === 'dataagent') {
+      lines.push(serializeDataPilot(locale))
+    } else if (detail) {
       lines.push(serializeProjectBlock(detail))
     } else {
       lines.push(section(locale, '（无详情文案）', '(No detail copy)'))
     }
-    lines.push('')
-  }
-
-  lines.push('')
-  lines.push(`## ${section(locale, '博客文章', 'Blog posts')}`)
-  for (const post of getBlogPosts()) {
-    lines.push(`### ${post.title}`)
-    lines.push(`${post.category} | ${post.date}`)
-    if (post.excerpt) lines.push(post.excerpt)
-    if (post.content) lines.push(stripMarkdownBlock(post.content))
     lines.push('')
   }
 

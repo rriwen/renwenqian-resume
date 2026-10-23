@@ -1,3 +1,5 @@
+import { getDataPilotContent } from './projects/dataPilot'
+import { getProjectBySlug } from './projects'
 import type { Locale } from '../i18n/translations'
 
 export type ProjectDetailHighlight = {
@@ -110,47 +112,6 @@ const details: Record<string, { en: ProjectDetailBlock; zh: ProjectDetailBlock }
       gallery: [
         { src: '/images/memory-m0-admin.gif', caption: '记忆管理交互' },
         { src: '/images/memory-m0-experience-flow.png', caption: '经验沉淀逻辑' },
-      ],
-    },
-  },
-  dataagent: {
-    en: {
-      tags: ['Web App', 'Data Product', 'B2B'],
-      paragraphs: [
-        'DataAgent brings AI-assisted analytics into the enterprise team’s daily toolkit—bridging complex metrics, data context, and natural-language intent.',
-        'The project focused on progressive disclosure for expert users, consistent language across SQL and conversational entry points, and states that stay legible under load and partial failures.',
-      ],
-      externalUrl: 'https://datapilot-rho-gilt.vercel.app/',
-      gallery: [
-        {
-          src: '/images/datapilot-metric-layer-data.png',
-          caption: 'Metric layer data management — table structure & field semantics.',
-        },
-        {
-          src: '/images/datapilot-metric-layer-modeling.png',
-          caption: 'Metric layer data modeling — canvas view for table relationships.',
-        },
-        {
-          src: '/images/datapilot-ai-serial-execution.png',
-          caption: 'Serial AI execution — chat, chart, and transparent pipeline (metrics → DSL → SQL).',
-        },
-        {
-          src: '/images/datapilot-ai-parallel-execution.png',
-          caption: 'Parallel AI execution — multi-expert workflow canvas with conversational progress.',
-        },
-      ],
-    },
-    zh: {
-      tags: ['AI 数据分析', 'B 端产品', '商业化探索'],
-      paragraphs: [
-        [
-          { text: '智能问数从技术验证走向商业化时，真正的障碍不是“能不能生成答案”，而是企业用户不敢直接使用：他们看不见 Agent 如何理解问题、如何选择指标和数据，也无法在出错后修正任务。我将一次性的答案页改造成可追踪的任务过程，在指标 / 时间确认、工具调用、SQL 校验和结果解释等关键节点提供可见状态与人工干预；同时把客户反馈沉淀为任务追踪、异常定位和结果评估能力，形成从发现问题到验证优化的闭环。最终结果采纳率从 15% 提升至 60%，并支持 5+ 家付费客户完成交付。' },
-        ],
-      ],
-      highlightBullets: [],
-      externalUrl: 'https://datapilot-rho-gilt.vercel.app/',
-      gallery: [
-        { src: '/images/datapilot-ai-serial-execution.png', caption: '核心图占位：展示 Agent 从问题理解、指标确认到 SQL 校验与结果解释的完整执行链路。' },
       ],
     },
   },
@@ -369,18 +330,6 @@ const details: Record<string, { en: ProjectDetailBlock; zh: ProjectDetailBlock }
       ],
     },
   },
-  designops: {
-    en: {
-      tags: ['Design Operations', 'Workflow', 'Product Design'],
-      paragraphs: ['A lightweight toolkit for turning design standards into repeatable team workflows.', 'I explored how handoff, visual QA, and reusable patterns can reduce friction between design and engineering.'],
-      gallery: [{ src: '/images/work-1.webp', caption: 'Design operations toolkit' }],
-    },
-    zh: {
-      tags: ['设计效能', '工作流', '产品设计'],
-      paragraphs: ['一套将设计规范转化为可复用团队工作流的轻量工具。', '探索如何通过交付、视觉检查和可复用模式，减少设计与研发之间的协作摩擦。'],
-      gallery: [{ src: '/images/work-1.webp', caption: '设计效能工具' }],
-    },
-  },
   agentops: {
     en: {
       tags: ['Agent Operations', 'Observability', 'AI Product'],
@@ -402,6 +351,15 @@ const details: Record<string, { en: ProjectDetailBlock; zh: ProjectDetailBlock }
 }
 
 export function getProjectDetail(slug: string, locale: Locale): ProjectDetailBlock | undefined {
+  if (slug === 'dataagent') {
+    const content = getDataPilotContent(locale)
+    return {
+      tags: getProjectBySlug(slug)!.tags[locale],
+      paragraphs: content.paragraphs,
+      externalUrl: content.demoUrl,
+      gallery: Object.values(content.parts).flatMap((part) => part.sections.flatMap((section) => section.images)),
+    }
+  }
   const row = details[slug]
   if (!row) return undefined
   return locale === 'zh' ? row.zh : row.en

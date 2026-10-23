@@ -5,8 +5,7 @@ import { useLanguage } from "../i18n/LanguageContext";
 
 const Lanyard = lazy(() => import("../components/Lanyard/Lanyard"));
 
-type ViewMode = "stack" | "grid";
-type Props = { dark: boolean; viewMode: ViewMode; onViewMode: (m: ViewMode) => void };
+type Props = { dark: boolean };
 
 function TypeWords({ words, className = "" }: { words: string[]; className?: string }) {
   const [wordIndex, setWordIndex] = useState(0);
@@ -64,24 +63,6 @@ export function Home({ dark }: Props) {
     locale === "zh"
       ? "一直在做AI、效率、生产力工具，感谢关注。"
       : "I make complex workflows simple and intuitive.";
-  const projectTags =
-    locale === "zh"
-      ? [
-          ["AI Native", "用户增长", "商业化"],
-          ["Demo", "可观测性", "产品设计"],
-          ["全栈设计"],
-          ["设计系统", "Agent UI"],
-          ["工具应用", "数据库开发"],
-          ["工具应用", "数据库运维"],
-        ]
-      : [
-          ["AI Native", "Growth", "Commercialization"],
-          ["Demo", "Observability", "Product Design"],
-          ["Full-stack Design"],
-          ["Design System", "Agent UI"],
-          ["Tools", "Database Development"],
-          ["Tools", "Database Operations"],
-        ];
 
   return (
     <main className="page-shell home-redesign">
@@ -134,11 +115,8 @@ export function Home({ dark }: Props) {
 
         </div>
         <div className="products-grid">
-          {projects.map((project, index) => {
-                const defaultIndex = projects.findIndex(
-                  (item) => item.slug === project.slug,
-                );
-                const tags = projectTags[defaultIndex >= 0 ? defaultIndex : index] || [];
+          {projects.map((project) => {
+                const tags = project.tags[locale];
                 return (
                   <article
                     className={`product-card${project.slug === "dataagent" ? " product-card-datapilot" : ""}${project.slug === "agentops" ? " product-card-agentops" : ""}${project.slug === "Memory" ? " product-card-memory" : ""}${project.slug === "aidesignsystem" ? " product-card-design-system" : ""}${project.slug === "datadevelop" ? " product-card-odc" : ""}${project.slug === "databaseops" ? " product-card-oceanbase" : ""}`}

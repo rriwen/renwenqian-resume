@@ -14,15 +14,5 @@ export default defineConfig(({ mode }) => {
       },
     }],
     build: { outDir: '../dist', emptyOutDir: true },
-    server: {
-      proxy: {
-        '/api': {
-          target: 'https://www.rriwen4x.me',
-          changeOrigin: true,
-          secure: true,
-        },
-
-      },
-    },
   }
 })

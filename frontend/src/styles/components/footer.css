@@ -1,0 +1,75 @@
+.footer-columns {
+  display: grid;
+  width: 100%;
+  grid-template-columns: minmax(0, 1fr) max-content max-content;
+  gap: var(--space-12);
+}
+
+.footer-columns > div {
+  display: flex;
+  flex-direction: column;
+  gap: .55rem;
+  min-width: 0;
+  align-items: flex-start;
+}
+
+.footer-columns > .footer-about {
+  width: min(380px, 100%);
+}
+
+.footer-columns > div:last-child {
+  justify-self: start;
+}
+
+.footer-columns h3 {
+  margin: 0 0 .7rem;
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
+}
+
+.footer-columns a, .footer-columns p {
+  margin: 0;
+  color: var(--muted);
+  font-size: .8125rem;
+  overflow-wrap: anywhere;
+  line-height: var(--leading-ui);
+}
+
+.footer-columns > .footer-about a[href^='mailto:'] {
+  margin-top: .65rem;
+}
+
+.footer-columns > .footer-about a[href^='tel:'] {
+  margin-bottom: .65rem;
+}
+
+.footer-columns a:hover {
+  color: var(--text);
+}
+
+.footer-contact-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.footer-contact-link svg {
+  flex-shrink: 0;
+}
+
+.footer-columns p {
+  max-width: 380px;
+}
+
+.footer-copyright {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding-top: var(--space-4);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  font-size: var(--text-xs);
+  color: var(--muted);
+  margin: var(--space-16) 0 0;
+}
+

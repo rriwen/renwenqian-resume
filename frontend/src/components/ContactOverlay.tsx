@@ -1,44 +1,13 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { IconClose } from './Icons'
 import { useLanguage } from '../i18n/LanguageContext'
-
-function isContactHash() {
-  return window.location.hash === '#contact'
-}
+import { useHashOverlay } from '../hooks/useHashOverlay'
 
 export function ContactOverlay() {
   const { m } = useLanguage()
-  const [open, setOpen] = useState(isContactHash)
-
-  const sync = useCallback(() => setOpen(isContactHash()), [])
-
-  const close = useCallback(() => {
-    window.history.pushState(null, '', window.location.pathname + window.location.search)
-    setOpen(false)
-  }, [])
-
-  const openChat = useCallback(() => {
-    window.location.hash = '#chat'
-  }, [])
-
-  useEffect(() => {
-    sync()
-    window.addEventListener('hashchange', sync)
-    window.addEventListener('popstate', sync)
-    return () => {
-      window.removeEventListener('hashchange', sync)
-      window.removeEventListener('popstate', sync)
-    }
-  }, [sync])
-
-  useEffect(() => {
-    if (!open) return
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') close()
-    }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
-  }, [open, close])
+  const { open, close } = useHashOverlay('#contact')
+  const navigate = useNavigate()
+  const openChat = () => navigate({ pathname: window.location.pathname, search: window.location.search, hash: '#chat' })
 
   if (!open) return null
 

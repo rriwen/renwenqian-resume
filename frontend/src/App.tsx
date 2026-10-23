@@ -5,15 +5,11 @@ import { ContactOverlay } from './components/ContactOverlay'
 import { Header } from './components/Header'
 import { SiteFooter } from './components/SiteFooter'
 import { LanguageProvider } from './i18n/LanguageContext'
-import { About } from './pages/About'
 import { Home } from './pages/Home'
-import { ProjectDetail } from './pages/ProjectDetail'
 
-const BlogIndex = lazy(() => import('./pages/BlogIndex').then((module) => ({ default: module.BlogIndex })))
-const BlogPost = lazy(() => import('./pages/BlogPost').then((module) => ({ default: module.BlogPost })))
+const About = lazy(() => import('./pages/About').then((module) => ({ default: module.About })))
+const ProjectDetail = lazy(() => import('./pages/ProjectDetail').then((module) => ({ default: module.ProjectDetail })))
 const Photography = lazy(() => import('./pages/Photography').then((module) => ({ default: module.Photography })))
-
-type HomeViewMode = 'stack' | 'grid'
 
 function ScrollToTop() {
   const { pathname, search } = useLocation()
@@ -25,16 +21,14 @@ function ScrollToTop() {
   return null
 }
 
-function AppFrame({ dark, onToggleTheme, viewMode, onViewMode }: { dark: boolean; onToggleTheme: () => void; viewMode: HomeViewMode; onViewMode: (value: HomeViewMode) => void }) {
+function AppFrame({ dark, onToggleTheme }: { dark: boolean; onToggleTheme: () => void }) {
   return <div style={{ minHeight: '100dvh' }}>
     <ScrollToTop />
     <Header dark={dark} onToggleTheme={onToggleTheme} />
     <div className="site-content">
       <Suspense fallback={<main className="route-loading">Loading...</main>}>
         <Routes>
-          <Route path="/" element={<Home dark={dark} viewMode={viewMode} onViewMode={onViewMode} />} />
-          <Route path="/blog" element={<BlogIndex />} />
-          <Route path="/blog/:slug" element={<BlogPost />} />
+          <Route path="/" element={<Home dark={dark} />} />
           <Route path="/photography" element={<Photography />} />
           <Route path="/project/:slug" element={<ProjectDetail />} />
           <Route path="/about" element={<About />} />
@@ -47,7 +41,6 @@ function AppFrame({ dark, onToggleTheme, viewMode, onViewMode }: { dark: boolean
 }
 
 export default function App() {
-  const [viewMode, setViewMode] = useState<HomeViewMode>('stack')
   const [dark, setDark] = useState(() => {
     try {
       const savedTheme = localStorage.getItem('as4x-theme')
@@ -63,7 +56,7 @@ export default function App() {
   return (
     <LanguageProvider>
       <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-        <AppFrame dark={dark} onToggleTheme={() => setDark((value) => !value)} viewMode={viewMode} onViewMode={setViewMode} />
+        <AppFrame dark={dark} onToggleTheme={() => setDark((value) => !value)} />
       </BrowserRouter>
     </LanguageProvider>
   )

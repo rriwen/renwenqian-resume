@@ -1,4 +1,4 @@
-/* The single source of truth for both the public site and Content Studio. */
+/* Shared design tokens for light and dark themes. */
 :root {
   color-scheme: light;
   --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
@@ -33,7 +33,7 @@
   --space-24: 6rem;
   --space-32: 8rem;
   --site-content-max: 1520px;
-  --detail-prose-width: 760px;
+  --detail-prose-width: 832px;
   --detail-media-width: 974px;
   --page-gutter: clamp(1.25rem, 5vw, 4.75rem);
   --page-top: 10rem;
@@ -67,12 +67,6 @@
   --media-on-overlay: #ffffff;
   --shadow-sm: 0 8px 24px rgb(0 0 0 / .08);
   --shadow-overlay: 0 24px 64px rgb(0 0 0 / .16);
-  --code-comment: #666666;
-  --code-string: #9b4d24;
-  --code-number: #14756b;
-  --code-property: #315b9a;
-  --code-keyword: #7b4b96;
-  --code-json: #8a5a16;
   --motion-fast: 160ms;
   --motion-normal: 240ms;
   --ease-standard: cubic-bezier(.2, .7, .2, 1);
@@ -96,10 +90,4 @@
   --lightbox-bg: rgb(0 0 0 / .96);
   --shadow-sm: 0 8px 24px rgb(0 0 0 / .3);
   --shadow-overlay: 0 24px 64px rgb(0 0 0 / .5);
-  --code-comment: #a3a3a3;
-  --code-string: #d68a61;
-  --code-number: #64b7a9;
-  --code-property: #91b7f0;
-  --code-keyword: #cf9be6;
-  --code-json: #e0ae61;
 }

@@ -2,22 +2,24 @@
 
 ## 项目定位
 
-DESIGN.4X 是个人产品设计师作品集与内容站点，覆盖项目案例、个人经历、博客文章和摄影内容。界面强调安静、克制、可扫描的编辑型排版，并支持中英文切换与浅色/深色主题。
+DESIGN.4X 是个人产品设计师作品集与内容站点，覆盖项目案例、个人经历和摄影内容，博客入口链接到外部 Notion。界面强调安静、克制、可扫描的编辑型排版，并支持中英文切换与浅色/深色主题。
 
 ## 技术栈
 
 - React 18 + TypeScript
 - Vite
 - React Router 6
-- React Markdown + remark-gfm
+- React Markdown（关于页）
 - Vercel Analytics
 - CSS 自定义属性实现主题与全局视觉变量
 
 常用命令：
 
 ```bash
-npm install
+npm ci
 npm run dev
+npm test
+npm run typecheck
 npm run build
 npm run preview
 ```
@@ -27,34 +29,39 @@ npm run preview
 | 路由 | 页面 | 说明 |
 | --- | --- | --- |
 | `/` | `Home` | 个人介绍、项目筛选和产品卡片 |
-| `/about` | `About` | 个人简介、工作经历、教育经历和联系方式 |
-| `/blog` | `BlogIndex` | 文章列表 |
-| `/blog/:slug` | `BlogPost` | Markdown 文章、目录、相关文章 |
+| `/about` | `About` | 个人简介、工作经历、可展开的项目经历和联系方式 |
 | `/photography` | `Photography` | Instagram 摄影内容 |
 | `/project/:slug` | `ProjectDetail` | 项目详情、画廊和相邻项目导航 |
 
-`frontend/src/App.tsx` 负责路由、主题状态、全局 Header/Footer、聊天与联系浮层。博客和摄影页面采用懒加载。
+`frontend/src/App.tsx` 负责路由、主题状态、全局 Header/Footer、聊天与联系浮层。首页直接加载，About、项目详情和摄影页面按路由懒加载；聊天首次打开时加载。导航与页脚保留外部 Notion 博客入口。
 
 ## 组件职责
 
 - `Header`：固定顶部导航、移动端菜单、语言切换、主题切换和聊天入口。
 - `SiteFooter`：站内导航、项目入口和联系方式。
 - `Home` 中的产品卡片：项目浏览与筛选。
-- `ChatbotOverlay`：站内 AI 对话浮层。
+- `components/project/`：通用详情、DataPilot 案例、画廊、图片查看器和相邻项目导航；`ProjectDetail` 负责路由与布局分派。
+- `components/about/`：工作条目、项目卡片、时间线与 Markdown 行内渲染；`About` 组合这些模块。
+- `components/Lanyard/`：React 入口与 3D 场景、物理模拟、纹理、几何和材质分别维护。
+- `ChatbotOverlay`：按需加载 `components/chat/ChatPanel`；`useChatThread` 管会话状态，关闭浮层保留正在生成的响应。
 - `ContactOverlay`：联系信息浮层。
+- `hooks/useHashOverlay`：聊天与联系浮层共用的 Hash 状态、路由同步与 Escape 关闭。
 - `LanguageContext`：中英文 locale 状态与翻译资源。
 
 ## 视觉系统
 
-`frontend/src/index.css` 只负责按顺序导入样式，前台和 Content Studio 共用同一套变量：
+`frontend/src/index.css` 只负责按顺序导入样式。代码导航与运行说明见 [README.md](README.md)。
 
 | 文件 | 职责 |
 | --- | --- |
 | `styles/tokens.css` | 颜色、字体、字号、间距、宽度、圆角、动效及深浅主题 |
 | `styles/foundation.css` | 全局基础、页面容器、按钮、焦点、联系弹层 |
-| `styles/components.css` | 页面与组件自身的布局和状态 |
-| `styles/prose.css` | Markdown、发布后的 HTML、后台预览和富文本编辑器的共同排版 |
-| `styles/responsive.css` | 集中管理断点和减少动效偏好 |
+| `styles/components.css` | 按固定顺序导入 `styles/components/*.css` |
+| `styles/components/` | 首页、项目、DataPilot、About、摄影、聊天、导航和页脚等各自的布局与状态 |
+| `styles/prose.css` | 正文排版，包括关于页 Markdown |
+| `styles/responsive.css` | 跨组件断点和减少动效偏好；组件专属规则留在各组件样式中 |
+
+保留 tokens → foundation → components → prose → responsive 的级联顺序，以及 `components.css` 内的导入顺序。定位样式时先选对应页面/组件文件。
 
 优先使用以下 CSS 变量，不要在页面中重复定义主题颜色：
 
@@ -91,8 +98,8 @@ npm run preview
 
 ## 响应式规则
 
-- `900px` 及以下使用折叠导航、双列项目网格和双列页脚，关于我信息独占一行；文章目录移入正文顶部。
-- `700px` 及以下进入手机布局：统一 20px 页边距，首页和项目画廊单列，摄影双列，后台列表改为纵向信息布局。
+- `900px` 及以下使用折叠导航、双列项目网格和双列页脚，关于我信息独占一行。
+- `700px` 及以下进入手机布局：统一 20px 页边距，首页和项目画廊单列，摄影双列。
 - `400px` 及以下将聊天入口缩为带可访问名称的图标，保留语言和主题按钮，保证 320px 屏幕不溢出。
 - 移动端 Header 使用圆形菜单按钮，点击展开主导航；展开状态显示标准关闭图标。
 - 移动端保留“和我聊聊”入口、语言切换和主题按钮。
@@ -105,22 +112,25 @@ npm run preview
 
 - 项目基础数据：`frontend/src/data/projects.ts`
 - 项目详情数据：`frontend/src/data/projectDetails.ts`
+- DataPilot 单一内容源：`frontend/src/data/projects/dataPilot.ts`，页面与聊天共同读取文案、链接和配图信息
 - 翻译资源：`frontend/src/i18n/translations.ts`
 - 摄影数据：`frontend/public/data/instagram.json`
-- 博客内容：`frontend/src/content/blog/`
+- 关于页内容：`frontend/src/content/about/`
 - 静态图片：`frontend/public/images/`
 
-### 内容管理数据库
+项目双语标签直接保存在 `projects.ts` 的项目记录中，不依赖清单顺序。关于页 Markdown 的 `##` / `###` 标题使用 `<!-- id: stable-id -->` 隐藏注释；同文件 ID 唯一，同义内容跨语言保持一致。改标题、移动条目时保留 ID，新增工作经历会自动展示。章节使用 `work`、`projects`、`education`、`contact`；教育内容保留在语料中，页面当前不展示。纯解析位于 `content/about/parseAboutContent.ts`，加载与缓存位于 `content/about.ts`。
 
-已发布内容通过根目录 `api/content.ts` 从 PostgreSQL 读取，接口只支持 GET。该目录是 Vercel 强制要求的 Serverless 路由入口；其余后端工具与迁移脚本位于 `backend/`，前端代码全部位于 `frontend/`。内容不使用浏览器本地存储。配置时复制 `.env.example` 并设置：
+### 内容与聊天接口
 
-- `POSTGRES_URL`：PostgreSQL 连接字符串，生产环境建议使用 Vercel Marketplace 中的 Neon。
+首页、项目详情、关于页和摄影页读取本地内容，博客由外部 Notion 承载。项目无数据库依赖。
 
-公开页面只读取已发布内容，数据库不可用时使用仓库中的静态内容兜底。Admin 编辑后台已移除，内容接口不再提供草稿读取、写入或删除功能。
+聊天服务端入口位于根目录 `api/chat.ts`，由 Vercel 部署；前端代码位于 `frontend/`。首次配置时复制 `.env.example` 并设置 `DEEPSEEK_API_KEY`，密钥只由服务端读取。
 
-本地使用 `npm run dev` 时，Vite 会将 `/api` 代理到线上 API；本地完整接口验证使用 `npm run dev:full`。服务端接口变更需要部署后才会影响线上接口。
+`ChatPanel` 加载后由 `useChatThread` 生成当前语言语料；`lib/siteCorpus.ts` 汇总本地内容，`lib/deepseekChat.ts` 负责传输。`lib/chat/` 分别维护 SSE 解析、文字渐显和会话历史校验，业务文案继续放在内容层。
 
-图片应使用明确的 `alt` 文本（装饰图可为空），大图使用懒加载；项目和博客详情中的媒体应保持原始比例并避免撑破容器。
+本地使用 `npm run dev` 时，`/api/chat` 由 Vite 中间件调用本地服务端实现。本地完整接口验证使用 `npm run dev:full`。服务端接口变更需要部署后才会影响线上接口。
+
+图片应使用明确的 `alt` 文本（装饰图可为空），大图使用懒加载；项目详情中的媒体应保持原始比例并避免撑破容器。
 
 ## 开发约定
 
@@ -128,15 +138,15 @@ npm run preview
 2. 新增页面需要验证 320px、390px、660px、768px 和 1440px，并覆盖中英文和深浅主题。
 3. 文本不能依赖固定高度；长中文、英文标题和链接都必须自然换行。
 4. 交互控件提供可理解的 `aria-label`，图标按钮需要有 tooltip 或可访问名称。
-5. 提交前运行 `npm run build`，确保 TypeScript 检查和 Vite 构建均通过。
+5. 提交前运行 `npm test` 和 `npm run build`，确保关键行为、TypeScript 检查和生产构建通过；开发中可单独运行 `npm run typecheck`。
 
 ## 验证清单
 
-- `/`、`/about`、`/blog`、`/photography`、项目详情和博客详情可直接访问。
+- `/`、`/about`、`/photography` 和项目详情可直接访问，导航与页脚的博客入口可打开外部 Notion。
 - 浅色/深色主题切换后文字与边框仍有足够对比度。
-- HTML、Markdown 和富文本编辑器的正文一致：桌面 16px、手机 15px，行高均为 1.75，章节标题层级保持一致。
+- HTML 和 Markdown 的正文一致：桌面 16px、手机 15px，行高均为 1.75，章节标题层级保持一致。
 - 深色联系弹层、项目指标、产品 Logo 和聊天输入框聚焦状态可读。
 - 移动端导航可以打开、关闭并点击跳转。
 - 页面没有水平滚动，正文、标签、表格和图片不发生遮挡。
 - 图片请求失败时页面仍可阅读，摄影页能显示空数据状态。
-- `npm run build` 通过。
+- `npm test`、`npm run typecheck` 和 `npm run build` 通过。

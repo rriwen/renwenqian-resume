@@ -1,0 +1,114 @@
+.site-footer-redesign {
+  padding: var(--space-16) 0 var(--space-6);
+  background: var(--subtle);
+}
+
+.site-footer-inner {
+  width: 100%;
+  max-width: var(--site-content-max);
+  margin-inline: auto;
+  padding: 0 var(--page-gutter);
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  width: 100%;
+  min-height: var(--header-height);
+  margin: 0 auto;
+  padding: var(--space-3) var(--page-gutter);
+  font-size: var(--text-xs);
+  line-height: var(--leading-ui);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.header-nav-list {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chatbot-input-wrap .chatbot-input-field:focus,
+.chatbot-input-wrap .chatbot-input-field:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-color: var(--accent);
+}
+
+.project-detail-cover {
+  width: min(var(--detail-media-width), 100%);
+  aspect-ratio: 16 / 8.5;
+  margin: 0 0 var(--space-12);
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  background: var(--subtle);
+  border: 1px solid var(--rule);
+}
+
+.project-detail-cover img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+}
+
+.project-detail-standard-page > :is(p, ul, ol, section) {
+  max-width: var(--detail-prose-width);
+}
+
+.project-detail-standard-page > .project-detail-gallery {
+  max-width: var(--detail-media-width);
+  margin-top: var(--section-gap);
+}
+
+.project-detail-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+.project-detail-adjacent {
+  margin-top: var(--section-gap);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--rule);
+}
+
+.about-page h2 {
+  font-size: var(--text-section);
+  font-weight: var(--weight-semibold);
+}
+
+.home-lanyard { height: 580px; min-width: 0; position: relative; }
+
+/* Give the badge a full-width transparent drawing area so it can swing
+   across the column boundary without being clipped by the old right panel. */
+.home-hero { position: relative; }
+.home-hero-copy { position: relative; z-index: 1; }
+.home-lanyard > .lanyard {
+  position: absolute;
+  inset: 0 calc(-1 * var(--page-gutter)) auto;
+  width: auto;
+  height: 580px;
+  overflow: visible;
+  --lanyard-anchor: .73;
+}
+.home-lanyard { position: static; }
+@media (max-width: 900px) {
+  .home-lanyard > .lanyard { height: 440px; }
+}
+@media (max-width: 700px) {
+  .home-lanyard { position: relative; }
+  .home-lanyard > .lanyard { height: 420px; --lanyard-anchor: .5; }
+}
+
+.external-link-icon {
+  color: var(--muted);
+  opacity: .7;
+}

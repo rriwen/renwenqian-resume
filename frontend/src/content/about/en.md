@@ -6,9 +6,9 @@ I design AI workflows that help people understand what agents are doing, check r
 
 I build design systems and connect design with frontend development through tokens, reusable components, and AI-assisted workflows. My tools include Figma, Google Stitch, Codex, and Cursor, backed by a working knowledge of HTML, CSS, and JavaScript.
 
-## Experience
+## Experience <!-- id: work -->
 
-### Senior Experience Designer
+### Senior Experience Designer <!-- id: oceanbase -->
 
 Ant Group · OceanBase
 
@@ -21,7 +21,7 @@ Ant Group · OceanBase
 - **Data tools**: Used interviews and usage data to improve data changes, approvals, and SQL checks. Increased self-service and satisfaction across database tools and doubled the user base.
 - **Design tooling & collaboration**: Built AI-assisted plugins for design handoff and visual QA, freeing up around 15% of team capacity.
 
-### Product Designer
+### Product Designer <!-- id: ecidi -->
 
 ECIDI subsidiary · Yunnan smart land acquisition platform
 
@@ -31,7 +31,7 @@ ECIDI subsidiary · Yunnan smart land acquisition platform
 - Designed a configurable rules engine for complex surveying and land acquisition requirements, improving processing efficiency by 40%.
 - Established design standards and vendor acceptance criteria to improve delivery quality and shorten iteration cycles.
 
-### Interaction Designer
+### Interaction Designer <!-- id: leishu -->
 
 Hangzhou Leishu Technology
 
@@ -39,7 +39,7 @@ Hangzhou Leishu Technology
 
 - Designed enterprise and government products, including Fengning OA, Luneng Football, and data integration and visualization tools. Covered discovery, information architecture, prototyping, and delivery QA.
 
-### Product Designer
+### Product Designer <!-- id: puhuai -->
 
 Shanghai Puhuai Technology
 
@@ -47,9 +47,9 @@ Shanghai Puhuai Technology
 
 - Led design for a panoramic VR photo community across VR, web, and mobile. Used A/B testing, surveys, usability testing, and competitive research to guide improvements. Helped grow the community to 200,000 users and 1 million visits; the app reached the top five on VR app charts and was featured on Oculus, Daydream, and Xiaomi.
 
-## Projects
+## Projects <!-- id: projects -->
 
-### Intelligent Analytics Q&A
+### Intelligent Analytics Q&A <!-- id: analytics -->
 
 > Product Designer
 
@@ -72,7 +72,7 @@ Achievements:
 - Raised adoption of AI-generated results from 15% to 60% through improvements to Agent conversation, confirmation, validation, and feedback.
 - Moved the product from technical validation and internal pilots into commercial delivery for 5+ paying customers.
 
-### AI Design Engineering
+### AI Design Engineering <!-- id: design-engineering -->
 
 > Design Engineering Lead
 
@@ -95,7 +95,7 @@ Achievements:
 - Reduced a single visual acceptance cycle from at least two person-days to minutes through automation
 
 
-### Database Operations & Development Product Matrix
+### Database Operations & Development Product Matrix <!-- id: database-operations -->
 
 > Experience Designer
 
@@ -117,9 +117,9 @@ Achievements:
 - Raised product-matrix satisfaction from 4.8 to 6.2 out of 7 and doubled users
 - Established a data-insight → solution-validation → instrumentation-closed-loop decision method for the team.
 
-## Education
+## Education <!-- id: education -->
 
-### Nanjing University of Posts and Telecommunications · B.S., Software Engineering
+### Nanjing University of Posts and Telecommunications · B.S., Software Engineering <!-- id: njupt -->
 
 > 2012.09 - 2016.07
 
@@ -127,9 +127,9 @@ Achievements:
 - Vice President of the New Media Society: content planning, collateral design, and publishing for the university’s official new media channels.
 - University entrepreneurship competition (national silver award, provincial silver award); SmileGate Creative Contest (Logo design track, second prize).
 
-## Contact
+## Contact <!-- id: contact -->
 
-### Get in touch
+### Get in touch <!-- id: get-in-touch -->
 
 - WeChat / Phone: 18362976211
 - Email: rriwen@gmail.com

@@ -1,0 +1,18 @@
+.project-detail-back-link {
+  text-decoration: none;
+}
+
+.project-detail-back-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.project-detail-adjacent-link {
+  text-decoration: none;
+}
+
+.project-detail-adjacent-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+

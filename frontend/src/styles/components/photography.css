@@ -1,0 +1,140 @@
+.photography-page {
+  min-height: 100dvh;
+}
+
+.photography-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-8);
+  padding-top: 0;
+  margin-bottom: var(--intro-gap);
+  align-items: baseline;
+}
+
+.photography-heading h1 {
+  margin: 0;
+  font-weight: var(--weight-medium);
+  letter-spacing: 0;
+  font-size: var(--text-title);
+  line-height: var(--leading-heading);
+}
+
+.photography-profile-link {
+  padding-bottom: 0.15rem;
+  color: var(--muted);
+  font-size: var(--text-xs);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.photography-grid {
+  display: grid;
+  grid-auto-flow: dense;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+.photography-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background: transparent;
+}
+
+.photography-item-placeholder {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 3 / 4;
+  border: 1px dashed color-mix(in srgb, var(--muted) 38%, transparent);
+  color: var(--muted);
+  font-size: var(--text-xs);
+  line-height: 1.5;
+  text-align: center;
+}
+
+.photography-item-placeholder span {
+  padding: var(--space-4);
+}
+
+.photography-item img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+}
+
+.photography-caption {
+  display: block;
+  padding: var(--space-4) 0;
+  color: var(--text);
+  white-space: normal;
+  font-size: var(--text-sm);
+  line-height: var(--leading-ui);
+}
+
+.photography-video-mark {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--media-overlay);
+  color: var(--media-on-overlay);
+  font-size: var(--text-xs);
+}
+
+.photography-empty, .photography-loading {
+  min-height: 48vh;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+
+.photography-empty {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-8);
+}
+
+.photography-empty p {
+  margin: 0;
+  color: var(--muted);
+  font-size: var(--text-base);
+}
+
+.photography-empty a {
+  font-size: var(--text-xs);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.photography-loading {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-1);
+  padding: var(--space-1) 0;
+}
+
+.photography-loading span {
+  aspect-ratio: 3 / 4;
+  animation: photography-loading-pulse 1.4s ease-in-out infinite alternate;
+  background: var(--subtle);
+}
+
+.photography-loading span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.photography-loading span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes photography-loading-pulse {
+  from { opacity: 0.4; }
+  to { opacity: 0.9; }
+}
+

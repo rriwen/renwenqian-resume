@@ -1,23 +1,7 @@
-export function IconX({ size = 14 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-    </svg>
-  )
-}
-
 export function IconClose({ size = 16 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden>
       <path d="M5 5l14 14M19 5L5 19" />
-    </svg>
-  )
-}
-
-export function IconLinkedIn({ size = 14 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
     </svg>
   )
 }
@@ -36,77 +20,6 @@ export function IconWeChat({ size = 14 }: { size?: number }) {
     <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden>
       <path d="M9 3C4.58 3 1 5.91 1 9.5c0 2.02 1.14 3.83 2.93 5.02L3.2 17l2.9-1.45c.66.2 1.36.34 2.09.41A6.77 6.77 0 0 1 8 14.4C8 10.6 11.75 7.5 16.35 7.5h.28C15.6 4.89 12.58 3 9 3Zm-2.7 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2Zm5.4 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z" />
       <path d="M16.35 9C12.57 9 9.5 11.42 9.5 14.4s3.07 5.4 6.85 5.4c.69 0 1.36-.08 1.99-.24L21 21l-.63-2.33C22 17.68 23.2 16.15 23.2 14.4c0-2.98-3.07-5.4-6.85-5.4Zm-2.3 4.65a.85.85 0 1 1 0-1.7.85.85 0 0 1 0 1.7Zm4.6 0a.85.85 0 1 1 0-1.7.85.85 0 0 1 0 1.7Z" />
-    </svg>
-  )
-}
-
-export function IconGrid({ size = 18 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-      <circle cx="5" cy="5" r="2" />
-      <circle cx="12" cy="5" r="2" />
-      <circle cx="19" cy="5" r="2" />
-      <circle cx="5" cy="12" r="2" />
-      <circle cx="12" cy="12" r="2" />
-      <circle cx="19" cy="12" r="2" />
-      <circle cx="5" cy="19" r="2" />
-      <circle cx="12" cy="19" r="2" />
-      <circle cx="19" cy="19" r="2" />
-    </svg>
-  )
-}
-
-export function IconGlobe({ size = 16 }: { size?: number }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden
-    >
-      <circle cx="12" cy="12" r="10" />
-      <path d="M2 12h20M12 2a15.3 15.3 0 0 1 0 20 15.3 15.3 0 0 1 0-20z" />
-    </svg>
-  )
-}
-
-/** 面性四芒星（扁平填充） */
-export function IconFourPointStar({ size = 14 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-      <path d="M12 2.25 L14.18 9.07 L21.25 11.18 L14.18 13.3 L12 21.75 L9.82 13.3 L2.75 11.18 L9.82 9.07 Z" />
-    </svg>
-  )
-}
-
-export function IconBot({ size = 14 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-      <rect x="4" y="7" width="16" height="13" rx="4" />
-      <path d="M12 3v4M8 13h.01M16 13h.01M8 17h8" />
-    </svg>
-  )
-}
-
-export function IconMessageCircle({ size = 14 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-      <path d="M20 11.5a7.5 7.5 0 0 1-7.5 7.5H7l-3.5 2 .9-3.8A7.5 7.5 0 1 1 20 11.5Z" />
-      <path d="M8 12h.01M12 12h.01M16 12h.01" />
-    </svg>
-  )
-}
-
-export function IconChatDots({ size = 14 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-      <path d="M18.5 16.5a6.5 6.5 0 0 0-5.5-10H8a6.5 6.5 0 0 0-3.4 12l-.6 3 3-1.3a6.5 6.5 0 0 0 5.5-.2" />
-      <path d="M15 13.5h.01M18 13.5h.01M12 13.5h.01" />
     </svg>
   )
 }
@@ -133,16 +46,6 @@ export function IconContrast({ size = 15 }: { size?: number }) {
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" aria-hidden>
       <circle cx="12" cy="12" r="9" />
       <path d="M12 3a9 9 0 0 1 0 18V3Z" fill="currentColor" stroke="none" />
-    </svg>
-  )
-}
-
-export function IconStack({ size = 22 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden>
-      <rect x="4" y="10" width="14" height="10" rx="1" fill="#1D4ED8" opacity="0.95" transform="rotate(-8 11 15)" />
-      <rect x="5" y="7" width="14" height="10" rx="1" fill="#2563EB" opacity="0.9" transform="rotate(-4 12 12)" />
-      <rect x="6" y="4" width="14" height="10" rx="1" fill="#3B82F6" />
     </svg>
   )
 }

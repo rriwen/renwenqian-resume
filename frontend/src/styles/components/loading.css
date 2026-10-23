@@ -1,0 +1,22 @@
+.route-loading {
+  min-height: 100dvh;
+  color: var(--muted);
+  padding: var(--page-top) var(--page-gutter);
+}
+
+.project-loading-grid {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 3.75rem var(--space-6);
+}
+
+.project-loading-grid i {
+  display: block;
+  aspect-ratio: 1.45;
+  background: var(--subtle);
+  animation: content-pulse 1.2s ease-in-out infinite alternate;
+}
+
+@keyframes content-pulse { from { opacity: .55; } to { opacity: 1; } }
+
