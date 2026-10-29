@@ -33,7 +33,7 @@ test('both About locales keep complete content and shared stable work IDs', () =
   }
   // These are intentionally separate localized source documents, not positional translations.
   assert.equal(parseAboutContent(sources.zh).projects.length, 4)
-  assert.equal(parseAboutContent(sources.en).projects.length, 3)
+  assert.equal(parseAboutContent(sources.en).projects.length, 4)
 })
 
 test('moving or renaming sections does not change their meaning', () => {

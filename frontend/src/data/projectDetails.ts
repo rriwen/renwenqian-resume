@@ -77,8 +77,8 @@ const details: Record<string, { en: ProjectDetailBlock; zh: ProjectDetailBlock }
           text: 'Designed a Skills-based one-click deployment flow so Agents can enable memory with zero configuration; designed a closed loop for OpenClaw work experience—automatic extraction, multi-round validation, and feedback-driven optimization—so Agent capabilities keep evolving.',
         },
         {
-          keyword: 'Full-stack AI design & development',
-          text: 'Solo end-to-end visual design, content planning, and front-end work for the marketing site and memory admin; used AI tools to compress design-to-launch to two weeks for a one-person full-stack delivery.',
+          keyword: 'Design & frontend delivery',
+          text: 'Independently delivered the visual design, content, and frontend code for the product website and memory admin. Used AI-assisted development, Skills, and a reusable component library to implement pages and components. Completed design-to-launch in two weeks.',
         },
       ],
       afterHighlightBullets:
@@ -102,8 +102,8 @@ const details: Record<string, { en: ProjectDetailBlock; zh: ProjectDetailBlock }
           text: '设计基于 Skills 的一键部署流程方案，让 Agent 零配置启用记忆能力；设计「 OpenClaw 工作经验自动提取 → 多轮验证 → 反馈优化」的闭环机制，驱动 Agent 持续进化。',
         },
         {
-          keyword: '全栈 AI 设计与开发',
-          text: '独立完成产品官网与记忆管理后台的视觉设计、内容规划、前端开发；借助 AI 工具将设计到上线的周期压缩至 2 周，实现单人全栈快速交付。',
+          keyword: '设计与前端交付',
+          text: '独立完成产品官网与记忆管理后台的视觉设计、内容规划和前端代码；结合 AI 辅助开发，使用 Skill 与组件库完成页面和组件实现，在 2 周内完成从设计到上线的交付。',
         },
       ],
       afterHighlightBullets:
@@ -137,7 +137,7 @@ const details: Record<string, { en: ProjectDetailBlock; zh: ProjectDetailBlock }
         },
       ],
       afterHighlightBullets:
-        'It became standardized AI product design assets for the team, with reuse across product lines exceeding 70%.',
+        'The design assets achieved over 70% reuse across product lines. I documented component usage, project setup, and interaction constraints in Skills, then applied them with the component library to AI analytics Q&A, the memory plugin, and product websites. Delivered page and component code.',
       externalUrl: 'http://originnext.oceanbase-ai.odcfront.alipay.net/',
       gallery: [
         { src: '/images/aidesignsystem-plan-component.jpg', caption: 'Plan component' },
@@ -168,7 +168,7 @@ const details: Record<string, { en: ProjectDetailBlock; zh: ProjectDetailBlock }
           text: '形成团队 AI 产品设计的标准化资产，在多条产品线中复用率超过 70%。',
         },
       ],
-      afterHighlightBullets: '近期，正在探索利用 Skill 提供组件约束和工程安装说明，能实现一句话搭建简单的 AI 对话应用。',
+      afterHighlightBullets: '将组件用法、工程安装与交互约束整理为 Skill，结合组件库应用于 AI 智能问数、记忆插件及官网开发，交付页面与组件代码。',
       externalUrl: 'http://originnext.oceanbase-ai.odcfront.alipay.net/',
       gallery: [
         { src: '/images/aidesignsystem-plan-component.jpg', caption: '计划组件' },
@@ -285,7 +285,7 @@ const details: Record<string, { en: ProjectDetailBlock; zh: ProjectDetailBlock }
         ],
       },
       afterResponsibilities: [
-        'Satisfaction across the product matrix rose from 4.8 to 6.2 (out of 7), while active users roughly doubled.',
+        'Satisfaction across the product matrix rose from 4.7 to 6.2 (out of 7), while the user base doubled.',
       ],
       gallery: [
         { src: '/images/datadevelop-sql-editor.jpg', caption: 'SQL editor' },
@@ -320,7 +320,7 @@ const details: Record<string, { en: ProjectDetailBlock; zh: ProjectDetailBlock }
         ],
       },
       afterResponsibilities: [
-        '目前整个产品矩阵的用户满意度从 4.8 分大幅提升至 6.2 分（满分 7 分），驱动用户数实现翻倍增长。',
+        '产品矩阵的用户满意度从 4.7 分提升至 6.2 分（满分 7 分），产品用户规模翻倍。',
       ],
       gallery: [
         { src: '/images/datadevelop-sql-editor.jpg', caption: 'SQL 编辑器布局' },

@@ -56,14 +56,14 @@ export function ProjectCards({ projects, locale }: { projects: AboutContent['pro
             </button>
             <div id={`about-project-${project.id}-content`} hidden={!expanded} className="about-project-card-content" style={proseColumn}>
               {expanded && <>
-                <ProjectBackground label={locale === 'zh' ? (project.id === 'analytics' ? '背景目标' : '背景与目标') : 'Background and goal'} content={[project.content.trim(), project.goal.trim()].filter(Boolean).join(' ')} />
-                <p style={{ ...bodyText, marginBottom: 'var(--space-2)' }}><strong>{locale === 'zh' ? (project.id === 'analytics' ? '我的职责' : '我主要负责') : 'Responsibilities'}</strong></p>
+                <ProjectBackground label={locale === 'zh' ? (project.id === 'design-engineering' ? '项目背景' : (['analytics', 'database-operations', 'data-development'].includes(project.id) ? '背景目标' : '背景与目标')) : 'Background and goal'} content={[project.content.trim(), project.goal.trim()].filter(Boolean).join(' ')} />
+                <p style={{ ...bodyText, marginBottom: 'var(--space-2)' }}><strong>{locale === 'zh' ? (['analytics', 'database-operations', 'data-development', 'design-engineering'].includes(project.id) ? '我的职责' : '我主要负责') : 'Responsibilities'}</strong></p>
                 {project.responsibilities.length > 0 ? (
                   <ResponsibilitiesList style={{ ...workArticleList, marginTop: 0 }}>
                     {project.responsibilities.map((item, itemIndex) => <li key={itemIndex} style={{ marginBottom: itemIndex < project.responsibilities.length - 1 ? 'var(--space-2)' : 0 }}>{renderMarkdownInline(item)}</li>)}
                   </ResponsibilitiesList>
                 ) : null}
-                <p style={{ ...bodyText, margin: 'var(--space-6) 0 var(--space-2)' }}><strong>{locale === 'zh' ? (project.id === 'analytics' ? '业绩成果' : '业绩') : 'Achievements'}</strong></p>
+                <p style={{ ...bodyText, margin: 'var(--space-6) 0 var(--space-2)' }}><strong>{locale === 'zh' ? (['analytics', 'database-operations', 'data-development', 'design-engineering'].includes(project.id) ? '业绩成果' : '业绩') : 'Achievements'}</strong></p>
                 {project.achievements.length > 0 ? (
                   <AchievementsList className="about-project-achievements" style={{ ...workArticleList, marginTop: 0, marginBottom: 0 }}>
                     {project.achievements.map((item, itemIndex) => <li key={itemIndex} style={{ marginBottom: itemIndex < project.achievements.length - 1 ? 'var(--space-2)' : 0 }}>{renderMarkdownInline(item)}</li>)}
