@@ -14,10 +14,10 @@ Ant Group · OceanBase
 
 > Aug 2021 – Nov 2026
 
-- **Product planning and customer validation:** Contributed to AI analytics requirements planning and solution iteration. Conducted customer conversations, POC demos, and scenario validation to support enterprise delivery.
-- **Agent experience design:** Led product design for Agent conversations and AI-powered analytics app generation. Also planned and designed troubleshooting features, extending this work into the incubation of an Agent observability platform.
-- **Interaction refinement for professional tools:** Designed core workflows for a MaaS platform, SQL editor, task orchestration, data visualization, and database operations platform. Used user research to prioritize improvements and coordinated implementation with product and engineering teams. Self-service completion on the relevant core workflows increased from **15% to 75%**, and data tool satisfaction rose from **4.7 to 6.2 out of 7**.
-- **Design engineering and code delivery:** Led design token, component library, Figma-to-code component mapping, and Skill development. Brought automated visual QA and a shared collaboration workflow into practice across **5+ teams**, and delivered page and component code with AI-assisted development.
+- **Product planning and customer validation:** Contributed to AI analytics requirements planning, identifying shared needs through customer conversations, POC demos, and scenario validation. Proposed and drove requirements for multi-turn conversations and observability features, iterated on solutions, and supported delivery to **5+ paying customers**.
+- **Agent product and experience design:** Led multi-turn Agent conversation and analytics application generation experiences. Drove implementation of solutions for understanding requirements, checking results, and making human corrections, helping increase adoption of generated applications (**15% → 60%**). Designed Agent replay and incubated an Agent observability platform based on on-site customer troubleshooting needs.
+- **Interaction refinement for professional tools:** Designed core workflows for a MaaS platform, SQL editor, task orchestration, data visualization, and database operations platform. Used user research to prioritize improvements and coordinated implementation with product and engineering teams. Self-service completion on core database installation and migration workflows increased **15% → 75%**, and data tool satisfaction rose **4.7 → 6.2 (out of 7)**.
+- **Design engineering and code delivery:** Led design token, AI component library, and Skill development. Brought automated visual QA and a shared collaboration workflow into practice across **5+ teams**, and delivered page and component code with AI-assisted development.
 
 ### Product Designer <!-- id: ecidi -->
 
