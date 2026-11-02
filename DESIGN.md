@@ -33,7 +33,7 @@ npm run preview
 | `/photography` | `Photography` | Instagram 摄影内容 |
 | `/project/:slug` | `ProjectDetail` | 项目详情、画廊和相邻项目导航 |
 
-`frontend/src/App.tsx` 负责路由、主题状态、全局 Header/Footer、聊天与联系浮层。首页直接加载，About、项目详情和摄影页面按路由懒加载；聊天首次打开时加载。导航与页脚保留外部 Notion 博客入口。
+`frontend/src/App.tsx` 负责路由、主题状态、全局 Header/Footer、聊天与联系浮层。首页直接加载，About、项目详情和摄影页面按路由懒加载；聊天首次打开时加载。外部 Notion 博客入口位于页脚，顶部导航不展示。
 
 ## 组件职责
 
@@ -142,7 +142,7 @@ npm run preview
 
 ## 验证清单
 
-- `/`、`/about`、`/photography` 和项目详情可直接访问，导航与页脚的博客入口可打开外部 Notion。
+- `/`、`/about`、`/photography` 和项目详情可直接访问，页脚的博客入口可打开外部 Notion。
 - 浅色/深色主题切换后文字与边框仍有足够对比度。
 - HTML 和 Markdown 的正文一致：桌面 16px、手机 15px，行高均为 1.75，章节标题层级保持一致。
 - 深色联系弹层、项目指标、产品 Logo 和聊天输入框聚焦状态可读。

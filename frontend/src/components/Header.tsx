@@ -55,7 +55,6 @@ export function Header({ dark, onToggleTheme }: HeaderProps) {
               </ul>
             </li>
             <li><Link to="/photography" className={pathname === '/photography' ? 'header-menu-link is-active' : 'header-menu-link'}>{locale === 'zh' ? '摄影' : 'Photo'}</Link></li>
-            <li><a href="https://app.notion.com/p/rriwen/Hi-I-m-4x-204195a9bba880f787b4dc0eec18a101?source=copy_link" className="header-menu-link" target="_blank" rel="noopener noreferrer">{locale === 'zh' ? '博客' : 'Blog'} <span className="external-link-icon" aria-hidden="true">↗</span></a></li>
           </ul>
           </nav>
         </div>

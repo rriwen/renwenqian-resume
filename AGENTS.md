@@ -10,11 +10,11 @@
 ## 结构与内容边界
 
 - `App.tsx`：路由、主题和全局浮层；首页直接加载，About、项目详情和摄影按路由懒加载。`pages/` 组合页面，`components/` 按功能拆分 UI。
-- `data/projects.ts`：项目清单、稳定 slug 与双语标签；标签属于项目记录，不能按数组位置另行关联。`data/projectDetails.ts`：通用双语详情；`data/projects/dataPilot.ts`：DataPilot 文案、链接与配图的唯一来源，详情页与聊天共用。
+- `data/projects.ts`：项目清单、稳定 slug 与双语标签；标签属于项目记录，不能按数组位置另行关联。`data/projectDetails.ts`：通用双语详情，`sections` 将章节标题、正文与配图绑定，页面和聊天共用；章节 ID 跨语言一致。`data/projects/dataPilot.ts`：DataPilot 文案、链接与配图的唯一来源，详情页与聊天共用。
 - `content/about/*.md`：关于页双语内容；`content/about/parseAboutContent.ts`：纯解析；`content/about.ts`：加载与缓存。每个 `##` / `###` 标题须有 `<!-- id: stable-id -->`，同文件 ID 唯一、同义条目跨语言一致；改标题或顺序保留 ID。章节 ID 固定为 `work`、`projects`、`education`、`contact`。
 - `components/about/WorkEntry.tsx` 按 ID 保留特殊布局，项目卡片跟随 `oceanbase`，经历用循环展示。教育文案仍供聊天使用；不要恢复不可达的隐藏 UI 副本。
 - `components/Lanyard/Lanyard.tsx` 是 React 入口，`scene.ts` 管创建与清理，`simulation.ts` 管物理；纹理、几何、材质和配置分别维护。
-- 博客由外部 Notion 承载，链接位于 `components/Header.tsx` 和 `components/SiteFooter.tsx`；无站内博客或数据库内容接口。
+- 博客由外部 Notion 承载，链接位于 `components/SiteFooter.tsx`，顶部导航不展示博客入口；无站内博客或数据库内容接口。
 - `ChatbotOverlay.tsx` 首次打开时懒加载 `components/chat/ChatPanel.tsx`；`useChatThread.ts` 管会话、请求和语料生成，关闭浮层保留进行中的响应。`hooks/useHashOverlay.ts` 管 Hash 浮层状态、路由同步与 Escape 关闭。
 - `lib/siteCorpus.ts` 汇总本地语料；`lib/deepseekChat.ts` → `api/chat.ts` 发送流式请求；`lib/chat/` 分离 SSE 解析、文字渐显、历史校验与消息裁剪。
 - `public/data/instagram.json` 与 `public/images/instagram/`：摄影快照；维护说明在 `docs/instagram-sync.md`。

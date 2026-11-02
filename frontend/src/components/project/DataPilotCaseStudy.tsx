@@ -37,7 +37,7 @@ export function DataPilotCaseStudy({ project, locale }: Props) {
   return (
     <main className="datapilot-case-page">
       <div className="page-shell datapilot-case-shell">
-        <Link to="/" className="back-link datapilot-back">{content.labels.back}</Link>
+        <Link to="/" className="back-link project-detail-back-link">{content.labels.back}</Link>
         <header className="datapilot-case-hero">
           <h1>{content.title}</h1>
           <p className="datapilot-hero-copy">{content.paragraphs[0]}</p>

@@ -19,10 +19,34 @@ test('project routes have unique identities and bilingual content', () => {
       const detail = getProjectDetail(project.slug, locale)
       assert.ok(detail, `${project.slug}: missing ${locale} detail`)
       assert.ok(detail.paragraphs.length, `${project.slug}: missing ${locale} copy`)
-      for (const src of [project.image, ...detail.gallery.map((item) => item.src)]) {
+      const images = [...detail.gallery, ...(detail.sections ?? []).flatMap((section) => section.images)]
+      for (const src of [project.image, ...images.map((item) => item.src)]) {
         assert.ok(src.startsWith('/images/'), `${project.slug}: unexpected asset path ${src}`)
         assert.ok(existsSync(new URL(`../frontend/public${src}`, import.meta.url)), `Missing image: ${src}`)
       }
+    }
+  }
+})
+
+test('database ops sections keep bilingual image associations and complete chat content', () => {
+  const zhSections = getProjectDetail('databaseops', 'zh')!.sections!
+  const enSections = getProjectDetail('databaseops', 'en')!.sections!
+  assert.equal(zhSections.length, 3)
+  assert.equal(new Set(zhSections.map((section) => section.id)).size, zhSections.length)
+  assert.deepEqual(
+    zhSections.map(({ id, images }) => ({ id, images: images.map((image) => image.src) })),
+    enSections.map(({ id, images }) => ({ id, images: images.map((image) => image.src) })),
+  )
+  for (const locale of locales) {
+    const corpus = buildSiteCorpus(locale)
+    for (const section of getProjectDetail('databaseops', locale)!.sections!) {
+      assert.ok(section.title && section.paragraphs.length && section.images.length)
+      assert.ok(corpus.includes(section.title))
+      for (const paragraph of section.paragraphs) {
+        const text = typeof paragraph === 'string' ? paragraph : paragraph.map((run) => run.text).join('')
+        assert.ok(corpus.includes(text), `Missing ${locale} section copy: ${section.id}`)
+      }
+      for (const image of section.images) assert.ok(corpus.includes(image.caption))
     }
   }
 })

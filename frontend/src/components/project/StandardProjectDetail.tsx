@@ -31,6 +31,7 @@ type Props = { project: Project; detail: ProjectDetailBlock }
 
 export function StandardProjectDetail({ project, detail }: Props) {
   const { locale, m } = useLanguage()
+  const hasSections = Boolean(detail.sections?.length)
   return (
     <main
       className="page-shell project-detail-page project-detail-standard-page"
@@ -42,7 +43,7 @@ export function StandardProjectDetail({ project, detail }: Props) {
         {m.workDetail.back}
       </Link>
 
-      <div className="project-detail-cover">
+      {!hasSections && <div className="project-detail-cover">
         <img
           src={project.image}
           alt=""
@@ -56,7 +57,7 @@ export function StandardProjectDetail({ project, detail }: Props) {
             display: 'block',
           }}
         />
-      </div>
+      </div>}
 
       <h1 className="page-title">
         {getProjectTitle(project, locale)}
@@ -81,6 +82,12 @@ export function StandardProjectDetail({ project, detail }: Props) {
           {renderParagraphContent(para)}
         </p>
       ))}
+
+      {hasSections && (
+        <div className="project-detail-intro-media">
+          <ProjectGallery items={[{ src: project.image, caption: getProjectTitle(project, locale) }]} layout="stacked" />
+        </div>
+      )}
 
       {detail.responsibilities ? (
         <section style={{ margin: '0 0 var(--space-4)' }}>
@@ -167,6 +174,18 @@ export function StandardProjectDetail({ project, detail }: Props) {
         <p style={body}>{detail.afterHighlightBullets}</p>
       ) : null}
 
+      {detail.sections?.map((section) => (
+        <section key={section.id} id={section.id} className="project-detail-section" aria-labelledby={`${section.id}-title`}>
+          <div className="project-detail-section-copy">
+            <h2 id={`${section.id}-title`}>{section.title}</h2>
+            {section.paragraphs.map((para, idx) => (
+              <p key={idx}>{renderParagraphContent(para)}</p>
+            ))}
+          </div>
+          <ProjectGallery items={section.images} layout="stacked" />
+        </section>
+      ))}
+
       {detail.externalUrl ? (
         <a
           href={detail.externalUrl}
@@ -188,7 +207,7 @@ export function StandardProjectDetail({ project, detail }: Props) {
         </a>
       ) : null}
 
-      <ProjectGallery items={detail.gallery} />
+      {detail.gallery.length > 0 && <ProjectGallery items={detail.gallery} />}
       <ProjectNavigation slug={project.slug} />
     </main>
   )

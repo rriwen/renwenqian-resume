@@ -41,9 +41,18 @@ export type ProjectDetailParagraphRun = { text: string; bold?: boolean }
 /** 普通字符串整段，或由片段拼接（用于段内局部强调） */
 export type ProjectDetailParagraph = string | ProjectDetailParagraphRun[]
 
+export type ProjectDetailSection = {
+  id: string
+  title: string
+  paragraphs: ProjectDetailParagraph[]
+  images: ProjectGalleryItem[]
+}
+
 export type ProjectDetailBlock = {
   tags: string[]
   paragraphs: ProjectDetailParagraph[]
+  /** 按章节绑定标题、正文与配图，页面与聊天共用。 */
+  sections?: ProjectDetailSection[]
   /** 段落之后：结构化职责说明（引言 + 列表 + 可选嵌套小标题） */
   responsibilities?: ProjectDetailResponsibilities
   /** 职责说明之后、要点列表之前的补充段落 */
@@ -180,7 +189,7 @@ const details: Record<string, { en: ProjectDetailBlock; zh: ProjectDetailBlock }
   },
   databaseops: {
     en: {
-      tags: ['Ops Platform', 'Self-service UX', 'Data migration'],
+      tags: ['Complex Systems', 'Self-service UX', 'Interaction Redesign'],
       paragraphs: [
         [
           { text: 'At the company level, the goal is a ' },
@@ -192,35 +201,37 @@ const details: Record<string, { en: ProjectDetailBlock; zh: ProjectDetailBlock }
         ],
         'As an experience designer, I focused on diagnosing the data-migration experience, rebuilding the core task flow, and moving self-service rates toward the company’s three-steps-five-minutes target.',
       ],
-      highlightBullets: [
+      sections: [
         {
-          keyword: 'Diagnosis & opportunities',
-          text:
-            'Combined surveys, interviews, and analytics: self-service was only about 15%. Journey mapping for migration surfaced bottlenecks—hard-to-use object filtering, unclear step guidance, and inaccurate instructions.',
+          id: 'diagnosis',
+          title: 'Diagnosis & opportunities',
+          paragraphs: [
+            'Combined surveys, interviews, and analytics: self-service was only about 15%. Journey mapping for migration surfaced bottlenecks: hard-to-use object filtering, unclear step guidance, and inaccurate instructions.',
+          ],
+          images: [{ src: '/images/databaseops-ux-map.jpg', caption: 'User experience map' }],
         },
         {
-          keyword: 'Agile design & interaction rework',
-          text:
+          id: 'interaction',
+          title: 'Agile design & interaction rework',
+          paragraphs: [
             'Ran a design sprint: in one week we shipped a rebuilt core flow and high-fidelity prototypes (end-to-end steps, redesigned filtering), then tested immediately with users.',
+          ],
+          images: [{ src: '/images/databaseops-help-guidance.jpg', caption: 'Help guidance alongside the migration wizard' }],
         },
         {
-          keyword: 'Cross-team rollout & measurement',
-          text:
+          id: 'outcomes',
+          title: 'Cross-team rollout & measurement',
+          paragraphs: [
             'Worked closely with product and engineering to validate, break down, and ship iterations; tightened instrumentation to monitor impact and keep improving.',
+            'After iteration, self-service completion on the core chain rose from 15% to over 75%, much closer to the three-steps-five-minutes vision, and customer support effort dropped by roughly 20%.',
+          ],
+          images: [{ src: '/images/databaseops-funnel-before-after.jpg', caption: 'Migration funnel before and after optimization' }],
         },
       ],
-      afterHighlightBullets:
-        'After iteration, self-service completion on the core chain rose from 15% to over 75%, much closer to the three-steps-five-minutes vision, and customer support effort dropped by roughly 20%.',
-      gallery: [
-        { src: '/images/databaseops-ux-map.jpg', caption: 'User experience map' },
-        { src: '/images/databaseops-help-guidance.jpg', caption: 'Help guidance — docs alongside the migration wizard.' },
-        { src: '/images/databaseops-funnel-before-after.jpg', caption: 'Migration funnel — before vs after optimization' },
-        { src: '/images/work-2.jpg', caption: 'Approval path — gates before production risk.' },
-        { src: '/images/work-5.webp', caption: 'Single control surface — tickets, signals, and actions.' },
-      ],
+      gallery: [],
     },
     zh: {
-      tags: ['运维平台', '自助体验', '数据迁移'],
+      tags: ['复杂系统', '自助体验', '交互重构'],
       paragraphs: [
         [
           { text: '公司层面致力于打造' },
@@ -232,30 +243,34 @@ const details: Record<string, { en: ProjectDetailBlock; zh: ProjectDetailBlock }
         ],
         '我作为体验设计师，主要负责深度诊断平台自助率现状，定位数据迁移场景的体验瓶颈，重构核心任务流程，将用户自助率提升至符合公司「三步五分钟」目标的水平。',
       ],
-      highlightBullets: [
+      sections: [
         {
-          keyword: '问题诊断与机会点挖掘',
-          text:
+          id: 'diagnosis',
+          title: '问题诊断与机会点挖掘',
+          paragraphs: [
             '通过梳理平台核心链路的用户体验地图，精准定位 3+ 核心瓶颈和卡点；综合运用问卷、用户访谈与埋点数据分析数据迁移场景，洞察自助率仅 15%，识别迁移对象过滤上手难、步骤引导混乱、操作指引不准确等卡点。',
+          ],
+          images: [{ src: '/images/databaseops-ux-map.jpg', caption: '用户体验地图' }],
         },
         {
-          keyword: '敏捷设计与交互重构',
-          text:
-            '采用设计冲刺方法，一周内协同团队快速产出重构后的核心任务流程与高保真交互原型（包括步骤串联、对象过滤交互重构等），并组织 3+用户测试验证。',
+          id: 'interaction',
+          title: '敏捷设计与交互重构',
+          paragraphs: [
+            '采用设计冲刺方法，一周内协同团队快速产出重构后的核心任务流程与高保真交互原型（包括步骤串联、对象过滤交互重构等），并组织 3+ 用户测试验证。',
+          ],
+          images: [{ src: '/images/databaseops-help-guidance.jpg', caption: '数据迁移交互重构' }],
         },
         {
-          keyword: '协同推动与效果闭环',
-          text:
+          id: 'outcomes',
+          title: '协同推动与效果闭环',
+          paragraphs: [
             '紧密协同产品与研发团队，快速验证方案并拆解迭代、推动上线；通过细化埋点持续监控数据表现，驱动持续优化。',
+            '通过持续的迭代优化，核心任务链路的用户自助完成率从 15% 提升至 75% 以上，大幅接近「三步五分钟」目标，且客户技术支持成本显著降低约 20%。',
+          ],
+          images: [{ src: '/images/databaseops-funnel-before-after.jpg', caption: '优化前后埋点数据变化' }],
         },
       ],
-      afterHighlightBullets:
-        '通过持续的迭代优化，核心任务链路的用户自助完成率从 15% 提升至 75% 以上，大幅接近「三步五分钟」目标，且客户技术支持成本显著降低约 20%。',
-      gallery: [
-        { src: '/images/databaseops-ux-map.jpg', caption: '用户体验地图' },
-        { src: '/images/databaseops-help-guidance.jpg', caption: '数据迁移交互重构' },
-        { src: '/images/databaseops-funnel-before-after.jpg', caption: '优化前后埋点数据变化' },
-      ],
+      gallery: [],
     },
   },
   datadevelop: {

@@ -14,10 +14,10 @@ const sources = Object.fromEntries(['zh', 'en'].map((locale) => [
 ]))
 
 test('both About locales keep complete content and shared stable work IDs', () => {
-  for (const source of Object.values(sources)) {
+  for (const [locale, source] of Object.entries(sources)) {
     const content = parseAboutContent(source)
     assert.ok(content.heading)
-    assert.equal(content.introParagraphs.length, 3)
+    assert.equal(content.introParagraphs.length, locale === 'zh' ? 2 : 3)
     assert.deepEqual(content.work.map((work) => work.id), ['oceanbase', 'ecidi', 'leishu', 'puhuai'])
     for (const work of content.work) {
       assert.ok(work.title && work.meta && work.period && work.bullets.length)

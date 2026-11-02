@@ -4,7 +4,9 @@ import { useLanguage } from '../../i18n/LanguageContext'
 import { isGifSrc } from '../../lib/isGifSrc'
 import { ProjectLightbox } from './ProjectLightbox'
 
-export function ProjectGallery({ items }: { items: ProjectGalleryItem[] }) {
+type Props = { items: ProjectGalleryItem[]; layout?: 'grid' | 'stacked' }
+
+export function ProjectGallery({ items, layout = 'grid' }: Props) {
   const { locale, m } = useLanguage()
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
   const triggerRef = useRef<HTMLButtonElement | null>(null)
@@ -14,7 +16,7 @@ export function ProjectGallery({ items }: { items: ProjectGalleryItem[] }) {
     <>
       <section
         aria-label={m.workDetail.galleryAria}
-        className="project-detail-gallery"
+        className={`project-detail-gallery${layout === 'stacked' ? ' project-detail-gallery--stacked' : ''}`}
       >
         <div className="project-detail-gallery-grid">
           {items.map((item, idx) => (
@@ -46,7 +48,7 @@ export function ProjectGallery({ items }: { items: ProjectGalleryItem[] }) {
                   overflow: 'hidden',
                   cursor: 'zoom-in',
                   background: 'var(--subtle)',
-                  aspectRatio: '16 / 9',
+                  aspectRatio: layout === 'stacked' ? undefined : '16 / 9',
                 }}
               >
                 <img
@@ -54,7 +56,7 @@ export function ProjectGallery({ items }: { items: ProjectGalleryItem[] }) {
                   alt=""
                   loading={isGifSrc(item.src) ? 'eager' : undefined}
                   decoding="async"
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', pointerEvents: 'none' }}
+                  style={{ width: '100%', height: layout === 'stacked' ? 'auto' : '100%', objectFit: layout === 'stacked' ? 'contain' : 'cover', display: 'block', pointerEvents: 'none' }}
                 />
               </button>
               <figcaption

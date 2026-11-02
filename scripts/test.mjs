@@ -7,6 +7,8 @@ const transport = createHttpServer() // never listens on a port
 const server = await createServer({
   configFile: false,
   root: process.cwd(),
+  // Keep tests from replacing the dependency cache used by a running dev server.
+  cacheDir: 'node_modules/.vite-tests',
   appType: 'custom',
   logLevel: 'error',
   esbuild: { jsx: 'automatic' },

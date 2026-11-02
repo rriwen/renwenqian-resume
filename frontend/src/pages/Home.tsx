@@ -282,6 +282,27 @@ export function Home({ dark }: Props) {
         </div>
       </section>
 
+      <section className="home-experiments" aria-labelledby="experiments-title">
+        <div className="products-intro">
+          <h2 className="products-desc" id="experiments-title">
+            {locale === "zh" ? "一些好玩的尝试" : "A few playful experiments"}
+          </h2>
+        </div>
+        <div className="products-grid">
+          {["01", "02", "03"].map((id) => (
+            <article className="product-card experiment-card" key={id}>
+              <div className="product-card-media experiment-card-media" aria-hidden="true">
+                <span>{locale === "zh" ? "封面待补充" : "Cover coming soon"}</span>
+              </div>
+              <div className="product-card-copy">
+                <h3>{locale === "zh" ? `尝试 ${id}` : `Experiment ${id}`}</h3>
+                <p>{locale === "zh" ? "内容待补充" : "Details coming soon"}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
       <section
         className="home-perspective"
         aria-labelledby="product-perspective-title"

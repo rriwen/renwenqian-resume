@@ -43,6 +43,11 @@ function serializeProjectBlock(block: ProjectDetailBlock): string {
     })
   }
   if (block.afterHighlightBullets) parts.push(block.afterHighlightBullets)
+  for (const section of block.sections ?? []) {
+    parts.push(`#### ${section.title}`)
+    parts.push(...section.paragraphs.map(paragraphToText))
+    parts.push(...section.images.map((image) => image.caption).filter(Boolean))
+  }
   if (block.externalUrl) parts.push(`Link: ${block.externalUrl}`)
   if (block.gallery?.length) {
     const caps = block.gallery.map((g) => g.caption).filter(Boolean)

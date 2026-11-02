@@ -32,6 +32,7 @@
   --space-20: 5rem;
   --space-24: 6rem;
   --space-32: 8rem;
+  --space-40: 10rem;
   --site-content-max: 1520px;
   --detail-prose-width: 832px;
   --detail-media-width: 974px;
@@ -56,7 +57,7 @@
   --text: #1d1d1f;
   --muted: #666666;
   --rule: #e5e5e5;
-  --control-border: #b5b5b5;
+  --control-border: #d1d1d1;
   --accent: #0068df;
   --danger: #b42318;
   --success: #247044;
@@ -81,7 +82,7 @@
   --text: #ededed;
   --muted: #a3a3a3;
   --rule: #333333;
-  --control-border: #666666;
+  --control-border: #484848;
   --accent: #70b0ff;
   --danger: #ff928b;
   --success: #73ce97;

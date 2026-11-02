@@ -10,19 +10,6 @@
   margin: 0;
 }
 
-.datapilot-back {
-  display: inline-block;
-  color: var(--muted);
-  letter-spacing: .08em;
-  text-transform: uppercase;
-  text-decoration: underline;
-  text-underline-offset: 4px;
-}
-
-.datapilot-back:hover {
-  color: var(--text);
-}
-
 .datapilot-case-hero {
   width: min(var(--detail-prose-width), 100%);
   padding-bottom: var(--space-12);

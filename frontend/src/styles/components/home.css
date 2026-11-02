@@ -78,6 +78,10 @@
   background: var(--page-bg);
 }
 
+.home-experiments {
+  margin-top: var(--space-40);
+}
+
 .products-intro {
   max-width: 900px;
   display: flex;
@@ -154,6 +158,13 @@
 
 .product-card-media img {
   display: none;
+}
+
+.experiment-card-media {
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+  font-size: var(--text-sm);
 }
 
 .product-card-datapilot .product-card-media {

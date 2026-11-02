@@ -23,6 +23,8 @@ npm run dev
 
 环境变量模板见 [`.env.example`](.env.example)。`DEEPSEEK_API_KEY` 只由服务端读取，用于 AI 对话。
 
+测试运行器使用独立的 `node_modules/.vite-tests/` 缓存，可在开发服务运行时执行 `npm test`，避免覆盖开发页面正在使用的依赖缓存。
+
 ## 按任务定位代码
 
 | 要修改的内容 | 入口 |
@@ -32,12 +34,12 @@ npm run dev
 | 首页布局与项目卡片 | [`frontend/src/pages/Home.tsx`](frontend/src/pages/Home.tsx) |
 | 首页 3D 名片 | [`Lanyard.tsx`](frontend/src/components/Lanyard/Lanyard.tsx) 为 React 入口；同目录 `scene.ts` 管生命周期，`simulation.ts` 管物理，`textures.ts` 管纹理；保留许可证 |
 | 项目名称、slug、封面、顺序、双语标签 | [`frontend/src/data/projects.ts`](frontend/src/data/projects.ts) |
-| 通用项目详情文案和画廊 | [`frontend/src/data/projectDetails.ts`](frontend/src/data/projectDetails.ts) |
+| 通用项目详情文案、图文章节和画廊 | [`frontend/src/data/projectDetails.ts`](frontend/src/data/projectDetails.ts)；`sections` 将章节标题、正文与配图绑定，页面和聊天共用 |
 | DataPilot 文案、链接、配图 | [`frontend/src/data/projects/dataPilot.ts`](frontend/src/data/projects/dataPilot.ts)，页面与聊天共用 |
 | 项目详情布局 | [`ProjectDetail.tsx`](frontend/src/pages/ProjectDetail.tsx) 分派；[`components/project/`](frontend/src/components/project/) 包含通用详情、DataPilot、画廊、图片查看器和相邻导航 |
 | 关于页文案与解析 | [`content/about/*.md`](frontend/src/content/about/)、[`parseAboutContent.ts`](frontend/src/content/about/parseAboutContent.ts)；[`content/about.ts`](frontend/src/content/about.ts) 负责加载与缓存 |
 | 关于页布局与时间线 | [`About.tsx`](frontend/src/pages/About.tsx) 组合 [`components/about/`](frontend/src/components/about/) 中的经历、项目卡片与时间线 |
-| 外部 Notion 博客入口 | [`Header.tsx`](frontend/src/components/Header.tsx)、[`SiteFooter.tsx`](frontend/src/components/SiteFooter.tsx) |
+| 外部 Notion 博客入口 | [`SiteFooter.tsx`](frontend/src/components/SiteFooter.tsx)；顶部导航不展示博客入口 |
 | 摄影内容 | [`frontend/src/pages/Photography.tsx`](frontend/src/pages/Photography.tsx)、[`frontend/public/data/instagram.json`](frontend/public/data/instagram.json) |
 | 导航、页脚、联系浮层、图标 | [`frontend/src/components/`](frontend/src/components/) |
 | AI 聊天界面与会话 | [`ChatbotOverlay.tsx`](frontend/src/components/ChatbotOverlay.tsx) 按需加载 [`ChatPanel.tsx`](frontend/src/components/chat/ChatPanel.tsx)；会话状态在 [`useChatThread.ts`](frontend/src/components/chat/useChatThread.ts) |
@@ -60,7 +62,7 @@ npm run dev
   ```
 
   章节 ID 为 `work`、`projects`、`education`、`contact`；条目 ID 在同一文件中唯一，同义条目跨语言保持一致，改标题或顺序时保留 ID。新增工作条目会自动展示，项目卡片跟随 `oceanbase` 条目；教育数据保留供聊天使用。重复或缺失 ID 会报错。
-- 博客由外部 Notion 承载，入口在导航与页脚；项目不再提供站内博客页面。
+- 博客由外部 Notion 承载，入口在页脚；顶部导航不展示博客入口，项目不再提供站内博客页面。
 - 聊天语料由本地项目、About 与翻译资源汇总，见 `buildSiteCorpus`。首次打开聊天时加载 `ChatPanel` 并生成当前语言语料；关闭浮层保留会话和进行中的流式响应。
 - 摄影读取本地 JSON 快照和图片；维护流程见 [`docs/instagram-sync.md`](docs/instagram-sync.md)。
 
