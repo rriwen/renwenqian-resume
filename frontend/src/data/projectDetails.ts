@@ -1468,21 +1468,414 @@ const details: Record<string, { en: ProjectDetailBlock; zh: ProjectDetailBlock }
   },
   agentops: {
     en: {
-      tags: ['Agent Operations', 'Observability', 'AI Product'],
-      paragraphs: [
-        'AgentOps is a workspace for operating AI Agents in production, from task visibility to debugging and iteration.',
-        'The experience brings run status, execution context, and failure recovery into one workflow so teams can improve Agent reliability over time.',
+      tags: [
+        "Agent Observability",
+        "Product Incubation",
+        "AI Interaction Design"
       ],
-      gallery: [{ src: '/images/work-6.webp', caption: 'AgentOps workspace concept' }],
+      overviewFacts: [
+        {
+          label: "Starting point",
+          value: "Customer POCs for conversational analytics"
+        },
+        {
+          label: "Product scope",
+          value: "Agent investigation across AI applications"
+        },
+        {
+          label: "Presented work",
+          value: "Product demo and DataPilot replay exploration"
+        }
+      ],
+      demoUrl: "https://aiops-phi.vercel.app/",
+      paragraphs: [
+        [
+          {
+            text: "The project began with a practical problem during customer POCs for conversational analytics: when AI execution went wrong, it was difficult to identify which step needed investigation. OpenObserve was introduced first, but interpreting traces was cumbersome in that usage context. Similar needs across several internal AI applications then prompted "
+          },
+          {
+            text: "the incubation of an Agent observability product",
+            bold: true
+          },
+          {
+            text: "."
+          }
+        ],
+        "The demo organizes application status, individual executions, and step-level evidence into an investigation workflow. A later exploration in DataPilot extends the same question to customers: how can replay help them understand what an agent did and how that process affected its output?"
+      ],
+      showCover: false,
+      sections: [
+        {
+          placement: "overview",
+          id: "product-preview",
+          legacyIds: [
+            "project-gallery"
+          ],
+          title: "Product interface overview",
+          hideTitle: true,
+          paragraphs: [],
+          images: [
+            {
+              src: "/images/agentops-overview.jpg",
+              caption: "Demo · Application switching and the Agent overview provide an entry point for investigation."
+            }
+          ]
+        },
+        {
+          id: "project-origin",
+          title: "The starting point: unexplained failures during a customer POC",
+          paragraphs: [
+            "The problem first emerged while running customer POCs for conversational analytics. An incorrect answer or an execution failure was visible, but the final output alone offered little help in understanding where the problem had occurred. Investigation required reconstructing the execution before deciding what to examine next.",
+            "The design needed to connect a problematic result to its execution, the step worth inspecting, and the evidence available there. The relationship between a task, its steps, and its investigation evidence became the focus of the solution."
+          ],
+          images: []
+        },
+        {
+          id: "openobserve-learning",
+          title: "Using an existing tool to clarify the design problem",
+          paragraphs: [
+            "The first response was to connect OpenObserve and use an existing product to inspect execution information. In that usage context, its presentation did not map directly to how the team understood Agent tasks. Reading traces was cumbersome, and interpreting the available information took considerable effort.",
+            [
+              {
+                text: "The experience clarified a design opportunity: "
+              },
+              {
+                text: "organize technical records around the execution of an Agent task",
+                bold: true
+              },
+              {
+                text: ". Investigation should make it easier to follow the task's structure, recognize the relevant step, and then open its details. This direction came from the team's experience with its own setup; it is not a general assessment of OpenObserve's capabilities."
+              }
+            ]
+          ],
+          images: []
+        },
+        {
+          id: "shared-product-need",
+          title: "From one project to a need shared across applications",
+          paragraphs: [
+            [
+              {
+                text: "As similar needs appeared in several internal AI applications, the opportunity expanded beyond the original conversational analytics project. The tasks differed, but "
+              },
+              {
+                text: "the investigation questions were closely related",
+                bold: true
+              },
+              {
+                text: ": which Agent needs attention, which execution should be inspected, what happened within it, and how did it end?"
+              }
+            ],
+            "The demo reflects this shared structure through application switching and an Agent overview. Request and error counts, latency, and status establish context before opening a run. The hierarchy connects applications, Agents, individual runs, and execution steps, while retaining each application’s task context."
+          ],
+          images: []
+        },
+        {
+          id: "decision-investigation-path",
+          title: "Narrow the scope to an execution worth investigating",
+          paragraphs: [
+            [
+              {
+                text: "An investigator may arrive without knowing which trace to open. The interface therefore supports narrowing the scope: review an Agent's operating state, identify an execution worth inspecting, and then examine its details. "
+              },
+              {
+                text: "Each level answers a different question and provides context for the next",
+                bold: true
+              },
+              {
+                text: "."
+              }
+            ],
+            "The trace list brings request rate, error, and duration trends together with the Agent, input, and output for individual executions. These details connect a run to its task, helping users choose where to investigate. The design intent is to reduce the effort of locating a relevant execution before reading its technical details."
+          ],
+          images: [
+            {
+              src: "/images/agentops-trace-list.jpg",
+              caption: "Demo · The trace list combines operating trends with task inputs and outputs to support run selection."
+            }
+          ]
+        },
+        {
+          id: "decision-execution-structure",
+          title: "Understand execution through hierarchy and time",
+          paragraphs: [
+            "Inside a run, the key question changes to how its steps relate. The demo provides trace, flame, and topology views, alongside a span tree and timeline, to expose execution structure and duration. Adjustable display depth lets users choose how much of the hierarchy to inspect. These views offer different perspectives on the same run, letting users select one that fits the question they are investigating before opening step-level details.",
+            [
+              {
+                text: "A selected span provides access to errors, attributes, events, links, and associated logs. This "
+              },
+              {
+                text: "connects an overview of the execution with evidence for a specific step",
+                bold: true
+              },
+              {
+                text: ". The current demo still includes many low-level technical spans; making task-level steps more prominent and managing information density remain important areas for further refinement."
+              }
+            ]
+          ],
+          images: [
+            {
+              src: "/images/agentops-execution-trace.jpg",
+              caption: "Demo · The span tree, timeline, and display depth expose the structure of a single execution."
+            }
+          ]
+        },
+        {
+          id: "decision-failure-context",
+          title: "Investigate errors, retries, and fallback in context",
+          paragraphs: [
+            "A failed step can be followed by retries and a fallback path. Understanding the final output therefore requires examining what happened before and after the failure, as well as the error itself.",
+            [
+              {
+                text: "One demo execution requests a daily sales report and an investigation of refund changes. Its trace shows a query error, repeated attempts, and a path that reads a previous snapshot before generating a fallback summary. The sequence helps explain "
+              },
+              {
+                text: "which path produced the output and which steps need further inspection",
+                bold: true
+              },
+              {
+                text: "."
+              },
+              {
+                text: " A fallback output also requires interpretation: what information did it use, which steps encountered errors, and what happened afterward?"
+              }
+            ],
+            "The span inspector keeps error details beside the execution context and provides access to logs. Users can investigate the failed call while retaining sight of its consequences for the wider task. The example illustrates the investigation workflow rather than an automatically determined root cause."
+          ],
+          images: [
+            {
+              src: "/images/agentops-error-inspector.jpg",
+              caption: "Demo · Error details are inspected alongside the query, retry, and fallback sequence."
+            }
+          ]
+        },
+        {
+          id: "validation-and-datapilot",
+          title: "From internal investigation to customer-facing replay",
+          paragraphs: [
+            "The current artifact is a product demo covering application overview, execution selection, and step-level investigation. Its effect on investigation time and comprehension still needs validation through real use, particularly when traces contain many technical steps.",
+            "The later DataPilot exploration brings execution replay into the customer experience. It asks which parts of a run help customers understand the completed work: the steps taken, the data used, exceptions encountered, and their implications for the result.",
+            [
+              {
+                text: "This extends the same design question to a different audience. Internal investigation needs detailed evidence; customer-facing replay needs "
+              },
+              {
+                text: "a deliberate selection and explanation of that evidence",
+                bold: true
+              },
+              {
+                text: ", expressed through the task the customer is trying to understand."
+              }
+            ]
+          ],
+          images: []
+        }
+      ],
+      gallery: []
     },
     zh: {
-      tags: ['Agent 运维', '可观测性', 'AI 产品'],
-      paragraphs: [
-        'AgentOps 是面向 AI Agent 生产运行的工作台，覆盖任务可见性、调试和持续迭代。',
-        '通过统一呈现运行状态、执行上下文和失败恢复路径，帮助团队持续提升 Agent 的稳定性与可控性。',
+      tags: [
+        "Agent 可观测",
+        "产品孵化",
+        "AI 交互设计"
       ],
-      gallery: [{ src: '/images/work-6.webp', caption: 'AgentOps 工作台概念' }],
-    },
+      overviewFacts: [
+        {
+          label: "项目起点",
+          value: "智能问数客户 POC"
+        },
+        {
+          label: "产品范围",
+          value: "跨应用的 Agent 执行排查"
+        },
+        {
+          label: "呈现内容",
+          value: "产品 Demo 与 DataPilot 回放探索"
+        }
+      ],
+      demoUrl: "https://aiops-phi.vercel.app/",
+      paragraphs: [
+        [
+          {
+            text: "项目起源于智能问数客户 POC 中的一次具体困难：AI 执行出错后，团队难以判断应该排查哪个环节。项目先接入 OpenObserve 辅助查看运行信息，随后在使用中发现 Trace 阅读繁琐、执行过程理解成本高。随着内部多个 AI 应用出现类似需求，"
+          },
+          {
+            text: "逐步孵化出 Agent 可观测产品",
+            bold: true
+          },
+          {
+            text: "。"
+          }
+        ],
+        "设计围绕应用概览、执行筛选与步骤核查组织排查路径。后续在 DataPilot 中，进一步探索面向客户的智能体回放，让客户理解 Agent 做了什么，以及执行过程如何影响最终结果。"
+      ],
+      showCover: false,
+      sections: [
+        {
+          placement: "overview",
+          id: "product-preview",
+          legacyIds: [
+            "project-gallery"
+          ],
+          title: "产品界面概览",
+          hideTitle: true,
+          paragraphs: [],
+          images: [
+            {
+              src: "/images/agentops-overview.jpg",
+              caption: "Demo · 应用切换与 Agent 概览，为不同 AI 应用提供一致的排查入口。"
+            }
+          ]
+        },
+        {
+          id: "project-origin",
+          title: "起点：客户 POC 中难以解释的异常",
+          paragraphs: [
+            "问题最早出现在智能问数的客户 POC 中。团队能够看到回答错误或执行异常，却难以仅凭最终结果判断问题发生在哪一步。继续排查之前，需要先还原这次执行的经过，才能确定接下来应该检查什么。",
+            "设计需要让参与排查的人从异常结果进入对应执行，找到值得核查的步骤，并查看相关信息。任务、执行步骤与排查依据之间的联系，成为后续方案的重点。"
+          ],
+          images: []
+        },
+        {
+          id: "openobserve-learning",
+          title: "从接入工具，到明确设计问题",
+          paragraphs: [
+            "早期先接入 OpenObserve，借助已有产品查看执行信息。在当时的使用方式下，它对 Agent 任务的表达不够直接，阅读 Trace 比较繁琐。排查人员需要在较多技术记录之间建立联系，再还原 Agent 做了什么，理解成本较高。",
+            [
+              {
+                text: "这段使用经历帮助项目明确了方向："
+              },
+              {
+                text: "围绕 Agent 的任务结构组织信息",
+                bold: true
+              },
+              {
+                text: "，让用户能够先理解执行经过，再进入具体步骤查看依据。自建产品的切入点来自实际排查中的理解负担，以及后续出现的内部共性需求。"
+              }
+            ]
+          ],
+          images: []
+        },
+        {
+          id: "shared-product-need",
+          title: "从单个项目，到跨应用的产品需求",
+          paragraphs: [
+            [
+              {
+                text: "随着公司内部多个 AI 应用出现类似需求，问题逐渐超出了智能问数项目本身。不同应用执行的任务各异，但"
+              },
+              {
+                text: "排查时需要回答的问题具有共性",
+                bold: true
+              },
+              {
+                text: "：哪个 Agent 值得关注、哪一次执行异常、内部经过了哪些步骤、最终如何结束。"
+              }
+            ],
+            "Demo 通过应用切换与 Agent 概览承接这一共性。请求与错误次数、延迟和状态帮助用户建立整体判断，再进入具体执行。产品围绕应用、Agent、单次执行和具体步骤组织信息，使不同应用拥有一致的排查入口，同时保留各自的任务内容。"
+          ],
+          images: []
+        },
+        {
+          id: "decision-investigation-path",
+          title: "逐步缩小范围，找到需要排查的执行",
+          paragraphs: [
+            [
+              {
+                text: "进入产品时，用户未必已经知道需要查看哪条 Trace。因此，排查路径需要支持逐步缩小范围：先了解 Agent 的运行情况，再筛选值得关注的执行，随后进入详情。"
+              },
+              {
+                text: "每一层信息都为下一步判断提供上下文",
+                bold: true
+              },
+              {
+                text: "。"
+              }
+            ],
+            "追踪列表将请求速率、错误和耗时趋势，与具体执行的 Agent、输入和输出放在同一视图中。用户可以把一条记录与实际任务联系起来，判断应当从哪里开始核查。设计目标是降低寻找目标执行的成本，让后续的细节阅读有明确对象。"
+          ],
+          images: [
+            {
+              src: "/images/agentops-trace-list.jpg",
+              caption: "Demo · 追踪列表结合运行趋势与任务输入、输出，帮助选择需要核查的执行。"
+            }
+          ]
+        },
+        {
+          id: "decision-execution-structure",
+          title: "用层级与时间轴理解执行过程",
+          paragraphs: [
+            "进入详情后，核心问题变成了这些步骤如何组成一次任务。Demo 提供 Trace 图、火焰图与拓扑图，结合 Span 树和时间轴表达执行结构与耗时关系。可调展示层级让用户选择当前需要关注的范围。这些视图分别承载不同的观察角度，用户可以围绕当前问题选择视图，并结合节点详情继续核查。",
+            [
+              {
+                text: "选中具体 Span 后，可以继续查看错误、属性、事件、链接与相关日志，"
+              },
+              {
+                text: "把整体经过和局部依据联系起来",
+                bold: true
+              },
+              {
+                text: "。当前界面仍包含较多底层技术节点，如何突出任务步骤、控制信息密度，是后续需要继续优化的部分。"
+              }
+            ]
+          ],
+          images: [
+            {
+              src: "/images/agentops-execution-trace.jpg",
+              caption: "Demo · Span 树、时间轴与展示层级，共同呈现一次执行内部的步骤关系。"
+            }
+          ]
+        },
+        {
+          id: "decision-failure-context",
+          title: "在完整链路中核查异常与降级",
+          paragraphs: [
+            [
+              {
+                text: "执行中的一个节点失败后，任务可能继续重试或进入降级路径。理解最终输出，需要结合异常前后的步骤，"
+              },
+              {
+                text: "核查任务如何继续、最后通过什么路径产生结果",
+                bold: true
+              },
+              {
+                text: "。"
+              }
+            ],
+            "Demo 中的一条示例任务要求生成销售日报并定位退款波动。链路展示了查询异常、多次重试，以及读取上一周期快照后生成降级摘要的过程。沿着这条路径，用户可以理解输出的来源，并找到需要进一步核查的环节。对排查而言，降级后的输出同样需要被理解：结果采用了哪些信息，哪些步骤发生异常，以及后续如何处理。",
+            "Span 详情将错误信息保留在执行上下文中，并提供查看日志的入口。用户既能深入检查具体调用，也能返回完整任务观察异常的后续影响。这条示例用于展示排查过程，具体原因仍需结合详情核查。"
+          ],
+          images: [
+            {
+              src: "/images/agentops-error-inspector.jpg",
+              caption: "Demo · 在执行上下文中查看错误详情，关联查询异常、重试与后续降级路径。"
+            }
+          ]
+        },
+        {
+          id: "validation-and-datapilot",
+          title: "从内部排错，延伸到客户回放",
+          paragraphs: [
+            "目前呈现的成果是产品 Demo，覆盖应用概览、执行筛选与步骤核查。它对排查耗时和理解成本的实际改善，仍需在真实使用中验证，尤其需要关注复杂链路中的信息负担。",
+            "后续在 DataPilot 中，进一步探索面向客户的智能体回放。设计问题转向：哪些步骤帮助客户理解任务完成情况，使用了哪些数据，遇到了什么异常，以及这些情况如何影响结果。",
+            [
+              {
+                text: "这一探索延续了对执行过程可理解性的关注。内部排查需要详细依据；面向客户的回放，则需要"
+              },
+              {
+                text: "选择和解释相关信息",
+                bold: true
+              },
+              {
+                text: "，将技术事件组织成客户能够理解的任务经过。"
+              }
+            ]
+          ],
+          images: []
+        }
+      ],
+      gallery: []
+    }
   },
 }
 

@@ -33,7 +33,7 @@ export const projects: Project[] = [
   {
     id: 2, slug: 'agentops', title: 'Agent 可观测产品', titleEn: 'Agent Observability',
     category: 'ai-products',
-    image: '/images/work-6.webp',
+    image: '/images/agentops-execution-trace.jpg',
     tags: { zh: ['Demo', '可观测性', '产品设计'], en: ['Demo', 'Observability', 'Product Design'] },
   },
   {
