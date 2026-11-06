@@ -1,13 +1,3 @@
-export function IconLightbulb({ lit }: { lit: boolean }) {
-  return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <path d="M8.5 16c0-1.8-2.5-2.6-2.5-6a6 6 0 0 1 12 0c0 3.4-2.5 4.2-2.5 6Z" fill={lit ? '#fbbf24' : 'none'} fillOpacity=".38" />
-      <path d="M9 19h6 M10 22h4 M12 16v-4 m-2-2 2 2 2-2" />
-      {lit && <path d="M12 1v1 M3 3l1 1 M21 3l-1 1 M1 10h1 M22 10h1" />}
-    </svg>
-  )
-}
-
 export function IconSidebarToggle({ expanded }: { expanded: boolean }) {
   return (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
