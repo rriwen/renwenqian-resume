@@ -133,7 +133,7 @@ Text2SQL 原型通过详情页 Demo 链接进入，由 `pages/SqlEditorPrototype
 - 关于页内容：`frontend/src/content/about/`
 - 静态图片：`frontend/public/images/`
 
-项目分类和双语标签直接保存在 `projects.ts` 的项目记录中，不依赖清单顺序。`projectCategories` 集中定义 `ai-products`、`data-tools`、`design-systems` 的顺序和双语名称，`getProjectGroups` 为侧栏提供统一分组。关于页 Markdown 的 `##` / `###` 标题使用 `<!-- id: stable-id -->` 隐藏注释；同文件 ID 唯一，同义内容跨语言保持一致。改标题、移动条目时保留 ID，新增工作经历会自动展示。章节使用 `work`、`projects`、`education`、`contact`；教育内容保留在语料中，页面当前不展示。纯解析位于 `content/about/parseAboutContent.ts`，加载与缓存位于 `content/about.ts`。
+项目分类和双语标签直接保存在 `projects.ts` 的项目记录中，不依赖清单顺序。`projectCategories` 集中定义 `ai-products`、`data-tools`、`design-systems` 的顺序和双语名称，`getProjectGroups` 为侧栏提供统一分组。关于页 Markdown 的 `##` / `###` 标题使用 `<!-- id: stable-id -->` 隐藏注释；同文件 ID 唯一，同义内容跨语言保持一致。改标题、移动条目时保留 ID，新增工作经历会自动展示。章节使用 `work`、`projects`、`education`、`contact`；教育经历在工作经历和联系方式之间展示学校、专业、学历与时间，并加入右侧目录；完整教育内容保留在聊天语料中。纯解析位于 `content/about/parseAboutContent.ts`，加载与缓存位于 `content/about.ts`。
 
 ### 内容与聊天接口
 

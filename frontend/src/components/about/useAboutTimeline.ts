@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-const TIMELINE_IDS = ['about-2026', 'experience', 'about-contact'] as const
+const TIMELINE_IDS = ['about-2026', 'experience', 'education', 'about-contact'] as const
 type TimelineId = (typeof TIMELINE_IDS)[number]
 export type TimelineEntry = { id: TimelineId; label: string }
 

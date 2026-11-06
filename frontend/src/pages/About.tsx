@@ -7,7 +7,7 @@ import { ProjectCards } from '../components/about/ProjectCards'
 import { WorkEntry, PROJECTS_WORK_ID } from '../components/about/WorkEntry'
 import { renderMarkdownInline } from '../components/about/renderMarkdownInline'
 import { useAboutTimeline, type TimelineEntry } from '../components/about/useAboutTimeline'
-import { anchorTarget, bodyText, contactLink, proseColumn, workArticleList } from '../components/about/styles'
+import { anchorTarget, bodyText, contactLink, proseColumn, workArticleList, workArticleTitle, workArticleMeta } from '../components/about/styles'
 
 function getContactHref(label: string, value: string): string | null {
   const normalized = label.toLowerCase()
@@ -28,6 +28,7 @@ export function About() {
   const timelineEntries: TimelineEntry[] = [
     { id: 'about-2026', label: locale === 'zh' ? '简介' : 'About' },
     { id: 'experience', label: locale === 'zh' ? '工作经历' : 'Experience' },
+    { id: 'education', label: locale === 'zh' ? '教育经历' : 'Education' },
     { id: 'about-contact', label: locale === 'zh' ? '联系方式' : 'Contact' },
   ]
 
@@ -67,6 +68,16 @@ export function About() {
           {!about.work.some((entry) => entry.id === PROJECTS_WORK_ID) && (
             <ProjectCards projects={about.projects} locale={locale} />
           )}
+        </section>
+
+        <section id="education" style={{ ...anchorTarget, marginTop: 'var(--space-12)', paddingTop: 'var(--space-8)' }}>
+          <h2 style={{ margin: '0 0 var(--space-8)', fontSize: 'var(--text-section)', fontWeight: 600 }}>
+            {locale === 'zh' ? '教育经历' : 'Education'}
+          </h2>
+          <div style={proseColumn}>
+            <h3 style={workArticleTitle}>{renderMarkdownInline(about.education.title)}</h3>
+            <p style={workArticleMeta}>{renderMarkdownInline(about.education.period)}</p>
+          </div>
         </section>
 
         <section

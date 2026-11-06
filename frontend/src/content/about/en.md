@@ -131,9 +131,9 @@ Achievements:
 
 ## Education <!-- id: education -->
 
-### Nanjing University of Posts and Telecommunications · B.S., Software Engineering <!-- id: njupt -->
+### Nanjing University of Posts and Telecommunications · Software Engineering <!-- id: njupt -->
 
-> 2012.09 - 2016.07
+> B.S. | 2012/09-2016/07
 
 - Coursework included advanced mathematics, data structures, algorithm analysis, computer networks, Android/iOS software development, databases, and related computer science topics.
 - Vice President of the New Media Society: content planning, collateral design, and publishing for the university’s official new media channels.

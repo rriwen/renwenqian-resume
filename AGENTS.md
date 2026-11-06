@@ -13,7 +13,7 @@
 - `data/projects.ts`：项目清单、稳定 slug、category 与双语标签；分类和标签属于项目记录，不能按数组位置另行关联。`projectCategories` 与 `getProjectGroups` 统一分类的顺序、双语名称和分组，供侧栏使用；分类顺序为 AI 产品、数据工具、设计工程，数据工具内数据库运维平台在数据库开发工具之前。`data/projectDetails.ts`：通用双语详情，`sections` 将章节标题、正文、可选表格与配图绑定，`subsections` 保存章节内的小标题、正文、圆点列表、可选表格与配图，页面和聊天共用；章节 ID 跨语言一致；小节的 `comparisonPlaceholder` 保存前后对比配图占位，桌面左旧右新、窄屏上下排列，准备说明不进入聊天语料。`data/projects/dataPilot.ts`：DataPilot 文案、链接与配图的唯一来源，详情页与聊天共用。
 - `content/about/*.md`：关于页双语内容；`content/about/parseAboutContent.ts`：纯解析；`content/about.ts`：加载与缓存。每个 `##` / `###` 标题须有 `<!-- id: stable-id -->`，同文件 ID 唯一、同义条目跨语言一致；改标题或顺序保留 ID。章节 ID 固定为 `work`、`projects`、`education`、`contact`。
 - 关于页与项目详情的刻度导航共用 `components/SectionAnchorNav.tsx`，仅 960px 及以上展示右侧刻度，窄屏隐藏；项目的 Hash 与章节高亮由 `components/project/ProjectAnchorNav.tsx` 管理；通用目录由 `data/projectAnchors.ts` 按实际内容生成，保留双语稳定 ID。详情不展示返回和相邻项目入口；Hash 跳转、刷新和浏览器历史需保持可用，DataPilot 深链接可切换到对应内容分组；`ReadingPageHeader` 顶部标题出现时同步展示 `DataPilotPartMenu` 下拉菜单，支持当前项标记、键盘与点击外部关闭，切换使用目标分组首节 Hash，保留刷新及前进后退。
-- `components/about/WorkEntry.tsx` 按 ID 保留特殊布局，项目卡片跟随 `oceanbase`，经历用循环展示。教育文案仍供聊天使用；不要恢复不可达的隐藏 UI 副本。
+- `components/about/WorkEntry.tsx` 按 ID 保留特殊布局，项目卡片跟随 `oceanbase`，经历用循环展示。教育经历在工作经历与联系方式之间展示学校、专业、学历和时间，复用 Markdown 数据并加入目录；完整教育文案仍供聊天使用。
 - `components/Lanyard/` 由联系弹窗打开时懒加载，展示可拖拽工牌动画，关闭时释放场景，首页不引用；`renderContainerRef` 指定整个弹窗为画布，本地布局框仅确定初始位置与大小，不限制拖拽范围。`Lanyard.tsx` 是 React 入口，`scene.ts` 管创建与清理，`simulation.ts` 管物理；纹理、几何、材质和配置分别维护。
 - 博客由外部 Notion 承载，链接保留在 `components/SiteSidebar.tsx` 但入口暂时隐藏，顶部导航也不展示；无站内博客或数据库内容接口。
 - 「一些尝试」使用 `/experiments` 路由，`pages/Experiments.tsx` 按需加载，暂时仅展示标题和「内容准备中。」；原路由可直达，展开侧栏、收起图标栏与移动端抽屉均不展示入口。
