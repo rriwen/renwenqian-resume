@@ -1,5 +1,5 @@
 import type { IncomingMessage, ServerResponse } from 'node:http'
-import { CHAT_INPUT_TOKENS, CHAT_MAX_REQUEST_BYTES, CHAT_REPLY_TOKENS, estimateMessagesTokens } from '../frontend/src/lib/chat/context'
+import { CHAT_INPUT_TOKENS, CHAT_MAX_REQUEST_BYTES, CHAT_REPLY_TOKENS, estimateMessagesTokens } from '../frontend/src/lib/chat/context.js'
 
 export const config = { maxDuration: 60 }
 
