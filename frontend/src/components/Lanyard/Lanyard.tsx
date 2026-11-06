@@ -30,6 +30,8 @@ const Lanyard = ({
   elasticity = 0.5,
   breeze = 0.5,
   interactive = true,
+  fullViewport = false,
+  renderContainerRef,
   intro = true,
   className = '',
   style
@@ -58,6 +60,7 @@ const Lanyard = ({
     elasticity,
     breeze,
     interactive,
+    fullViewport,
     intro
   };
 
@@ -69,14 +72,14 @@ const Lanyard = ({
     const container = containerRef.current;
     if (!container) return undefined;
 
-    const scene = createLanyardScene(container, () => settingsRef.current!);
+    const scene = createLanyardScene(container, () => settingsRef.current!, renderContainerRef?.current ?? undefined);
     if (!scene) return undefined;
     applyRef.current = scene.apply;
     return () => {
       applyRef.current = null;
       scene.dispose();
     };
-  }, []);
+  }, [fullViewport, renderContainerRef]);
 
   return <div ref={containerRef} className={`lanyard ${className}`.trim()} style={style} />;
 };

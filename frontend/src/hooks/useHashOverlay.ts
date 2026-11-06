@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 /** Support direct hashes, native history and React Router navigation alike. */
-export function useHashOverlay(hash: string) {
+export function useHashOverlay(hash: string, { closeOnEscape = true } = {}) {
   const location = useLocation()
   const navigate = useNavigate()
   const [open, setOpen] = useState(() => window.location.hash === hash)
@@ -21,10 +21,10 @@ export function useHashOverlay(hash: string) {
     navigate({ pathname: window.location.pathname, search: window.location.search, hash: '' })
   }, [navigate])
   useEffect(() => {
-    if (!open) return
+    if (!open || !closeOnEscape) return
     const onKey = (event: KeyboardEvent) => { if (event.key === 'Escape') close() }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [open, close])
+  }, [open, close, closeOnEscape])
   return { open, close }
 }

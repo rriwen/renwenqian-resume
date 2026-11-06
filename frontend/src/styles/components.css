@@ -1,11 +1,14 @@
 /* Keep this order: shared layout overrides follow the component rules. */
 @import './components/datapilot.css';
+@import './components/composer.css';
 @import './components/home.css';
-@import './components/footer.css';
 @import './components/header.css';
+@import './components/page-header.css';
 @import './components/project-detail.css';
+@import './components/project-architecture.css';
 @import './components/about.css';
 @import './components/chatbot.css';
+@import './components/popconfirm.css';
 @import './components/loading.css';
 @import './components/photography.css';
 @import './components/layout.css';

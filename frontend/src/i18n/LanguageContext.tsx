@@ -1,47 +1,16 @@
-import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
+import { createContext, useContext, type ReactNode } from 'react'
 import { translations, type Locale, type Messages } from './translations'
-
-const STORAGE_KEY = 'as4x-locale'
-
-function readStoredLocale(): Locale {
-  try {
-    const v = localStorage.getItem(STORAGE_KEY)
-    if (v === 'zh' || v === 'en') return v
-  } catch {
-    /* ignore */
-  }
-  return 'zh'
-}
 
 type LanguageContextValue = {
   locale: Locale
-  setLocale: (l: Locale) => void
   m: Messages
 }
 
 const LanguageContext = createContext<LanguageContextValue | null>(null)
+const language: LanguageContextValue = { locale: 'zh', m: translations.zh }
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [locale, setLocaleState] = useState<Locale>(readStoredLocale)
-
-  const setLocale = (l: Locale) => {
-    setLocaleState(l)
-    try {
-      localStorage.setItem(STORAGE_KEY, l)
-    } catch {
-      /* ignore */
-    }
-  }
-
-  const m = translations[locale]
-
-  useEffect(() => {
-    document.documentElement.lang = locale === 'zh' ? 'zh-CN' : 'en'
-  }, [locale])
-
-  const value = useMemo(() => ({ locale, setLocale, m }), [locale])
-
-  return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>
+  return <LanguageContext.Provider value={language}>{children}</LanguageContext.Provider>
 }
 
 export function useLanguage() {

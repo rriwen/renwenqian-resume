@@ -13,8 +13,8 @@ export function ProjectDetail() {
   const detail = project ? getProjectDetail(project.slug, locale) : undefined
 
   useEffect(() => {
-    document.title = project ? `${getProjectTitle(project, locale)} | REN WENQIAN` : m.home.title
-  }, [project, locale, m.home.title])
+    document.title = project ? `${getProjectTitle(project, locale)} | ${m.header.name}` : m.home.title
+  }, [project, locale, m.home.title, m.header.name])
 
   if (!project || !detail) {
     return (
@@ -28,7 +28,7 @@ export function ProjectDetail() {
   }
 
   if (project.slug === 'dataagent') {
-    return <DataPilotCaseStudy key={project.slug} project={project} locale={locale} />
+    return <DataPilotCaseStudy key={project.slug} locale={locale} />
   }
 
   return <StandardProjectDetail key={project.slug} project={project} detail={detail} />

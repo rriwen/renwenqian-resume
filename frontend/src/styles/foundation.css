@@ -33,10 +33,13 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { border-color
 .empty-state { padding-block: var(--space-12); color: var(--muted); font-size: var(--text-base); }
 
 .contact-overlay { position: fixed; inset: 0; z-index: 200; display: grid; place-items: center; overflow-y: auto; padding: var(--space-5); background: var(--overlay-bg); backdrop-filter: blur(10px); }
-.contact-panel { width: min(420px, 100%); max-height: calc(100dvh - 2.5rem); overflow-y: auto; padding: var(--space-8); border: 1px solid var(--rule); border-radius: var(--radius-lg); background: var(--surface); color: var(--text); box-shadow: var(--shadow-overlay); }
-.contact-heading { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); }
-.contact-heading h2 { margin: 0; font-size: var(--text-xl); }
-.contact-panel > p { margin: var(--space-5) 0; color: var(--muted); }
+.contact-panel { position: relative; isolation: isolate; display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); align-items: center; gap: var(--space-6); width: min(640px, 100%); max-height: calc(100dvh - 2.5rem); overflow-y: auto; padding: var(--space-10); border: 1px solid var(--rule); border-radius: var(--radius-lg); background: var(--surface); color: var(--text); box-shadow: var(--shadow-overlay); }
+.contact-dismiss { min-width: 112px; margin-top: var(--space-6); border-radius: var(--radius-pill); }
+.contact-copy { position: relative; z-index: 1; min-width: 0; pointer-events: none; }
+.contact-copy h2 { margin: 0; font-size: var(--text-xl); }
+.contact-copy .contact-details { margin-top: var(--space-5); }
+.contact-lanyard { height: 320px; min-width: 0; }
 .contact-details { display: grid; gap: var(--space-2); overflow-wrap: anywhere; }
 .contact-details a { text-decoration: underline; text-underline-offset: 4px; }
-.contact-panel > .ui-button { width: 100%; margin-top: var(--space-6); }
+.contact-copy .contact-details > * { justify-self: start; pointer-events: auto; }
+.contact-dismiss { pointer-events: auto; }

@@ -1,4 +1,4 @@
-# What I Do
+# About Me
 
 I'm a senior product designer with a software engineering background and seven years of enterprise product design experience. Over the past three years, I've focused on AI products and data tools.
 
@@ -15,8 +15,8 @@ Ant Group · OceanBase
 > Aug 2021 – Nov 2026
 
 - **Product planning and customer validation:** Contributed to AI analytics requirements planning, identifying shared needs through customer conversations, POC demos, and scenario validation. Proposed and drove requirements for multi-turn conversations and observability features, iterated on solutions, and supported delivery to **5+ paying customers**.
-- **Agent product and experience design:** Led multi-turn Agent conversation and analytics application generation experiences. Drove implementation of solutions for understanding requirements, checking results, and making human corrections, helping increase adoption of generated applications (**15% → 60%**). Designed Agent replay and incubated an Agent observability platform based on on-site customer troubleshooting needs.
-- **Interaction refinement for professional tools:** Designed core workflows for a MaaS platform, SQL editor, task orchestration, data visualization, and database operations platform. Used user research to prioritize improvements and coordinated implementation with product and engineering teams. Self-service completion on core database installation and migration workflows increased **15% → 75%**, and data tool satisfaction rose **4.7 → 6.2 (out of 7)**.
+- **Agent product design:** Led multi-turn Agent conversation and analytics application generation experiences. Drove implementation of solutions for understanding requirements, checking results, and making human corrections, helping increase adoption of generated applications (**15% → 60%**). Designed Agent replay and incubated an Agent observability platform based on on-site customer troubleshooting needs.
+- **Interaction refinement for professional tools:** Designed core workflows for a MaaS platform, SQL editor, task orchestration, data visualization, and database operations platform. Used user research to prioritize improvements and coordinated implementation with product and engineering teams. Following the migration redesign, new-user task-creation completion was **75%**, and data tool satisfaction rose **4.7 → 6.2 (out of 7)**.
 - **Design engineering and code delivery:** Led design token, AI component library, and Skill development. Brought automated visual QA and a shared collaboration workflow into practice across **5+ teams**, and delivered page and component code with AI-assisted development.
 
 ### Product Designer <!-- id: ecidi -->
@@ -83,7 +83,6 @@ Responsibilities:
 - **Agent Ready component library:** Built a library for AI-assisted development, documenting component semantics, properties, states, usage scenarios, and code examples so agents could understand, select, and reuse components consistently.
 - Mapped Figma components, variants, and interaction states to code components with Figma Code Connect.
 - Built a component-library Skill and authored DESIGN.md for the AI Native workflow, covering component properties, page structure, layout, responsive behavior, and interaction constraints.
-- Designed automated visual acceptance with baselines, comparison rules, and feedback loops, then partnered with design and frontend teams on pilots and iteration.
 - Applied Skills and the component library to AI analytics Q&A, the memory plugin, and product websites, delivering page and component code.
 
 Achievements:
@@ -98,17 +97,17 @@ Achievements:
 
 > Jan 2022 – Jun 2024
 
-Project background: The platform provides enterprise databases and supporting management tools that help technical teams install databases, migrate data, and manage daily operations. The platform aimed to deliver a self-service experience in “three steps, five minutes,” but users still relied heavily on technical support for installation and migration, with a self-service completion rate of just 15%.
+Project background: The platform provides enterprise databases and supporting management tools that help technical teams install databases, migrate data, and manage daily operations. The platform aimed to deliver a self-service experience in “three steps, five minutes,” but users still relied heavily on technical support for installation and migration.
 
-Goal: Improve installation and migration experiences to lower the learning curve, increase self-service completion, and reduce support costs.
+Goal: Diagnose issues across the self-service journey, then focus on data migration to make task creation and object configuration easier to complete independently.
 
 Responsibilities:
-- **Usability issue diagnosis:** Established a task completion baseline through user testing with a sample of users. Combined user interviews and journey mapping to identify friction in database installation and migration, prioritizing improvements based on these findings and business impact.
-- **Core workflow redesign:** Redesigned the product experience for database installation and data migration. Created onboarding guidance to clarify configuration requirements, connected migration steps, and redesigned data selection interactions to reduce the effort required to learn and complete complex tasks.
-- **Validation and delivery:** Coordinated product and engineering resources to complete core workflow designs and user testing in a one-week design sprint, moving the solution into development and delivery. Built analytics dashboards to track self-service completion and inform subsequent iterations.
+- **End-to-end experience diagnosis:** Mapped issues from product discovery through trial and ordering to database connection and migration. Combined frontline SA feedback with event instrumentation along the migration-task creation flow to identify friction.
+- **Migration workflow redesign:** Focused on data migration, bringing data-source creation, progress saving, and contextual help into the creation flow. Used rule forms, mapping previews, and aggregation feedback to reduce the learning and operating effort of object configuration.
+- **Validation:** Conducted user testing with an interactive prototype and used event instrumentation to observe task-creation completion after optimization, informing further iterations.
 
 Achievements:
-- Core-flow self-service completion **15% → 75%**, reducing technical support costs by **20%**.
+- After optimization, new-user task-creation completion was **75%**; before optimization, experienced-user completion was **16.8%**. Both measurements use event instrumentation for the same completion behavior, but cover different time windows and user cohorts, so they are reported as separate observations.
 
 ### Data Development Tools <!-- id: data-development -->
 

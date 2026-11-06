@@ -1,0 +1,32 @@
+.popconfirm {
+  position: fixed;
+  inset: auto;
+  box-sizing: border-box;
+  width: 232px;
+  max-width: calc(100vw - 24px);
+  margin: 0;
+  padding: var(--space-4);
+  border: 1px solid var(--control-border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: 0 8px 28px color-mix(in srgb, var(--text) 16%, transparent);
+  overflow: visible;
+}
+.popconfirm-arrow {
+  position: absolute;
+  top: -5px;
+  width: 9px;
+  height: 9px;
+  border: 1px solid var(--control-border);
+  border-right: 0;
+  border-bottom: 0;
+  background: var(--surface);
+  transform: translateX(-50%) rotate(45deg);
+}
+.popconfirm[data-side='top'] .popconfirm-arrow { top: auto; bottom: -5px; transform: translateX(-50%) rotate(225deg); }
+.popconfirm-title, .popconfirm-error { margin: 0 0 var(--space-3); font-size: var(--text-sm); line-height: 1.5; }
+.popconfirm-error { color: var(--danger); }
+.popconfirm-actions { display: flex; justify-content: flex-end; gap: var(--space-2); }
+.popconfirm-actions .ui-button { min-height: 32px; padding: var(--space-1) var(--space-3); border-radius: var(--radius-pill); font-size: var(--text-xs); }
+.popconfirm-danger { color: var(--danger); }

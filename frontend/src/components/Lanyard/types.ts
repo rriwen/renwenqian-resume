@@ -1,4 +1,4 @@
-import type { CSSProperties } from 'react';
+import type { CSSProperties, RefObject } from 'react';
 import type * as THREE from 'three';
 
 export type Orientation = 'portrait' | 'landscape';
@@ -35,6 +35,9 @@ export interface LanyardProps {
   elasticity?: number;
   breeze?: number;
   interactive?: boolean;
+  fullViewport?: boolean;
+  /** Render across this element while retaining the local frame as the resting position. */
+  renderContainerRef?: RefObject<HTMLElement>;
   intro?: boolean;
   className?: string;
   style?: CSSProperties;
@@ -60,6 +63,7 @@ export interface Settings {
   elasticity: number;
   breeze: number;
   interactive: boolean;
+  fullViewport: boolean;
   intro: boolean;
 }
 

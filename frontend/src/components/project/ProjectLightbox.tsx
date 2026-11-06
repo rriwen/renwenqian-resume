@@ -15,6 +15,7 @@ type Props = {
 export function ProjectLightbox({ items, index, onChange, onClose, returnFocusTo }: Props) {
   const { locale, m } = useLanguage()
   const galleryLen = items.length
+  const region = items[index].sourceRegion
   const dialogRef = useRef<HTMLDivElement>(null)
   const [lightboxIntrinsic, setLightboxIntrinsic] = useState<{ w: number; h: number } | null>(null)
 
@@ -176,7 +177,11 @@ export function ProjectLightbox({ items, index, onChange, onClose, returnFocusTo
           minHeight: 0,
         }}
       >
-        <img
+        {region ? (
+          <div style={{ position: 'relative', overflow: 'hidden', flexShrink: 0, width: `min(calc(100vw - 3rem), calc((100dvh - 9rem) * ${region.width / region.height}))`, aspectRatio: `${region.width} / ${region.height}`, borderRadius: 'var(--radius-sm)', background: '#fff' }}>
+            <img src={items[index].src} alt={items[index].caption} style={{ position: 'absolute', display: 'block', maxWidth: 'none', width: `${100 * region.sourceWidth / region.width}%`, height: 'auto', left: `${-100 * region.x / region.width}%`, top: `${-100 * region.y / region.height}%` }} />
+          </div>
+        ) : <img
           key={index}
           src={items[index].src}
           alt={items[index].caption}
@@ -199,14 +204,14 @@ export function ProjectLightbox({ items, index, onChange, onClose, returnFocusTo
             objectPosition: 'center',
             display: 'block',
             borderRadius: 'var(--radius-sm)',
-            boxShadow: 'var(--shadow-overlay)',
+            boxShadow: items[index].transparentBackground ? 'none' : 'var(--shadow-overlay)',
             ...(isGifSrc(items[index].src)
               ? {
                   imageRendering: 'smooth',
                 }
               : {}),
           }}
-        />
+        />}
         <p
           style={{
             margin: 0,

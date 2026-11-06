@@ -1,0 +1,138 @@
+figure.project-architecture {
+  --architecture-label-width: 112px;
+  --architecture-column-gap: var(--space-5);
+  --architecture-muted: color-mix(in srgb, var(--muted) 60%, var(--text));
+  min-width: 0;
+  margin: 0;
+  color: var(--text);
+  container-type: inline-size;
+}
+
+.project-architecture .project-architecture-layers {
+  display: grid;
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.project-architecture .project-architecture-layer {
+  display: grid;
+  grid-template-columns: var(--architecture-label-width) minmax(0, 1fr);
+  align-items: center;
+  gap: var(--architecture-column-gap);
+  min-width: 0;
+  margin: 0;
+  padding: var(--space-5);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--architecture-layer-color, var(--accent)) 10%, var(--surface));
+}
+
+.project-architecture-layer--assets {
+  --architecture-layer-color: var(--architecture-assets);
+}
+
+.project-architecture-layer--guidance {
+  --architecture-layer-color: var(--architecture-guidance);
+}
+
+.project-architecture-layer--delivery {
+  --architecture-layer-color: var(--architecture-delivery);
+}
+
+.project-architecture-layer--applications {
+  --architecture-layer-color: var(--architecture-applications);
+}
+
+.project-architecture-layer-label {
+  display: grid;
+  gap: var(--space-2);
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.project-architecture-layer-title {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-ui);
+}
+
+.project-architecture-layer-description {
+  color: var(--architecture-muted);
+  font-size: var(--text-xs);
+  line-height: var(--leading-ui);
+}
+
+.project-architecture .project-architecture-nodes {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  gap: var(--space-3);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.project-architecture .project-architecture-node {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space-2);
+  min-width: 0;
+  min-height: 84px;
+  box-sizing: border-box;
+  margin: 0;
+  padding: var(--space-3);
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--architecture-layer-color, var(--accent)) 28%, var(--surface));
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.project-architecture-node-title {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  line-height: var(--leading-ui);
+}
+
+.project-architecture-node-description {
+  color: var(--architecture-muted);
+  font-size: var(--text-xs);
+  line-height: var(--leading-ui);
+}
+
+.project-architecture .project-architecture-layer--applications {
+  padding-block: var(--space-4);
+}
+
+.project-architecture-layer--applications .project-architecture-node {
+  min-height: 48px;
+}
+
+/* Leave room for the fixed reading anchors beside a narrow desktop column. */
+@media (min-width: 960px) and (max-width: 1100px) {
+  figure.project-architecture { margin-inline-end: var(--space-6); }
+}
+
+@container (max-width: 600px) {
+  .project-architecture .project-architecture-layer {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-4);
+    padding: var(--space-4);
+  }
+
+  .project-architecture-layer-label { gap: var(--space-1); }
+
+  .project-architecture .project-architecture-nodes {
+    grid-auto-flow: row;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-2);
+  }
+
+  .project-architecture .project-architecture-node {
+    min-height: 0;
+    gap: var(--space-1);
+    text-align: left;
+  }
+}

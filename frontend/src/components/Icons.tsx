@@ -1,3 +1,83 @@
+export function IconSidebarToggle({ expanded }: { expanded: boolean }) {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      {expanded && <path d="M9.5 4.5H6a3 3 0 0 0-3 3v9a3 3 0 0 0 3 3h3.5Z" fill="currentColor" fillOpacity=".22" stroke="none" />}
+      <rect x="3" y="4.5" width="18" height="15" rx="3" />
+      <path d="M9.5 4.5v15" />
+    </svg>
+  )
+}
+
+export function IconFolder({ size = 18 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M3 7a2.5 2.5 0 0 1 2.5-2.5h3.6a2 2 0 0 1 1.4.6L12 6.6a2 2 0 0 0 1.4.6h5.1A2.5 2.5 0 0 1 21 9.7v7.8a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 17.5Z" />
+    </svg>
+  )
+}
+
+export function IconSparkle({ size = 18 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M12 3c1.2 5.6 3.4 7.8 9 9-5.6 1.2-7.8 3.4-9 9-1.2-5.6-3.4-7.8-9-9 5.6-1.2 7.8-3.4 9-9Z" />
+    </svg>
+  )
+}
+
+export function IconTerminal({ size = 18 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <rect x="3" y="4.5" width="18" height="15" rx="2.5" />
+      <path d="m7 9 3 3-3 3 M13 15h4" />
+    </svg>
+  )
+}
+
+export function IconPalette({ size = 18 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M12 3a9 9 0 1 0 0 18h1.2a2.8 2.8 0 0 0 2.2-4.5 1.4 1.4 0 0 1 1.1-2.3H18a3 3 0 0 0 3-3C21 6.7 17 3 12 3Z" />
+      <circle cx="7.4" cy="10.4" r="1" fill="currentColor" stroke="none" />
+      <circle cx="10.4" cy="6.8" r="1" fill="currentColor" stroke="none" />
+      <circle cx="15" cy="7.6" r="1" fill="currentColor" stroke="none" />
+    </svg>
+  )
+}
+
+export function IconNewChat({ size = 18 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M6 4h12a3 3 0 0 1 3 3v8a3 3 0 0 1-3 3H8l-5 3V7a3 3 0 0 1 3-3Z" />
+    </svg>
+  )
+}
+
+export function IconFileText({ size = 18 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M13.2 3H7a2.5 2.5 0 0 0-2.5 2.5v13A2.5 2.5 0 0 0 7 21h10a2.5 2.5 0 0 0 2.5-2.5V9.3a2 2 0 0 0-.6-1.4l-4.3-4.3a2 2 0 0 0-1.4-.6Z" />
+      <path d="M13 3v4a2 2 0 0 0 2 2h4.5" />
+    </svg>
+  )
+}
+
+export function IconPuzzle({ size = 18 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M9 5V3.5a2.5 2.5 0 0 1 5 0V5h3a2 2 0 0 1 2 2v3h1.5a2.5 2.5 0 0 1 0 5H19v4a2 2 0 0 1-2 2h-3v-1.5a2.5 2.5 0 0 0-5 0V21H5a2 2 0 0 1-2-2v-4h1.5a2.5 2.5 0 0 0 0-5H3V7a2 2 0 0 1 2-2Z" />
+    </svg>
+  )
+}
+
+export function IconCamera({ size = 18 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M8.1 5.1A2 2 0 0 1 9.8 4h4.4a2 2 0 0 1 1.7 1.1L17 7h2a2.5 2.5 0 0 1 2.5 2.5v8A2.5 2.5 0 0 1 19 20H5a2.5 2.5 0 0 1-2.5-2.5v-8A2.5 2.5 0 0 1 5 7h2Z" />
+      <circle cx="12" cy="13.5" r="3.5" />
+    </svg>
+  )
+}
+
 export function IconClose({ size = 16 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden>
@@ -8,9 +88,26 @@ export function IconClose({ size = 16 }: { size?: number }) {
 
 export function IconMail({ size = 14 }: { size?: number }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
-      <rect x="2" y="4" width="20" height="16" rx="2" />
-      <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <rect x="3" y="5" width="18" height="14" rx="2.5" />
+      <path d="m3 7 7.9 5.1a2 2 0 0 0 2.2 0L21 7" />
+    </svg>
+  )
+}
+
+export function IconSun({ size = 18 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <circle cx="12" cy="12" r="4" />
+      <path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42" />
+    </svg>
+  )
+}
+
+export function IconMoon({ size = 18 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+      <path d="M20.5 13.2A8.7 8.7 0 0 1 10.8 3.5a8.7 8.7 0 1 0 9.7 9.7Z" />
     </svg>
   )
 }

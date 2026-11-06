@@ -1,6 +1,8 @@
-import { Fragment, useEffect } from 'react'
+import { Fragment, useEffect, useRef } from 'react'
 import { getAboutContent } from '../content/about'
 import { useLanguage } from '../i18n/LanguageContext'
+import { SectionAnchorNav } from '../components/SectionAnchorNav'
+import { ReadingPageHeader } from '../components/ReadingPageHeader'
 import { ProjectCards } from '../components/about/ProjectCards'
 import { WorkEntry, PROJECTS_WORK_ID } from '../components/about/WorkEntry'
 import { renderMarkdownInline } from '../components/about/renderMarkdownInline'
@@ -20,6 +22,8 @@ function getContactHref(label: string, value: string): string | null {
 export function About() {
   const { m, locale } = useLanguage()
   const about = getAboutContent(locale)
+  const titleRef = useRef<HTMLHeadingElement>(null)
+  const title = renderMarkdownInline(about.heading)
   const { activeTimelineId, navigateTimeline } = useAboutTimeline()
   const timelineEntries: TimelineEntry[] = [
     { id: 'about-2026', label: locale === 'zh' ? '简介' : 'About' },
@@ -33,9 +37,10 @@ export function About() {
 
   return (
     <>
+      <ReadingPageHeader title={title} titleRef={titleRef} />
       <main className="page-shell about-page">
         <div id="about-2026" style={{ ...anchorTarget, position: 'relative', marginBottom: 'var(--space-6)' }}>
-          <h1 className="page-title">{renderMarkdownInline(about.heading)}</h1>
+          <h1 ref={titleRef} className="page-title">{title}</h1>
         </div>
 
         <div style={proseColumn}>
@@ -94,28 +99,12 @@ export function About() {
         </section>
       </main>
 
-      <nav className="about-timeline-nav" aria-label={m.about.timeline.navAria}>
-        <ul className="about-timeline-list">
-          {timelineEntries.map(({ id, label }) => (
-            <li key={id} className="about-timeline-item about-timeline-item-section">
-              <a
-                href={`#${id}`}
-                className={activeTimelineId === id ? 'about-timeline-link active' : 'about-timeline-link'}
-                aria-label={label}
-                onClick={(e) => {
-                  e.preventDefault()
-                  navigateTimeline(id)
-                }}
-              >
-                <span className="about-timeline-tip" aria-hidden>
-                  {label}
-                </span>
-                <span className="about-timeline-tick" aria-hidden />
-              </a>
-            </li>
-          ))}
-        </ul>
-      </nav>
+      <SectionAnchorNav
+        sections={timelineEntries.map(({ id, label }) => ({ id, title: label }))}
+        activeId={activeTimelineId}
+        label={m.about.timeline.navAria}
+        onNavigate={navigateTimeline}
+      />
     </>
   )
 }

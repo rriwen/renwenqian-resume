@@ -6,8 +6,8 @@
 
 .datapilot-case-shell {
   width: 100%;
-  max-width: none;
-  margin: 0;
+  max-width: calc(var(--detail-prose-width) + var(--page-gutter) * 2);
+  margin-inline: auto;
 }
 
 .datapilot-case-hero {
@@ -17,7 +17,7 @@
 
 .datapilot-case-hero h1 {
   max-width: 900px;
-  margin: 0 0 1.75rem;
+  margin: 0 0 var(--space-3);
   font-weight: var(--weight-medium);
   letter-spacing: 0;
   font-size: var(--text-title);
@@ -69,6 +69,9 @@
   font-size: inherit;
 }
 
+.datapilot-meta.project-case-tags { margin: 0 0 var(--space-6); }
+.project-case-tags + .datapilot-hero-copy { margin-top: 0; }
+
 .datapilot-part-tabs {
   display: inline-flex;
   gap: var(--space-1);
@@ -94,6 +97,52 @@
   color: var(--page-bg);
 }
 
+.datapilot-header-switcher { position: relative; display: inline-flex; max-width: 100%; font-size: var(--text-sm); }
+.datapilot-header-switcher-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  max-width: 100%;
+  height: var(--control-height);
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-md);
+  color: var(--text);
+  font-size: inherit;
+}
+.datapilot-header-switcher-trigger > span { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.datapilot-header-switcher-trigger > svg { flex: none; transition: transform var(--motion-fast); }
+.datapilot-header-switcher-trigger[aria-expanded='true'] > svg { transform: rotate(180deg); }
+.datapilot-header-switcher-trigger:is(:hover, [aria-expanded='true']) { background: var(--hover-bg); }
+.datapilot-header-menu {
+  position: absolute;
+  top: calc(100% + var(--space-2));
+  left: 0;
+  z-index: 1;
+  width: max-content;
+  min-width: 100%;
+  padding: var(--space-1);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+.datapilot-header-menu button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-6);
+  width: 100%;
+  min-height: var(--control-height);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-size: var(--text-sm);
+  white-space: nowrap;
+  text-align: left;
+}
+.datapilot-header-menu button:is(:hover, :focus-visible, [aria-checked='true']) { background: var(--hover-bg); }
+.datapilot-header-menu button:focus-visible { outline-offset: -2px; }
+
 .datapilot-case-layout {
   display: block;
   padding: var(--section-gap) 0 0;
@@ -105,7 +154,8 @@
 }
 
 .datapilot-module {
-  scroll-margin-top: var(--header-clearance);
+  /* The document already reserves the reading header with scroll-padding-top. */
+  scroll-margin-top: 0;
   padding: 0 0 var(--section-gap);
 }
 
@@ -328,43 +378,5 @@
 
 .datapilot-toc a:hover {
   color: var(--text);
-}
-
-.datapilot-adjacent {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--space-8);
-  width: 100%;
-  margin-top: var(--space-16);
-  padding-top: var(--space-6);
-  border-top: 1px solid var(--rule);
-}
-
-.datapilot-adjacent div {
-  min-width: 0;
-}
-
-.datapilot-adjacent .is-next {
-  text-align: right;
-}
-
-.datapilot-adjacent span {
-  display: block;
-  margin-bottom: .45rem;
-  color: var(--muted);
-  font-size: var(--text-xs);
-}
-
-.datapilot-adjacent a {
-  color: var(--text);
-  font-size: var(--text-base);
-  font-weight: var(--weight-semibold);
-  line-height: 1.4;
-  text-decoration: none;
-}
-
-.datapilot-adjacent a:hover {
-  text-decoration: underline;
-  text-underline-offset: 4px;
 }
 

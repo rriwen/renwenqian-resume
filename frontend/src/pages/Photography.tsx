@@ -34,7 +34,7 @@ export function Photography() {
   const [feed, setFeed] = useState<InstagramFeed | null>(null)
 
   useEffect(() => {
-    document.title = `${locale === 'zh' ? '摄影' : 'Photography'} | REN WENQIAN`
+    document.title = `${locale === 'zh' ? '摄影' : 'Photography'} | ${locale === 'zh' ? '泗澄' : 'SICHENG'}`
   }, [locale])
 
   useEffect(() => {

@@ -56,15 +56,15 @@ test('chat transport passes cancellation and sends only server-supported fields'
   assert.deepEqual(requestBody, {stream:true, messages:[{role:'system',content:'system\n\n---\n\nfacts'}, {role:'user',content:'hi'}]})
 })
 
-test('invalid persisted history is rejected and outbound history fits the API limit', () => {
+test('invalid persisted history is rejected and memory is not limited to 99 messages', () => {
   assert.deepEqual(parseStoredLines('{broken'), [])
   assert.deepEqual(parseStoredLines('{"id":"not-an-array"}'), [])
   assert.deepEqual(parseStoredLines('[null,{"id":"1","role":"system","content":"bad"},{"id":"2","role":"user","content":"ok"}]'), [{id:'2',role:'user',content:'ok'}])
   const history: ChatLine[] = Array.from({length:120}, (_,index) => ({id:String(index),role:'user',content:String(index)}))
   history.push({id:'empty',role:'assistant',content:''})
   const turns = linesToChatTurns(history)
-  assert.equal(turns.length, 99)
-  assert.equal(turns[0].content, '21')
+  assert.equal(turns.length, 120)
+  assert.equal(turns[0].content, '0')
   assert.equal(history.length, 121)
 })
 

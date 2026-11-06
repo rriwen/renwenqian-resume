@@ -1,15 +1,19 @@
-import { lazy, Suspense, useEffect, useState } from 'react'
-import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom'
-import { ChatbotOverlay } from './components/ChatbotOverlay'
+import { lazy, Suspense, useCallback, useEffect, useState } from 'react'
+import { BrowserRouter, Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
+import { ChatbotView } from './components/ChatbotView'
+import { ChatStoreProvider } from './components/chat/ChatStoreProvider'
+import { useHashOverlay } from './hooks/useHashOverlay'
 import { ContactOverlay } from './components/ContactOverlay'
 import { Header } from './components/Header'
-import { SiteFooter } from './components/SiteFooter'
 import { LanguageProvider } from './i18n/LanguageContext'
 import { Home } from './pages/Home'
+import type { ChatCommand } from './lib/chat/thread'
 
 const About = lazy(() => import('./pages/About').then((module) => ({ default: module.About })))
 const ProjectDetail = lazy(() => import('./pages/ProjectDetail').then((module) => ({ default: module.ProjectDetail })))
 const Photography = lazy(() => import('./pages/Photography').then((module) => ({ default: module.Photography })))
+const Experiments = lazy(() => import('./pages/Experiments').then((module) => ({ default: module.Experiments })))
+const SqlEditorPrototype = lazy(() => import('./pages/SqlEditorPrototype').then((module) => ({ default: module.SqlEditorPrototype })))
 
 function ScrollToTop() {
   const { pathname, search } = useLocation()
@@ -22,21 +26,53 @@ function ScrollToTop() {
 }
 
 function AppFrame({ dark, onToggleTheme }: { dark: boolean; onToggleTheme: () => void }) {
-  return <div style={{ minHeight: '100dvh' }}>
+  const chat = useHashOverlay('#chat', { closeOnEscape: false })
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
+  const [chatCommands, setChatCommands] = useState<ChatCommand[]>([])
+  const [homeVersion, setHomeVersion] = useState(0)
+  const [contactOpen, setContactOpen] = useState(false)
+  const location = useLocation()
+  const navigate = useNavigate()
+  const openContact = useCallback(() => setContactOpen(true), [])
+  const closeContact = useCallback(() => setContactOpen(false), [])
+  useEffect(closeContact, [location.key, closeContact])
+  const askQuestion = useCallback((text: string) => {
+    if (!text.trim()) return
+    setChatCommands((current) => [...current, { id: crypto.randomUUID(), type: 'ask', text: text.trim() }])
+    navigate({ pathname: window.location.pathname, search: window.location.search, hash: '#chat' })
+  }, [navigate])
+  const newChat = useCallback(() => {
+    setChatCommands((current) => [...current, { id: crypto.randomUUID(), type: 'new' }])
+    setHomeVersion((value) => value + 1)
+    navigate('/')
+  }, [navigate])
+  const consumeCommands = useCallback((ids: string[]) => {
+    setChatCommands((current) => current.filter((command) => !ids.includes(command.id)))
+  }, [])
+  const selectConversation = useCallback((conversationId: string) => {
+    // Keep selection after any new-chat/ask commands waiting for the lazy panel.
+    setChatCommands((current) => [...current, { id: crypto.randomUUID(), type: 'select', conversationId }])
+    navigate({ pathname: window.location.pathname, search: window.location.search, hash: '#chat' })
+  }, [navigate])
+  return <div className={`app-frame${sidebarCollapsed ? ' is-sidebar-collapsed' : ''}`}>
     <ScrollToTop />
-    <Header dark={dark} onToggleTheme={onToggleTheme} />
-    <div className="site-content">
+    <Header onNewChat={newChat} onSelectConversation={selectConversation} onOpenContact={openContact} dark={dark} onToggleTheme={onToggleTheme} sidebarCollapsed={sidebarCollapsed} onToggleSidebar={() => setSidebarCollapsed((value) => !value)} />
+    <div className="site-main" id="site-main">
+      <div className="site-content" hidden={chat.open}>
       <Suspense fallback={<main className="route-loading">Loading...</main>}>
         <Routes>
-          <Route path="/" element={<Home dark={dark} />} />
+          <Route path="/" element={<Home key={homeVersion} onAsk={askQuestion} />} />
           <Route path="/photography" element={<Photography />} />
+          <Route path="/experiments" element={<Experiments />} />
           <Route path="/project/:slug" element={<ProjectDetail />} />
           <Route path="/about" element={<About />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Suspense>
+      </div>
+      <ChatbotView open={chat.open} commands={chatCommands} onCommandsConsumed={consumeCommands} />
     </div>
-    <SiteFooter /><ChatbotOverlay dark={dark} onToggleTheme={onToggleTheme} /><ContactOverlay />
+    <ContactOverlay dark={dark} open={contactOpen} close={closeContact} />
   </div>
 }
 
@@ -44,8 +80,8 @@ export default function App() {
   const [dark, setDark] = useState(() => {
     try {
       const savedTheme = localStorage.getItem('as4x-theme')
-      return savedTheme ? savedTheme === 'dark' : false
-    } catch { return false }
+      return savedTheme !== 'light'
+    } catch { return true }
   })
 
   useEffect(() => {
@@ -56,7 +92,16 @@ export default function App() {
   return (
     <LanguageProvider>
       <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-        <AppFrame dark={dark} onToggleTheme={() => setDark((value) => !value)} />
+        <ChatStoreProvider>
+          <Routes>
+            <Route path="/prototype/text2sql" element={
+              <Suspense fallback={<main className="route-loading">正在加载 SQL 编辑器…</main>}>
+                <SqlEditorPrototype />
+              </Suspense>
+            } />
+            <Route path="*" element={<AppFrame dark={dark} onToggleTheme={() => setDark((value) => !value)} />} />
+          </Routes>
+        </ChatStoreProvider>
       </BrowserRouter>
     </LanguageProvider>
   )

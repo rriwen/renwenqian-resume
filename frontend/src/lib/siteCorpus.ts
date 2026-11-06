@@ -1,12 +1,13 @@
 import { getProjectTitle, projects } from '../data/projects'
-import { getProjectDetail, type ProjectDetailBlock, type ProjectDetailParagraph } from '../data/projectDetails'
+import { getProjectDetail, type ProjectDetailBlock, type ProjectDetailParagraph, type ProjectDetailTable } from '../data/projectDetails'
 import { getDataPilotContent } from '../data/projects/dataPilot'
 import { getAboutContent, stripMarkdownInline } from '../content/about'
 import { translations, type Locale } from '../i18n/translations'
+import { getChatProjectImages } from './chat/projectImages'
 
 function paragraphToText(p: ProjectDetailParagraph): string {
   if (typeof p === 'string') return p
-  return p.map((r) => r.text).join('')
+  return p.map((r) => r.href ? `${r.text} (${r.href})` : r.text).join('')
 }
 
 function serializeResponsibilities(r: NonNullable<ProjectDetailBlock['responsibilities']>): string {
@@ -23,9 +24,23 @@ function serializeResponsibilities(r: NonNullable<ProjectDetailBlock['responsibi
   return lines.join('\n')
 }
 
+function serializeTable(table: ProjectDetailTable): string[] {
+  const lines = [table.columns.join(' | ')]
+  const columnText: string[] = Array(table.columns.length).fill('')
+  for (const row of table.rows) {
+    row.cells.forEach((cell, index) => {
+      if (cell !== null) columnText[index] = typeof cell === 'string' ? cell : cell.text
+    })
+    lines.push(columnText.join(' | '))
+  }
+  return lines
+}
+
 function serializeProjectBlock(block: ProjectDetailBlock): string {
   const parts: string[] = []
   if (block.tags.length) parts.push(`Tags: ${block.tags.join(', ')}`)
+  for (const fact of block.overviewFacts ?? []) parts.push(`${fact.label}: ${fact.value}`)
+  if (block.demoUrl) parts.push(`Demo: ${block.demoUrl}`)
   for (const p of block.paragraphs) {
     parts.push(paragraphToText(p))
   }
@@ -46,6 +61,41 @@ function serializeProjectBlock(block: ProjectDetailBlock): string {
   for (const section of block.sections ?? []) {
     parts.push(`#### ${section.title}`)
     parts.push(...section.paragraphs.map(paragraphToText))
+    if (section.table) parts.push(...serializeTable(section.table))
+    if (section.architecture) {
+      const architecture = section.architecture
+      parts.push(architecture.title)
+      for (const layer of architecture.layers) {
+        parts.push(layer.description ? `${layer.title}: ${layer.description}` : layer.title)
+        parts.push(...layer.nodes.map((node) => node.description ? `${node.title}: ${node.description}` : node.title))
+      }
+    }
+    for (const subsection of section.subsections ?? []) {
+      parts.push(`##### ${subsection.title}`)
+      parts.push(...subsection.paragraphs.map(paragraphToText))
+      if (subsection.prototypeEmbed) parts.push(`${subsection.prototypeEmbed.title}: ${subsection.prototypeEmbed.url}`)
+      parts.push(...(subsection.listItems ?? []).map((item) => `- ${paragraphToText(item)}`))
+      if (subsection.table) parts.push(...serializeTable(subsection.table))
+      parts.push(...(subsection.closingParagraphs ?? []).map(paragraphToText))
+      parts.push(...(subsection.afterImagesParagraphs ?? []).map(paragraphToText))
+      if (subsection.comparison) {
+        const comparison = subsection.comparison
+        parts.push(`###### ${comparison.title}`, ...comparison.paragraphs.map(paragraphToText))
+        if (comparison.description) parts.push(comparison.description)
+        for (const option of comparison.options) {
+          parts.push(option.title, ...option.paragraphs.map(paragraphToText))
+          parts.push(...option.listItems.map((item) => `- ${paragraphToText(item)}`))
+          parts.push(...option.images.map((image) => image.caption).filter(Boolean))
+        }
+      }
+      if (subsection.funnel) {
+        const funnel = subsection.funnel
+        parts.push(funnel.title, funnel.context, funnel.legend, funnel.note)
+        parts.push(`${funnel.summary.before}${funnel.summary.value}${funnel.summary.after}`)
+        parts.push(...funnel.stages.map((stage) => `${stage.label}: ${stage.estimated ? '≈ ' : ''}${stage.value}${stage.conversionRate === undefined ? '' : ` | ${stage.conversionRate}%`}`))
+      }
+      parts.push(...(subsection.images ?? []).map((image) => image.caption).filter(Boolean))
+    }
     parts.push(...section.images.map((image) => image.caption).filter(Boolean))
   }
   if (block.externalUrl) parts.push(`Link: ${block.externalUrl}`)
@@ -137,6 +187,7 @@ export function buildSiteCorpus(locale: Locale): string {
   lines.push(`## ${section(locale, '站点概览', 'Overview')}`)
   lines.push(`${m.header.name} — ${m.header.role}`)
   lines.push(m.home.title)
+  lines.push(m.home.greeting, m.home.description)
   lines.push('')
 
   lines.push(`## ${section(locale, '页脚', 'Footer')}`)
@@ -166,6 +217,11 @@ export function buildSiteCorpus(locale: Locale): string {
       lines.push(section(locale, '（无详情文案）', '(No detail copy)'))
     }
     lines.push('')
+  }
+
+  lines.push(`## ${section(locale, '可用项目配图（按相关性选择，保留原稿、探索或示意图的说明）', 'Available project figures (select relevant images and preserve draft/exploration/diagram context)')}`)
+  for (const image of getChatProjectImages(locale)) {
+    lines.push(`- ${image.projectTitle} | ${image.caption} | ${image.src} | ${image.projectPath}`)
   }
 
   return lines.join('\n').trim()

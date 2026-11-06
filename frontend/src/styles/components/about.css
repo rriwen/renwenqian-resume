@@ -1,12 +1,17 @@
+.about-page {
+  max-width: calc(var(--detail-prose-width) + var(--page-gutter) * 2);
+  margin-inline: auto;
+}
+
 .about-timeline-nav {
   --about-timeline-edge-inset: 48px;
   position: fixed;
   right: var(--about-timeline-edge-inset);
-  top: 50%;
+  top: 42%;
   transform: translateY(-50%);
   z-index: 25;
   display: none;
-  width: 9px;
+  width: 24px;
   overflow: visible;
 }
 
@@ -109,23 +114,8 @@
   overflow: visible;
 }
 
-.about-timeline-list::before {
-  content: '';
-  position: absolute;
-  right: 0;
-  top: 0.2rem;
-  bottom: 0.2rem;
-  width: 1px;
-  background: var(--control-border);
-}
-
 .about-timeline-item {
   position: relative;
-}
-
-.about-timeline-item-section .about-timeline-tick {
-  width: 9px;
-  height: 3px;
 }
 
 .about-timeline-link {
@@ -133,8 +123,8 @@
   align-items: center;
   justify-content: flex-end;
   position: relative;
-  min-height: 1.1rem;
-  padding: 0 0 0 var(--space-5);
+  min-height: 14px;
+  padding: 0;
   margin: 0;
   text-decoration: none;
   color: inherit;
@@ -147,44 +137,33 @@
   top: 50%;
   left: -0.5rem;
   right: -0.5rem;
-  height: 1.1rem;
+  height: 100%;
   transform: translateY(-50%);
   z-index: 0;
-}
-
-.about-timeline-link:hover, .about-timeline-link:focus-visible {
-  min-height: 1.1rem;
-  padding: 0 0 0 var(--space-5);
 }
 
 .about-timeline-tick {
   position: relative;
   z-index: 1;
   flex-shrink: 0;
-  width: 7px;
+  width: 9px;
   height: 2px;
-  margin-right: -1px;
   border-radius: var(--radius-sm);
   background: var(--control-border);
-  transition: background 0.3s cubic-bezier(0.33, 1, 0.68, 1),
-    width 0.34s cubic-bezier(0.33, 1, 0.68, 1),
-    height 0.3s cubic-bezier(0.33, 1, 0.68, 1);
-}
-
-.about-timeline-link:hover .about-timeline-tick, .about-timeline-link:focus-visible .about-timeline-tick {
-  width: 11px;
-  background: var(--control-border);
+  transition: background 0.2s cubic-bezier(0.33, 1, 0.68, 1),
+    width 0.2s cubic-bezier(0.33, 1, 0.68, 1),
+    height 0.2s cubic-bezier(0.33, 1, 0.68, 1);
 }
 
 .about-timeline-link.active .about-timeline-tick {
-  width: 9px;
-  height: 2px;
+  width: 12px;
+  height: 3px;
   background: var(--text);
 }
 
-.about-timeline-link.active:hover .about-timeline-tick, .about-timeline-link.active:focus-visible .about-timeline-tick {
-  width: 13px;
-  height: 3px;
+.about-timeline-link:hover .about-timeline-tick, .about-timeline-link:focus-visible .about-timeline-tick {
+  width: 22px;
+  height: 4px;
   background: var(--text);
 }
 

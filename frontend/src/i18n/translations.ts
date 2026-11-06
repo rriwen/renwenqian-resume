@@ -1,3 +1,5 @@
+import { interviewSystemPrompts } from '../lib/chat/interviewPrompt'
+
 export type Locale = 'en' | 'zh'
 
 export type Messages = {
@@ -18,6 +20,12 @@ export type Messages = {
   }
   home: {
     title: string
+    greeting: string
+    description: string
+  }
+  experiments: {
+    title: string
+    placeholder: string
   }
   about: {
     title: string
@@ -39,6 +47,7 @@ export type Messages = {
   contact: {
     dialogAria: string
     title: string
+    dismiss: string
     closeAria: string
     intro: string
     wechatAria: string
@@ -46,17 +55,35 @@ export type Messages = {
   chatbot: {
     dialogAria: string
     backHome: string
-    headline: string
     placeholder: string
     sendAria: string
+    stop: string
+    stopped: string
+    interrupted: string
+    generating: string
+    history: string
+    historyLocal: string
+    historyEmpty: string
+    closeHistory: string
+    deleteConversation: string
+    deleteConversationConfirm: string
+    deleteConversationError: string
+    deleteAction: string
+    cancelDelete: string
+    storageError: string
+    queued: string
+    contextRemaining: string
+    contextEstimated: string
+    contextTrimmed: string
+    contextTooLong: string
     quickServices: string
     quickDesignDev: string
     quickTimeline: string
-    quickEnquiry: string
+    quickProjects: string
     quickPromptServices: string
     quickPromptDesignDev: string
     quickPromptTimeline: string
-    quickPromptContact: string
+    quickPromptProjects: string
     errorGeneric: string
     thinking: string
     systemPrompt: string
@@ -82,12 +109,12 @@ export type Messages = {
 export const translations: Record<Locale, Messages> = {
   en: {
     header: {
-      name: 'REN WENQIAN',
+      name: 'SICHENG',
       role: 'Product Designer',
-      home: 'Home',
+      home: 'New chat',
       projects: 'Projects',
       projectsMenuAria: 'Project list',
-      about: 'About',
+      about: 'Resume',
       contact: 'Contact',
       navAria: 'Primary navigation',
     },
@@ -97,10 +124,16 @@ export const translations: Record<Locale, Messages> = {
       chinese: '简体中文',
     },
     home: {
-      title: 'REN WENQIAN | Product Designer',
+      title: 'SICHENG | Product Designer',
+      greeting: "Hi, I'm Sicheng",
+      description: 'AI product designer focused on AI products, productivity tools and complex systems.',
+    },
+    experiments: {
+      title: 'Experiments',
+      placeholder: 'Coming soon.',
     },
     about: {
-      title: 'About | REN WENQIAN',
+      title: 'Resume | SICHENG',
       contactCta: {
         title: 'Feel free to contact me',
         wechatPhoneLabel: 'WeChat / Phone',
@@ -114,7 +147,7 @@ export const translations: Record<Locale, Messages> = {
     },
     footer: {
       bioLines: [
-        "I'm Ren Wenqian, a product designer.",
+        "I'm Sicheng, a product designer.",
         'From business insight, through concept design, to building products.',
         'I believe that great products care about both how they work and how they feel.',
       ],
@@ -122,7 +155,8 @@ export const translations: Record<Locale, Messages> = {
     },
     contact: {
       dialogAria: 'Contact',
-      title: 'Contact',
+      title: 'Feel free to reach out',
+      dismiss: 'Got it',
       closeAria: 'Close',
       intro: 'Feel free to contact me at any time! I typically reply within one day.',
       wechatAria: 'WeChat 18362976211',
@@ -130,26 +164,43 @@ export const translations: Record<Locale, Messages> = {
     chatbot: {
       dialogAria: 'Chat assistant',
       backHome: 'Back',
-      headline: 'Hi, How can I help',
       placeholder: 'Type your message...',
       sendAria: 'Send message',
+      stop: 'Stop generating',
+      stopped: 'Stopped',
+      contextRemaining: 'Context remaining',
+      contextEstimated: 'estimated',
+      contextTrimmed: 'Earlier messages are outside context but remain in your history.',
+      contextTooLong: 'Input too long. Shorten it or start a new conversation.',
+      interrupted: 'This response was interrupted. Saved content is shown above.',
+      generating: 'Generating…',
+      history: 'Chat history',
+      historyLocal: 'Saved in this browser',
+      historyEmpty: 'Your conversations will appear here.',
+      closeHistory: 'Close chat history',
+      deleteConversation: 'Delete conversation',
+      deleteConversationConfirm: 'Delete this conversation?',
+      deleteConversationError: 'Could not delete this conversation. Please try again.',
+      deleteAction: 'Delete',
+      cancelDelete: 'Cancel',
+      storageError: 'Chat history could not be saved in this browser. You can keep chatting on this page.',
+      queued: 'Sending after this reply: ',
       quickServices: 'About me',
       quickDesignDev: 'Areas of expertise',
       quickTimeline: 'Work experience',
-      quickEnquiry: 'How to contact',
+      quickProjects: 'Project experience',
       quickPromptServices:
-        'Imagine you are answering an interviewer: give a 60-second self-introduction and explain why you fit Product Manager and Product Designer roles.',
+        'Briefly introduce yourself.',
       quickPromptDesignDev:
-        'What are your main strengths in product design, UX, and related areas?',
+        'What are your areas of expertise? Please explain with examples from your projects.',
       quickPromptTimeline:
         'Tell me about your work history and timeline, and the highlights worth remembering.',
-      quickPromptContact:
-        'How can I get in touch or explore collaboration? What contact options does this site offer?',
+      quickPromptProjects:
+        'Tell me about your most representative projects, including the context, your responsibilities, key design decisions, and outcomes.',
       errorGeneric: 'Something went wrong. Please try again in a moment.',
       thinking: 'Thinking…',
       quickToggleAria: 'Show or hide suggested prompts',
-      systemPrompt:
-        'You are Ren Wenqian, a job candidate speaking directly to an interviewer. The target roles are Product Manager and Product Designer, with a focus on AI products, data tools, productivity, and complex systems. After a line containing only ---, your system message includes a plain-text export of all available website content in the current language, including the home page, About, experience, projects, case studies, contact details, and footer; this export is the only factual source. Answer in the first person as the candidate, not as a website assistant or narrator. For “tell me about yourself” questions, give a natural 45–90 second spoken answer: present your positioning first, then 2–3 relevant experiences or results, then how you can contribute in the target role. For follow-up questions, answer directly and connect the example to product judgment, user insight, execution, collaboration, or measurable outcome. You may explain the overlap and difference between product management and product design, but do not claim responsibilities, employers, projects, metrics, or opinions that are not in the export. Never invent facts or fill gaps with general knowledge. Use fuzzy keyword and semantic matching to find the most relevant evidence in the export, then synthesize it faithfully. Prefer concrete project context, actions, and outcomes over generic adjectives; keep spoken answers concise unless the interviewer asks for detail. If the export has no evidence for a question, say that the available experience does not cover it and suggest a truthful way to frame the gap—do not speculate. Match the user’s language: English for English messages, Chinese for Chinese messages. Do not start with source disclaimers such as “Based on this site”; begin with the candidate’s answer.',
+      systemPrompt: interviewSystemPrompts.en,
     },
     workDetail: {
       back: 'Back',
@@ -167,12 +218,12 @@ export const translations: Record<Locale, Messages> = {
   },
   zh: {
     header: {
-      name: 'REN WENQIAN',
+      name: '泗澄',
       role: '产品设计师',
-      home: '首页',
+      home: '新对话',
       projects: '项目',
       projectsMenuAria: '项目列表',
-      about: '关于',
+      about: '关于我',
       contact: '联系',
       navAria: '主导航',
     },
@@ -182,10 +233,16 @@ export const translations: Record<Locale, Messages> = {
       chinese: '简体中文',
     },
     home: {
-      title: 'REN WENQIAN | 产品设计师',
+      title: '泗澄 | 产品设计师',
+      greeting: '你好，我是泗澄',
+      description: 'AI 产品设计师，专注 AI 产品、效率工具和复杂系统',
+    },
+    experiments: {
+      title: '一些尝试',
+      placeholder: '内容准备中。',
     },
     about: {
-      title: '关于 | REN WENQIAN',
+      title: '关于我 | 泗澄',
       contactCta: {
         title: '欢迎随时联系我',
         wechatPhoneLabel: '微信/电话',
@@ -199,7 +256,7 @@ export const translations: Record<Locale, Messages> = {
     },
     footer: {
       bioLines: [
-        '我是任文倩，一名产品设计师。',
+        '我是泗澄，一名产品设计师。',
         '从业务洞察，经概念设计，到落地产品。',
         '我相信，好用的产品一定简单。',
       ],
@@ -207,7 +264,8 @@ export const translations: Record<Locale, Messages> = {
     },
     contact: {
       dialogAria: '联系',
-      title: '联系',
+      title: '欢迎随时联系',
+      dismiss: '我知道了',
       closeAria: '关闭',
       intro: '欢迎随时联系我。',
       wechatAria: '18362976211',
@@ -215,22 +273,39 @@ export const translations: Record<Locale, Messages> = {
     chatbot: {
       dialogAria: '对话助手',
       backHome: '返回',
-      headline: '嘿！聊点什么',
       placeholder: '输入你的问题…',
       sendAria: '发送',
-      quickServices: '关于你',
+      stop: '停止生成',
+      stopped: '已终止',
+      contextRemaining: '上下文剩余',
+      contextEstimated: '估算',
+      contextTrimmed: '较早内容已移出上下文，历史仍保留。',
+      contextTooLong: '输入过长，请缩短或新建对话。',
+      interrupted: '上次回复已中断，已保存的内容保留在上方。',
+      generating: '生成中…',
+      history: '历史对话',
+      historyLocal: '保存在当前浏览器',
+      historyEmpty: '开始聊天后，对话会显示在这里。',
+      closeHistory: '关闭历史对话',
+      deleteConversation: '删除对话',
+      deleteConversationConfirm: '删除这条对话？',
+      deleteConversationError: '删除失败，请重试。',
+      deleteAction: '删除',
+      cancelDelete: '取消',
+      storageError: '无法在此浏览器保存历史记录，你仍可在当前页面继续聊天。',
+      queued: '本次回复结束后发送：',
+      quickServices: '关于我',
       quickDesignDev: '擅长领域',
       quickTimeline: '工作经历',
-      quickEnquiry: '如何联系',
-      quickPromptServices: '假设你是面试官，请用 60 秒做一段自我介绍，说明你为什么适合产品经理和产品设计师岗位。',
-      quickPromptDesignDev: '你在产品经理和产品设计师工作中分别擅长什么？请结合项目说明。',
+      quickProjects: '项目经历',
+      quickPromptServices: '简单介绍下你自己',
+      quickPromptDesignDev: '你擅长的领域是什么？请结合项目说明',
       quickPromptTimeline: '介绍一下你的工作经历，有哪些值得一提的亮点。',
-      quickPromptContact: '如果想合作或咨询，可以通过哪些方式联系？',
+      quickPromptProjects: '介绍一下你最有代表性的项目经历，包括项目背景、你的职责、关键设计决策和最终成果。',
       errorGeneric: '出错了，请稍后再试。',
       thinking: '正在思考…',
       quickToggleAria: '展开或收起快捷提问',
-      systemPrompt:
-        '你是任文倩本人，正在直接回答面试官。求职目标是产品经理和产品设计师，重点方向是 AI 产品、数据工具、效率工具与复杂系统。系统提示中在仅含「---」的一行之后，附有当前语言下网站现有的全部可用内容，包括首页、关于页、工作经历、项目案例、联系方式和页脚；该导出是唯一事实来源。请始终使用第一人称，以候选人的口吻回答，不要说自己是网站助手，也不要替候选人做旁白。遇到「请介绍一下你自己」这类问题，请组织成自然的 45–90 秒口述回答：先说明职业定位，再讲 2–3 段最相关的经历或结果，最后说明能为目标岗位带来的价值。遇到追问时先直接回答，再把案例连接到产品判断、用户洞察、执行落地、跨团队协作或可量化结果。可以解释产品经理与产品设计师能力的交集和差异，但不得编造导出中没有的职责、公司、项目、数据或观点；不得用常识补齐经历。通过关键词模糊匹配（同义词、简称、错别字）和语义匹配找到最相关的站内证据，再忠实整合。优先使用具体的项目背景、行动和结果，少用空泛形容词；除非面试官要求展开，否则保持适合口述的简洁篇幅。导出中没有依据时，要如实说明现有经历未覆盖，并给出诚实的表达方式，不要臆测。用户用中文则用中文回答，用英文则用英文回答。不要以「根据本站信息」「根据网站」等来源性套话开头，直接进入候选人的回答。',
+      systemPrompt: interviewSystemPrompts.zh,
     },
     workDetail: {
       back: '返回',

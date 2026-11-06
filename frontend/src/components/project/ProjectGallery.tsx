@@ -42,13 +42,14 @@ export function ProjectGallery({ items, layout = 'grid' }: Props) {
                   width: '100%',
                   margin: 0,
                   padding: 0,
-                  border: '1px solid var(--rule)',
+                  border: item.transparentBackground ? '1px solid transparent' : '1px solid var(--rule)',
                   borderRadius: 'var(--radius-sm)',
                   boxSizing: 'border-box',
                   overflow: 'hidden',
                   cursor: 'zoom-in',
-                  background: 'var(--subtle)',
-                  aspectRatio: layout === 'stacked' ? undefined : '16 / 9',
+                  background: item.transparentBackground ? 'transparent' : 'var(--subtle)',
+                  aspectRatio: item.sourceRegion ? `${item.sourceRegion.width} / ${item.sourceRegion.height}` : layout === 'stacked' ? undefined : '16 / 9',
+                  position: 'relative',
                 }}
               >
                 <img
@@ -56,19 +57,33 @@ export function ProjectGallery({ items, layout = 'grid' }: Props) {
                   alt=""
                   loading={isGifSrc(item.src) ? 'eager' : undefined}
                   decoding="async"
-                  style={{ width: '100%', height: layout === 'stacked' ? 'auto' : '100%', objectFit: layout === 'stacked' ? 'contain' : 'cover', display: 'block', pointerEvents: 'none' }}
+                  style={{
+                    position: item.sourceRegion ? 'absolute' : undefined,
+                    maxWidth: item.sourceRegion ? 'none' : undefined,
+                    left: item.sourceRegion ? `${-100 * item.sourceRegion.x / item.sourceRegion.width}%` : undefined,
+                    top: item.sourceRegion ? `${-100 * item.sourceRegion.y / item.sourceRegion.height}%` : undefined,
+                    width: item.sourceRegion ? `${100 * item.sourceRegion.sourceWidth / item.sourceRegion.width}%` : '100%',
+                    height: item.sourceRegion ? 'auto' : layout === 'stacked' ? 'auto' : '100%',
+                    aspectRatio: layout === 'stacked' ? item.previewCrop?.aspectRatio : undefined,
+                    objectFit: layout === 'stacked' && !item.previewCrop ? 'contain' : 'cover',
+                    objectPosition: item.previewCrop?.objectPosition,
+                    display: 'block',
+                    pointerEvents: 'none',
+                  }}
                 />
               </button>
-              <figcaption
-                style={{
-                  fontSize: 'var(--text-xs)',
-                  lineHeight: 'var(--leading-ui)',
-                  color: 'var(--muted)',
-                  letterSpacing: locale === 'zh' ? '0.01em' : '0.02em',
-                }}
-              >
-                {item.caption}
-              </figcaption>
+              {!item.hideCaption && (
+                <figcaption
+                  style={{
+                    fontSize: 'var(--text-xs)',
+                    lineHeight: 'var(--leading-ui)',
+                    color: 'var(--muted)',
+                    letterSpacing: locale === 'zh' ? '0.01em' : '0.02em',
+                  }}
+                >
+                  {item.caption}
+                </figcaption>
+              )}
             </figure>
           ))}
         </div>

@@ -1,4 +1,5 @@
 import { readChatEventStream } from './chat/readEventStream'
+import { prepareChatContext } from './chat/context'
 
 export type ChatTurn = { role: 'user' | 'assistant'; content: string }
 
@@ -10,11 +11,12 @@ export async function sendDeepseekChatStream(
   onDelta: (delta: string) => void,
   signal?: AbortSignal,
 ): Promise<void> {
-  const systemBody = siteCorpus.trim() ? `${systemPrompt}\n\n---\n\n${siteCorpus.trim()}` : systemPrompt
+  const { system, turns, usage } = prepareChatContext(systemPrompt, siteCorpus, history)
+  if (usage.exceedsLimit) throw new Error('CONTEXT_LIMIT_EXCEEDED')
   const response = await fetch('/api/chat', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ messages: [{ role: 'system', content: systemBody }, ...history], stream: true }),
+    body: JSON.stringify({ messages: [system, ...turns], stream: true }),
     signal,
   })
   if (!response.ok) {

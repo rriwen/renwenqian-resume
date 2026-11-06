@@ -1,6 +1,9 @@
 import type { ChatTurn } from '../deepseekChat'
 
-export type ChatLine = ChatTurn & { id: string }
+export type ChatLine = ChatTurn & { id: string; stopped?: true }
+export type ChatCommand = { id: string; type: 'new' }
+  | { id: string; type: 'ask'; text: string }
+  | { id: string; type: 'select'; conversationId: string }
 export const CHAT_THREAD_STORAGE_KEY = 'as4x-chat-thread-v1'
 
 export function parseStoredLines(raw: string | null): ChatLine[] {
@@ -14,20 +17,7 @@ export function parseStoredLines(raw: string | null): ChatLine[] {
   } catch { return [] }
 }
 
-export function loadThread(): ChatLine[] {
-  try { return parseStoredLines(sessionStorage.getItem(CHAT_THREAD_STORAGE_KEY)) } catch { return [] }
-}
-
 export function linesToChatTurns(lines: ChatLine[]): ChatTurn[] {
-  // The API allows 100 messages including the system message. Keep full UI history.
-  return lines.filter((line) => line.content.trim()).slice(-99).map(({ role, content }) => ({ role, content }))
-}
-
-export function stripAssistantBoldMarkers(text: string): string {
-  let previous = ''
-  while (text !== previous) {
-    previous = text
-    text = text.replace(/\*\*([\s\S]+?)\*\*/g, '$1')
-  }
-  return text.replace(/\*\*/g, '')
+  // Keep session memory intact; the shared context budget selects complete rounds at transport time.
+  return lines.filter((line) => line.content.trim()).map(({ role, content }) => ({ role, content }))
 }

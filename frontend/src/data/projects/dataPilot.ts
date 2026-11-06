@@ -229,6 +229,7 @@ function createDataPilotContent(locale: Locale) {
 
   return {
     title: getProjectTitle(project, locale),
+    tags: project.tags[locale],
     demoUrl: DATA_PILOT_DEMO_URL,
     paragraphs: [
       isZh ? 'AI 智能问数是一款面向业务分析场景的自然语言数据产品。产品将业务数据、指标口径与语义知识加工为 AI 可理解的上下文，提升问数结果的准确性，并支持从查询结果继续生成报表、仪表盘等数据应用。' : 'DataAgent is a natural-language analytics product for business scenarios. It turns business data, metric definitions, and semantic knowledge into AI-readable context for more accurate answers, then supports continued creation of reports, dashboards, and other data applications.',

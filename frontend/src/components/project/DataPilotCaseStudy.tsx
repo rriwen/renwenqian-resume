@@ -1,52 +1,51 @@
-import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
-import { getAdjacentProjects, getProjectTitle, type Project } from '../../data/projects'
+import { useEffect, useRef, useState } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { ProjectAnchorNav } from './ProjectAnchorNav'
+import { DataPilotPartMenu } from './DataPilotPartMenu'
 import { getDataPilotContent, type DataPilotPart } from '../../data/projects/dataPilot'
 import type { Locale } from '../../i18n/translations'
+import { ReadingPageHeader } from '../ReadingPageHeader'
 
-type Props = { project: Project; locale: Locale }
+type Props = { locale: Locale }
 
-export function DataPilotCaseStudy({ project, locale }: Props) {
+export function DataPilotCaseStudy({ locale }: Props) {
   const content = getDataPilotContent(locale)
-  const { prev: prevProject, next: nextProject } = getAdjacentProjects(project.slug)
+  const titleRef = useRef<HTMLHeadingElement>(null)
   const [activePart, setActivePart] = useState<DataPilotPart>('experience')
-  const [activeSectionId, setActiveSectionId] = useState('overview')
+  const location = useLocation()
+  const navigate = useNavigate()
   const visibleSections = content.parts[activePart].sections
 
   useEffect(() => {
-    const sectionIds = visibleSections.map((section) => section.id)
-    const updateActiveSection = () => {
-      let current = sectionIds[0]
-      for (const id of sectionIds) {
-        const element = document.getElementById(id)
-        if (element && element.getBoundingClientRect().top <= 120) current = id
-      }
-      setActiveSectionId(current)
-    }
+    const id = location.hash.slice(1)
+    const part = (Object.keys(content.parts) as DataPilotPart[]).find((key) => content.parts[key].sections.some((section) => section.id === id))
+    if (part) setActivePart(part)
+    else if (!location.hash) setActivePart('experience')
+  }, [location.hash, content])
 
-    setActiveSectionId(sectionIds[0])
-    updateActiveSection()
-    window.addEventListener('scroll', updateActiveSection, { passive: true })
-    window.addEventListener('resize', updateActiveSection)
-    return () => {
-      window.removeEventListener('scroll', updateActiveSection)
-      window.removeEventListener('resize', updateActiveSection)
-    }
-  }, [visibleSections])
+  const selectPart = (part: DataPilotPart) => {
+    setActivePart(part)
+    const id = content.parts[part].sections[0]?.id
+    navigate({ pathname: location.pathname, search: location.search, hash: id ? `#${id}` : '' }, { preventScrollReset: true })
+  }
 
   return (
     <main className="datapilot-case-page">
+      <ReadingPageHeader title={content.title} titleRef={titleRef} controls={
+        <DataPilotPartMenu label={content.labels.tabs} value={activePart} onSelect={selectPart}
+          options={(Object.keys(content.parts) as DataPilotPart[]).map((part) => ({ value: part, label: content.parts[part].title }))} />
+      } />
       <div className="page-shell datapilot-case-shell">
-        <Link to="/" className="back-link project-detail-back-link">{content.labels.back}</Link>
         <header className="datapilot-case-hero">
-          <h1>{content.title}</h1>
+          <h1 ref={titleRef}>{content.title}</h1>
+          <div className="datapilot-meta project-case-tags project-case-tags--filled">{content.tags.map(tag => <span className="project-case-tag" key={tag}>{tag}</span>)}</div>
           <p className="datapilot-hero-copy">{content.paragraphs[0]}</p>
           <p className="datapilot-hero-copy is-secondary">{content.paragraphs[1]}</p>
           <div className="datapilot-meta">{content.metadata.map((item) => <span key={item}>{item}</span>)}<a className="datapilot-demo-link" href={content.demoUrl} target="_blank" rel="noreferrer">{content.labels.demo} ↗</a></div>
         </header>
         <div className="datapilot-part-tabs" role="tablist" aria-label={content.labels.tabs}>
           {(Object.keys(content.parts) as DataPilotPart[]).map((part) => (
-            <button key={part} type="button" role="tab" aria-selected={activePart === part} className={activePart === part ? 'is-active' : ''} onClick={() => setActivePart(part)}>
+            <button key={part} type="button" role="tab" aria-selected={activePart === part} className={activePart === part ? 'is-active' : ''} onClick={() => selectPart(part)}>
               {content.parts[part].title}
             </button>
           ))}
@@ -77,37 +76,10 @@ export function DataPilotCaseStudy({ project, locale }: Props) {
                 {section.bullets && section.id === 'overview' ? <ul className="datapilot-bullets">{section.bullets.map((bullet) => <li key={bullet}>{bullet}</li>)}</ul> : null}
               </section>
             ))}
-            <nav className="datapilot-adjacent" aria-label={content.labels.navigation}>
-              <div>
-                {prevProject ? <><span>{content.labels.previous}</span><Link to={`/project/${prevProject.slug}`}>{getProjectTitle(prevProject, locale)}</Link></> : null}
-              </div>
-              <div className="is-next">
-                {nextProject ? <><span>{content.labels.next}</span><Link to={`/project/${nextProject.slug}`}>{getProjectTitle(nextProject, locale)}</Link></> : null}
-              </div>
-            </nav>
           </article>
         </div>
       </div>
-      <nav className="about-timeline-nav datapilot-anchor-nav" aria-label={content.labels.contents}>
-        <ul className="about-timeline-list">
-          {visibleSections.map((section) => <li key={section.id} className="about-timeline-item about-timeline-item-section">
-            <a
-              href={`#${section.id}`}
-              className={activeSectionId === section.id ? 'about-timeline-link active' : 'about-timeline-link'}
-              aria-label={section.title}
-              onClick={(event) => {
-                event.preventDefault()
-                document.getElementById(section.id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-                window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}#${section.id}`)
-                setActiveSectionId(section.id)
-              }}
-            >
-              <span className="about-timeline-tip" aria-hidden>{section.title}</span>
-              <span className="about-timeline-tick" aria-hidden />
-            </a>
-          </li>)}
-        </ul>
-      </nav>
+      <ProjectAnchorNav sections={visibleSections} label={content.labels.contents} />
     </main>
   )
 }

@@ -9,7 +9,7 @@ import { loadImage, paintFace, paintStrap, parseColor } from './textures';
 import { configureSimulation, createSimulation, flipSimulation, physicsForSettings, placeHanging, stepSimulation } from './simulation';
 
 /** Owns all WebGL/browser resources for one mounted badge. */
-export const createLanyardScene = (container: HTMLDivElement, getSettings: () => Settings) => {
+export const createLanyardScene = (container: HTMLDivElement, getSettings: () => Settings, renderContainer?: HTMLElement) => {
   let renderer: THREE.WebGLRenderer;
   try {
     renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
@@ -23,7 +23,18 @@ export const createLanyardScene = (container: HTMLDivElement, getSettings: () =>
   const canvas = renderer.domElement;
   canvas.className = 'lanyard-canvas';
   canvas.setAttribute('aria-hidden', 'true');
-  container.appendChild(canvas);
+  const fullViewport = getSettings().fullViewport && !renderContainer;
+  const expanded = fullViewport || !!renderContainer;
+  const surface = expanded ? document.createElement('div') : container;
+  const interactionElement: HTMLElement = expanded ? document.createElement('div') : canvas;
+  if (expanded) {
+    surface.className = fullViewport ? 'lanyard-viewport' : 'lanyard-stage';
+    surface.setAttribute('aria-hidden', 'true');
+    interactionElement.className = 'lanyard-hit-area';
+    (renderContainer ?? document.body).appendChild(surface);
+  }
+  surface.appendChild(canvas);
+  if (expanded) surface.appendChild(interactionElement);
 
   const anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
   const scene = new THREE.Scene();
@@ -75,7 +86,7 @@ export const createLanyardScene = (container: HTMLDivElement, getSettings: () =>
   scene.add(entranceGroup);
 
   const sim = createSimulation();
-  const view = { width: 1, height: 1 };
+  const view = { width: 1, height: 1, left: 0, top: 0, renderWidth: 1, renderHeight: 1 };
   let layout = cardLayout('portrait', 0.3);
   let applied: Applied = {};
   let strapScale = STRAP_WIDTH;
@@ -125,11 +136,14 @@ export const createLanyardScene = (container: HTMLDivElement, getSettings: () =>
   const frameView = () => {
     const s = getSettings();
     const aspect = view.width / view.height;
-    let viewHeight = layout.height / clamp(s.size, 0.15, 0.9);
-    const minimumWidth = layout.width / 0.72;
+    const cardFill = clamp(s.size, 0.15, 0.9);
+    let viewHeight = layout.height / cardFill;
+    const minimumWidth = layout.width / cardFill;
     if (viewHeight * aspect < minimumWidth) viewHeight = minimumWidth / aspect;
     const viewWidth = viewHeight * aspect;
     camera.aspect = aspect;
+    // Extend the frustum beyond the layout frame without changing the badge scale.
+    if (expanded) camera.setViewOffset(view.width, view.height, -view.left, -view.top, view.renderWidth, view.renderHeight);
     camera.position.set(0, 0, viewHeight / 2 / Math.tan((FOV * Math.PI) / 360));
     camera.lookAt(0, 0, 0);
     camera.updateProjectionMatrix();
@@ -172,13 +186,13 @@ export const createLanyardScene = (container: HTMLDivElement, getSettings: () =>
       ring.position.set(0, layout.ringY, 0.005);
       applied.framingKey = '';
     }
-    const framingKey = `${layoutKey}|${s.size}|${s.anchor}|${s.strapLength}|${view.width}|${view.height}`;
+    const framingKey = `${layoutKey}|${s.size}|${s.anchor}|${s.strapLength}|${view.width}|${view.height}|${view.left}|${view.top}|${view.renderWidth}|${view.renderHeight}`;
     if (framingKey !== applied.framingKey) {
       frameView();
       if (!placed) {
         placeHanging(sim, layout, false);
         placed = true;
-      } else if (layoutKey !== applied.layoutKey) {
+      } else if (layoutKey !== applied.layoutKey || (expanded && !sim.grab)) {
         placeHanging(sim, layout, false);
       }
     }
@@ -215,19 +229,32 @@ export const createLanyardScene = (container: HTMLDivElement, getSettings: () =>
       clampMesh.geometry.dispose();
       clampMesh.geometry = buildClampGeometry(strapScale);
     }
-    canvas.style.touchAction = s.interactive ? 'pan-y' : 'auto';
+    interactionElement.style.touchAction = s.interactive ? (expanded ? 'none' : 'pan-y') : 'auto';
+    if (expanded) interactionElement.style.pointerEvents = s.interactive ? 'auto' : 'none';
 
     applied = { layoutKey, framingKey, imageKey, faceKey, strapColor: s.strapColor, strapScale };
     start();
   };
 
   const updateBand = createBandUpdater(sim, camera, bandGeometry, clampGroup);
+  const hitCorners = Array.from({ length: 4 }, () => new THREE.Vector3());
+  const cornerSigns = [[-1, 1], [1, 1], [1, -1], [-1, -1]];
 
   const render = () => {
     cardGroup.position.copy(sim.body.position);
     cardGroup.quaternion.copy(sim.body.quaternion);
     updateBand(strapScale, tileRatio);
     renderer.render(scene, camera);
+    if (expanded) {
+      // Capture pointers only over the projected card, leaving the page underneath usable.
+      const polygon = cornerSigns.map(([x, y], index) => {
+        const point = hitCorners[index].set(x * layout.width / 2, y * layout.height / 2 - 0.06, THICKNESS / 2);
+        point.applyMatrix4(cardGroup.matrixWorld).project(camera);
+        return `${((point.x + 1) * view.renderWidth / 2).toFixed(2)}px ${((1 - point.y) * view.renderHeight / 2).toFixed(2)}px`;
+      });
+      interactionElement.style.clipPath = `polygon(${polygon.join(',')})`;
+      interactionElement.style.visibility = entranceGroup.visible ? 'visible' : 'hidden';
+    }
   };
 
   const tick = (now: number) => {
@@ -274,7 +301,7 @@ export const createLanyardScene = (container: HTMLDivElement, getSettings: () =>
   };
 
   const setCursor = (value: string) => {
-    if (canvas.style.cursor !== value) canvas.style.cursor = value;
+    if (interactionElement.style.cursor !== value) interactionElement.style.cursor = value;
   };
 
   const onPointerDown = (event: PointerEvent) => {
@@ -290,7 +317,7 @@ export const createLanyardScene = (container: HTMLDivElement, getSettings: () =>
       target: hit.point.clone()
     };
     press = { x: event.clientX, y: event.clientY, time: performance.now(), point: hit.point.clone() };
-    canvas.setPointerCapture?.(event.pointerId);
+    interactionElement.setPointerCapture?.(event.pointerId);
     setCursor('grabbing');
     event.preventDefault();
     start();
@@ -315,7 +342,7 @@ export const createLanyardScene = (container: HTMLDivElement, getSettings: () =>
     sim.grab = null;
     if (press && event.type === 'pointerup' && performance.now() - press.time < 450) flipSimulation(sim, press.point, camera.position);
     press = null;
-    canvas.releasePointerCapture?.(event.pointerId);
+    interactionElement.releasePointerCapture?.(event.pointerId);
     setCursor(hovering && event.pointerType !== 'touch' ? 'grab' : '');
     start();
   };
@@ -326,26 +353,54 @@ export const createLanyardScene = (container: HTMLDivElement, getSettings: () =>
     if (pickCard()) event.preventDefault();
   };
 
-  canvas.addEventListener('pointerdown', onPointerDown);
-  canvas.addEventListener('pointermove', onPointerMove);
-  canvas.addEventListener('pointerup', onPointerUp);
-  canvas.addEventListener('pointercancel', onPointerUp);
-  canvas.addEventListener('lostpointercapture', onPointerUp);
-  canvas.addEventListener('touchstart', onTouchStart, { passive: false });
+  interactionElement.addEventListener('pointerdown', onPointerDown);
+  interactionElement.addEventListener('pointermove', onPointerMove);
+  interactionElement.addEventListener('pointerup', onPointerUp);
+  interactionElement.addEventListener('pointercancel', onPointerUp);
+  interactionElement.addEventListener('lostpointercapture', onPointerUp);
+  interactionElement.addEventListener('touchstart', onTouchStart, { passive: false });
 
   const resize = () => {
+    if (expanded && (!container.clientWidth || !container.clientHeight)) {
+      surface.hidden = true;
+      visible = false;
+      sim.grab = null;
+      press = null;
+      return;
+    }
+    if (expanded) {
+      surface.hidden = false;
+      visible = true;
+    }
+    const rect = container.getBoundingClientRect();
     view.width = Math.max(1, container.clientWidth);
     view.height = Math.max(1, container.clientHeight);
+    view.left = rect.left;
+    view.top = rect.top + (fullViewport ? window.scrollY : 0);
+    view.renderWidth = fullViewport ? window.innerWidth : view.width;
+    view.renderHeight = fullViewport ? window.innerHeight : view.height;
+    if (renderContainer) {
+      // The local frame sets the resting position; the canvas covers the whole modal.
+      surface.style.height = '100%';
+      view.renderWidth = Math.max(1, renderContainer.clientWidth);
+      view.renderHeight = Math.max(1, renderContainer.scrollHeight);
+      surface.style.height = `${view.renderHeight}px`;
+      const surfaceRect = surface.getBoundingClientRect();
+      view.left = rect.left - surfaceRect.left;
+      view.top = rect.top - surfaceRect.top;
+    }
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-    renderer.setSize(view.width, view.height, false);
+    renderer.setSize(view.renderWidth, view.renderHeight, false);
     apply();
     render();
   };
 
   const resizeObserver = new ResizeObserver(resize);
   resizeObserver.observe(container);
+  if (renderContainer) resizeObserver.observe(renderContainer);
   const intersectionObserver = new IntersectionObserver(([entry]) => {
-    visible = entry.isIntersecting;
+    visible = expanded ? container.getClientRects().length > 0 : entry.isIntersecting;
+    if (expanded) surface.hidden = !visible;
     if (visible) start();
   });
   intersectionObserver.observe(container);
@@ -353,6 +408,7 @@ export const createLanyardScene = (container: HTMLDivElement, getSettings: () =>
     if (!document.hidden) start();
   };
   document.addEventListener('visibilitychange', onVisibility);
+  if (expanded) window.addEventListener('resize', resize);
 
   resize();
 
@@ -362,17 +418,19 @@ export const createLanyardScene = (container: HTMLDivElement, getSettings: () =>
     resizeObserver.disconnect();
     intersectionObserver.disconnect();
     document.removeEventListener('visibilitychange', onVisibility);
-    canvas.removeEventListener('pointerdown', onPointerDown);
-    canvas.removeEventListener('pointermove', onPointerMove);
-    canvas.removeEventListener('pointerup', onPointerUp);
-    canvas.removeEventListener('pointercancel', onPointerUp);
-    canvas.removeEventListener('lostpointercapture', onPointerUp);
-    canvas.removeEventListener('touchstart', onTouchStart);
+    window.removeEventListener('resize', resize);
+    interactionElement.removeEventListener('pointerdown', onPointerDown);
+    interactionElement.removeEventListener('pointermove', onPointerMove);
+    interactionElement.removeEventListener('pointerup', onPointerUp);
+    interactionElement.removeEventListener('pointercancel', onPointerUp);
+    interactionElement.removeEventListener('lostpointercapture', onPointerUp);
+    interactionElement.removeEventListener('touchstart', onTouchStart);
     [bodyMesh, frontMesh, backMesh, ring, clampMesh, eyelet, band, holder, snap].forEach(mesh => mesh.geometry?.dispose());
     materials.dispose();
     environment.dispose();
     renderer.dispose();
     if (canvas.parentNode) canvas.parentNode.removeChild(canvas);
+    if (expanded) surface.remove();
   };
 
   return { apply, dispose };

@@ -1,4 +1,5 @@
 import type { IncomingMessage, ServerResponse } from 'node:http'
+import { CHAT_INPUT_TOKENS, CHAT_MAX_REQUEST_BYTES, CHAT_REPLY_TOKENS, estimateMessagesTokens } from '../frontend/src/lib/chat/context'
 
 export const config = { maxDuration: 60 }
 
@@ -27,7 +28,7 @@ export async function handleChat(req: ChatRequest, res: ServerResponse, key: str
       let size = 0
       for await (const chunk of req) {
         size += Buffer.byteLength(chunk)
-        if (size > 500000) return fail(413, 'Request too large')
+        if (size > CHAT_MAX_REQUEST_BYTES) return fail(413, 'Request too large')
         chunks.push(Buffer.from(chunk))
       }
       body = Buffer.concat(chunks).toString('utf8')
@@ -36,14 +37,15 @@ export async function handleChat(req: ChatRequest, res: ServerResponse, key: str
       try { body = JSON.parse(body) } catch { return fail(400, 'Invalid JSON') }
     }
     const input = body as { messages?: unknown; stream?: unknown } | null
-    if (!input || !Array.isArray(input.messages) || !input.messages.length || input.messages.length > 100 ||
-      input.messages.some((m) => !m || !['system', 'user', 'assistant'].includes(m.role) || typeof m.content !== 'string') ||
-      JSON.stringify(input.messages).length > 500000) return fail(400, 'Invalid messages')
+    if (!input || !Array.isArray(input.messages) || !input.messages.length ||
+      input.messages.some((m) => !m || !['system', 'user', 'assistant'].includes(m.role) || typeof m.content !== 'string')) return fail(400, 'Invalid messages')
+    if (Buffer.byteLength(JSON.stringify(input)) > CHAT_MAX_REQUEST_BYTES) return fail(413, 'Request too large')
+    if (estimateMessagesTokens(input.messages) > CHAT_INPUT_TOKENS) return fail(413, 'CONTEXT_LIMIT_EXCEEDED')
     const stream = input.stream === true
     const upstream = await fetch('https://api.deepseek.com/v1/chat/completions', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${key}` },
-      body: JSON.stringify({ model: 'deepseek-chat', messages: input.messages.map((m) => ({ role: m.role, content: m.content })), temperature: 0.65, stream, max_tokens: 2048 }),
+      body: JSON.stringify({ model: 'deepseek-chat', messages: input.messages.map((m) => ({ role: m.role, content: m.content })), temperature: 0.65, stream, max_tokens: CHAT_REPLY_TOKENS }),
       signal: controller.signal,
     })
     if (!upstream.ok || !upstream.body) return fail(upstream.status === 429 ? 429 : 502, 'Chat service is temporarily unavailable')

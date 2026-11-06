@@ -43,6 +43,8 @@
   --intro-gap: var(--space-16);
   --paragraph-gap: var(--space-5);
   --header-height: 72px;
+  --sidebar-width: 256px;
+  --sidebar-rail-width: 72px;
   --header-clearance: calc(var(--header-height) + var(--space-6) + env(safe-area-inset-top, 0px));
   --control-height: 36px;
   --radius-sm: 4px;
@@ -56,7 +58,7 @@
   --hover-bg: #efefef;
   --text: #1d1d1f;
   --muted: #666666;
-  --rule: #e5e5e5;
+  --rule: #ededed;
   --control-border: #d1d1d1;
   --accent: #0068df;
   --danger: #b42318;
@@ -81,7 +83,7 @@
   --hover-bg: #262626;
   --text: #ededed;
   --muted: #a3a3a3;
-  --rule: #333333;
+  --rule: #242424;
   --control-border: #484848;
   --accent: #70b0ff;
   --danger: #ff928b;
@@ -91,4 +93,33 @@
   --lightbox-bg: rgb(0 0 0 / .96);
   --shadow-sm: 0 8px 24px rgb(0 0 0 / .3);
   --shadow-overlay: 0 24px 64px rgb(0 0 0 / .5);
+}
+
+/* Distinct architecture layers, with readable tinted surfaces in both themes. */
+:root {
+  --architecture-assets: var(--accent);
+  --architecture-guidance: #7d61bd;
+  --architecture-delivery: #238475;
+  --architecture-applications: #aa722b;
+}
+:root[data-theme='dark'] {
+  --architecture-guidance: #b69ae8;
+  --architecture-delivery: #69c7b3;
+  --architecture-applications: #e5b86c;
+}
+
+/* Lieflat Porcelain, desaturated for the portfolio; darker values on light surfaces. */
+:root {
+  --funnel-stage-1: #475b73;
+  --funnel-stage-2: #5a6d84;
+  --funnel-stage-3: #6d7e93;
+  --funnel-stage-4: #7d8b9e;
+  --funnel-thread: #8090a3;
+}
+:root[data-theme='dark'] {
+  --funnel-stage-1: #d5dbe2;
+  --funnel-stage-2: #bcc7d7;
+  --funnel-stage-3: #a8b7c8;
+  --funnel-stage-4: #8e9eb2;
+  --funnel-thread: #6f7e90;
 }
