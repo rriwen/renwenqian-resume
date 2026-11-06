@@ -59,7 +59,7 @@ function AppFrame({ dark, onToggleTheme }: { dark: boolean; onToggleTheme: () =>
     <Header onNewChat={newChat} onSelectConversation={selectConversation} onOpenContact={openContact} dark={dark} onToggleTheme={onToggleTheme} sidebarCollapsed={sidebarCollapsed} onToggleSidebar={() => setSidebarCollapsed((value) => !value)} />
     <div className="site-main" id="site-main">
       <div className="site-content" hidden={chat.open}>
-      <Suspense fallback={<main className="route-loading">Loading...</main>}>
+      <Suspense fallback={<main className="route-loading" aria-busy="true" aria-label="页面加载中" />}>
         <Routes>
           <Route path="/" element={<Home key={homeVersion} onAsk={askQuestion} dark={dark} onToggleTheme={onToggleTheme} />} />
           <Route path="/photography" element={<Photography />} />
@@ -95,7 +95,7 @@ export default function App() {
         <ChatStoreProvider>
           <Routes>
             <Route path="/prototype/text2sql" element={
-              <Suspense fallback={<main className="route-loading">正在加载 SQL 编辑器…</main>}>
+              <Suspense fallback={<main className="route-loading" aria-busy="true" aria-label="页面加载中" />}>
                 <SqlEditorPrototype />
               </Suspense>
             } />
