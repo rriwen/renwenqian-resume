@@ -61,7 +61,7 @@ function AppFrame({ dark, onToggleTheme }: { dark: boolean; onToggleTheme: () =>
       <div className="site-content" hidden={chat.open}>
       <Suspense fallback={<main className="route-loading">Loading...</main>}>
         <Routes>
-          <Route path="/" element={<Home key={homeVersion} onAsk={askQuestion} />} />
+          <Route path="/" element={<Home key={homeVersion} onAsk={askQuestion} dark={dark} onToggleTheme={onToggleTheme} />} />
           <Route path="/photography" element={<Photography />} />
           <Route path="/experiments" element={<Experiments />} />
           <Route path="/project/:slug" element={<ProjectDetail />} />

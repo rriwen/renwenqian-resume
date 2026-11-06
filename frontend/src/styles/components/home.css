@@ -33,10 +33,36 @@
   line-height: var(--leading-heading);
 }
 
+.home-wave-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  vertical-align: baseline;
+  touch-action: manipulation;
+}
+
+.home-wave-button:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 4px;
+}
+
 .home-wave {
   display: inline-block;
   transform-origin: 70% 80%;
   animation: home-wave 1.1s ease-in-out .35s 2;
+}
+
+.home-wave.is-clicked { animation: home-wave .65s ease-in-out 0s 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .home-wave, .home-wave.is-clicked { animation: none; }
 }
 
 @keyframes home-wave {

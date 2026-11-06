@@ -2,11 +2,12 @@ import { useEffect, useRef, useState } from "react";
 import { ArrowUpIcon } from "@phosphor-icons/react";
 import { useLanguage } from "../i18n/LanguageContext";
 
-type Props = { onAsk: (text: string) => void };
+type Props = { onAsk: (text: string) => void; dark: boolean; onToggleTheme: () => void };
 
-export function Home({ onAsk }: Props) {
+export function Home({ onAsk, dark, onToggleTheme }: Props) {
   const { locale, m } = useLanguage();
   const [question, setQuestion] = useState("");
+  const [waveVersion, setWaveVersion] = useState(0);
   const questionRef = useRef<HTMLTextAreaElement>(null);
   const isMac = typeof navigator !== "undefined" && /Mac|iPhone|iPad/.test(navigator.platform);
   const questionPlaceholder = locale === "zh" ? "关于我的工作，有什么想问的吗？" : "Ask about my work…";
@@ -36,7 +37,13 @@ export function Home({ onAsk }: Props) {
     <main className="page-shell home-redesign">
       <section className="home-hero" aria-labelledby="home-headline">
         <div className="home-hero-copy">
-          <h1 id="home-headline">{m.home.greeting}{" "}<span className="home-wave" aria-hidden="true">👋🏻</span></h1>
+          <h1 id="home-headline">{m.home.greeting}{" "}<button
+            type="button"
+            className="home-wave-button"
+            aria-label={dark ? "切换浅色模式" : "切换暗色模式"}
+            title={dark ? "切换浅色模式" : "切换暗色模式"}
+            onClick={() => { setWaveVersion((value) => value + 1); onToggleTheme(); }}
+          ><span key={waveVersion} className={`home-wave${waveVersion ? " is-clicked" : ""}`} aria-hidden="true">👋🏻</span></button></h1>
           <p className="home-intro">{m.home.description}</p>
           <div className="home-chat-entry">
             <form className="home-chat-form prompt-composer" aria-label={locale === "zh" ? "向我提问" : "Ask me a question"} onSubmit={(event) => {
