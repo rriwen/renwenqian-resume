@@ -20,3 +20,71 @@
 
 @keyframes content-pulse { from { opacity: .55; } to { opacity: 1; } }
 
+/* Animate reading blocks, never the sticky header or hash navigation container. */
+@media (prefers-reduced-motion: no-preference) {
+  .about-page > div,
+  .about-page > section,
+  .datapilot-case-hero,
+  .project-detail-section,
+  .datapilot-module {
+    animation: reading-enter 480ms cubic-bezier(.22, 1, .36, 1) backwards;
+  }
+  .about-page > section,
+  .project-detail-section,
+  .datapilot-module { animation-delay: 70ms; }
+}
+
+@keyframes reading-enter {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.media-frame { position: relative; }
+.media-image { opacity: 0; transition: opacity 320ms ease; }
+.media-image.is-ready { opacity: 1; }
+.media-loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: var(--subtle);
+  color: var(--muted);
+  font-size: var(--text-xs);
+  pointer-events: none;
+  overflow: hidden;
+}
+.media-loading::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, transparent 20%, var(--hover-bg) 50%, transparent 80%);
+  animation: media-shimmer 1.6s ease-in-out infinite;
+}
+.media-loading-dot {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--rule);
+  border-top-color: var(--muted);
+  border-radius: 50%;
+  animation: media-spin 900ms linear infinite;
+}
+.media-load-error {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: var(--subtle);
+  color: var(--muted);
+  font-size: var(--text-xs);
+}
+.media-load-fallback { position: absolute; z-index: 2; left: 50%; top: 65%; transform: translateX(-50%); font-size: var(--text-xs); color: var(--text); }
+@keyframes media-shimmer { from { transform: translateX(-100%); } to { transform: translateX(100%); } }
+@keyframes media-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .media-image { transition: none; }
+  .media-loading::before, .media-loading-dot { animation: none; }
+}
+

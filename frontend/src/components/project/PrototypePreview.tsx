@@ -17,6 +17,15 @@ export function PrototypePreview({ url, title, viewportWidth }: { url: string; t
     return () => observer.disconnect()
   }, [viewportWidth])
   const [active, setActive] = useState(false)
+  const [loadedUrl, setLoadedUrl] = useState<string | null>(null)
+  const loading = loadedUrl !== url
+  const [slow, setSlow] = useState(false)
+  useEffect(() => {
+    setSlow(false)
+    if (!loading) return
+    const timeout = setTimeout(() => setSlow(true), 15000)
+    return () => clearTimeout(timeout)
+  }, [url, loading])
   const [remaining, setRemaining] = useState<number | null>(null)
   const [position, setPosition] = useState({ x: 0, y: 0 })
   const timer = useRef<ReturnType<typeof setInterval> | null>(null)
@@ -42,7 +51,7 @@ export function PrototypePreview({ url, title, viewportWidth }: { url: string; t
     setPosition({ x: Math.max(8, Math.min(event.clientX - rect.left + 16, rect.width - 172)), y: Math.max(8, Math.min(event.clientY - rect.top + 16, rect.height - 40)) })
   }
   const start = (event: PointerEvent<HTMLButtonElement>) => {
-    if (event.pointerType !== 'mouse') return
+    if (loading || event.pointerType !== 'mouse') return
     clearTimer()
     trackPointer(event)
     const started = performance.now()
@@ -60,8 +69,10 @@ export function PrototypePreview({ url, title, viewportWidth }: { url: string; t
 
   return (
     <div ref={container} className={`project-detail-prototype-preview${active ? ' is-interactive' : ''}`} onPointerLeave={reset} onKeyDown={event => { if (event.key === 'Escape') reset() }}>
-      <iframe ref={frame} style={viewportWidth ? { position: 'absolute', width: viewportWidth, height: viewportWidth * 9 / 16, transform: `scale(${scale})`, transformOrigin: 'top left' } : undefined} src={url} title={title} loading="lazy" allowFullScreen tabIndex={active ? 0 : -1} />
-      {!active && <button type="button" className="project-detail-prototype-gate"
+      <iframe key={url} ref={frame} className={`media-image${loading ? '' : ' is-ready'}`} onLoad={() => setLoadedUrl(url)} style={viewportWidth ? { position: 'absolute', width: viewportWidth, height: viewportWidth * 9 / 16, transform: `scale(${scale})`, transformOrigin: 'top left' } : undefined} src={url} title={title} loading="lazy" allowFullScreen tabIndex={active ? 0 : -1} />
+      {loading && <span className="media-loading" role="status" aria-label="Demo 加载中"><span className="media-loading-dot" aria-hidden="true" /></span>}
+      {loading && slow && <a className="media-load-fallback" href={url} target="_blank" rel="noopener noreferrer">加载较慢，单独打开 Demo ↗</a>}
+      {!active && <button type="button" disabled={loading} className="project-detail-prototype-gate"
         aria-label={zh ? `启用${title}，鼠标停留两秒或按 Enter` : `Activate ${title}: hover for two seconds or press Enter`}
         onPointerEnter={start} onPointerMove={trackPointer}
         onPointerDown={event => { if (event.pointerType !== 'mouse') activate() }}

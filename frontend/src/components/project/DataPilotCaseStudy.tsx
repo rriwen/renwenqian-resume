@@ -5,6 +5,7 @@ import { DataPilotPartMenu } from './DataPilotPartMenu'
 import { getDataPilotContent, type DataPilotPart } from '../../data/projects/dataPilot'
 import type { Locale } from '../../i18n/translations'
 import { ReadingPageHeader } from '../ReadingPageHeader'
+import { LoadingImage } from './LoadingImage'
 
 type Props = { locale: Locale }
 
@@ -71,7 +72,7 @@ export function DataPilotCaseStudy({ locale }: Props) {
                   return <li key={bullet}>{separator > -1 ? <><strong>{bullet.slice(0, separator)}</strong>{bullet.slice(separator)}</> : bullet}</li>
                 })}</ul> : null}
                 {section.images.length ? <div className={`datapilot-evidence ${section.images.length > 1 ? 'is-multi' : 'is-single'}`}>
-                  {section.images.map((image) => <figure key={image.src + image.caption}>{image.display === 'image' ? <img className="datapilot-evidence-image" src={image.src} alt={image.alt ?? image.caption} /> : <div className="datapilot-image-placeholder" role="img" aria-label={image.caption} />}{image.caption ? <figcaption>{image.caption}</figcaption> : null}</figure>)}
+                  {section.images.map((image) => <figure key={image.src + image.caption}>{image.display === 'image' ? <div className="media-frame"><LoadingImage className="datapilot-evidence-image" src={image.src} alt={image.alt ?? image.caption} /></div> : <div className="datapilot-image-placeholder" role="img" aria-label={image.caption} />}{image.caption ? <figcaption>{image.caption}</figcaption> : null}</figure>)}
                 </div> : null}
                 {section.bullets && section.id === 'overview' ? <ul className="datapilot-bullets">{section.bullets.map((bullet) => <li key={bullet}>{bullet}</li>)}</ul> : null}
               </section>

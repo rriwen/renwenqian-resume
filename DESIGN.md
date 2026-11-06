@@ -165,3 +165,7 @@ Text2SQL 原型通过详情页 Demo 链接进入，由 `pages/SqlEditorPrototype
 - 页面没有水平滚动，正文、标签、表格和图片不发生遮挡。
 - 图片请求失败时页面仍可阅读，摄影页能显示空数据状态。
 - `npm test`、`npm run typecheck` 和 `npm run build` 通过。
+
+### 阅读页加载动效
+
+关于我和项目详情的正文块在挂载时以 8px 上移、480ms 淡入；不作用于吸顶页头和锚点容器。`LoadingImage.tsx` 为项目画廊及 DataPilot 图片提供加载扫光、完成淡入和失败提示，保留原图比例、裁剪与全屏入口。`PrototypePreview.tsx` 在 iframe 加载时显示状态，完成后启用交互，等待超过 15 秒提供独立打开链接（iframe load 不代表外部页面业务加载成功）。样式集中在 `styles/components/loading.css`，减少动态效果偏好下禁用动画与过渡。

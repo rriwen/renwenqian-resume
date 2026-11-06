@@ -3,6 +3,7 @@ import type { ProjectGalleryItem } from '../../data/projectDetails'
 import { useLanguage } from '../../i18n/LanguageContext'
 import { isGifSrc } from '../../lib/isGifSrc'
 import { ProjectLightbox } from './ProjectLightbox'
+import { LoadingImage } from './LoadingImage'
 
 type Props = { items: ProjectGalleryItem[]; layout?: 'grid' | 'stacked' }
 
@@ -52,7 +53,7 @@ export function ProjectGallery({ items, layout = 'grid' }: Props) {
                   position: 'relative',
                 }}
               >
-                <img
+                <LoadingImage
                   src={item.src}
                   alt=""
                   loading={isGifSrc(item.src) ? 'eager' : undefined}
