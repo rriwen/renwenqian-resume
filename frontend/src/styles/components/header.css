@@ -47,6 +47,17 @@
   flex-shrink: 0;
 }
 
+@keyframes sidebar-enter {
+  from { transform: translateX(-100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@media (min-width: 901px) and (prefers-reduced-motion: no-preference) {
+  .site-sidebar {
+    animation: sidebar-enter 650ms cubic-bezier(.22, 1, .36, 1) backwards;
+  }
+}
+
 .site-sidebar svg[stroke='currentColor'] {
   stroke-width: 1.7;
 }
