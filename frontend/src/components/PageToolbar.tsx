@@ -2,7 +2,7 @@ import { useLocation } from 'react-router-dom'
 import { ResumeDownload } from './about/ResumeDownload'
 import { ChatHistory } from './chat/ChatHistory'
 import { useChatStore } from './chat/ChatStoreProvider'
-import { IconMail, IconMoon, IconSun } from './Icons'
+import { IconMoon, IconSun } from './Icons'
 
 type Props = {
   onSelectConversation: (id: string) => void
@@ -25,7 +25,7 @@ export function PageToolbar({ onSelectConversation, showHistory, dark, onToggleT
         <button type="button" className="icon-button" onClick={onToggleTheme} aria-label={dark ? '切换浅色模式' : '切换暗色模式'} title={dark ? '浅色模式' : '暗色模式'}>
           {dark ? <IconSun /> : <IconMoon />}
         </button>
-        <button type="button" className="ui-button page-toolbar-contact" aria-haspopup="dialog" onClick={onOpenContact}><IconMail /><span>联系我</span></button>
+        <button type="button" className="ui-button page-toolbar-contact" aria-haspopup="dialog" onClick={onOpenContact}><span>联系我</span></button>
       </div>
     </header>
   )
