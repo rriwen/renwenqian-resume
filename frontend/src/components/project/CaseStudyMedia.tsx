@@ -1,11 +1,19 @@
-import type { ReactNode } from 'react'
+import { createContext, useContext, type ReactNode } from 'react'
+import { MeshGradientBackground } from './MeshGradientBackground'
 import type { ProjectGalleryItem } from '../../data/projectDetails'
 import { ProjectGallery } from './ProjectGallery'
 
+const HeroPaletteContext = createContext<string | undefined>(undefined)
+
+export function CaseStudyHeroPalette({ slug, children }: { slug: string; children: ReactNode }) {
+  return <HeroPaletteContext.Provider value={slug}>{children}</HeroPaletteContext.Provider>
+}
+
 /** Shared exhibition frame; the original image remains available in the lightbox. */
 export function CaseStudyMediaFrame({ children, index = 0, item }: { children: ReactNode; index?: number; item?: ProjectGalleryItem }) {
+  const heroPalette = useContext(HeroPaletteContext)
   const palette = item ? Array.from(item.src).reduce((sum, char) => sum + char.charCodeAt(0), 0) % 4 : index % 4
-  return <div className={`case-study-media case-study-media--${palette}`}>{children}</div>
+  return <div className={`case-study-media case-study-media--${palette}${heroPalette ? " project-hero-gradient" : ""}`} data-hero-palette={heroPalette}>{heroPalette && <MeshGradientBackground />}{children}</div>
 }
 
 export function CaseStudyGallery({ items }: { items: ProjectGalleryItem[] }) {

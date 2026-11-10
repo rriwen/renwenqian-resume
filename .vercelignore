@@ -1,0 +1,6 @@
+output/
+tmp/
+.env*
+!.env.example
+node_modules/
+.git/

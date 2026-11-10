@@ -31,6 +31,7 @@ export const projects: Project[] = [
     tags: { zh: ['AI Native', '用户增长', '商业化'], en: ['AI Native', 'Growth', 'Commercialization'] },
   },
   {
+    navigationTitle: { zh: 'AgentOps', en: 'AgentOps' },
     id: 2, slug: 'agentops', title: 'Agent 可观测产品', titleEn: 'Agent Observability',
     category: 'ai-products',
     image: '/images/agentops-execution-trace.jpg',

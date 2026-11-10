@@ -3,13 +3,12 @@ import { Link, useLocation, useMatch } from 'react-router-dom'
 import { getProjectBySlug, getProjectNavigationTitle, type ProjectCategory } from '../data/projects'
 import { getProjectNavigationGroups, getProjectViewBySlug } from '../data/projectViews'
 import { useLanguage } from '../i18n/LanguageContext'
-import { IconCamera, IconClose, IconFileText, IconMail, IconNewChat, IconPalette, IconSidebarToggle, IconSparkle, IconTerminal } from './Icons'
+import { IconCamera, IconClose, IconFileText, IconNewChat, IconPalette, IconSidebarToggle, IconSparkle, IconTerminal } from './Icons'
 import { SidebarRail } from './SidebarRail'
 import { BookOpenIcon } from '@phosphor-icons/react'
 
 type Props = {
   onNewChat: () => void
-  onOpenContact: () => void
   open: boolean
   onClose: () => void
   triggerRef: RefObject<HTMLButtonElement>
@@ -20,7 +19,7 @@ type Props = {
   expandButtonRef: RefObject<HTMLButtonElement>
 }
 
-export function SiteSidebar({ onNewChat, onOpenContact, open, onClose, triggerRef, launcherRef, desktopCollapsed, onToggleSidebar, collapseButtonRef, expandButtonRef }: Props) {
+export function SiteSidebar({ onNewChat, open, onClose, triggerRef, launcherRef, desktopCollapsed, onToggleSidebar, collapseButtonRef, expandButtonRef }: Props) {
   const { pathname, hash } = useLocation()
   const selectedPathname = hash === '#chat' ? '' : pathname
   const match = useMatch('/project/:slug')
@@ -109,14 +108,10 @@ export function SiteSidebar({ onNewChat, onOpenContact, open, onClose, triggerRe
             )
           })}
           <Link to="/photography" className="sidebar-link sidebar-photography" aria-current={selectedPathname === '/photography' ? 'page' : undefined}><IconCamera /><span>{locale === 'zh' ? '摄影记录' : 'Photography journal'}</span></Link>
-          <button type="button" className="sidebar-link sidebar-contact-button" aria-haspopup="dialog" onClick={(event) => {
-            event.currentTarget.focus()
-            onClose()
-            onOpenContact()
-          }}><IconMail size={18} /><span>{locale === 'zh' ? '联系我' : 'Contact me'}</span></button>
+
           <a hidden className="sidebar-link sidebar-blog" href="https://app.notion.com/p/rriwen/Hi-I-m-4x-204195a9bba880f787b4dc0eec18a101?source=copy_link" target="_blank" rel="noopener noreferrer"><BookOpenIcon size={18} aria-hidden="true" /><span>{locale === 'zh' ? '博客' : 'Blog'}</span><span className="external-link-icon" aria-hidden="true">↗</span></a>
         </nav>
-        {desktopCollapsed && <SidebarRail onNewChat={onNewChat} onOpenContact={onOpenContact} />}
+        {desktopCollapsed && <SidebarRail onNewChat={onNewChat} />}
       </aside>
     </>
   )

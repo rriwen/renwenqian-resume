@@ -3,9 +3,9 @@ import { Link, useLocation } from 'react-router-dom'
 import { getProjectNavigationTitle, type ProjectCategory } from '../data/projects'
 import { getProjectNavigationGroups } from '../data/projectViews'
 import { useLanguage } from '../i18n/LanguageContext'
-import { IconCamera, IconFileText, IconMail, IconNewChat, IconPalette, IconSparkle, IconTerminal } from './Icons'
+import { IconCamera, IconFileText, IconNewChat, IconPalette, IconSparkle, IconTerminal } from './Icons'
 
-export function SidebarRail({ onNewChat, onOpenContact }: { onNewChat: () => void; onOpenContact: () => void }) {
+export function SidebarRail({ onNewChat }: { onNewChat: () => void }) {
   const { pathname, hash, key } = useLocation()
   const selectedPathname = hash === '#chat' ? '' : pathname
   const projectGroups = getProjectNavigationGroups()
@@ -15,7 +15,6 @@ export function SidebarRail({ onNewChat, onOpenContact }: { onNewChat: () => voi
   const groupRefs = useRef<Partial<Record<ProjectCategory, HTMLDivElement | null>>>({})
   const triggerRefs = useRef<Partial<Record<ProjectCategory, HTMLButtonElement | null>>>({})
   const photographyLabel = locale === 'zh' ? '摄影记录' : 'Photography journal'
-  const contactLabel = locale === 'zh' ? '联系我' : 'Contact me'
 
   useEffect(() => { setOpenGroup(null) }, [key])
 
@@ -89,10 +88,6 @@ export function SidebarRail({ onNewChat, onOpenContact }: { onNewChat: () => voi
       <Link to="/photography" className="sidebar-rail-link sidebar-tooltip-host" aria-label={photographyLabel} aria-current={selectedPathname === '/photography' ? 'page' : undefined}>
         <IconCamera /><span className="sidebar-tooltip" aria-hidden="true">{photographyLabel}</span>
       </Link>
-      <button type="button" className="sidebar-rail-link sidebar-contact-button sidebar-tooltip-host" aria-label={contactLabel} aria-haspopup="dialog" onClick={(event) => {
-        event.currentTarget.focus()
-        onOpenContact()
-      }}><IconMail /><span className="sidebar-tooltip" aria-hidden="true">{contactLabel}</span></button>
     </nav>
   )
 }

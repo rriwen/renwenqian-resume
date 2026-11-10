@@ -30,6 +30,10 @@
 .case-study-page .project-overview-facts dt { margin-bottom: 12px; font-size: var(--text-xs); }
 .case-study-page .project-overview-facts dd { font-size: var(--text-prose); }
 .case-study-media { position: relative; padding: clamp(16px, 2.2vw, 32px); border-radius: var(--radius-lg); overflow: hidden; background: linear-gradient(130deg,#c5eafa,#70b6ff 50%,#c9f5fc); }
+.project-case-cover .case-study-media { padding: clamp(16px, 2.5vw, 32px) clamp(16px, 2.5vw, 32px) 0; }
+.project-case-cover .case-study-placeholder { aspect-ratio: 1.88; }
+.project-case-cover .project-detail-prototype-preview { aspect-ratio: 1.88; overflow: hidden; }
+.project-case-cover .case-study-media > button { border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
 .case-study-media--1 { background: linear-gradient(130deg,#b1a3ff,#e9d8ff 50%,#f7cfe6); }
 .case-study-media--2 { background: linear-gradient(130deg,#c7e8d5,#a3dedd 50%,#def9ed); }
 .case-study-media--3 { background: linear-gradient(130deg,#fee3d8,#eed3ec 50%,#b8c8fa); }
@@ -66,3 +70,14 @@
 .case-study-page #responsibilities > ul > li { padding: 24px 0; margin: 0 !important; border-bottom: 1px solid var(--rule); }
 .case-study-page #design-highlights > ul { list-style: none !important; padding: 0 !important; }
 .case-study-page #design-highlights > ul > li { padding: 24px 0; margin: 0 !important; border-bottom: 1px solid var(--rule); }
+
+/* Project-specific hero hues share one mesh shader and motion rhythm. */
+[data-hero-palette="dataagent"] { --showcase-ice: #c5f4ff; --showcase-sky: #91cfff; --showcase-blue: #438fff; --showcase-lavender: #d5e4ff; }
+[data-hero-palette="databaseops"] { --showcase-ice: #dcf9f6; --showcase-sky: #a1e7ec; --showcase-blue: #53b9d5; --showcase-lavender: #c4e9ff; }
+[data-hero-palette="agentops"] { --showcase-ice: #eee4ff; --showcase-sky: #c9b5f5; --showcase-blue: #9371df; --showcase-lavender: #f1d6ef; }
+[data-hero-palette="text2sql"] { --showcase-ice: #e4f6dc; --showcase-sky: #bee8ce; --showcase-blue: #6bbcaa; --showcase-lavender: #d7f5ec; }
+[data-hero-palette="workflow-editor"] { --showcase-ice: #fff1dc; --showcase-sky: #f5d3b6; --showcase-blue: #e9a788; --showcase-lavender: #f8dce2; }
+[data-hero-palette="datadevelop"] { --showcase-ice: #fce7f0; --showcase-sky: #edbcd4; --showcase-blue: #cf8cbb; --showcase-lavender: #e5d6f7; }
+[data-hero-palette="aidesignsystem"] { --showcase-ice: #e9edff; --showcase-sky: #bfc9f5; --showcase-blue: #879be0; --showcase-lavender: #dcdcf6; }
+.project-hero-gradient { isolation: isolate; background: linear-gradient(130deg, var(--showcase-ice), var(--showcase-sky) 45%, var(--showcase-blue), var(--showcase-lavender)); }
+.project-hero-gradient > .dbv-mesh-gradient { position: absolute; inset: 0; pointer-events: none; z-index: -1; }

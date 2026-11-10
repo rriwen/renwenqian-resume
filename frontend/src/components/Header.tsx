@@ -41,8 +41,8 @@ export function Header({ onNewChat, onSelectConversation, onOpenContact, dark, o
         <button ref={menuButtonRef} type="button" className="mobile-menu-button" aria-label={locale === 'zh' ? '打开导航' : 'Open navigation'} aria-controls="site-sidebar" aria-expanded={menuOpen} onClick={() => setMenuOpen(true)}><IconMenu size={17} /></button>
         <Link to="/" className="header-logo mobile-header-logo">DESIGN.4x</Link>
       </div>
-      <PageToolbar onSelectConversation={onSelectConversation} showHistory={location.pathname === '/' || location.hash === '#chat'} dark={dark} onToggleTheme={onToggleTheme} />
-      <SiteSidebar onNewChat={onNewChat} onOpenContact={onOpenContact} open={menuOpen} onClose={closeMenu} triggerRef={menuButtonRef} launcherRef={launcherRef} desktopCollapsed={sidebarCollapsed} onToggleSidebar={onToggleSidebar} collapseButtonRef={collapseButtonRef} expandButtonRef={expandButtonRef} />
+      <PageToolbar onOpenContact={onOpenContact} onSelectConversation={onSelectConversation} showHistory={location.pathname === '/' || location.hash === '#chat'} dark={dark} onToggleTheme={onToggleTheme} />
+      <SiteSidebar onNewChat={onNewChat} open={menuOpen} onClose={closeMenu} triggerRef={menuButtonRef} launcherRef={launcherRef} desktopCollapsed={sidebarCollapsed} onToggleSidebar={onToggleSidebar} collapseButtonRef={collapseButtonRef} expandButtonRef={expandButtonRef} />
     </>
   )
 }

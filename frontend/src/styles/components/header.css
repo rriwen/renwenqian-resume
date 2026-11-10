@@ -88,7 +88,6 @@
   scrollbar-width: thin;
 }
 
-.sidebar-contact-button { margin-top: var(--space-4); }
 
 .sidebar-link, .sidebar-group-toggle {
   display: flex;
@@ -250,3 +249,43 @@ button.sidebar-link { border: none; background: none; font-family: inherit; curs
   .sidebar-project-flyout .sidebar-link:is(:hover, :focus-visible, [aria-current='page']) { color: var(--text); }
 }
 
+
+.resume-download-dialog {
+  margin: auto;
+  width: min(420px, calc(100vw - 40px));
+  padding: var(--space-6);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-md);
+  background: var(--page-bg);
+  color: var(--text);
+}
+.resume-download-dialog::backdrop { background: var(--overlay-bg); backdrop-filter: blur(10px); }
+.resume-download-dialog h2 { margin: 0; font-size: var(--text-lg); line-height: 1.5; text-align: left; }
+.resume-download-file {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-4);
+  margin-top: var(--space-5);
+  padding: var(--space-3);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-md);
+  background: transparent;
+  text-align: left;
+}
+.resume-download-file-icon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  background: var(--page-bg);
+}
+.resume-download-file-icon svg { width: 26px; height: 32px; }
+.resume-download-file-info { display: grid; gap: var(--space-1); min-width: 0; }
+.resume-download-file-name { font-size: var(--text-sm); font-weight: var(--weight-medium); overflow-wrap: anywhere; }
+.resume-download-file-type { font-size: var(--text-sm); color: var(--muted); }
+.resume-download-actions { display: flex; justify-content: flex-end; gap: var(--space-3); margin-top: var(--space-6); }
+.resume-download-actions .ui-button { border-radius: var(--radius-pill); min-width: 80px; }
+
+.page-toolbar-contact { margin-left: var(--space-2); min-height: 36px; padding: 0 var(--space-4); border-radius: 999px; gap: var(--space-2); }

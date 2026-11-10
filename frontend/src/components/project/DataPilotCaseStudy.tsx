@@ -6,7 +6,7 @@ import { DataPilotPartMenu } from './DataPilotPartMenu'
 import { getDataPilotContent, type DataPilotPart } from '../../data/projects/dataPilot'
 import type { Locale } from '../../i18n/translations'
 import { ReadingPageHeader } from '../ReadingPageHeader'
-import { CaseStudyGallery, CaseStudyPlaceholder } from './CaseStudyMedia'
+import { CaseStudyHeroPalette, CaseStudyGallery, CaseStudyPlaceholder } from './CaseStudyMedia'
 import { DataPilotPocSection } from './DataPilotPocSection'
 
 type Props = { locale: Locale }
@@ -49,7 +49,7 @@ export function DataPilotCaseStudy({ locale }: Props) {
           <h1 ref={titleRef}>{content.title}</h1>
           <p className="case-study-lead">{locale === 'zh' ? '串联自然语言问数与数据应用生成，支持业务分析的完整流程' : 'Connect natural-language queries and data applications across the analysis workflow'}</p>
           <div className="datapilot-meta project-case-tags project-case-tags--filled">{getCaseStudyMethods('dataagent', locale).map(tag => <span className="project-case-tag" key={tag}>{tag}</span>)}</div>
-          <div className="project-case-cover"><CaseStudyGallery items={[{ src: '/images/datapilot-hero.png', caption: content.title, hideCaption: true }]} /></div>
+          <div className="project-case-cover"><CaseStudyHeroPalette slug="dataagent"><CaseStudyGallery items={[{ src: '/images/datapilot-hero.png', caption: content.title, hideCaption: true, previewCrop: { aspectRatio: 1.88, objectPosition: 'top' } }]} /></CaseStudyHeroPalette></div>
           <a className="ui-button case-study-demo" href={content.demoUrl} target="_blank" rel="noopener noreferrer">{content.labels.demo} ↗</a>
           <div className="case-study-introduction">{content.paragraphs.map(paragraph => <p key={paragraph}>{paragraph}</p>)}</div>
           <div className="datapilot-meta case-study-metadata">{content.metadata.map(item => <span key={item}>{item}</span>)}</div>

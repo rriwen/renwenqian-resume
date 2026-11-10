@@ -129,7 +129,7 @@ export function DatabaseOpsVisualCaseStudy({ project, detail }: Props) {
         <h1 ref={titleRef}>{title}</h1>
         <p className="dbv-lead">{copy.intro}</p>
         <div className="datapilot-meta project-case-tags project-case-tags--filled">{getCaseStudyMethods('databaseops', locale).map(tag => <span className="project-case-tag" key={tag}>{tag}</span>)}</div>
-        <div className="dbv-showcase dbv-hero-media">
+        <div className="dbv-showcase dbv-hero-media project-hero-gradient" data-hero-palette="databaseops">
           <MeshGradientBackground />
           <ProjectGallery items={[{ src: project.image, caption: copy.coverCaption, hideCaption: true, transparentBackground: true, previewCrop: { aspectRatio: 1.88, objectPosition: 'top' } }]} layout="stacked" />
         </div>

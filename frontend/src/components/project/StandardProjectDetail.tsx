@@ -3,7 +3,7 @@ import { type ProjectDetailBlock, type ProjectDetailComparison, type ProjectDeta
 import { getProjectTitle, type Project } from '../../data/projects'
 import { useLanguage } from '../../i18n/LanguageContext'
 import { DetailTable } from './DetailTable'
-import { CaseStudyGallery, CaseStudyMediaFrame, CaseStudyPlaceholder } from './CaseStudyMedia'
+import { CaseStudyHeroPalette, CaseStudyGallery, CaseStudyMediaFrame, CaseStudyPlaceholder } from './CaseStudyMedia'
 import { ProjectFunnel } from './ProjectFunnel'
 import { ProjectArchitecture } from './ProjectArchitecture'
 import { PrototypePreview } from './PrototypePreview'
@@ -170,12 +170,12 @@ export function StandardProjectDetail({ project, detail }: Props) {
           <div className="datapilot-meta project-case-tags project-case-tags--filled">
             {getCaseStudyMethods(project.slug, locale).map(tag => <span className="project-case-tag" key={tag}>{tag}</span>)}
           </div>
-          {(detail.demoUrl || detail.externalUrl) && <a className="ui-button case-study-demo" href={detail.demoUrl || detail.externalUrl} target="_blank" rel="noopener noreferrer">{detail.demoUrl ? (locale === 'zh' ? '体验交互原型' : 'Try prototype') : m.workDetail.viewSite} ↗</a>}
-          <div className="project-case-cover">
+          <div className="project-case-cover"><CaseStudyHeroPalette slug={project.slug}>
             {detail.overviewPrototype ? <CaseStudyMediaFrame><PrototypePreview {...detail.overviewPrototype} /></CaseStudyMediaFrame>
               : ['design-token', 'design-md'].includes(project.slug) ? <CaseStudyPlaceholder title={title} />
-              : <CaseStudyGallery items={[{ src: project.image, caption: title, hideCaption: true }]} />}
-          </div>
+              : <CaseStudyGallery items={[{ src: project.image, caption: title, hideCaption: true, previewCrop: { aspectRatio: 1.88, objectPosition: 'top' } }]} />}
+          </CaseStudyHeroPalette></div>
+          {(detail.demoUrl || detail.externalUrl) && <a className="ui-button case-study-demo" href={detail.demoUrl || detail.externalUrl} target="_blank" rel="noopener noreferrer">{detail.demoUrl ? (locale === 'zh' ? '体验交互原型' : 'Try prototype') : m.workDetail.viewSite} ↗</a>}
         </header>
         <article className="datapilot-case-content project-case-content">
           {bodyParagraphs.length > 0 && <div className="case-study-introduction">{bodyParagraphs.map((para, idx) => <p key={idx}>{renderParagraphContent(para)}</p>)}</div>}

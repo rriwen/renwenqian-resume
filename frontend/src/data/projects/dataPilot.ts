@@ -362,7 +362,7 @@ function createDataPilotContent(locale: Locale) {
     },
     labels: {
       back: isZh ? '返回' : 'Back',
-      demo: isZh ? '查看 Demo' : 'View demo',
+      demo: isZh ? '体验交互原型' : 'Try prototype',
       tabs: isZh ? '案例内容切换' : 'Case study sections',
       contents: isZh ? '案例目录' : 'Case study contents',
       navigation: isZh ? '项目导航' : 'Project navigation',

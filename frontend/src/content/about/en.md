@@ -79,16 +79,14 @@ Project goal: Establish one workflow from design standards and component code to
 
 Responsibilities:
 
-- Built the Design Token system for colors, type, spacing, radii, naming, layers, and usage rules.
-- **Agent Ready component library:** Built a library for AI-assisted development, documenting component semantics, properties, states, usage scenarios, and code examples so agents could understand, select, and reuse components consistently.
-- Mapped Figma components, variants, and interaction states to code components with Figma Code Connect.
-- Built a component-library Skill and authored DESIGN.md for the AI Native workflow, covering component properties, page structure, layout, responsive behavior, and interaction constraints.
-- Applied Skills and the component library to AI analytics Q&A, the memory plugin, and product websites, delivering page and component code.
+- **Design assets:** Built Design Tokens and an Agent Ready component library, aligning foundation variables, component semantics, and usage rules so agents can understand, select, and reuse components.
+- **Rules and mappings:** Mapped Figma components to code through Code Connect, using the component-library Skill and DESIGN.md to define component usage, page design, and interaction constraints.
+- **Code delivery:** Guided AI-assisted implementation with components and rules, participating in component selection, page structure, code implementation, and review.
+- **Project applications:** Applied these foundations to AI analytics, the memory plugin, and product websites; independently delivered visual design, content planning, and frontend code for the memory plugin website and administration interface.
 
 Achievements:
 
-- Connected design standards, component code, AI generation, and visual acceptance into one workflow used across 5+ team deliveries
-- Reduced a single visual acceptance cycle from at least two person-days to minutes through automation
+- Connected design standards, component code, AI generation, and visual acceptance into a unified collaboration and delivery workflow, improving baseline team delivery efficiency by approximately **200%** across **5+ teams**.
 
 
 ### Database Operations Platform <!-- id: database-operations -->

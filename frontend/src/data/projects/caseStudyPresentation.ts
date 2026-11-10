@@ -4,7 +4,7 @@ import type { Locale } from '../../i18n/translations'
 const introductions: Record<string, Record<Locale, string>> = {
   agentops: { zh: '从执行链路与结果回放入手，让 Agent 的运行过程可观察、可排查', en: 'Make Agent execution observable and diagnosable through traces and replay' },
   text2sql: { zh: '将自然语言问数融入 SQL 编辑器，串联生成、执行与结果查看', en: 'Connect natural-language queries, SQL generation, execution, and results' },
-  datadevelop: { zh: '围绕数据库开发任务，优化 SQL 编辑与数据操作体验', en: 'Improve SQL editing and data operations around database development tasks' },
+  datadevelop: { zh: '围绕数据库开发任务，持续打磨 SQL 编辑与数据操作体验', en: 'Improve SQL editing and data operations around database development tasks' },
   'workflow-editor': { zh: '通过可视化编排，组织数据任务的执行顺序与依赖关系', en: 'Organize data tasks and dependencies through visual workflow orchestration' },
   aidesignsystem: { zh: '串联设计资产、规则映射与代码交付，探索设计师参与 AI 研发的方式', en: 'Connect design assets, rules, and code delivery to explore design in AI-assisted development' },
   Memory: { zh: '让 Agent 的经验可积累、可检索、可复用', en: 'Make Agent experience retrievable and reusable' },
