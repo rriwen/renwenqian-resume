@@ -1197,7 +1197,7 @@ const details: Record<string, { en: ProjectDetailBlock; zh: ProjectDetailBlock }
             rows: [
               { id: 'target-users', cells: ['目标用户', '有数据库运维基础、首次试用的新用户'] },
               { id: 'design-goal', cells: ['设计目标', '提升数据迁移环节的任务自助率'] },
-              { id: 'success-metrics', cells: ['衡量标准', '任务完成率目标：80%\n任务耗时目标：5 分钟'] },
+              { id: 'success-metrics', cells: ['衡量标准', '任务完成率(80%) & 耗时(5min)'] },
             ],
           },
           "images": []
@@ -1240,7 +1240,7 @@ const details: Record<string, { en: ProjectDetailBlock; zh: ProjectDetailBlock }
         {
           id: 'migration-analysis',
           title: '迁移卡点定位',
-          paragraphs: ['在全链路诊断的基础上，优化重点聚焦数据迁移环节的自助体验。\n通过数据埋点分析迁移任务创建各阶段的转化情况，定位主要流失环节。'],
+          paragraphs: ['在全链路诊断的基础上，优化重点聚焦数据迁移环节的自助体验。通过数据埋点分析迁移任务创建各阶段的转化情况，定位主要流失环节。'],
           subsections: [
             {
               id: 'instrumentation',
@@ -1298,8 +1298,8 @@ const details: Record<string, { en: ProjectDetailBlock; zh: ProjectDetailBlock }
                 columns: ['设计重点', '原有卡点', '优化处理'],
                 rows: [
                   { id: 'in-flow-source', cells: ['流程内准备数据源', '选择数据源时，仍需离开创建流程准备连接信息。', '在当前步骤提供「已有数据源 / 新建数据源」，将数据源准备纳入任务链路。'] },
-                  { id: 'save-source', cells: ['保存配置供后续复用', '数据源信息需要重复填写，增加重新配置的成本。', '提供「保存数据源信息」，填写名称与备注，便于后续通过已有数据源复用配置。'] },
-                  { id: 'contextual-help', cells: ['配置与引导并置', '权限要求与连接限制分散，用户需反复查找文档。', '在配置区右侧嵌入限制条件、账号授权与注意事项，支持配置过程中的即时查阅。'] },
+                  { id: 'save-source', cells: ['保存配置供后续复用', '数据源信息需要重复填写，增加重新配置的成本。', '提供「保存」，填写名称与备注，便于后续通过已有数据源复用配置。'] },
+                  { id: 'contextual-help', cells: ['配置与引导并置', '权限要求与连接限制分散，用户需反复查找文档。', '嵌入限制条件、账号授权与注意事项等帮助内容，支持即时查阅。'] },
                 ],
               },
               closingParagraphs: [

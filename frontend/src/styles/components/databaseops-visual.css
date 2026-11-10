@@ -23,9 +23,9 @@
 .dbv-mesh-gradient { position: absolute; inset: 0; pointer-events: none; }
 .dbv-hero-media > .project-detail-gallery { position: relative; z-index: 1; }
 .dbv-hero-media .project-detail-gallery button { box-shadow: none; border-bottom: 0 !important; border-bottom-left-radius: 0 !important; border-bottom-right-radius: 0 !important; }
-.dbv-background { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 56px; align-items: start; }
-.dbv-facts { padding-left: 24px; border-left: 1px solid var(--rule); }
-.dbv-facts > div + div { margin-top: 24px; }
+.dbv-background { display: grid; grid-template-columns: minmax(0, 1fr); align-items: start; }
+.dbv-background .dbv-facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--rule); }
+
 .dbv-facts dt { color: var(--muted); font-size: var(--text-xs); margin-bottom: 8px; }
 .dbv-facts dd { white-space: pre-line; }
 .dbv-journey-map { margin-top: 32px; }
@@ -98,7 +98,7 @@
   .dbv-shell { padding: var(--page-top) 20px 64px; }
   .dbv-section { margin-top: 80px; }
   .dbv-background, .dbv-findings, .dbv-stepper-options, .dbv-decision, .dbv-object-options > div { grid-template-columns: minmax(0,1fr); gap: 24px; }
-  .dbv-facts { padding: 24px 0 0; border-left: 0; border-top: 1px solid var(--rule); }
+  .dbv-background .dbv-facts { grid-template-columns: minmax(0, 1fr); gap: 24px; }
   .dbv-showcase, .dbv-editorial .dbv-showcase { padding: 16px; }
   .dbv-strategies a { grid-template-columns: minmax(0,1fr); gap: 12px; }
   .dbv-strategies a > span { grid-column: 1; }
@@ -137,7 +137,7 @@
 
 /* Keep the original screenshots intact inside equally sized presentation panels. */
 .dbv-finding-image .dbv-image-frame { aspect-ratio: 1.36; box-sizing: border-box; display: flex; align-items: center; }
-.dbv-analysis-intro p { white-space: pre-line; }
+.dbv-analysis-intro p { white-space: normal; }
 .dbv-page .dbv-funnel > p { margin-bottom: 24px; }
 
 
