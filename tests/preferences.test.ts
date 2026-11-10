@@ -7,17 +7,17 @@ const html = readFileSync(new URL('../frontend/index.html', import.meta.url), 'u
 const bootstrap = html.match(/<script>([\s\S]*?)<\/script>/)?.[1]
 
 function applyPreferences(read: (key: string) => string | null) {
-  const root = { lang: 'zh-CN', dataset: { theme: 'dark' } }
+  const root = { lang: 'zh-CN', dataset: { theme: 'light' } }
   assert.ok(bootstrap, 'Preference initialization must run before the app module')
   runInNewContext(bootstrap, { document: { documentElement: root }, localStorage: { getItem: read } })
   return root
 }
 
-test('first paint defaults to Chinese and dark even without usable storage', () => {
-  assert.match(html, /<html lang="zh-CN" data-theme="dark">/)
+test('first paint defaults to Chinese and light even without usable storage', () => {
+  assert.match(html, /<html lang="zh-CN" data-theme="light">/)
   assert.ok(html.indexOf('<script>') < html.indexOf('type="module"'))
   for (const read of [() => null, () => 'invalid', () => { throw new Error('Storage unavailable') }]) {
-    assert.deepEqual(applyPreferences(read), { lang: 'zh-CN', dataset: { theme: 'dark' } })
+    assert.deepEqual(applyPreferences(read), { lang: 'zh-CN', dataset: { theme: 'light' } })
   }
 })
 

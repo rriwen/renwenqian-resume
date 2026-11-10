@@ -80,8 +80,8 @@ export default function App() {
   const [dark, setDark] = useState(() => {
     try {
       const savedTheme = localStorage.getItem('as4x-theme')
-      return savedTheme !== 'light'
-    } catch { return true }
+      return savedTheme === 'dark'
+    } catch { return false }
   })
 
   useEffect(() => {

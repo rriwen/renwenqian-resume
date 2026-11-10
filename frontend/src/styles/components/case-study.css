@@ -1,0 +1,68 @@
+/* Shared case-study presentation, aligned with the database operations case. */
+.case-study-page { --paragraph-gap: 28px; --section-gap: 120px; }
+.case-study-page .datapilot-case-shell { width: min(1120px, 100%); max-width: 1120px; box-sizing: border-box; padding: var(--page-top) clamp(24px, 4vw, 64px) 96px; }
+.case-study-page :is(.datapilot-case-hero, .project-case-cover, .project-detail-section-copy, .project-detail-section, .project-case-overview > p) { width: 100%; max-width: 100%; }
+.case-study-page .datapilot-case-hero { padding-bottom: 0; }
+.case-study-page .datapilot-case-hero h1 { margin: 0; font-size: var(--text-title); font-weight: var(--weight-semibold); }
+.case-study-page .case-study-lead { margin: 20px 0 18px; font-size: var(--text-prose); line-height: var(--leading-body); color: var(--text); }
+.case-study-page .project-case-tags { margin: 0; flex-wrap: wrap; }
+.case-study-page .project-case-tag { font-size: var(--text-xs); line-height: var(--leading-ui); }
+.case-study-page .case-study-demo { display: inline-flex; margin-top: 24px; text-decoration: none; width: fit-content; }
+.case-study-page .project-case-cover { margin-top: 36px; }
+.case-study-introduction { margin-top: 48px; }
+.case-study-introduction p { margin: 0 0 28px; font-size: var(--text-prose); line-height: var(--leading-body); }
+.case-study-page .case-study-metadata { margin: 28px 0 0; padding-top: 24px; border-top: 1px solid var(--rule); }
+.case-study-page .project-case-content > .project-detail-section { margin-top: 120px; gap: 32px; }
+.case-study-page .project-detail-section-copy h2 { margin-bottom: 28px; }
+.case-study-page .project-detail-subsection { margin-top: 48px; }
+.case-study-page .project-detail-subsection + .project-detail-subsection { margin-top: 64px; }
+.case-study-page .project-detail-subsection h3 { margin-bottom: 24px; }
+.case-study-page .project-detail-subsection-body { gap: 28px; }
+.case-study-page .project-detail-subsection-body--text-image { grid-template-columns: minmax(0, 1fr); }
+.case-study-page .project-detail-subsection-body--text-image figcaption { order: initial; }
+.case-study-page .project-detail-subsection-list li + li { margin-top: 16px; }
+.case-study-page .project-detail-design-comparison { border: 1px solid var(--rule); border-radius: var(--radius-lg); background: var(--subtle); padding: 0; margin-top: 32px; overflow: hidden; }
+.case-study-page .project-detail-design-comparison > summary { width: auto; display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 22px 24px; color: var(--text); font-size: var(--text-sm); }
+.case-study-page .project-detail-comparison-content { padding: 24px; }
+.case-study-page .project-overview-facts { margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--rule); }
+.case-study-page .project-overview-facts dl { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 32px; }
+.case-study-page .project-overview-facts dl > div { display: block; }
+.case-study-page .project-overview-facts dt { margin-bottom: 12px; font-size: var(--text-xs); }
+.case-study-page .project-overview-facts dd { font-size: var(--text-prose); }
+.case-study-media { position: relative; padding: clamp(16px, 2.2vw, 32px); border-radius: var(--radius-lg); overflow: hidden; background: linear-gradient(130deg,#c5eafa,#70b6ff 50%,#c9f5fc); }
+.case-study-media--1 { background: linear-gradient(130deg,#b1a3ff,#e9d8ff 50%,#f7cfe6); }
+.case-study-media--2 { background: linear-gradient(130deg,#c7e8d5,#a3dedd 50%,#def9ed); }
+.case-study-media--3 { background: linear-gradient(130deg,#fee3d8,#eed3ec 50%,#b8c8fa); }
+.case-study-media > button { border: 0 !important; box-shadow: none; }
+.case-study-media .project-detail-prototype-preview { margin: 0; border: 0; }
+.case-study-placeholder { display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 12px; aspect-ratio: 16/9; padding: 24px; box-sizing: border-box; border-radius: var(--radius-sm); background: var(--surface); color: var(--muted); text-align: center; }
+.case-study-placeholder small { font-size: var(--text-xs); }
+.case-study-page .project-detail-image-placeholder { background: linear-gradient(130deg,#c5eafa,#d9d2fa); color: #475569; border: 0; border-radius: var(--radius-lg); }
+.case-study-page .datapilot-evidence { margin-top: 32px; }
+.case-study-page .datapilot-part-tabs { margin-top: 48px; }
+.case-study-page .datapilot-application-types { display: grid; grid-template-columns: minmax(0,1fr); gap: 40px; }
+.case-study-page .datapilot-application-types > section { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0,1.2fr); gap: 16px 32px; padding: 32px 0; border-top: 1px solid var(--rule); }
+.case-study-page .datapilot-application-types > section > :not(.case-study-media) { grid-column: 1; margin: 0; }
+.case-study-page .datapilot-application-types .case-study-media { grid-column: 2; grid-row: 1 / span 4; align-self: center; }
+@container site-main (max-width: 900px) {
+  .case-study-page .datapilot-case-shell { padding-inline: 32px; }
+}
+@container site-main (max-width: 700px) {
+  .case-study-page .datapilot-case-shell { padding: var(--page-top) 20px 64px; }
+  .case-study-page .project-case-content > .project-detail-section { margin-top: 80px; }
+  .case-study-page .project-overview-facts dl, .case-study-page .datapilot-application-types > section { grid-template-columns: minmax(0,1fr); }
+  .case-study-page .datapilot-application-types .case-study-media { grid-column: 1; grid-row: auto; }
+  .case-study-page .project-detail-comparison-content { padding: 16px; }
+  .case-study-page .project-detail-design-comparison > summary { padding: 20px; }
+  .case-study-page .datapilot-evidence.is-multi { grid-template-columns: minmax(0,1fr); }
+}
+
+.case-study-page .datapilot-case-content { width: 100%; }
+.case-study-page .datapilot-case-layout { padding-top: 0; }
+.case-study-page .datapilot-evidence.is-single figure { max-width: 100%; }
+
+.case-study-page .case-study-demo { border-radius: var(--radius-pill); }
+.case-study-page #responsibilities > ul { list-style: none !important; padding: 0 !important; }
+.case-study-page #responsibilities > ul > li { padding: 24px 0; margin: 0 !important; border-bottom: 1px solid var(--rule); }
+.case-study-page #design-highlights > ul { list-style: none !important; padding: 0 !important; }
+.case-study-page #design-highlights > ul > li { padding: 24px 0; margin: 0 !important; border-bottom: 1px solid var(--rule); }

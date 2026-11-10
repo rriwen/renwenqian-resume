@@ -19,7 +19,7 @@
 .dbv-page .project-detail-gallery-grid { width: 100%; }
 .dbv-showcase .project-detail-gallery button { box-shadow: var(--shadow-sm); }
 .dbv-showcase figcaption { padding-top: 8px; }
-.dbv-showcase.dbv-hero-media { margin: 0 0 36px; padding: clamp(16px, 2.5vw, 32px) clamp(16px, 2.5vw, 32px) 0; position: relative; isolation: isolate; overflow: hidden; background: linear-gradient(125deg, var(--showcase-ice), var(--showcase-sky) 35%, var(--showcase-blue) 70%, var(--showcase-lavender)); }
+.dbv-showcase.dbv-hero-media { margin: 36px 0 0; padding: clamp(16px, 2.5vw, 32px) clamp(16px, 2.5vw, 32px) 0; position: relative; isolation: isolate; overflow: hidden; background: linear-gradient(125deg, var(--showcase-ice), var(--showcase-sky) 35%, var(--showcase-blue) 70%, var(--showcase-lavender)); }
 .dbv-mesh-gradient { position: absolute; inset: 0; pointer-events: none; }
 .dbv-hero-media > .project-detail-gallery { position: relative; z-index: 1; }
 .dbv-hero-media .project-detail-gallery button { box-shadow: none; border-bottom: 0 !important; border-bottom-left-radius: 0 !important; border-bottom-right-radius: 0 !important; }

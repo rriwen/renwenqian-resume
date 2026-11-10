@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-theme="dark">
+<html lang="zh-CN" data-theme="light">
   <head>
     <meta charset="UTF-8" />
     <script>
       // The site uses Chinese. Apply the saved theme before the first paint.
       try {
-        document.documentElement.dataset.theme = localStorage.getItem('as4x-theme') === 'light' ? 'light' : 'dark';
+        document.documentElement.dataset.theme = localStorage.getItem('as4x-theme') === 'dark' ? 'dark' : 'light';
       } catch { /* Keep the HTML defaults when storage is unavailable. */ }
     </script>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />

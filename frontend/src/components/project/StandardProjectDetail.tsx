@@ -3,13 +3,14 @@ import { type ProjectDetailBlock, type ProjectDetailComparison, type ProjectDeta
 import { getProjectTitle, type Project } from '../../data/projects'
 import { useLanguage } from '../../i18n/LanguageContext'
 import { DetailTable } from './DetailTable'
-import { ProjectGallery } from './ProjectGallery'
+import { CaseStudyGallery, CaseStudyMediaFrame, CaseStudyPlaceholder } from './CaseStudyMedia'
 import { ProjectFunnel } from './ProjectFunnel'
 import { ProjectArchitecture } from './ProjectArchitecture'
 import { PrototypePreview } from './PrototypePreview'
 import { ProjectAnchorNav } from './ProjectAnchorNav'
 import { getProjectAnchors } from '../../data/projectAnchors'
 import { ReadingPageHeader } from '../ReadingPageHeader'
+import { getCaseStudyIntroduction, getCaseStudyMethods } from '../../data/projects/caseStudyPresentation'
 
 const body: CSSProperties = {
   margin: '0 0 var(--paragraph-gap)',
@@ -39,8 +40,8 @@ function renderParagraphContent(para: ProjectDetailParagraph) {
 
 function SectionGallery({ items, disclosure, layout }: { items: ProjectGalleryItem[]; disclosure?: string; layout?: 'row' }) {
   const gallery = layout === 'row'
-    ? <div className="project-detail-gallery-row"><ProjectGallery items={items} layout="stacked" /></div>
-    : <ProjectGallery items={items} layout="stacked" />
+    ? <div className="project-detail-gallery-row"><CaseStudyGallery items={items} /></div>
+    : <CaseStudyGallery items={items} />
   return disclosure ? (
     <details className="project-detail-design-comparison project-detail-evidence">
       <summary><span className="project-detail-comparison-heading"><span>{disclosure}</span></span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg></summary>
@@ -84,6 +85,8 @@ export function StandardProjectDetail({ project, detail }: Props) {
   const { locale, m } = useLanguage()
   const titleRef = useRef<HTMLHeadingElement>(null)
   const title = getProjectTitle(project, locale)
+  const introduction = getCaseStudyIntroduction(project.slug, locale)
+  const bodyParagraphs = introduction ? detail.paragraphs : detail.paragraphs.slice(1)
   const anchors = getProjectAnchors(detail, locale)
   const titleFor = (id: string) => anchors.find((anchor) => anchor.id === id)!.title
   const renderSection = (section: ProjectDetailSection) => (
@@ -109,7 +112,7 @@ export function StandardProjectDetail({ project, detail }: Props) {
                   <p key={idx}>{renderParagraphContent(para)}</p>
                 ))}
                 {subsection.prototypeEmbed && (
-                  <PrototypePreview url={subsection.prototypeEmbed.url} title={subsection.prototypeEmbed.title} />
+                  <a className="ui-button case-study-demo" href={subsection.prototypeEmbed.url} target="_blank" rel="noopener noreferrer">{subsection.prototypeEmbed.title} ↗</a>
                 )}
                 {!!subsection.listItems?.length && (
                   <ul className="project-detail-subsection-list">
@@ -155,7 +158,7 @@ export function StandardProjectDetail({ project, detail }: Props) {
     </section>
   )
   return (
-    <main className="datapilot-case-page project-detail-standard-page">
+    <main className="datapilot-case-page project-detail-standard-page case-study-page">
       <ReadingPageHeader title={title} titleRef={titleRef} />
       <div className="page-shell datapilot-case-shell">
         <header id="project-overview" className="datapilot-case-hero project-case-overview">
@@ -163,34 +166,28 @@ export function StandardProjectDetail({ project, detail }: Props) {
             {title}
           </h1>
 
+          {introduction ? <p className="case-study-lead">{introduction}</p> : detail.paragraphs.slice(0, 1).map((para, idx) => <p key={idx} className="case-study-lead">{renderParagraphContent(para)}</p>)}
           <div className="datapilot-meta project-case-tags project-case-tags--filled">
-            {detail.tags.map(tag => <span className="project-case-tag" key={tag}>{tag}</span>)}
-            {detail.externalUrl && <a className="datapilot-demo-link" href={detail.externalUrl} target="_blank" rel="noreferrer">{m.workDetail.viewSite}</a>}
+            {getCaseStudyMethods(project.slug, locale).map(tag => <span className="project-case-tag" key={tag}>{tag}</span>)}
           </div>
-
-          {detail.paragraphs.map((para, idx) => (
-            <p key={idx} style={body}>
-              {renderParagraphContent(para)}
-            </p>
-          ))}
-
+          {(detail.demoUrl || detail.externalUrl) && <a className="ui-button case-study-demo" href={detail.demoUrl || detail.externalUrl} target="_blank" rel="noopener noreferrer">{detail.demoUrl ? (locale === 'zh' ? '体验交互原型' : 'Try prototype') : m.workDetail.viewSite} ↗</a>}
+          <div className="project-case-cover">
+            {detail.overviewPrototype ? <CaseStudyMediaFrame><PrototypePreview {...detail.overviewPrototype} /></CaseStudyMediaFrame>
+              : ['design-token', 'design-md'].includes(project.slug) ? <CaseStudyPlaceholder title={title} />
+              : <CaseStudyGallery items={[{ src: project.image, caption: title, hideCaption: true }]} />}
+          </div>
+        </header>
+        <article className="datapilot-case-content project-case-content">
+          {bodyParagraphs.length > 0 && <div className="case-study-introduction">{bodyParagraphs.map((para, idx) => <p key={idx}>{renderParagraphContent(para)}</p>)}</div>}
           {detail.sections?.filter((section) => section.placement === 'overview').map(renderSection)}
 
           {detail.overviewFacts && (
             <div className="project-overview-facts">
               <dl>{detail.overviewFacts.map(fact => <div key={fact.label}><dt>{fact.label}</dt><dd>{fact.value}</dd></div>)}</dl>
-              {detail.demoUrl && <a className="project-overview-demo" href={detail.demoUrl} target="_blank" rel="noreferrer">Demo ↗</a>}
+
             </div>
           )}
 
-          {detail.overviewPrototype && <PrototypePreview {...detail.overviewPrototype} />}
-        </header>
-        {detail.showCover !== false && (
-          <div className="project-case-cover">
-            <ProjectGallery items={[{ src: project.image, caption: getProjectTitle(project, locale) }]} layout="stacked" />
-          </div>
-        )}
-        <article className="datapilot-case-content project-case-content">
           {detail.responsibilities ? (
             <section id="responsibilities" className="project-detail-section" aria-labelledby="responsibilities-title">
               <h2 id="responsibilities-title">{titleFor('responsibilities')}</h2>
@@ -269,7 +266,7 @@ export function StandardProjectDetail({ project, detail }: Props) {
 
           {detail.gallery.length > 0 && <section id="project-gallery" className="project-detail-section" aria-labelledby="project-gallery-title">
             <h2 id="project-gallery-title">{titleFor('project-gallery')}</h2>
-            <ProjectGallery items={detail.gallery} layout="stacked" />
+            <CaseStudyGallery items={detail.gallery} />
           </section>}
         </article>
       </div>

@@ -1,3 +1,4 @@
+import { getCaseStudyMethods } from '../../data/projects/caseStudyPresentation'
 import { useEffect, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate, useNavigationType } from 'react-router-dom'
 import { ProjectAnchorNav } from './ProjectAnchorNav'
@@ -5,7 +6,7 @@ import { DataPilotPartMenu } from './DataPilotPartMenu'
 import { getDataPilotContent, type DataPilotPart } from '../../data/projects/dataPilot'
 import type { Locale } from '../../i18n/translations'
 import { ReadingPageHeader } from '../ReadingPageHeader'
-import { LoadingImage } from './LoadingImage'
+import { CaseStudyGallery, CaseStudyPlaceholder } from './CaseStudyMedia'
 import { DataPilotPocSection } from './DataPilotPocSection'
 
 type Props = { locale: Locale }
@@ -38,7 +39,7 @@ export function DataPilotCaseStudy({ locale }: Props) {
   }
 
   return (
-    <main className="datapilot-case-page">
+    <main className="datapilot-case-page case-study-page">
       <ReadingPageHeader title={content.title} titleRef={titleRef} controls={
         <DataPilotPartMenu label={content.labels.tabs} value={activePart} onSelect={selectPart}
           options={(Object.keys(content.parts) as DataPilotPart[]).map((part) => ({ value: part, label: content.parts[part].title }))} />
@@ -46,10 +47,12 @@ export function DataPilotCaseStudy({ locale }: Props) {
       <div className="page-shell datapilot-case-shell">
         <header className="datapilot-case-hero">
           <h1 ref={titleRef}>{content.title}</h1>
-          <div className="datapilot-meta project-case-tags project-case-tags--filled">{content.tags.map(tag => <span className="project-case-tag" key={tag}>{tag}</span>)}</div>
-          <p className="datapilot-hero-copy">{content.paragraphs[0]}</p>
-          <p className="datapilot-hero-copy is-secondary">{content.paragraphs[1]}</p>
-          <div className="datapilot-meta">{content.metadata.map((item) => <span key={item}>{item}</span>)}<a className="datapilot-demo-link" href={content.demoUrl} target="_blank" rel="noreferrer">{content.labels.demo} ↗</a></div>
+          <p className="case-study-lead">{locale === 'zh' ? '串联自然语言问数与数据应用生成，支持业务分析的完整流程' : 'Connect natural-language queries and data applications across the analysis workflow'}</p>
+          <div className="datapilot-meta project-case-tags project-case-tags--filled">{getCaseStudyMethods('dataagent', locale).map(tag => <span className="project-case-tag" key={tag}>{tag}</span>)}</div>
+          <div className="project-case-cover"><CaseStudyGallery items={[{ src: '/images/datapilot-hero.png', caption: content.title, hideCaption: true }]} /></div>
+          <a className="ui-button case-study-demo" href={content.demoUrl} target="_blank" rel="noopener noreferrer">{content.labels.demo} ↗</a>
+          <div className="case-study-introduction">{content.paragraphs.map(paragraph => <p key={paragraph}>{paragraph}</p>)}</div>
+          <div className="datapilot-meta case-study-metadata">{content.metadata.map(item => <span key={item}>{item}</span>)}</div>
         </header>
         <div className="datapilot-part-tabs" role="tablist" aria-label={content.labels.tabs}>
           {(Object.keys(content.parts) as DataPilotPart[]).map((part) => (
@@ -70,7 +73,7 @@ export function DataPilotCaseStudy({ locale }: Props) {
                   <p><strong>{content.labels.scene}</strong>{item.scene}</p>
                   <p><strong>{content.labels.problem}</strong>{item.problem}</p>
                   <p><strong>{content.labels.solution}</strong>{item.solution}</p>
-                  <div className="datapilot-application-screenshot" role="img" aria-label={item.screenshot}><span>{item.screenshot}</span></div>
+                  <CaseStudyPlaceholder title={item.screenshot} />
                 </section>)}</div> : null}
                 {section.related ? <p className="datapilot-related-link">{content.labels.relatedIntro} <Link to="/project/agentops">{content.labels.relatedProject}</Link>。</p> : null}
                 {section.stats ? <div className="datapilot-stat-row">{section.stats.map((stat) => <strong key={stat}>{stat}</strong>)}</div> : null}
@@ -79,7 +82,9 @@ export function DataPilotCaseStudy({ locale }: Props) {
                   return <li key={bullet}>{separator > -1 ? <><strong>{bullet.slice(0, separator)}</strong>{bullet.slice(separator)}</> : bullet}</li>
                 })}</ul> : null}
                 {section.images.length ? <div className={`datapilot-evidence ${section.images.length > 1 ? 'is-multi' : 'is-single'}`}>
-                  {section.images.map((image) => <figure key={image.src + image.caption}>{image.display === 'image' ? <div className="media-frame"><LoadingImage className="datapilot-evidence-image" src={image.src} alt={image.alt ?? image.caption} /></div> : <div className="datapilot-image-placeholder" role="img" aria-label={image.caption} />}{image.caption ? <figcaption>{image.caption}</figcaption> : null}</figure>)}
+                  {section.images.map(image => image.display === 'image'
+                    ? <CaseStudyGallery key={image.src + image.caption} items={[{ src: image.src, caption: image.caption }]} />
+                    : <CaseStudyPlaceholder key={image.src + image.caption} title={image.caption} />)}
                 </div> : null}
                 {section.bullets && section.id === 'overview' ? <ul className="project-detail-subsection-list">{section.bullets.map((bullet) => <li key={bullet}>{bullet}</li>)}</ul> : null}
                 </div>
