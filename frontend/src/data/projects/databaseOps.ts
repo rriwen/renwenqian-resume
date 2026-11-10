@@ -26,7 +26,7 @@ export function getDatabaseOpsFunnel(locale: Locale): ProjectFunnelData {
   const zh = locale === 'zh'
   return {
     title: zh ? '从创建到选择数据源，仅 35.34% 继续' : 'Only 35.34% continue to selecting data sources',
-    context: zh ? '优化前 · 熟练用户 · 数据埋点' : 'Before optimization · Experienced users · Event instrumentation',
+    context: zh ? '优化前 · 全量用户 · 数据埋点' : 'Before optimization · All users · Event instrumentation',
     legend: zh
       ? '各层顶部宽度表示阶段数量，底部衔接下一阶段数量；灰蓝强调色突出选中阶段。'
       : 'Each segment’s top width encodes its count and its bottom connects to the next count; blue-grey emphasis highlights the selected stage.',
@@ -55,4 +55,18 @@ export function getFunnelStageMetrics(stages: FunnelStage[], index: number) {
     dropOff: previous ? previous.value - stage.value : 0,
     estimated: stage.estimated || !!previous?.estimated,
   }
+}
+
+/** Visual comparison: baseline evidence and an explicitly simulated 75% completion distribution. */
+export function getDatabaseOpsResultFunnels(locale: Locale) {
+  const zh = locale === 'zh'
+  return [
+    { title: zh ? '优化前 · 全量用户' : 'Before · All users', simulated: false, stages: getDatabaseOpsFunnel(locale).stages },
+    { title: zh ? '优化后 · 新用户' : 'After · New users', simulated: true, stages: [
+      { id: 'create', label: zh ? '创建迁移项目' : 'Create migration project', value: 160, estimated: false },
+      { id: 'source', label: zh ? '选择数据源' : 'Select data sources', value: 143, estimated: false },
+      { id: 'objects', label: zh ? '选择迁移对象' : 'Select migration objects', value: 136, estimated: false },
+      { id: 'start', label: zh ? '预检查 / 启动' : 'Pre-check / start', value: 120, estimated: false },
+    ] as FunnelStage[] },
+  ]
 }

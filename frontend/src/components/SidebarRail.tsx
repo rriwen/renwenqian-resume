@@ -1,13 +1,14 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { getProjectGroups, getProjectNavigationTitle, type ProjectCategory } from '../data/projects'
+import { getProjectNavigationTitle, type ProjectCategory } from '../data/projects'
+import { getProjectNavigationGroups } from '../data/projectViews'
 import { useLanguage } from '../i18n/LanguageContext'
 import { IconCamera, IconFileText, IconMail, IconNewChat, IconPalette, IconSparkle, IconTerminal } from './Icons'
 
 export function SidebarRail({ onNewChat, onOpenContact }: { onNewChat: () => void; onOpenContact: () => void }) {
   const { pathname, hash, key } = useLocation()
   const selectedPathname = hash === '#chat' ? '' : pathname
-  const projectGroups = getProjectGroups()
+  const projectGroups = getProjectNavigationGroups()
   const isDesignEngineering = projectGroups.find((group) => group.id === 'design-systems')!.projects.some((project) => selectedPathname === `/project/${project.slug}`)
   const { locale, m } = useLanguage()
   const [openGroup, setOpenGroup] = useState<ProjectCategory | null>(null)

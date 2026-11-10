@@ -255,6 +255,14 @@ for (const locale of locales) {
       for (const section of part.sections) {
         assert.ok(corpus.includes(section.title), `Missing title: ${section.id}`)
         assert.ok(corpus.includes(section.body), `Missing body: ${section.id}`)
+        for (const row of section.table?.rows ?? []) {
+          for (const cell of row.cells) {
+            if (cell !== null) assert.ok(corpus.includes(typeof cell === 'string' ? cell : cell.text), `Missing table content: ${section.id}`)
+          }
+        }
+        for (const step of section.steps ?? []) {
+          assert.ok(corpus.includes(`${step.title}: ${step.detail}`), `Missing analysis step: ${section.id}`)
+        }
         for (const bullet of section.bullets ?? []) assert.ok(corpus.includes(bullet))
         for (const application of section.applicationTypes ?? []) {
           assert.ok(corpus.includes(application.scene))
@@ -265,3 +273,14 @@ for (const locale of locales) {
     }
   })
 }
+
+
+test('DataPilot experience keeps hypothetical scenarios and outcomes explicit', () => {
+  const zh = getDataPilotContent('zh').parts.experience.sections
+  const en = getDataPilotContent('en').parts.experience.sections
+  assert.deepEqual(zh.map(({ id }) => id), en.map(({ id }) => id))
+  assert.ok(zh.find(({ id }) => id === 'continuous-analysis-example')!.body.includes('构思'))
+  assert.ok(zh.find(({ id }) => id === 'agent-replay')!.body.includes('不是重新执行'))
+  assert.ok(zh.find(({ id }) => id === 'role')!.body.includes('7 天'))
+  for (const sections of [zh, en]) assert.ok(!JSON.stringify(sections).includes('15%'))
+})

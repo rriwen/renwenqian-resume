@@ -1,10 +1,13 @@
-import { lazy, Suspense, useEffect, useRef } from 'react'
+import { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react'
 import { useLanguage } from '../i18n/LanguageContext'
 
 const Lanyard = lazy(() => import('./Lanyard/Lanyard'))
 
 export function ContactOverlay({ dark, open, close }: { dark: boolean; open: boolean; close: () => void }) {
   const { m } = useLanguage()
+  const [badgeReady, setBadgeReady] = useState(false)
+  const onBadgeReady = useCallback(() => setBadgeReady(true), [])
+  useEffect(() => { if (!open) setBadgeReady(false) }, [open])
   const panelRef = useRef<HTMLDivElement>(null)
   const closeRef = useRef<HTMLButtonElement>(null)
 
@@ -63,8 +66,13 @@ export function ContactOverlay({ dark, open, close }: { dark: boolean; open: boo
           <button ref={closeRef} type="button" className="ui-button contact-dismiss" onClick={close}>{m.contact.dismiss}</button>
         </div>
         <div className="contact-lanyard" aria-hidden="true">
+          {!badgeReady && <div className="contact-badge-placeholder">
+            <div className="contact-badge-clip" />
+            <div className="contact-badge-card"><img src={`/images/lanyard/front${dark ? '-dark' : ''}.svg`} alt="" /></div>
+          </div>}
           <Suspense fallback={null}>
             <Lanyard
+              onReady={onBadgeReady}
               renderContainerRef={panelRef}
               frontImage={`/images/lanyard/front${dark ? '-dark' : ''}.svg`}
               backImage={`/images/lanyard/back${dark ? '-dark' : ''}.svg`}

@@ -1,13 +1,15 @@
-import { useCallback, useRef, useState } from 'react'
+import { type ComponentType, type ReactNode, useCallback, useRef, useState } from 'react'
 import type { ProjectGalleryItem } from '../../data/projectDetails'
 import { useLanguage } from '../../i18n/LanguageContext'
 import { isGifSrc } from '../../lib/isGifSrc'
 import { ProjectLightbox } from './ProjectLightbox'
 import { LoadingImage } from './LoadingImage'
 
-type Props = { items: ProjectGalleryItem[]; layout?: 'grid' | 'stacked' }
+type ImageFrameProps = { children: ReactNode; item: ProjectGalleryItem; index: number }
+const PlainImageFrame = ({ children }: ImageFrameProps) => <>{children}</>
+type Props = { items: ProjectGalleryItem[]; layout?: 'grid' | 'stacked'; imageFrame?: ComponentType<ImageFrameProps> }
 
-export function ProjectGallery({ items, layout = 'grid' }: Props) {
+export function ProjectGallery({ items, layout = 'grid', imageFrame: ImageFrame = PlainImageFrame }: Props) {
   const { locale, m } = useLanguage()
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
   const triggerRef = useRef<HTMLButtonElement | null>(null)
@@ -30,6 +32,7 @@ export function ProjectGallery({ items, layout = 'grid' }: Props) {
                 gap: '0.45rem',
               }}
             >
+              <ImageFrame item={item} index={idx}>
               <button
                 type="button"
                 aria-label={`${m.workDetail.galleryOpenFullscreenAria}: ${item.caption}`}
@@ -73,6 +76,7 @@ export function ProjectGallery({ items, layout = 'grid' }: Props) {
                   }}
                 />
               </button>
+              </ImageFrame>
               {!item.hideCaption && (
                 <figcaption
                   style={{

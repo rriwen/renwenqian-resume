@@ -5,7 +5,7 @@ import { SectionAnchorNav, type SectionAnchor } from '../SectionAnchorNav'
 export type ProjectAnchor = SectionAnchor
 
 /** Shared case-study navigation; existing section IDs are also shareable URLs. */
-export function ProjectAnchorNav({ sections, label }: { sections: ProjectAnchor[]; label: string }) {
+export function ProjectAnchorNav({ sections, label, scrollToHash = true }: { sections: ProjectAnchor[]; label: string; scrollToHash?: boolean }) {
   const location = useLocation()
   const navigate = useNavigate()
   const [activeId, setActiveId] = useState(sections[0]?.id)
@@ -28,6 +28,7 @@ export function ProjectAnchorNav({ sections, label }: { sections: ProjectAnchor[
   }, [ids])
 
   useEffect(() => {
+    if (!scrollToHash) return
     const id = location.hash.slice(1)
     const target = document.getElementById(id)
     const anchorId = ids.split('|').find((sectionId) => document.getElementById(sectionId)?.contains(target))
@@ -38,7 +39,7 @@ export function ProjectAnchorNav({ sections, label }: { sections: ProjectAnchor[
       setActiveId(anchorId)
     })
     return () => cancelAnimationFrame(frame)
-  }, [location.key, location.hash, ids])
+  }, [location.key, location.hash, ids, scrollToHash])
 
   return <SectionAnchorNav
     sections={sections}

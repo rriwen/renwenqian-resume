@@ -95,7 +95,7 @@ Achievements:
 
 > Experience Designer
 
-> Jan 2022 – Jun 2024
+> Jan 2023 – Jun 2024
 
 Project background: The platform provides enterprise databases and supporting management tools that help technical teams install databases, migrate data, and manage daily operations. The platform aimed to deliver a self-service experience in “three steps, five minutes,” but users still relied heavily on technical support for installation and migration.
 

@@ -13,12 +13,14 @@ export function ReadingPageHeader({ title, titleRef, controls }: Props) {
   useEffect(() => {
     const heading = titleRef.current
     if (!heading) return
-    const observer = new IntersectionObserver(([entry]) => {
-      setVisible(!entry.isIntersecting && entry.boundingClientRect.bottom < 0)
-    })
+    const syncVisibility = () => setVisible(heading.getBoundingClientRect().bottom <= 0)
+    syncVisibility()
+    const observer = new IntersectionObserver(syncVisibility, { threshold: [0, 1] })
     observer.observe(heading)
     return () => observer.disconnect()
-  }, [titleRef])
+    // A layout edit can replace the h1 while retaining the same ref object.
+    // Rebind after commits so the observer always tracks the current heading.
+  })
 
   // The original h1 remains the accessible page heading; this is its visual continuation.
   return (

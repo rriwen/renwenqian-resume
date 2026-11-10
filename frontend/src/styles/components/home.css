@@ -84,6 +84,8 @@
 
 .home-chat-entry { margin-top: var(--space-8); }
 
+.home-chat-form { --prompt-composer-beam-duration: 3s; }
+
 :root:not([data-theme='dark']) .home-chat-form {
   border-color: var(--control-border);
 }

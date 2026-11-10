@@ -116,6 +116,8 @@ function serializeDataPilot(locale: Locale): string {
       lines.push(`##### ${section.title}`)
       if (section.intro) lines.push(section.intro)
       lines.push(section.body)
+      if (section.table) lines.push(...serializeTable(section.table))
+      for (const step of section.steps ?? []) lines.push(`${step.title}: ${step.detail}`)
       for (const application of section.applicationTypes ?? []) {
         lines.push(application.title)
         lines.push(`${content.labels.scene}: ${application.scene}`)

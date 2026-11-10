@@ -43,3 +43,10 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { border-color
 .contact-details a { text-decoration: underline; text-underline-offset: 4px; }
 .contact-copy .contact-details > * { justify-self: start; pointer-events: auto; }
 .contact-dismiss { pointer-events: auto; }
+
+/* Lightweight badge preview stays visible while the lazy 3D scene and textures load. */
+.contact-lanyard { position: relative; }
+.contact-badge-placeholder { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; pointer-events: none; }
+.contact-badge-clip { width: 22px; height: 36px; border-radius: 6px; background: var(--muted); margin-bottom: -4px; }
+.contact-badge-card { width: 88%; aspect-ratio: 1.26; padding: 12px; box-sizing: border-box; border: 1px solid var(--rule); border-radius: 18px; background: var(--subtle); }
+.contact-badge-card img { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 12px; }

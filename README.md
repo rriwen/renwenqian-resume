@@ -34,10 +34,13 @@ npm run dev
 | 首页介绍、推荐问题与提问输入框 | [`frontend/src/pages/Home.tsx`](frontend/src/pages/Home.tsx)；首页文案读取 `translations.home`，推荐问题复用 `translations.chatbot`；点击推荐问题仅回填并聚焦输入框，Enter / 发送后在当前内容区展开聊天，Shift+Enter 换行，⌘K / Ctrl+K 聚焦；发送按钮位于输入框右下角 |
 | 联系弹窗的 3D 工牌组件（首页不加载） | [`Lanyard.tsx`](frontend/src/components/Lanyard/Lanyard.tsx) 为 React 入口，由 `ContactOverlay` 打开时懒加载；通过 `renderContainerRef` 将整个弹窗作为画布，本地布局框仅确定工牌初始位置与大小；同目录 `scene.ts` 管生命周期、扩展画布和拖拽命中区域，`simulation.ts` 管物理，`textures.ts` 管纹理；保留许可证 |
 | 项目名称、slug、分类、封面、顺序、双语标签 | [`frontend/src/data/projects.ts`](frontend/src/data/projects.ts) |
+| 同一项目的独立展示入口 | [`frontend/src/data/projectViews.ts`](frontend/src/data/projectViews.ts) 维护导航视图与来源项目映射；`getProjectNavigationGroups` 使用项目正式地址且不再增加别名入口，桌面侧栏、收起栏和移动抽屉共用；视图不加入 `projects` 清单，不重复生成聊天语料 |
 | 通用项目详情文案、图文章节和画廊 | [`frontend/src/data/projectDetails.ts`](frontend/src/data/projectDetails.ts)；`sections` 将章节标题、正文、可选表格与配图绑定，`subsections` 保存章节内的小标题、正文、圆点列表、可选表格与配图，页面和聊天共用 |
-| DataPilot 文案、链接、配图 | [`frontend/src/data/projects/dataPilot.ts`](frontend/src/data/projects/dataPilot.ts)，页面与聊天共用 |
+| DataPilot 文案、链接、配图 | [`frontend/src/data/projects/dataPilot.ts`](frontend/src/data/projects/dataPilot.ts)，页面与聊天共用；POC 以海尔生产场景展开范围筛选、指标口径、演示任务、评价与阶段交付，保留 `poc-validation` 深链接；POC 使用 `DataPilotPocSection.tsx` 原生布局，与数据库运维平台共用 `DetailTable.tsx` |
 | 设计工程案例与分层架构图 | [`frontend/src/data/projects/designEngineering.ts`](frontend/src/data/projects/designEngineering.ts) 保存双语文案与架构数据，正文按设计资产、规则映射、项目应用组织，页面和聊天共用；[`ProjectArchitecture.tsx`](frontend/src/components/project/ProjectArchitecture.tsx) 与 [`project-architecture.css`](frontend/src/styles/components/project-architecture.css) 绘制四层架构，保留旧 `design-highlights` / `project-gallery` / `connections` 深链接 |
-| 项目详情布局 | [`ProjectDetail.tsx`](frontend/src/pages/ProjectDetail.tsx) 分派；[`components/project/`](frontend/src/components/project/) 包含通用详情、DataPilot、画廊、图片查看器和共用锚点导航 |
+| 项目详情布局 | [`ProjectDetail.tsx`](frontend/src/pages/ProjectDetail.tsx) 分派；[`components/project/`](frontend/src/components/project/) 包含通用详情、DataPilot、画廊、图片查看器和共用锚点导航；DataPilot 正文 tab 切换保持滚动位置，顶部下拉菜单和深链接仍定位章节 |
+| 数据库运维视觉版 | [`DatabaseOpsVisualCaseStudy.tsx`](frontend/src/components/project/DatabaseOpsVisualCaseStudy.tsx) 在 `/project/databaseops` 按需加载，并导入 [`databaseops-visual.css`](frontend/src/styles/components/databaseops-visual.css)；[`data/projects/databaseOpsVisual.ts`](frontend/src/data/projects/databaseOpsVisual.ts) 保存双语展示标题、图注与素材入口，案例正文继续读取原 `databaseops` 详情；[`databaseops-visual-source-setup.jpg`](frontend/public/images/databaseops-visual-source-setup.jpg) 为现有原型的真实截图 |
+| 视觉版首屏动效 | [`MeshGradientBackground.tsx`](frontend/src/components/project/MeshGradientBackground.tsx) 使用 Paper Shaders Mesh Gradient，对齐 OceanBase DataPilot 官网首屏的四色色值和动画参数；仅自动播放，支持减少动态效果、离屏暂停和静态回退 |
 | Text2SQL 交互原型 | [`SqlEditorPrototype.tsx`](frontend/src/pages/SqlEditorPrototype.tsx)，独立路由 `/prototype/text2sql`；[`components/sql-prototype/model.ts`](frontend/src/components/sql-prototype/model.ts) 管本地模拟逻辑，页面按需导入 [`styles/components/sql-prototype.css`](frontend/src/styles/components/sql-prototype.css)；在 Text2SQL 概述下方以 1280×720 画布等比嵌入预览（`?embed=1` 隐藏内部返回入口），也支持独立打开，按原稿还原编辑器内 AI 流程；AI 回复与 SQL 执行均为本地模拟，不访问真实数据库 |
 | 数据库迁移交互漏斗 | [`data/projects/databaseOps.ts`](frontend/src/data/projects/databaseOps.ts) 保存双语数据与估算标记；[`ProjectFunnel.tsx`](frontend/src/components/project/ProjectFunnel.tsx) 提供阶段选择和数据说明，[`FunnelGraphic.tsx`](frontend/src/components/project/FunnelGraphic.tsx) 基于 Lieflat L13 模板绘制 SVG；支持阶段选择、滚入动画、减少动效、深浅主题与响应式布局；缩小数量、突出各步转化率；选型和来源见 [`docs/databaseops-chart.md`](docs/databaseops-chart.md) |
 | 关于页与项目页滚动页头 | [`ReadingPageHeader.tsx`](frontend/src/components/ReadingPageHeader.tsx) 观察原始 h1，标题滚出视口后显示顶部吸附页头，DataPilot 的 `DataPilotPartMenu.tsx` 下拉菜单与顶部标题同时出现和隐藏；样式位于 `styles/components/page-header.css`，不改变正文布局或锚点位置 |
@@ -67,6 +70,7 @@ npm run dev
 - 当前会话的追问携带问答历史与站点资料，刷新后继续沿用该会话内容；不同会话的记忆独立。[`lib/chat/context.ts`](frontend/src/lib/chat/context.ts) 为前后端共用的预算与完整轮次选择逻辑，使用应用侧 64,000 token 预算（含 2,048 token 回复预留）与 500,000 字节请求上限，不再固定截取 99 条消息。超出容量的早期消息仍留在本地历史，但不参与当前回复；最新一轮过长时阻止请求。聊天发送按钮左侧的 [`ContextMeter.tsx`](frontend/src/components/chat/ContextMeter.tsx) 显示估算余量，计入站点资料、历史和草稿，支持悬停、聚焦或点击查看说明。这是应用预算与本地估算，不是模型标称窗口或服务商账单用量。
 
 - 项目分类与标签来自同一条 `projects.ts` 记录，调整顺序不会错配分类或标签。`projectCategories` 定义 AI 产品、数据工具、设计工程的稳定 ID、顺序和双语名称；`getProjectGroups` 为侧栏提供统一分组。通用详情读取 `projectDetails.ts`；`dataagent` 的 DataPilot 案例统一读取 `data/projects/dataPilot.ts`，不要在页面或聊天语料中另写一份文案。
+- 数据库运维平台保留 `/project/databaseops` 的原布局；新增 `/project/databaseops-visual` 作为同一案例的视觉版。两个页面共用 `projectDetails.ts` 中的 `databaseops` 内容，`projectViews.ts` 仅保存导航名称、独立 slug 与来源项目映射，不复制项目记录或聊天语料。
 - Text2SQL 原型 `/prototype/text2sql` 按需加载，使用独立产品界面，不展示作品集导航、聊天或联系浮层；应用层会话 Provider 保持存续。原型默认按截图使用浅色，暗色切换仅作用于原型，不修改站点主题偏好。AI 回复和 SQL 执行均为本地演示；原稿中标注「待定」的结果审阅、异常反馈在原型中可体验，不作为当年最终上线或效果的证据。
 - 数据库运维平台的诊断记录、设计策略、步骤条 GIF 与原型测试说明统一维护在 `projectDetails.ts`；正文片段的 `href` 同时供页面链接与聊天语料使用，原型地址由 `DATABASE_OPS_PROTOTYPE_URL` 统一定义。创建流程内嵌原型由小节 `prototypeEmbed` 定义，使用 16:9 iframe；Axure 链接参数 `c=1&sc=1` 默认隐藏播放器顶栏并按宽度缩放；`PrototypePreview.tsx` 在鼠标停留 2 秒后启用交互，光标旁显示倒计时，移出后重置；触屏点击与键盘 Enter 可直接启用。原始过程配图可通过 `imagesDisclosure` 折叠，沿用画廊与全屏预览；背景和目标表位于正文首节（`design-goals`），设计机会表以分组标题和列表还原策略内容；步骤条探索通过小节的 `comparison` 嵌入第一个设计决策，桌面左右对照、窄屏上下排列，步骤条不设独立目录刻度，保留 `stepper-design` 元素 ID 兼容旧链接。优化后的三步流程统一为「连接数据源 → 设置迁移类型 → 选择迁移对象」，对象选择分为穿梭框勾选、白屏规则配置和文件导入。小节的 `comparisonPlaceholder` 提供左旧右新、窄屏上下排列的配图占位，配图准备说明不进入聊天语料。16.8% 与 75% 均为埋点统计的任务创建完成率，分别对应优化前熟练用户、优化后新用户，时间窗口与用户群不同，不表述为直接提升幅度；关于页保持同一口径。
 - 关于页读取中英文 Markdown，所有 `##` 章节和 `###` 条目都用隐藏注释声明稳定 ID：
@@ -84,7 +88,7 @@ npm run dev
 
 网站固定使用中文，不再提供中英文切换，忽略旧语言偏好；首次访问默认暗色，手动选择的主题在本地保存，刷新后沿用。主题在首屏绘制前初始化。桌面端（>900px）使用 256px 可收起的固定分组侧栏，收起后保留 72px 图标栏，顶部默认显示 4x，悬停或键盘聚焦切换展开图标，可重新展开；项目合并为单个图标，悬停或点击展示分类与项目名称，其他图标显示菜单名；900px 及以下使用带焦点管理的导航抽屉。右侧正文使用页面滚动，布局按可用内容宽度适配；侧栏列出全部六个项目，全站不再展示页脚。关于我 / Resume 入口继续使用 `/about`，保留原有内容及章节 ID。侧栏「新对话 / New chat」创建空白会话并返回首页 `/`，不终止其他会话；DESIGN.4x 返回首页 `/`。一级导航使用 圆角线性图标，分类内项目不重复添加图标。
 
-所有项目详情采用 AI 智能问数的阅读结构：顶部项目概述、图文内容章节、共用 `ProjectAnchorNav`；不展示返回或相邻项目导航。通用项目锚点由 `data/projectAnchors.ts` 根据已有内容生成，保留已有章节 ID；支持带 Hash 的直达链接、刷新、前进后退和当前章节高亮。960px 以上复用关于页的 `SectionAnchorNav` 右侧刻度、位置和间距；取消竖向分割线、缩小刻度间距并上移，悬停或键盘聚焦放大刻度，960px 以下隐藏锚点导航。
+通用项目详情采用 AI 智能问数的阅读结构：顶部项目概述、图文内容章节、共用 `ProjectAnchorNav`；不展示返回或相邻项目导航。数据库运维视觉版使用独立的展板与图文排版，原路由继续使用通用布局。通用项目锚点由 `data/projectAnchors.ts` 根据已有内容生成，保留已有章节 ID；支持带 Hash 的直达链接、刷新、前进后退和当前章节高亮。960px 以上复用关于页的 `SectionAnchorNav` 右侧刻度、位置和间距；取消竖向分割线、缩小刻度间距并上移，悬停或键盘聚焦放大刻度，960px 以下隐藏锚点导航。
 
 首页展示个人介绍、提问输入框与推荐问题，按可用高度布局，短屏自然滚动，不展示或加载 3D 工牌；项目入口集中在侧栏，首页不展示项目列表。推荐问题使用带边框的胶囊按钮，不展示悬停箭头；移动端以 12px 字号横向单行排列，超出后可横向滚动，中文简介以较小字号保持单行，菜单按钮右侧显示 DESIGN.4x 首页链接。首页直接加载；About（关于我）、项目详情、摄影和一些尝试按路由懒加载。样式始终按 tokens → foundation → components → prose → responsive 顺序加载，拆分组件样式时保留 `components.css` 的导入顺序。
 
@@ -110,3 +114,7 @@ rg -n 'buildSiteCorpus|sendDeepseekChatStream' frontend/src/lib api
 
 - 项目导航使用 `navigationTitle` 覆盖菜单名称（AI 智能问数），`hiddenFromNavigation` 隐藏入口但保留详情路由（Agent 记忆插件）。Text2SQL（`/project/text2sql`）依据早期交互稿整理双语案例，内容保存在 `projectDetails.ts`，原稿 `public/images/text2sql-interaction-design.png` 默认折叠；项目已上线，个人职责为产品界面设计，原稿标注「待定」的结果审阅与异常反馈仍按方案探索描述，不推断最终落地或效果指标。任务流编辑器（`/project/workflow-editor`）依据原始设计文章整理双语案例，内容同样保存在 `projectDetails.ts`，原文配图默认折叠。
 
+
+数据库运维视觉版的全部配图展板复用 `MeshGradientBackground`。配色取自 OceanBase DataPilot「从问数到报告」四个面板（实际为冰蓝与紫粉两套交替），按素材路径稳定打散分配；`ProjectGallery.imageFrame` 仅在视觉版启用，原版布局不变。图注位于展板外，首屏继续隐藏图注。
+
+- 数据库运维平台仅展示当前视觉版本，导航以「数据库运维平台」指向 `/project/databaseops`；旧 `/project/databaseops-visual` 重定向到正式地址并保留查询参数和 Hash，不再展示原版布局及阅读原版入口。原始项目数据继续供当前版与聊天共用。

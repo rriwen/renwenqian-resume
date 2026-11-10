@@ -26,7 +26,7 @@
   border: 0.5px solid color-mix(in srgb, var(--control-border) 55%, var(--page-bg));
   border-radius: calc(var(--radius-lg) * 2);
   box-shadow: inset 0 1px 0 color-mix(in srgb, var(--text) 4%, transparent);
-  animation: prompt-composer-beam 2s linear infinite;
+  animation: prompt-composer-beam var(--prompt-composer-beam-duration, 2s) linear infinite;
   transition: border-color var(--motion-normal), background-color var(--motion-normal), box-shadow var(--motion-normal);
 }
 

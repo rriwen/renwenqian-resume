@@ -1,3 +1,4 @@
+import type { ProjectDetailTable } from '../projectDetails'
 import type { Locale } from '../../i18n/translations'
 import { getProjectBySlug, getProjectTitle } from '../projects'
 
@@ -8,6 +9,8 @@ export type DataPilotSection = {
   title: string
   intro: string
   body: string
+  table?: ProjectDetailTable
+  steps?: { title: string; detail: string }[]
   bullets?: string[]
   stats?: string[]
   related?: boolean
@@ -23,122 +26,202 @@ function createDataPilotContent(locale: Locale) {
   const project = getProjectBySlug('dataagent')!
   const sections: DataPilotSection[] = isZh
     ? [
-        {
-          id: 'overview',
-          index: '01',
-          title: '项目目标',
-          intro: '从“生成答案”转向“让结果可信并进入工作流”',
-          body: '智能问数从技术验证进入商业化交付后，产品开始关注用户为何不敢采纳答案。早期版本在指标口径和执行过程上不够稳定，用户难以判断结果是否可信，出错后也缺少修正路径。因此目标分两层：先减少指标与维度的口径偏差，让结果可确认、可追踪、可修正；再让结果进入真实工作流，支持分析、监控、汇报和决策。\n\n设计策略围绕“理解—确认—修正—使用”展开：生成前展示 Agent 对问题和业务口径的理解，只在关键歧义处询问；执行中呈现节点与状态，让结果可以回查；出现偏差时保留上下文，通过对话局部修改；结果确认后继续生成多维表格、仪表盘或数据大屏，承接后续任务。',
-          bullets: ['数据分析师：检查口径、修改参数并继续分析', '业务人员：用自然语言完成高频经营查询', '管理者：将结果用于监控、汇报和决策'],
-          images: [{ src: '/images/dataagent-target-users-scenarios.png', caption: '', display: 'image', alt: '业务人员、数据分析师和管理者的目标用户与使用场景示意图' }],
-        },
-        {
-          id: 'accuracy',
-          index: '02',
-          title: '准确率优化',
-          intro: '先判断错误发生在哪个节点，再选择对应方案',
-          body: '准确率问题不能只归因于模型。一次问数会经过意图理解、口径匹配、工具调用和结果返回，任一节点出错都会影响最终结果。\n\n定位时，先收集用户纠正、低评分和查询失败的案例，再按相同输入重放任务。逐步对照每个节点的输入、解析结果、调用参数和最终数据，找到首次出现偏差的位置。\n\n确认错误节点后，再选择追问确认、口径选择、调用校验或结果回查等方案，避免用增加确认步骤解决所有问题。',
-          bullets: ['意图理解：用户问“华东销售怎么样”，先追问要看趋势、排名还是异常，再进入分析', '指标与维度：用户输入“收入”时，同时展示营业收入、回款金额等候选定义，由用户确认口径', '工具调用：生成经营看板前校验查询与制图工具的参数和顺序，失败时直接标出异常节点', '结果校验：结果页保留“营业收入｜华东区域”等查询条件与执行记录，方便核对和回查'],
-          related: true,
-          images: [
-            { src: '/images/datapilot-metric-layer-data.png', caption: '数据字段与指标口径' },
-            { src: '/images/datapilot-metric-layer-modeling.png', caption: '指标、维度和数据关系' },
-          ],
-        },
-        {
-          id: 'conversation',
-          index: '03',
-          title: 'Agent 多轮对话体验',
-          intro: '让确认、执行、反馈和修正形成连续任务',
-          body: '参数明确时直接执行；出现关键歧义时，在对话中插入确认卡片。卡片集中展示已识别的指标、维度和筛选条件，候选口径用单选项呈现，用户确认后从当前节点继续。\n\n执行阶段使用步骤列表展示“理解问题—匹配口径—查询数据—生成结果”。当前步骤持续显示处理中状态，已完成步骤收起，用户仍可展开查看工具与参数，减少等待时的不确定感。\n\n结果中的筛选条件和展示方式支持原位修改。提交后只重跑受影响的节点，并保留上一版结果用于对照。失败信息出现在对应步骤下方，说明原因，同时提供修改参数、重试和返回上一步三个入口。',
-          bullets: ['确认卡片：集中核对指标、维度和筛选条件', '执行步骤：显示当前进度，按需展开工具与参数', '原位修正：保留上下文，只重跑受影响的节点', '结果对照：修改后保留上一版结果，方便判断变化', '错误恢复：在出错节点提供修改、重试和返回入口'],
-          images: [{ src: '/images/datapilot-ai-serial-execution.png', caption: 'Agent 从问题理解到结果生成的连续执行流程' }],
-        },
-        {
-          id: 'applications',
-          index: '04',
-          title: '应用扩展',
-          intro: '根据后续任务选择合适的结果形态',
-          body: '应用生成可预览、可撤销，因此让 Agent 先完成可逆的规划与生成，只在目标缺失或存在明显歧义时询问用户。用户负责说明应用用途和关键取舍，Agent 负责组织字段、图表和内容顺序，减少逐步确认带来的打断。\n\n选择应用类型后，Agent 自动继承问数中的数据来源、指标、维度和筛选条件，并展示这些生成依据。若无法判断使用对象、查看方式或后续任务，再用简短问题补齐信息，避免基于错误假设继续生成。\n\n用户通过自然语言提出修改后，Agent 先复述要求并说明影响范围，再局部更新受影响的模块。系统同步检查数据与图表匹配、关键指标和画布范围，并保留上一版本与撤销入口。不同应用承接的任务不同，人与 Agent 的协作问题也会随之变化。',
-          applicationTypes: [
-            { title: '多维表格', scene: '用户把问数结果继续生成包含字段、视图和计算规则的业务分析表，并在后续分析中持续调整。', problem: '一句“生成门店经营表”同时包含用途和结构要求，Agent 对行粒度、字段关系和计算口径的理解不可见。草案偏离预期后，用户也难以判断一句修改会影响哪些字段与视图。', solution: '先展示 Agent 对用途、数据粒度和字段关系的理解，仅追问有歧义的部分。收到“改为每个门店一行”等要求后，先返回修改摘要和影响范围，再局部更新，并保留撤销入口。', screenshot: '多维表格生成结果截图' },
-            { title: '仪表盘', scene: '业务负责人把分析结果生成周期性监控页面，用于查看指标变化、发现异常并继续追查。', problem: '“关注经营异常”需要被转换成页面大纲、指标优先级和图表组合。若 Agent 直接生成完整页面，用户很难判断它是否理解了监控目标；使用“这张图”等指代修改时也容易产生歧义。', solution: '先给出页面大纲和推荐模块，再生成仪表盘。每个模块显示名称、所回答的问题和数据口径；用户按模块名称提出调整，Agent 复述修改目标后局部更新，并提供重新生成与撤销。', screenshot: '仪表盘生成结果截图' },
-            { title: '数据大屏', scene: '管理者把经营分析生成用于会议、汇报或业务现场展示的大屏，需要快速传达核心结论。', problem: '“更有重点”“更适合汇报”等视觉意图缺少明确指向。Agent 可能同时改动内容、版式和色彩，扩大修改范围，甚至破坏已经确认的叙事顺序。', solution: '先用选项确认受众、屏幕比例和核心结论，再生成叙事大纲与整屏预览。为各区域命名，用户通过名称提出修改；Agent 先说明将调整的内容，只更新对应区域，并保留上一版本。', screenshot: '数据大屏生成结果截图' },
-          ],
-          images: [],
-        },
-        {
-          id: 'delivery',
-          index: '05',
-          title: '交付结果',
-          intro: '将交付中的共性问题转化为标准产品能力',
-          body: '在 5+ 家付费客户交付过程中，指标口径、结果解释和展示形式相关反馈被持续收集，并区分为通用问题、行业差异和个性化需求。通用问题进入产品迭代，行业差异通过配置和业务词典解决，个性化需求结合复用价值评估。失败案例进一步转化为问题优先级和验收标准，推动产品、算法、研发和交付团队统一方案，并跟进上线后的数据验证。\n\n结合 AI 辅助开发参与问数页面与组件实现，通过 Skill 明确组件用法与交互状态，复用组件库交付可运行代码。\n\n这里的“应用生成采纳率”指用户直接使用或继续编辑生成的应用，并将其用于实际业务的应用生成任务比例，不包含单次问数结果。后续仍需按客户、业务场景和应用类型拆分验证。',
-          stats: ['应用生成采纳率 15% → 60%', '5+ 家付费客户', '从技术验证进入商业化交付'],
-          images: [{ src: project.image, caption: '面向业务用户的问数与数据应用场景' }],
-        },
-        {
-          id: 'role',
-          index: '06',
-          title: '后续验证',
-          intro: '下一步需要继续验证不同场景下的使用效果',
-          body: '当前指标反映应用生成采纳率变化，后续进一步按客户、业务场景和应用类型拆分，持续观察多维表格、仪表盘和数据大屏的实际使用情况。问数准确性与任务完成情况单独验证，结合风险判断哪些步骤适合自动执行、哪些需要保留人工确认。',
-          bullets: ['按业务场景拆分应用生成采纳率和修改率', '单独验证问数准确性与任务完成情况', '减少低风险问题中的确认步骤', '完善多轮对话中的上下文保留和参数修改'],
-          images: [{ src: '/images/datapilot-ai-parallel-execution.png', caption: '多任务协同与结果生成场景' }],
-        },
-      ]
+  {
+    "id": "overview",
+    "index": "01",
+    "title": "从问数到应用：0 → 1 的产品演进",
+    "intro": "让一次分析，成为可以继续使用的工作成果",
+    "body": "DataPilot 最初解决用自然语言查询数据，随后扩展到应用生成。我从 0 到 1 参与产品建设，负责多轮对话、应用生成和智能体回放的设计与前端实现。\n\n体验设计的重点也随之变化：问数阶段澄清业务口径，应用阶段支持连续修改，交付阶段依据执行证据定位偏差。三个能力围绕同一条任务链连接起来。",
+    "bullets": [
+      "对话：让业务目标可确认。",
+      "应用：让分析成果可继续修改与使用。",
+      "回放：让执行偏差可追查。"
+    ],
+    "images": []
+  },
+  {
+    "id": "conversation",
+    "index": "02",
+    "title": "多轮对话：把澄清留在任务里",
+    "intro": "只问影响决策的问题",
+    "body": "直接回答含糊问题容易把错误口径带进后续应用；每一步都询问，又会让业务人员替 Agent 做技术决策。我的取舍是让用户决定业务目标与口径，Agent 负责组织工具执行。\n\n实现上，原始请求、待回答的问题与用户答复关联到同一任务。界面恢复时能够继续呈现待处理交互，避免把刷新当成新任务。这个机制支持中途澄清，不等于模型可以无误记住所有历史。",
+    "bullets": [
+      "明确条件直接推进，关键歧义才澄清。",
+      "保留请求与答复的关联，支持恢复后的继续交互。",
+      "新旧条件冲突时，让变化可核对。"
+    ],
+    "images": []
+  },
+  {
+    "id": "continuous-analysis-example",
+    "index": "03",
+    "title": "海尔生产场景：一条连续任务",
+    "intro": "交互构思示范，与已有 POC 衔接",
+    "body": "以下对话是基于 DataPilot 能力构思的交互示范，不是海尔客户访谈原话、真实故障或已完成的验证结果。它承接已有 POC 的生产进度场景，说明如何从分析走向可复用应用。\n\n生产落后的原因仍需结合排产与工单核实，不能直接归因为 OEE。",
+    "bullets": [
+      "用户：“看看哪些产线进度落后。”Agent：“看哪个日期和班次？按计划完成率，还是计划与实际数量差判断？”",
+      "用户：“昨天白班，按计划完成率。”保留工厂范围，核对日期、班次和计算口径。",
+      "用户：“把这条产线的停机和质量记录放进应用，每天复盘用。”缺少节拍等必要定义时说明限制，不补造 OEE。",
+      "用户：“改为夜班，保留布局，按完成率排序。”保留已认可的结构，同时更新关联数据。"
+    ],
+    "images": []
+  },
+  {
+    "id": "continuous-analysis-validation",
+    "index": "04",
+    "title": "应用修改：保留结构，更新关联结果",
+    "intro": "局部修改不能变成只改一张图",
+    "body": "“改为夜班，布局不变”包含两个约束：保留已认可的页面结构，同时更新受班次影响的进度、排序和明细。只更新当前图表，其余模块仍显示白班数据，会造成看似完成、结果却矛盾的页面。\n\n设计上将保留项与变更项分开表达，修改后核对关联结果。实现通过应用与版本上下文承接继续编辑；是否正确更新全部依赖，需要跨模块测试，不能以生成成功代替业务验证。",
+    "bullets": [
+      "保留：布局、模块顺序和未改变的分析范围。",
+      "更新：班次条件、查询结果、汇总值与排序。",
+      "核对：所有视图口径一致；新数据失败时明确提示旧结果。"
+    ],
+    "images": []
+  },
+  {
+    "id": "applications",
+    "index": "05",
+    "title": "应用生成：区分预览、保存与使用",
+    "intro": "让用户知道自己拿到的是哪一步成果",
+    "body": "候选预览、保存版本与发布代表不同的完成状态。预览可打开说明界面可呈现，保存成功说明版本已保留，发布成功说明选定版本可以访问。这些都不能单独证明数据正确或用户已经采纳。\n\n用户围绕当前应用继续修改，系统保留版本语境。发布失败时不替换已有发布版本，避免破坏已经使用的成果。我的职责是将这些机制转译为前端体验，不将全部服务端能力归为个人实现。",
+    "bullets": [
+      "候选预览：检查界面和关键交互。",
+      "保存版本：形成可以继续编辑的稳定对象。",
+      "业务核对：与相同日期、班次和口径的记录对照。",
+      "发布与使用：分别观察发布成功和后续有效使用。"
+    ],
+    "images": []
+  },
+  {
+    "id": "agent-replay",
+    "index": "06",
+    "title": "智能体回放：从异常回到证据",
+    "intro": "执行成功，不代表回答了正确的问题",
+    "body": "回放沿执行阶段查看输入、工具结果和状态，也可沿数据对象查看关联证据。两个入口帮助定位首次出现偏差的位置，而不是让人阅读完整日志。回放重建已持久化的记录，不是重新执行，也不等于展示模型全部内部思考。\n\n构思示例：夜班分析返回空结果，但业务人员认为当天有生产。先核对班次条件，再检查查询参数、跨日时间边界和返回记录。如果跨日夜班被自然日截断，应作为待核实的口径问题，不能直接认定没有业务数据。",
+    "bullets": [
+      "步骤入口：从异常追到输入、参数和工具输出。",
+      "对象入口：查看数据与执行证据之间的关系。",
+      "区分证据与诊断：AI 提出的原因是线索，不是已核实结论。"
+    ],
+    "images": []
+  },
+  {
+    "id": "accuracy",
+    "index": "07",
+    "title": "Agent 调优：把个案变成回归任务",
+    "intro": "先定位偏差，再选择修正层级",
+    "body": "调优方案从原始问题、预期结果与实际输出开始。依据回放证据，区分指标定义、字段映射、工具参数与交互澄清问题，避免一律增加提示词或确认步骤。\n\n在跨日夜班的构思中，补齐班次定义后重新测试原问题，再扩展到日班、跨月和缺失记录。配置修改后在新会话验证，避免旧会话保留的执行配置干扰判断。以下是拟议回归方案，不是已完成实验或自动修复闭环。",
+    "bullets": [
+      "知识层：明确完成率、良品与返工口径。",
+      "工具层：检查筛选字段、时间边界和参数映射。",
+      "交互层：只澄清会改变结论的缺失条件。",
+      "回归层：验证原问题、邻近场景和修改后的关联视图。"
+    ],
+    "images": []
+  },
+  {
+    "id": "delivery",
+    "index": "08",
+    "title": "采纳优化：从生成成功走向持续使用",
+    "intro": "建立可以验证的优化故事",
+    "body": "待验证假设：初次口径不符、修改成本高和成果状态不清，会使用户放弃应用。对应的优化是关键澄清、连续编辑和清晰的版本状态；回放帮助团队定位重复错误。\n\n先观察生成保存是否成功，再观察用户是否发布或用于工作，最后检查是否持续使用。当前没有可核实的采纳提升数据，因此不将历史草稿中的数值写成实绩。",
+    "bullets": [
+      "关键澄清 → 检查口径错误是否减少。",
+      "连续编辑 → 检查修改完成率与放弃情况。",
+      "版本状态 → 检查保存到发布的流失。",
+      "回放调优 → 检查同类错误的回归复现。"
+    ],
+    "images": []
+  },
+  {
+    "id": "role",
+    "index": "09",
+    "title": "指标验证：明确分母与观察期",
+    "intro": "发布转化是中间指标，持续使用才接近采纳",
+    "body": "对需要发布的任务，建议以首次生成并保存成功、且有完整 7 天观察期的唯一应用为分母；分子为期间用户主动发布、服务端确认成功的唯一应用。重复编辑或发布不重复计数。\n\n自用分析在任务开始前单独归类，观察重复有效使用；发布后的业务使用另行跟踪，不能只数页面打开。生成或保存失败作为上游损失单列，不能事后排除失败样本来美化转化。\n\nPOC 样本有限时，优先记录独立完成数、人工介入次数、任务耗时中位数与重复错误。固定前后比较的任务条件，再讨论提升幅度。",
+    "bullets": [
+      "核心：7 天发布转化与后续有效使用。",
+      "护栏：生成保存成功率、正确性与放弃率。",
+      "状态：验证方案已定义，实际效果待数据验证。"
+    ],
+    "images": []
+  }
+]
     : [
-        {
-          id: 'overview', index: '01', title: 'Overview', intro: '',
-          body: 'DataAgent moved from technical validation toward commercial exploration. I owned the Agent conversation experience, from question input and intent recognition to confirmation and result generation across tables, dashboards, and data walls. My product judgment was to first address why users hesitated to adopt results and could not recover from errors, then expand output formats; I matched tables, dashboards, and data walls to detail analysis, monitoring, and presentation goals instead of optimizing for one-off answers.', stats: ['AI-generated application adoption 15% → 60%', '5+ paid customer deliveries', 'Tables / dashboards / data walls'], images: [{ src: project.image, caption: 'DataAgent product overview' }],
-        },
-        {
-          id: 'goals', index: '02', title: 'Decisions & goals', intro: 'Improve answer accuracy and make results usable beyond one-off answers', body: 'The product goals were to improve metric, dimension, time, and query accuracy, while supporting richer output formats for analysis, monitoring, and presentation.', bullets: ['Understand the user’s analysis goal', 'Reduce parsing and matching errors', 'Support different data-use scenarios'], images: [{ src: '/images/datapilot-metric-layer-data.png', caption: 'Metric and field context' }],
-        },
-        {
-          id: 'problems', index: '03', title: 'Problems & priorities', intro: 'Map unstable results to specific conversation nodes', body: 'I grouped customer feedback and failed cases across the Agent workflow. A request such as “show East China sales” requires the system to resolve the metric, region level, and time range, as well as whether a specific tool or Skill should be called. Any incorrect decision or call can make the final result unreliable.', bullets: ['Intent parsing', 'Metric and dimension matching', 'Time interpretation', 'Tool / Skill calling: wrong selection, incomplete parameters, or incorrect order', 'Output format selection'], images: [{ src: '/images/datapilot-metric-layer-data.png', caption: 'Metric context' }, { src: '/images/datapilot-metric-layer-modeling.png', caption: 'Metric relationships' }],
-        },
-        {
-          id: 'conversation', index: '04', title: 'Multi-turn Agent conversation experience', intro: 'Turn natural language into a confirmable, executable, and editable task', body: 'I designed the main Agent flow and made trade-offs based on risk and ambiguity: execute low-risk requests directly, but confirm when critical parameters are unclear. Before a tool or Skill call, the system checks selection and parameters; during execution it shows node states, and after failure it explains the cause and offers retry. Users can change time, filters, or output format mid-task, with only the changed parts updated before continuing.', bullets: ['Input and intent', 'Metric, dimension, and time parsing', 'Risk-based execution or confirmation', 'Tool / Skill selection, parameter, and order checks', 'Execution states, error causes, and retry', 'Continue after mid-task edits'], images: [{ src: '/images/datapilot-ai-serial-execution.png', caption: 'Conversation and execution flow' }],
-        },
-        {
-          id: 'accuracy', index: '05', title: 'Accuracy & applications', intro: 'Make results accurate and usable in real workflows', body: 'I organized failure cases and aligned the response: use confirmation for ambiguous metrics, convert natural-language time into explicit ranges, and preserve context when users revise one parameter. I also mapped output formats to user goals: tables for detail analysis, dashboards for recurring monitoring, and data walls for business presentation.', bullets: ['Intent clarification and metric definitions', 'Explicit time ranges and validation', 'Tables, dashboards, and data walls', 'Context-preserving revisions'], related: true, images: [{ src: '/images/datapilot-ai-serial-execution.png', caption: 'Serial execution' }, { src: '/images/datapilot-ai-parallel-execution.png', caption: 'Parallel execution' }],
-        },
-        {
-          id: 'delivery', index: '07', title: 'Delivery results', intro: 'Turn recurring delivery issues into reusable product capabilities', body: 'Across 5+ paid customer deliveries, I categorized feedback into general product issues, industry-specific configuration, and one-off requests. General issues were fed back into the core experience and validated through subsequent delivery.\n\nI also contributed page and component code with AI-assisted development, using Skills to document component usage and interaction states and reusing the component library.\n\nAI-generated application adoption measures the share of application-generation tasks where users use the generated application in their work, either directly or after editing. It excludes individual query answers. Further validation will break this down by customer, use case, and application type.', stats: ['AI-generated application adoption 15% → 60%', '5+ paid customer deliveries', 'Technical validation → commercial delivery'], images: [{ src: project.image, caption: 'Business-facing query experience' }],
-        },
-        {
-          id: 'role', index: '08', title: 'Next validation', intro: 'Continue validating performance across different use cases', body: 'The current metric reflects adoption of AI-generated applications. Next, I would break it down by customer, use case, and application type while tracking actual use of tables, dashboards, and data walls. Query accuracy and task completion will be validated separately, with risk guiding which steps can run automatically and which need confirmation.', bullets: ['Measure application adoption and edit rates by use case', 'Validate query accuracy and task completion separately', 'Reduce confirmation steps for low-risk requests', 'Improve context retention across multi-turn revisions'], images: [{ src: '/images/datapilot-ai-parallel-execution.png', caption: 'Multi-task result generation' }],
-        },
-      ]
-
-  const conversationExamples: DataPilotSection[] = [
-    {
-      id: 'continuous-analysis-example', index: '',
-      title: isZh ? '连续分析需求判断（示例）' : 'Continuous analysis requirements (example)',
-      intro: isZh ? '从“记住历史”进一步拆解为可核对、可修改的分析条件' : 'Turn a request for memory into conditions users can check and change',
-      body: isZh
-        ? '以下为假设业务场景，用于展示产品判断与交互方案推演，不代表已完成的客户项目或用户测试。\n\n连锁零售企业的区域经理需要在经营例会前，定位 9 月华东区净销售额较 8 月下滑的主要来源。一次问数只能看到总体变化，需要连续拆解到城市和品类。假设客户提出“让 Agent 记住前面的问题”，直接沿用全部历史条件可能将后续分析带偏。\n\n需要解决的是：用户无法确认本轮继承了哪些条件、修改了哪些条件。因此可将诉求拆为保留适用条件、明确变更范围、澄清冲突与歧义，以及允许纠正后继续分析。'
-        : 'This hypothetical business scenario illustrates product and interaction reasoning. It is not a completed customer project or user test.\n\nBefore a business review, a retail regional manager needs to locate the main contributors to a decline in East China net sales from August to September. A single answer shows the overall change; follow-ups need to break it down by city and category. If the customer asks the Agent to remember earlier questions, carrying every past condition forward could distort later analysis.\n\nThe underlying problem is that users cannot tell which conditions were inherited or changed. The request can be broken into retaining applicable conditions, making changes explicit, clarifying conflicts and ambiguities, and allowing corrections before continuing.',
-      bullets: isZh
-        ? ['第一轮：“9 月华东区净销售额比 8 月下降了多少？”明确区域、时间、对比周期与指标口径。', '第二轮：“按城市拆开，看看哪里下降最多。”保留时间、区域与指标，新增城市维度；澄清“下降金额”还是“下降比例”。', '第三轮：“看看杭州，按品类拆一下。”范围收窄到杭州，切换为品类维度，保留时间与指标。', '第四轮：“那华南呢？”清除与华南冲突的杭州条件，询问看华南整体变化还是继续按品类拆分。']
-        : ['Turn 1: “How much did East China net sales fall in September compared with August?” Establish the region, period, comparison period, and metric definition.', 'Turn 2: “Break it down by city. Where was the largest decline?” Retain the period, region, and metric, add the city dimension, and clarify absolute versus percentage decline.', 'Turn 3: “Look at Hangzhou by category.” Narrow the scope to Hangzhou and switch to categories while keeping the period and metric.', 'Turn 4: “What about South China?” Remove the conflicting Hangzhou condition and clarify whether to show the overall change or retain the category breakdown.'],
-      images: [],
-    },
-    {
-      id: 'continuous-analysis-validation', index: '',
-      title: isZh ? '方案取舍与验证（示例）' : 'Proposed scope and validation (example)',
-      intro: isZh ? '先保障同一任务内的条件正确与过程可理解' : 'Prioritize correct conditions and an understandable process within one task',
-      body: isZh
-        ? '承接上述假设场景，建议在结果附近展示当前条件摘要，例如“9 月对比 8 月 · 华东 · 净销售额 · 按城市 · 按下降金额排序”。追问后突出本轮变化，例如“范围改为杭州、维度改为品类；时间与指标不变”。明确的追问直接执行，出现冲突或多个合理解释时提供必要的澄清选项；用户也可修改条件后继续分析。\n\n以下为拟议的版本边界和验证方法，尚不作为已落地功能或验证结论。'
-        : 'For the hypothetical scenario above, the proposed interface places a current-condition summary near the result, such as “September vs August · East China · Net sales · By city · Ranked by absolute decline.” After a follow-up, it highlights what changed: “Scope changed to Hangzhou; dimension changed to category; period and metric unchanged.” Clear requests proceed directly. Conflicts or multiple plausible interpretations trigger necessary clarification, and users can edit conditions before continuing.\n\nThe scope and validation methods below are proposals, not shipped functionality or completed findings.',
-      bullets: isZh
-        ? ['首版建议：同一分析任务内的条件继承与修改、当前条件摘要、变更提示和关键歧义澄清。', '暂缓范围：跨会话长期记忆、复杂分支对话树和自动生成完整经营报告，减少旧条件误用与开发测试范围扩张。', '验证任务：用上述四轮追问检查条件继承是否正确，用户能否发现并修正偏差，是否减少重复输入，以及能否定位主要下滑贡献项。', '判断标准：不单独以对话轮数减少判断成功；必要澄清可能增加一轮，却避免错误分析。', '结论边界：城市与品类拆解用于定位下滑来源；要判断原因，还需要客流、缺货、促销等证据。']
-        : ['Proposed first release: condition inheritance and editing within one task, a current-condition summary, change feedback, and clarification of material ambiguities.', 'Defer: cross-session memory, complex conversation branches, and full report generation to limit stale-condition errors and development and testing scope.', 'Validation tasks: use the four turns to check inheritance correctness, whether users can detect and correct deviations, repeated input, and identification of the main contributors to decline.', 'Success criteria: do not rely on fewer turns alone; a necessary clarification may add a turn while preventing incorrect analysis.', 'Interpretation limits: city and category breakdowns locate contributors to the decline. Explaining causes requires evidence such as footfall, stock availability, and promotions.'],
-      images: [],
-    },
-  ]
-  sections.splice(sections.findIndex((section) => section.id === 'conversation') + 1, 0, ...conversationExamples)
-  sections.forEach((section, index) => { section.index = String(index + 1).padStart(2, '0') })
+  {
+    "id": "overview",
+    "index": "01",
+    "title": "Product evolution",
+    "intro": "",
+    "body": "I participated in DataPilot from zero to one, owning design and frontend implementation of multi-turn conversations, application generation and Agent replay.",
+    "images": []
+  },
+  {
+    "id": "conversation",
+    "index": "02",
+    "title": "Multi-turn conversation",
+    "intro": "",
+    "body": "Clarify only material business ambiguities. Persist requests, pending questions and replies within the task so interaction can resume. This does not guarantee perfect model memory.",
+    "images": []
+  },
+  {
+    "id": "continuous-analysis-example",
+    "index": "03",
+    "title": "Manufacturing interaction example",
+    "intro": "",
+    "body": "This hypothetical dialogue extends the existing Haier manufacturing POC. It is not a customer quotation or verified outcome. A user reviews progress, investigates a line and creates an application. OEE alone does not establish causes of delay.",
+    "images": []
+  },
+  {
+    "id": "continuous-analysis-validation",
+    "index": "04",
+    "title": "Consistent revisions",
+    "intro": "",
+    "body": "Changing shifts while preserving layout should update all dependent views. Application version context supports continued edits; correctness needs cross-view validation.",
+    "images": []
+  },
+  {
+    "id": "applications",
+    "index": "05",
+    "title": "Preview, save and use",
+    "intro": "",
+    "body": "Preview, save, publication and business use are distinct. Failed publication preserves the existing released version. Backend mechanisms are not presented as my sole implementation.",
+    "images": []
+  },
+  {
+    "id": "agent-replay",
+    "index": "06",
+    "title": "Agent replay",
+    "intro": "",
+    "body": "Replay reconstructs persisted evidence, not re-execution or all internal reasoning. A hypothetical empty night-shift result requires checking cross-day boundaries. AI diagnoses remain hypotheses.",
+    "images": []
+  },
+  {
+    "id": "accuracy",
+    "index": "07",
+    "title": "Agent tuning",
+    "intro": "",
+    "body": "Capture expected and actual results, locate evidence, correct knowledge, tools or interaction, then run original and adjacent regression cases. Validate configuration changes in a new session. This is a proposed plan.",
+    "images": []
+  },
+  {
+    "id": "delivery",
+    "index": "08",
+    "title": "Adoption hypotheses",
+    "intro": "",
+    "body": "Test whether clarification, continued editing and version states reduce abandonment and recurring errors. No verified adoption uplift is available.",
+    "images": []
+  },
+  {
+    "id": "role",
+    "index": "09",
+    "title": "Measurement plan",
+    "intro": "",
+    "body": "Measure unique first-saved applications with a complete seven-day observation window and explicit successful publication. Track meaningful use separately, preclassify self-use tasks and report upstream failures, correctness and abandonment. POC evaluation also tracks independent completion, interventions and median duration.",
+    "images": []
+  }
+]
 
   const growthSections: DataPilotSection[] = isZh
     ? [
@@ -214,15 +297,50 @@ function createDataPilotContent(locale: Locale) {
 
   const pocSections: DataPilotSection[] = [
     {
-      id: 'poc-validation', index: '01',
-      title: isZh ? '客户场景验证' : 'Customer scenario validation',
-      intro: isZh ? '通过客户 POC 演示验证业务场景价值' : 'Validate business use cases through customer POC demos',
-      body: isZh
-        ? '参与数据分析 Agent 产品需求规划与客户 POC 演示，结合场景验证反馈梳理用户要完成的分析任务，抽象共性需求并推进产品方案迭代。识别服务网点选址等时空分析需求，支持定制化交付；主导 Agent 多轮对话体验设计，覆盖提问、指标确认、结果查看与继续追问。'
-        : 'Contributed to data analysis Agent requirements planning and customer POC demos. Used scenario feedback to map analysis tasks, identify shared needs, and iterate product solutions. Identified spatiotemporal analysis needs such as service outlet location planning for customized delivery, and led multi-turn Agent conversation experience design across question input, metric confirmation, result review, and follow-up questions.',
-      bullets: isZh
-        ? ['客户演示：围绕实际业务需求参与 POC 演示', '场景验证：识别服务网点选址等时空分析需求', '需求梳理：结合反馈明确 Agent 多轮对话的交互需求']
-        : ['Customer demos: participate in POC demos around business needs', 'Scenario validation: identify needs such as service outlet location planning', 'Requirements: use feedback to define interaction needs for multi-turn Agent conversations'],
+      id: "poc-validation", index: "01",
+      title: isZh ? "海尔生产场景 POC" : "Haier manufacturing POC",
+      intro: isZh ? "验证智能问数能否帮助业务人员追查生产进度" : "Validate analytics for investigating production progress",
+      body: isZh ? "我参与海尔客户 POC，围绕“生产进度落后，怎样定位工厂、产线和效率损失”组织案例。客户已有运营看板与日报，POC 聚焦从总览继续追查的业务价值：找到关注对象、核对指标口径，再回到具体记录。" : "I participated in the Haier customer POC. This case centers on locating factories, lines, and efficiency losses when production falls behind. With dashboards and daily reports already available, the POC focuses on deeper investigation: identify relevant objects, reconcile definitions, and inspect business records.",
+      images: [],
+    },
+    {
+      id: "poc-haier-scope", index: "02",
+      title: isZh ? "场景取舍" : "Scope decisions",
+      intro: isZh ? "优先验证生产进度，按数据条件展开 OEE 分析" : "Start with production progress and expand into OEE as data allows",
+      body: isZh ? "按业务价值、数据可用性与验证成本收敛范围：先验证生产进度，再按条件展开效率分析。" : "Orders, work orders, and lines had been inventoried and take priority. OEE has leads in downtime, scans, and inspections, with shift and cycle-time definitions still to confirm. Equipment prediction and process control require more data and specialist validation. Scope balances business value, data readiness, and validation cost.",
+      table: isZh ? {"columns": ["候选场景", "已有条件", "POC 取舍"], "rows": [{"id": "poc-haier-scope-1", "cells": ["订单完成 / 负荷", "订单、工单、工厂与产线", "优先验证"]}, {"id": "poc-haier-scope-2", "cells": ["OEE 损失分析", "停机、扫描与检验记录", "先澄清班次与节拍"]}, {"id": "poc-haier-scope-3", "cells": ["质量追溯", "检验与不良记录", "核对工序、批次关联"]}, {"id": "poc-haier-scope-4", "cells": ["设备预测 / 过程控制", "数据与专业条件待补", "暂不纳入首轮"]}]} : {"columns": ["Scenario", "Available inputs", "POC priority"], "rows": [{"id": "poc-haier-scope-1", "cells": ["Completion / load", "Orders, work orders, factories and lines", "Validate first"]}, {"id": "poc-haier-scope-2", "cells": ["OEE losses", "Downtime, scans and inspections", "Clarify shifts and cycle times"]}, {"id": "poc-haier-scope-3", "cells": ["Quality traceability", "Inspections and defect records", "Check process and batch links"]}, {"id": "poc-haier-scope-4", "cells": ["Prediction / process control", "Further data and specialist input needed", "Outside the first round"]}]},
+      images: [],
+    },
+    {
+      id: "poc-haier-metrics", index: "03",
+      title: isZh ? "数据准备" : "Data preparation",
+      intro: isZh ? "把行业指标转成客户可核对的口径" : "Translate industry metrics into verifiable customer definitions",
+      body: isZh ? "将 OEE 拆解到客户的数据与计算规则，演示前列出缺失条件，确保结果能够与日报对照。" : "Map OEE availability, performance, and quality losses to downtime, production scans, and inspection records. Before demonstration, clarify shifts, ideal cycle times, downtime categories, and good-output definitions. List missing inputs explicitly so comparisons with customer reports use matching definitions.",
+      table: isZh ? {"columns": ["分析维度", "关联数据", "待确认口径"], "rows": [{"id": "poc-haier-metrics-1", "cells": ["时间损失 · A", "停机、订单与时序工单", "计划生产时间、班次、停机分类"]}, {"id": "poc-haier-metrics-2", "cells": ["速度损失 · P", "生产扫描、工单与产线", "理想节拍、运行时间、产量单位"]}, {"id": "poc-haier-metrics-3", "cells": ["质量损失 · Q", "检验、不良数与下线量", "良品、返工、报废及检验范围"]}]} : {"columns": ["Dimension", "Related data", "Definitions to confirm"], "rows": [{"id": "poc-haier-metrics-1", "cells": ["Availability · A", "Downtime, orders and timed work orders", "Planned production time, shifts and stop categories"]}, {"id": "poc-haier-metrics-2", "cells": ["Performance · P", "Scans, work orders and lines", "Ideal cycle time, operating time and output units"]}, {"id": "poc-haier-metrics-3", "cells": ["Quality · Q", "Inspections, defects and completed output", "Good units, rework, scrap and inspection scope"]}]},
+      images: [],
+    },
+    {
+      id: "poc-haier-task", index: "04",
+      title: isZh ? "演示设计" : "Demonstration design",
+      intro: isZh ? "用一项连续任务展示分析价值" : "Demonstrate value through one continuous task",
+      body: isZh ? "保留日期、班次与当前产线，让追问能够继续、条件变化能够看见、异常结论能够回查。进度落后的原因仍需结合工单与排产核实。" : "The demonstration follows progress review → line selection → loss breakdown → record inspection. Interaction priorities are preserving dates, shifts, and the current line across follow-ups, exposing condition changes, and making findings traceable. Delays require work-order and scheduling checks before attributing them to OEE.",
+      steps: isZh ? [{"title": "查看进度", "detail": "核对计划与实际"}, {"title": "定位产线", "detail": "保留日期与班次"}, {"title": "拆解损失", "detail": "对齐 OEE 口径"}, {"title": "核查记录", "detail": "回查停机与检验"}] : [{"title": "Review progress", "detail": "Compare plan and actual"}, {"title": "Locate lines", "detail": "Retain dates and shifts"}, {"title": "Inspect losses", "detail": "Align OEE definitions"}, {"title": "Check records", "detail": "Inspect stops and quality"}],
+      images: [],
+    },
+    {
+      id: "poc-haier-evaluation", index: "05",
+      title: isZh ? "验证标准" : "Evaluation criteria",
+      intro: isZh ? "围绕同一业务任务检查可用性与可信度" : "Check usability and trust through the same business task",
+      body: isZh ? "POC 围绕任务完成情况评价方案，记录结果核对、人工修改与求助位置，为下一轮迭代定位问题。" : "Evaluate task completion and record reconciliation issues, manual edits, and requests for help to guide the next iteration.",
+      bullets: isZh ? ["能否独立找到需要关注的工厂与产线", "能否与同一时间、同一口径的日报对照", "能否从损失指标回查停机或检验记录", "更换产线或班次后，分析路径能否复用"] : ["Independently identify factories and lines needing attention", "Reconcile with daily reports using matching time and definitions", "Trace loss metrics to downtime or inspection records", "Reuse the analysis path for another line or shift"],
+      images: [],
+    },
+    {
+      id: "poc-haier-delivery", index: "06",
+      title: isZh ? "阶段产出" : "Stage outputs",
+      intro: isZh ? "用具体应用承接客户评价" : "Give customers concrete applications to evaluate",
+      body: isZh ? "已有应用承接客户演示与讨论。后续聚焦条件继承、结果回查和数据更新提示，指标口径与使用效果继续由业务人员验证。" : "Existing operations, capacity-load, OEE, and daily-report applications support demonstrations. The POC grounds discussion in scenarios, definitions, and analysis paths, with follow-up validation focused on condition inheritance, source-record inspection, and data freshness. Business users still need to validate definitions and usage outcomes.",
+      table: isZh ? {"columns": ["业务任务", "已有应用"], "rows": [{"id": "poc-haier-delivery-1", "cells": ["查看生产进度", "工厂线体生产运营看板"]}, {"id": "poc-haier-delivery-2", "cells": ["分析产能负荷", "产能负荷率综合分析"]}, {"id": "poc-haier-delivery-3", "cells": ["追查设备效率", "设备 OEE 综合效率看板"]}, {"id": "poc-haier-delivery-4", "cells": ["日常复盘", "工厂日报、线体运营大屏"]}]} : {"columns": ["Business task", "Existing application"], "rows": [{"id": "poc-haier-delivery-1", "cells": ["Review production progress", "Factory and line operations dashboard"]}, {"id": "poc-haier-delivery-2", "cells": ["Analyze capacity load", "Capacity utilization analysis"]}, {"id": "poc-haier-delivery-3", "cells": ["Investigate equipment efficiency", "Equipment OEE dashboard"]}, {"id": "poc-haier-delivery-4", "cells": ["Daily review", "Factory reports and line displays"]}]},
       images: [],
     },
   ]
@@ -236,7 +354,7 @@ function createDataPilotContent(locale: Locale) {
       isZh ? '项目沿三条主线推进：产品体验设计，让 AI 结果可理解、可确认、可修正；POC 场景验证，通过客户演示与反馈验证业务场景价值；海外 SaaS 探索，通过 AI 模拟验证市场定位、首次使用与付费路径。' : 'The project followed three tracks: product experience design to make AI results understandable, confirmable, and editable; POC scenario validation through customer demos and feedback; and overseas SaaS exploration using AI simulation to validate market positioning, first use, and payment paths.',
       isZh ? '我参与数据分析 Agent 的产品需求规划，主导 Agent 多轮对话体验设计，覆盖提问、指标确认、结果查看与继续追问；结合客户 POC 与场景验证梳理关键交互需求，并针对分析问题排查需求设计智能体回放方案。' : 'I contributed to data analysis Agent requirements planning and led multi-turn Agent conversation experience design, covering question input, metric confirmation, result review, and follow-up questions. I used customer POC and scenario validation feedback to identify key interaction needs and designed an Agent replay solution for diagnosing analysis problems.',
     ],
-    metadata: ['角色：产品体验负责人', '阶段：技术验证 → 商业化交付', '周期：持续迭代'],
+    metadata: ['职责：设计与前端实现', '阶段：0 → 1 与持续迭代', '范围：对话 · 应用 · 回放'],
     parts: {
       experience: { title: isZh ? '产品体验设计' : 'Product experience design', sections },
       poc: { title: isZh ? 'POC 场景验证' : 'POC scenario validation', sections: pocSections },

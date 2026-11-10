@@ -9,12 +9,16 @@
 
 ## 结构与内容边界
 
+- 视觉版首屏展板的 `MeshGradientBackground.tsx` 使用 Paper Shaders Mesh Gradient，配色与动画参数对齐 OceanBase DataPilot 官网首屏；配色复用 `--showcase-ice` / `--showcase-sky` / `--showcase-blue` / `--showcase-lavender`，不添加鼠标交互。Paper Shaders 许可与 NOTICE 位于 `public/licenses/paper-shaders/`，原 `Iridescence.LICENSE.md` 也保留；离屏和后台暂停、减少动态效果冻结及静态渐变回退。首屏图注隐藏，放大预览保留说明；图片无可见边框与阴影。视觉版顶部使用全站 `--page-top`。
+
 - `App.tsx`：路由、主题和全局浮层；`PageToolbar` 在所有页面右上角提供主题按钮，仅在首页对话入口和聊天界面且存在非空历史对话时提供历史按钮；「联系我」作为 `SiteSidebar` 中「摄影记录」下方的带文字菜单项，额外间距 16px；收起侧栏时保留对应图标入口，移动端抽屉保持相同顺序；`Header` 管理侧栏开关、移动端菜单与焦点，`SiteSidebar` 提供桌面固定目录、移动端抽屉，`SidebarRail` 提供桌面收起后的图标导航与项目分类浮层，正文继续使用页面滚动；首页直接加载，About、项目详情、摄影和一些尝试按路由懒加载。`pages/` 组合页面，`components/` 按功能拆分 UI。
 - `data/projects.ts`：项目清单、稳定 slug、category 与双语标签；分类和标签属于项目记录，不能按数组位置另行关联。`projectCategories` 与 `getProjectGroups` 统一分类的顺序、双语名称和分组，供侧栏使用；分类顺序为 AI 产品、数据工具、设计工程，数据工具内数据库运维平台在数据库开发工具之前。`data/projectDetails.ts`：通用双语详情，`sections` 将章节标题、正文、可选表格与配图绑定，`subsections` 保存章节内的小标题、正文、圆点列表、可选表格与配图，页面和聊天共用；章节 ID 跨语言一致；小节的 `comparisonPlaceholder` 保存前后对比配图占位，桌面左旧右新、窄屏上下排列，准备说明不进入聊天语料。`data/projects/dataPilot.ts`：DataPilot 文案、链接与配图的唯一来源，详情页与聊天共用。
+- `data/projectViews.ts` 维护同一项目的独立展示入口。数据库运维视觉版 `/project/databaseops-visual` 为旧地址别名，重定向到正式地址 `/project/databaseops`，读取同一项目详情内容。`getProjectNavigationGroups` 使用项目正式地址且不再增加别名入口，展开侧栏、收起栏和移动抽屉共用；独立视图不加入 `projects` 清单，不重复进入聊天语料。`components/project/DatabaseOpsVisualCaseStudy.tsx` 按需加载并导入作用域内的 `styles/components/databaseops-visual.css`；`data/projects/databaseOpsVisual.ts` 仅保存双语展示文案、图注和素材入口，正文、表格与证据继续读取原详情。`public/images/databaseops-visual-source-setup.jpg` 为现有原型的真实截图。视觉版采用展板大图、图文并排与交互细节拆解，保留原型、步骤条 GIF 和图片全屏预览，支持深浅主题与移动端；验证指标继续区分 16.8% 与 75% 的不同用户群和时间窗口。
 - `content/about/*.md`：关于页双语内容；`content/about/parseAboutContent.ts`：纯解析；`content/about.ts`：加载与缓存。每个 `##` / `###` 标题须有 `<!-- id: stable-id -->`，同文件 ID 唯一、同义条目跨语言一致；改标题或顺序保留 ID。章节 ID 固定为 `work`、`projects`、`education`、`contact`。
-- 关于页与项目详情的刻度导航共用 `components/SectionAnchorNav.tsx`，仅 960px 及以上展示右侧刻度，窄屏隐藏；项目的 Hash 与章节高亮由 `components/project/ProjectAnchorNav.tsx` 管理；通用目录由 `data/projectAnchors.ts` 按实际内容生成，保留双语稳定 ID。详情不展示返回和相邻项目入口；Hash 跳转、刷新和浏览器历史需保持可用，DataPilot 深链接可切换到对应内容分组；`ReadingPageHeader` 顶部标题出现时同步展示 `DataPilotPartMenu` 下拉菜单，支持当前项标记、键盘与点击外部关闭，切换使用目标分组首节 Hash，保留刷新及前进后退。
+- DataPilot 的 POC 以海尔生产场景为主案例，围绕场景范围、指标口径、连续演示任务、业务评价与阶段交付展开，统一维护在 `data/projects/dataPilot.ts`。保留首节 `poc-validation`，新增章节使用跨语言一致的 `poc-haier-*` ID；以原生表格和四步流程图展示，表格复用 `components/project/DetailTable.tsx`，专用布局在 `DataPilotPocSection.tsx`；`table` 与 `steps` 同步进入聊天语料，不嵌入 PPT 截图。区分演示应用、验证要求与实际效果，不将页面业务指标写为设计成果。
+- 关于页与项目详情的刻度导航共用 `components/SectionAnchorNav.tsx`，仅 960px 及以上展示右侧刻度，窄屏隐藏；项目的 Hash 与章节高亮由 `components/project/ProjectAnchorNav.tsx` 管理；通用目录由 `data/projectAnchors.ts` 按实际内容生成，保留双语稳定 ID。详情不展示返回和相邻项目入口；Hash 跳转、刷新和浏览器历史需保持可用，DataPilot 深链接可切换到对应内容分组；正文 tab 原地切换并更新首节 Hash，不触发滚动，刷新与浏览器前进后退仍恢复锚点定位；`ReadingPageHeader` 顶部标题出现时同步展示 `DataPilotPartMenu` 下拉菜单，支持当前项标记、键盘与点击外部关闭，切换使用目标分组首节 Hash，保留刷新及前进后退。
 - `components/about/WorkEntry.tsx` 按 ID 保留特殊布局，项目卡片跟随 `oceanbase`，经历用循环展示。教育经历在工作经历与联系方式之间展示学校、专业、学历和时间，复用 Markdown 数据并加入目录；完整教育文案仍供聊天使用。
-- `components/Lanyard/` 由联系弹窗打开时懒加载，展示可拖拽工牌动画，关闭时释放场景，首页不引用；`renderContainerRef` 指定整个弹窗为画布，本地布局框仅确定初始位置与大小，不限制拖拽范围。`Lanyard.tsx` 是 React 入口，`scene.ts` 管创建与清理，`simulation.ts` 管物理；纹理、几何、材质和配置分别维护。
+- `components/Lanyard/` 由联系弹窗打开时懒加载，展示可拖拽工牌动画，关闭时释放场景，首页不引用；加载期间由 `ContactOverlay` 显示轻量静态工牌占位，纹理就绪并完成首帧绘制后通过 `onReady` 切换至 3D，WebGL 不可用时保留静态预览；`renderContainerRef` 指定整个弹窗为画布，本地布局框仅确定初始位置与大小，不限制拖拽范围。`Lanyard.tsx` 是 React 入口，`scene.ts` 管创建与清理，`simulation.ts` 管物理；纹理、几何、材质和配置分别维护。
 - 博客由外部 Notion 承载，链接保留在 `components/SiteSidebar.tsx` 但入口暂时隐藏，顶部导航也不展示；无站内博客或数据库内容接口。
 - 「一些尝试」使用 `/experiments` 路由，`pages/Experiments.tsx` 按需加载，暂时仅展示标题和「内容准备中。」；原路由可直达，展开侧栏、收起图标栏与移动端抽屉均不展示入口。
 - `ChatbotView.tsx` 首次打开时懒加载 `components/chat/ChatPanel.tsx`；`ChatStoreProvider.tsx` 在应用层持有唯一的会话状态及生命周期，供历史入口与聊天界面共享；`useChatThread.ts` 连接该状态与按需生成的语料，`lib/chat/chatStore.ts` 管按会话隔离的并行请求、草稿和问题队列，`conversationStorage.ts` 管版本化 localStorage 保存及旧 sessionStorage 迁移；`conversationTitle.ts` 本地归纳首条提问的主题标题，新旧记录共用，保留项目名称、消息内容和历史排序。切换会话或页面不终止生成；停止只影响当前回复并保留已显示文本；停止标记作为消息元数据持久保存，在对话流对应位置显示「已终止」，不作为消息正文发送给模型。聊天界面不展示返回按钮，仅在首页对话入口和聊天界面右上角展示 `ChatHistory.tsx`，提供查看、续聊和单条删除，删除前通过 `components/Popconfirm.tsx` 气泡二次确认，浮层使用原生顶层避免被滚动列表裁切；支持取消、Escape、点击外部关闭与焦点恢复；删除当前聊天返回首页，其他记录删除不改变当前页面，生成中的记录删除时取消请求和队列；存储删除失败保留记录，同源标签页同步删除；首次发送才进入历史，刷新不自动重发中断请求；空白对话统一返回首页，不再渲染单独欢迎页。首页输入、新建和历史选择经 `App` 以唯一 ID 的有序命令转交 `ChatPanel`；首页输入保留当前路由，消费时绑定会话且等待该会话已有回复结束，不能因懒加载、StrictMode 或重开对话重复发送。`hooks/useHashOverlay.ts` 管页内聊天 Hash 与路由同步。联系弹窗由 `App` 的页面内状态控制，开关不修改 URL、锚点或浏览器历史，保留原页面与滚动位置；由 `ContactOverlay` 管 Escape、焦点和滚动锁定。
@@ -52,3 +56,7 @@
 
 
 - Text2SQL 概述通过 `overviewPrototype` 嵌入本地原型；`PrototypePreview` 的可选 `viewportWidth` 使用 ResizeObserver 等比缩放桌面画布。原型 `?embed=1` 隐藏内部返回链接，避免 iframe 嵌套作品集。
+
+数据库运维视觉版的全部配图展板复用 `MeshGradientBackground`。配色取自 OceanBase DataPilot「从问数到报告」四个面板（实际为冰蓝与紫粉两套交替），按素材路径稳定打散分配；`ProjectGallery.imageFrame` 仅在视觉版启用，原版布局不变。图注位于展板外，首屏继续隐藏图注。
+
+- 数据库运维平台仅展示当前视觉版本，导航以「数据库运维平台」指向 `/project/databaseops`；旧 `/project/databaseops-visual` 重定向到正式地址并保留查询参数和 Hash，不再展示原版布局及阅读原版入口。原始项目数据继续供当前版与聊天共用。

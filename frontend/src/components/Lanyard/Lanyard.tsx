@@ -11,6 +11,7 @@ import './Lanyard.css';
 export type { LanyardProps } from './types';
 
 const Lanyard = ({
+  onReady,
   frontImage,
   backImage,
   imageFit = 'cover',
@@ -36,6 +37,8 @@ const Lanyard = ({
   className = '',
   style
 }: LanyardProps) => {
+  const readyRef = useRef(onReady);
+  readyRef.current = onReady;
   const containerRef = useRef<HTMLDivElement>(null);
   const settingsRef = useRef<Settings | null>(null);
   const applyRef = useRef<(() => void) | null>(null);
@@ -72,7 +75,7 @@ const Lanyard = ({
     const container = containerRef.current;
     if (!container) return undefined;
 
-    const scene = createLanyardScene(container, () => settingsRef.current!, renderContainerRef?.current ?? undefined);
+    const scene = createLanyardScene(container, () => settingsRef.current!, renderContainerRef?.current ?? undefined, () => readyRef.current?.());
     if (!scene) return undefined;
     applyRef.current = scene.apply;
     return () => {

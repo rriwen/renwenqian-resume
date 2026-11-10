@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type RefObject } from 'react'
 import { Link, useLocation, useMatch } from 'react-router-dom'
-import { getProjectBySlug, getProjectGroups, getProjectNavigationTitle, type ProjectCategory } from '../data/projects'
+import { getProjectBySlug, getProjectNavigationTitle, type ProjectCategory } from '../data/projects'
+import { getProjectNavigationGroups, getProjectViewBySlug } from '../data/projectViews'
 import { useLanguage } from '../i18n/LanguageContext'
 import { IconCamera, IconClose, IconFileText, IconMail, IconNewChat, IconPalette, IconSidebarToggle, IconSparkle, IconTerminal } from './Icons'
 import { SidebarRail } from './SidebarRail'
@@ -23,7 +24,9 @@ export function SiteSidebar({ onNewChat, onOpenContact, open, onClose, triggerRe
   const { pathname, hash } = useLocation()
   const selectedPathname = hash === '#chat' ? '' : pathname
   const match = useMatch('/project/:slug')
-  const project = getProjectBySlug(match?.params.slug)
+  const view = getProjectViewBySlug(match?.params.slug)
+  const project = getProjectBySlug(view?.sourceSlug ?? match?.params.slug)
+  const selectedProjectSlug = view?.slug ?? project?.slug
   const { locale, m } = useLanguage()
   const [collapsed, setCollapsed] = useState<Partial<Record<ProjectCategory, boolean>>>({})
   const panelRef = useRef<HTMLElement>(null)
@@ -31,7 +34,7 @@ export function SiteSidebar({ onNewChat, onOpenContact, open, onClose, triggerRe
 
   useEffect(() => {
     if (project) setCollapsed((previous) => ({ ...previous, [project.category]: false }))
-  }, [project])
+  }, [project, selectedProjectSlug])
 
   useEffect(() => {
     if (!open) return
@@ -86,7 +89,7 @@ export function SiteSidebar({ onNewChat, onOpenContact, open, onClose, triggerRe
         <nav id="site-navigation" className="sidebar-navigation" aria-label={m.header.navAria} onClick={(event) => { if ((event.target as HTMLElement).closest('a')) onClose() }}>
           <button type="button" className="sidebar-link" aria-current={selectedPathname === '/' && !hash ? 'page' : undefined} onClick={() => { onClose(); onNewChat() }}><IconNewChat /><span>{m.header.home}</span></button>
           <Link to="/about" className="sidebar-link" aria-current={selectedPathname === '/about' ? 'page' : undefined}><IconFileText /><span>{m.header.about}</span></Link>
-          {getProjectGroups().map((group) => {
+          {getProjectNavigationGroups().map((group) => {
             if (group.id === 'design-systems') return (
               <Link key={group.id} to="/project/aidesignsystem" className="sidebar-link" aria-current={selectedPathname && project?.category === group.id ? 'page' : undefined}>
                 <IconPalette /><span>{group.label[locale]}</span>
@@ -99,7 +102,7 @@ export function SiteSidebar({ onNewChat, onOpenContact, open, onClose, triggerRe
               </button>
               <ul id={`sidebar-${group.id}`} className="sidebar-projects" hidden={!!collapsed[group.id]}>
                 {group.projects.filter((item) => !item.hiddenFromNavigation).map((item) => (
-                  <li key={item.id}><Link to={`/project/${item.slug}`} className="sidebar-link" aria-current={selectedPathname && project?.slug === item.slug ? 'page' : undefined}>{getProjectNavigationTitle(item, locale)}</Link></li>
+                  <li key={item.id}><Link to={`/project/${item.slug}`} className="sidebar-link" aria-current={selectedPathname && selectedProjectSlug === item.slug ? 'page' : undefined}>{getProjectNavigationTitle(item, locale)}</Link></li>
                 ))}
               </ul>
             </div>

@@ -965,7 +965,7 @@ const details: Record<string, { en: ProjectDetailBlock; zh: ProjectDetailBlock }
   databaseops: {
     en: {
       showCover: false,
-      tags: ['Self-service UX', 'User journey mapping', 'Event instrumentation', '2022.01–2024.06'],
+      tags: ['2023.01-2024.06', 'Self-service UX', 'User journey mapping', 'Event instrumentation'],
       paragraphs: [],
       sections: [
         {
@@ -980,8 +980,8 @@ const details: Record<string, { en: ProjectDetailBlock; zh: ProjectDetailBlock }
           table: {
             columns: ['Item', 'Description'],
             rows: [
-              { id: 'target-users', cells: ['Target users', 'First-time console users with basic database operations knowledge'] },
-              { id: 'design-goal', cells: ['Design goal', 'Improve task completion and operating efficiency during data migration'] },
+              { id: 'target-users', cells: ['Target users', 'New users trying the product for the first time, with database operations knowledge'] },
+              { id: 'design-goal', cells: ['Design goal', 'Increase the self-service task completion rate during data migration'] },
               { id: 'success-metrics', cells: ['Success metrics', 'Task completion target: 80%\nTime-on-task target: 5 minutes'] },
             ],
           },
@@ -1076,7 +1076,7 @@ const details: Record<string, { en: ProjectDetailBlock; zh: ProjectDetailBlock }
               hideTitle: true,
               title: '1. Connect the task flow and guide users at the point of need',
               paragraphs: [
-                'Connect the full flow from data-source connection (source and target) → migration-type setup → migration-object selection. Integrate data-source preparation, configuration saving and reuse, and contextual guidance (such as allowlist configuration and account authorization) into task creation to reduce interruptions and repeated setup.',
+                'De-emphasize steps the system can handle, such as project creation and pre-checks, so users can focus on the core task flow: data-source connection (source and target) → migration-type setup → migration-object selection. Integrate data-source preparation, configuration saving and reuse, and contextual guidance (such as allowlist configuration and account authorization) into the current flow to reduce interruptions and repeated setup.',
               ],
               table: {
                 columns: ['Design focus', 'Original friction', 'Design response'],
@@ -1139,9 +1139,9 @@ const details: Record<string, { en: ProjectDetailBlock; zh: ProjectDetailBlock }
               table: {
                 columns: ['Interaction method', 'Users and task context', 'Design response'],
                 rows: [
-                  { id: 'transfer-selection', cells: ['Transfer-list selection', 'Users unfamiliar with rule syntax who want to select visible objects.', 'Select objects from the source list and move them into the selected list, making the selection explicit.'] },
-                  { id: 'visual-rules', cells: ['Visual rule configuration', 'Users familiar with matching logic who need to select objects in batches.', 'Configure rules through a visual form, reducing the need to write wildcard syntax in an editor.'] },
-                  { id: 'file-import', cells: ['File import', 'Users with a prepared object list who need batch configuration.', 'Import a file to reuse the prepared list and reduce repeated selection or entry.'] },
+                  { id: 'transfer-selection', cells: ['Transfer-list selection', 'For users unfamiliar with rule syntax who need to confirm migration objects individually, ', 'browse and select source objects, then move them to the selected list to see the migration scope without learning wildcard rules first.'] },
+                  { id: 'visual-rules', cells: ['Visual rule configuration', 'For users familiar with matching logic who need to select objects by naming patterns, ', 'configure matching and exclusion conditions in a form to reduce individual selection and rule writing in an editor.'] },
+                  { id: 'file-import', cells: ['File import', 'For users with an existing migration object list who need to reuse configurations in bulk, ', 'upload a file containing source-to-target mappings to reduce repeated selection and entry, omissions, and inconsistent configuration.'] },
                 ],
               },
 
@@ -1180,7 +1180,7 @@ const details: Record<string, { en: ProjectDetailBlock; zh: ProjectDetailBlock }
     },
     zh: {
       showCover: false,
-      tags: ['自助体验', '用户地图', '数据埋点', '2022.01–2024.06'],
+      tags: ['2023.01-2024.06', '自助体验', '用户地图', '数据埋点'],
       paragraphs: [],
       sections: [
         {
@@ -1195,8 +1195,8 @@ const details: Record<string, { en: ProjectDetailBlock; zh: ProjectDetailBlock }
           table: {
             columns: ['项目', '说明'],
             rows: [
-              { id: 'target-users', cells: ['目标用户', '有一定数据库运维基础、首次接触控制台的新用户'] },
-              { id: 'design-goal', cells: ['设计目标', '提高数据迁移环节的任务完成率和操作效率'] },
+              { id: 'target-users', cells: ['目标用户', '有数据库运维基础、首次试用的新用户'] },
+              { id: 'design-goal', cells: ['设计目标', '提升数据迁移环节的任务自助率'] },
               { id: 'success-metrics', cells: ['衡量标准', '任务完成率目标：80%\n任务耗时目标：5 分钟'] },
             ],
           },
@@ -1240,7 +1240,7 @@ const details: Record<string, { en: ProjectDetailBlock; zh: ProjectDetailBlock }
         {
           id: 'migration-analysis',
           title: '迁移卡点定位',
-          paragraphs: ['在全链路诊断的基础上，优化重点聚焦数据迁移环节的自助体验。通过数据埋点分析迁移任务创建各阶段的转化情况，定位主要流失环节。'],
+          paragraphs: ['在全链路诊断的基础上，优化重点聚焦数据迁移环节的自助体验。\n通过数据埋点分析迁移任务创建各阶段的转化情况，定位主要流失环节。'],
           subsections: [
             {
               id: 'instrumentation',
@@ -1249,11 +1249,11 @@ const details: Record<string, { en: ProjectDetailBlock; zh: ProjectDetailBlock }
               paragraphs: ['结合原有创建流程分析、竞品分析与一线 SA 访谈，进一步归纳影响用户自助完成任务的两类关键问题：'],
               listItems: [
                 [
-                  { text: '创建流程易中断：', bold: true },
+                  { text: '创建流程易中断', bold: true },
                   { text: '数据源准备与账号授权需要离开当前流程，返回后需重复配置，增加任务中断与放弃的风险。' },
                 ],
                 [
-                  { text: '对象配置理解成本高：', bold: true },
+                  { text: '对象配置理解成本高', bold: true },
                   { text: '迁移对象选择依赖通配规则，过滤与汇聚操作缺少有效引导，增加文档查阅与操作试错成本。' },
                 ],
               ],
@@ -1291,7 +1291,8 @@ const details: Record<string, { en: ProjectDetailBlock; zh: ProjectDetailBlock }
               hideTitle: true,
               title: '1. 串联任务步骤，在操作卡点提供引导',
               paragraphs: [
-                '串联“连接数据源（源端与目标端）→ 设置迁移类型 → 选择迁移对象”的完整链路，将数据源准备、配置保存与复用、帮助查阅（白名单配置、账号授权等）整合至任务创建流程，降低流程中断与重复配置成本。',
+                '弱化创建项目、预检查等可由系统完成的步骤，让用户聚焦“连接数据源（源端与目标端）→ 设置迁移类型 → 选择迁移对象”的核心任务链路。',
+                '将数据源准备、配置保存与复用、帮助查阅（白名单配置、账号授权等）整合至当前流程，降低流程中断与重复配置成本。',
               ],
               table: {
                 columns: ['设计重点', '原有卡点', '优化处理'],
@@ -1308,7 +1309,7 @@ const details: Record<string, { en: ProjectDetailBlock; zh: ProjectDetailBlock }
                 id: 'stepper-design',
                 title: '步骤条组件优化',
                 description: '任务结构与进度呈现',
-                paragraphs: ['从进度识别与空间占用两个维度对比横向、纵向布局。以下动图展示早期探索方案，沿用该版本的步骤名称。'],
+                paragraphs: ['从进度识别与空间占用两个维度对比横向、纵向布局。'],
                 options: [
                   {
                     id: 'horizontal-stepper',
@@ -1340,8 +1341,7 @@ const details: Record<string, { en: ProjectDetailBlock; zh: ProjectDetailBlock }
           id: 'object-selection',
           title: '优化二：重构对象选择交互',
           paragraphs: [
-                '原流程依赖编辑器编写通配规则，用户需掌握规则语法后才能选择迁移对象。对于直接选择可见对象的场景，这一前置要求增加了理解与操作成本。',
-                '根据用户的规则熟悉程度与已有对象清单，提供三种选择方式：直接勾选降低使用门槛，白屏规则配置与文件导入支持批量操作。',
+                '原流程仅依赖编写通配规则，用户需掌握规则语法后才能选择迁移对象，增加了理解与操作成本。因此，根据已有数据范围清单及用户对规则熟悉程度和习惯，提供三种选择方式：直接勾选降低使用门槛，白屏规则配置与文件导入支持批量操作。',
               ],
           subsections: [
             {
@@ -1354,9 +1354,9 @@ const details: Record<string, { en: ProjectDetailBlock; zh: ProjectDetailBlock }
               table: {
                 columns: ['交互方式', '适用用户与场景', '设计处理'],
                 rows: [
-                  { id: 'transfer-selection', cells: ['穿梭框勾选', '不熟悉规则语法、需要直接选择可见对象的用户。', '从源端列表勾选并移入已选列表，明确呈现选择范围。'] },
-                  { id: 'visual-rules', cells: ['白屏规则配置', '了解匹配逻辑，需要按条件批量选择对象的用户。', '通过可视化表单配置规则，降低在编辑器中手写通配语法的负担。'] },
-                  { id: 'file-import', cells: ['文件导入', '已有对象清单，需要批量配置的用户。', '通过导入文件复用已有准备材料，减少重复选择和录入。'] },
+                  { id: 'transfer-selection', cells: ['穿梭框勾选', '面向不熟悉规则语法、需要逐项确认迁移对象的用户，', '通过浏览、勾选源端对象并移入已选列表，直观看到迁移范围，无需先学习通配规则。'] },
+                  { id: 'visual-rules', cells: ['白屏规则配置', '面向了解匹配逻辑、需要按命名规则批量选择对象的用户，', '通过表单配置匹配与排除条件，减少逐项勾选和在编辑器中手写规则的负担。'] },
+                  { id: 'file-import', cells: ['文件导入', '面向已有迁移对象清单、需要批量复用配置的用户，', '通过上传包含源端与目标端映射关系的文件导入对象，减少重复选择与录入，降低遗漏和配置不一致的风险。'] },
                 ],
               },
 

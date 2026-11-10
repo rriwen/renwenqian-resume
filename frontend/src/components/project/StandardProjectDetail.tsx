@@ -1,7 +1,8 @@
 import { createElement, useRef, type CSSProperties } from 'react'
-import { type ProjectDetailBlock, type ProjectDetailComparison, type ProjectDetailParagraph, type ProjectDetailSection, type ProjectDetailTable, type ProjectGalleryItem } from '../../data/projectDetails'
+import { type ProjectDetailBlock, type ProjectDetailComparison, type ProjectDetailParagraph, type ProjectDetailSection, type ProjectGalleryItem } from '../../data/projectDetails'
 import { getProjectTitle, type Project } from '../../data/projects'
 import { useLanguage } from '../../i18n/LanguageContext'
+import { DetailTable } from './DetailTable'
 import { ProjectGallery } from './ProjectGallery'
 import { ProjectFunnel } from './ProjectFunnel'
 import { ProjectArchitecture } from './ProjectArchitecture'
@@ -35,34 +36,6 @@ function renderParagraphContent(para: ProjectDetailParagraph) {
   )
 }
 
-function DetailTable({ table, titleId }: { table: ProjectDetailTable; titleId: string }) {
-  return (
-    <div className="project-detail-table-scroll" role="region" aria-labelledby={titleId} tabIndex={0}>
-      <table className={`project-detail-table${table.columns.length === 2 ? ' project-detail-table--two-column' : ''}`} aria-labelledby={titleId}>
-        <thead>
-          <tr>{table.columns.map((column) => <th key={column} scope="col">{column}</th>)}</tr>
-        </thead>
-        <tbody>
-          {table.rows.map((row) => (
-            <tr key={row.id}>
-              {row.cells.map((cell, index) => {
-                if (cell === null) return null
-                const text = typeof cell === 'string' ? cell : cell.text
-                const rowSpan = typeof cell === 'string' ? undefined : cell.rowSpan
-                const content = typeof cell !== 'string' && cell.groups
-                  ? cell.groups.map((group) => <div key={group.title} className="project-detail-table-group"><strong>{group.title}</strong><ul>{group.items.map((item) => <li key={item}>{item}</li>)}</ul></div>)
-                  : text
-                return index === 0
-                  ? <th key={index} scope="row" rowSpan={rowSpan}>{content}</th>
-                  : <td key={index} rowSpan={rowSpan}>{content}</td>
-              })}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  )
-}
 
 function SectionGallery({ items, disclosure, layout }: { items: ProjectGalleryItem[]; disclosure?: string; layout?: 'row' }) {
   const gallery = layout === 'row'

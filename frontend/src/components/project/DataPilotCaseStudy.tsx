@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate, useNavigationType } from 'react-router-dom'
 import { ProjectAnchorNav } from './ProjectAnchorNav'
 import { DataPilotPartMenu } from './DataPilotPartMenu'
 import { getDataPilotContent, type DataPilotPart } from '../../data/projects/dataPilot'
 import type { Locale } from '../../i18n/translations'
 import { ReadingPageHeader } from '../ReadingPageHeader'
 import { LoadingImage } from './LoadingImage'
+import { DataPilotPocSection } from './DataPilotPocSection'
 
 type Props = { locale: Locale }
 
@@ -15,6 +16,8 @@ export function DataPilotCaseStudy({ locale }: Props) {
   const [activePart, setActivePart] = useState<DataPilotPart>('experience')
   const location = useLocation()
   const navigate = useNavigate()
+  const navigationType = useNavigationType()
+  const preserveTabScroll = navigationType === 'PUSH' && location.state?.preserveDataPilotTabScroll === true
   const visibleSections = content.parts[activePart].sections
 
   useEffect(() => {
@@ -24,10 +27,14 @@ export function DataPilotCaseStudy({ locale }: Props) {
     else if (!location.hash) setActivePart('experience')
   }, [location.hash, content])
 
-  const selectPart = (part: DataPilotPart) => {
+  const selectPart = (part: DataPilotPart, preserveScroll = false) => {
+    if (preserveScroll && part === activePart) return
     setActivePart(part)
     const id = content.parts[part].sections[0]?.id
-    navigate({ pathname: location.pathname, search: location.search, hash: id ? `#${id}` : '' }, { preventScrollReset: true })
+    navigate({ pathname: location.pathname, search: location.search, hash: id ? `#${id}` : '' }, {
+      preventScrollReset: true,
+      state: preserveScroll ? { preserveDataPilotTabScroll: true } : null,
+    })
   }
 
   return (
@@ -46,17 +53,17 @@ export function DataPilotCaseStudy({ locale }: Props) {
         </header>
         <div className="datapilot-part-tabs" role="tablist" aria-label={content.labels.tabs}>
           {(Object.keys(content.parts) as DataPilotPart[]).map((part) => (
-            <button key={part} type="button" role="tab" aria-selected={activePart === part} className={activePart === part ? 'is-active' : ''} onClick={() => selectPart(part)}>
+            <button key={part} type="button" role="tab" aria-selected={activePart === part} className={activePart === part ? 'is-active' : ''} onClick={() => selectPart(part, true)}>
               {content.parts[part].title}
             </button>
           ))}
         </div>
         <div className="datapilot-case-layout">
-          <article className="datapilot-case-content">
-            {visibleSections.map((section) => (
-              <section className="datapilot-module" id={section.id} key={section.id}>
-                <div className="datapilot-module-heading"><span>{section.index}</span><h2>{section.title}</h2></div>
-                {section.intro ? <h3>{section.intro}</h3> : null}
+          <article className={`datapilot-case-content project-case-content${activePart === 'poc' ? ' datapilot-poc-content' : ''}`}>
+            {visibleSections.map((section) => activePart === 'poc' ? <DataPilotPocSection key={section.id} section={section} /> : (
+              <section className="project-detail-section" id={section.id} key={section.id} aria-labelledby={`${section.id}-title`}>
+                <div className="project-detail-section-copy">
+                <h2 id={`${section.id}-title`}>{section.intro || section.title}</h2>
                 {section.body.split('\n\n').map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
                 {section.applicationTypes ? <div className="datapilot-application-types">{section.applicationTypes.map((item) => <section key={item.title}>
                   <h4>{item.title}</h4>
@@ -67,20 +74,21 @@ export function DataPilotCaseStudy({ locale }: Props) {
                 </section>)}</div> : null}
                 {section.related ? <p className="datapilot-related-link">{content.labels.relatedIntro} <Link to="/project/agentops">{content.labels.relatedProject}</Link>。</p> : null}
                 {section.stats ? <div className="datapilot-stat-row">{section.stats.map((stat) => <strong key={stat}>{stat}</strong>)}</div> : null}
-                {section.bullets && section.id !== 'overview' ? <ul className="datapilot-bullets">{section.bullets.map((bullet) => {
+                {section.bullets && section.id !== 'overview' ? <ul className="project-detail-subsection-list">{section.bullets.map((bullet) => {
                   const separator = section.id === 'accuracy' ? bullet.indexOf('：') : -1
                   return <li key={bullet}>{separator > -1 ? <><strong>{bullet.slice(0, separator)}</strong>{bullet.slice(separator)}</> : bullet}</li>
                 })}</ul> : null}
                 {section.images.length ? <div className={`datapilot-evidence ${section.images.length > 1 ? 'is-multi' : 'is-single'}`}>
                   {section.images.map((image) => <figure key={image.src + image.caption}>{image.display === 'image' ? <div className="media-frame"><LoadingImage className="datapilot-evidence-image" src={image.src} alt={image.alt ?? image.caption} /></div> : <div className="datapilot-image-placeholder" role="img" aria-label={image.caption} />}{image.caption ? <figcaption>{image.caption}</figcaption> : null}</figure>)}
                 </div> : null}
-                {section.bullets && section.id === 'overview' ? <ul className="datapilot-bullets">{section.bullets.map((bullet) => <li key={bullet}>{bullet}</li>)}</ul> : null}
+                {section.bullets && section.id === 'overview' ? <ul className="project-detail-subsection-list">{section.bullets.map((bullet) => <li key={bullet}>{bullet}</li>)}</ul> : null}
+                </div>
               </section>
             ))}
           </article>
         </div>
       </div>
-      <ProjectAnchorNav sections={visibleSections} label={content.labels.contents} />
+      <ProjectAnchorNav sections={visibleSections} label={content.labels.contents} scrollToHash={!preserveTabScroll} />
     </main>
   )
 }

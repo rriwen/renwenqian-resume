@@ -16,6 +16,8 @@ export interface PathLike {
 }
 
 export interface LanyardProps {
+  /** Fires after the first textured frame is rendered. */
+  onReady?: () => void;
   frontImage?: string;
   backImage?: string;
   imageFit?: ImageFit;

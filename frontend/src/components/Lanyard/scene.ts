@@ -9,7 +9,7 @@ import { loadImage, paintFace, paintStrap, parseColor } from './textures';
 import { configureSimulation, createSimulation, flipSimulation, physicsForSettings, placeHanging, stepSimulation } from './simulation';
 
 /** Owns all WebGL/browser resources for one mounted badge. */
-export const createLanyardScene = (container: HTMLDivElement, getSettings: () => Settings, renderContainer?: HTMLElement) => {
+export const createLanyardScene = (container: HTMLDivElement, getSettings: () => Settings, renderContainer?: HTMLElement, onReady?: () => void) => {
   let renderer: THREE.WebGLRenderer;
   try {
     renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
@@ -22,6 +22,7 @@ export const createLanyardScene = (container: HTMLDivElement, getSettings: () =>
   renderer.toneMappingExposure = 1;
   const canvas = renderer.domElement;
   canvas.className = 'lanyard-canvas';
+  canvas.style.visibility = 'hidden';
   canvas.setAttribute('aria-hidden', 'true');
   const fullViewport = getSettings().fullViewport && !renderContainer;
   const expanded = fullViewport || !!renderContainer;
@@ -216,6 +217,9 @@ export const createLanyardScene = (container: HTMLDivElement, getSettings: () =>
           entrancePending = false;
           entranceGroup.visible = true;
         }
+        render();
+        canvas.style.visibility = 'visible';
+        onReady?.();
         start();
       });
     }
