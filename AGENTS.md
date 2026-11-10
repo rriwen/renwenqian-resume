@@ -62,3 +62,7 @@
 - 数据库运维平台仅展示当前视觉版本，导航以「数据库运维平台」指向 `/project/databaseops`；旧 `/project/databaseops-visual` 重定向到正式地址并保留查询参数和 Hash，不再展示原版布局及阅读原版入口。原始项目数据继续供当前版与聊天共用。
 
 - 项目详情统一参考数据库运维平台的阅读呈现；`CaseStudyMedia.tsx` 提供渐变展板、原图预览和明确配图占位，`styles/components/case-study.css` 作用于通用详情与 DataPilot。首屏按标题、简介、标签、主图排列；正文沿用原章节 ID、事实与双语数据，过程材料使用折叠卡片，外部原型使用胶囊链接按钮。Text2SQL 保留首屏本地原型；不为缺图编造截图或成果。
+
+## 发布快捷指令
+
+- 用户发送 `/部署` 时，读取 `/Users/rriwen/.codex/skills/as4x-deploy/SKILL.md` 并执行：验证当前修改、提交并推送 GitHub、部署 Vercel 生产环境、确认 Ready 后报告链接。该指令即本次发布请求。
