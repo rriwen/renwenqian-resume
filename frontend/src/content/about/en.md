@@ -2,7 +2,7 @@
 
 With a software engineering background and seven years of enterprise product design experience, I've focused on AI products and data tools over the past three years. I identify needs in customer scenarios and translate complex business requirements and AI capabilities into simple, efficient product experiences.
 
-At Ant Group · OceanBase, I contributed to AI product planning and customer POC validation, led multi-turn conversation and application generation experiences, helped increase application generation adoption **15% → 60%**, and supported delivery to **5+ paying customers**. I also drove adoption of AI design workflows across **5+ teams**, extending design into standardized code delivery.
+At Ant Group · OceanBase, I contributed to AI product planning and customer POC validation, led multi-turn conversation and application generation experiences, helped increase application generation adoption **15% → 60%**, and supported delivery to **4 paying customers**. I also drove adoption of AI design workflows across **5+ teams**, extending design into standardized code delivery.
 
 ## Experience <!-- id: work -->
 
@@ -12,9 +12,9 @@ Ant Group · OceanBase
 
 > Aug 2021 – Nov 2026
 
-- **Product planning and validation:** Contributed to AI analytics requirements planning, identifying shared problems through customer conversations, POC demos, and scenario validation. Proposed requirements for multi-turn analysis, application generation, and issue tracing, using customer feedback to drive prioritization discussions and solution iterations, supporting delivery to **5+ paying customers**;
+- **AI product planning and validation:** Identified product opportunities through business goals, user research, and customer POC feedback. Contributed to capability planning and requirements breakdown for AI analytics and an Agent observability platform, driving product incubation and iteration and supporting delivery to **4 paying customers**;
 - **Agent product design:** Led multi-turn conversation and analytics application generation experiences. Helped users understand, verify, and correct generated results through metric confirmation, application version management, and revision and retry flows, driving application generation adoption **15% → 60%**. Designed Agent replay around customer troubleshooting needs and incubated an Agent observability platform;
-- **Data tool experience:** Designed product experiences for SQL editing, task orchestration, database operations, and a MaaS platform. Used user research, event-tracking data, and frontline feedback to identify improvement priorities and coordinated delivery with product and engineering teams; migration task completion **16.8% → 75%**, and data tool satisfaction **4.7 → 6.2 (out of 7)**;
+- **Data tool experience:** Designed core workflows, interaction architecture, and UI for SQL editing, task orchestration, database operations, and a MaaS platform, using user research, event-tracking data, and frontline feedback to drive improvements; migration task completion **16.8% → 75%**, and data tool satisfaction **4.7 → 6.2 (out of 7)**;
 - **AI design engineering:** Led the development of Design Tokens, an AI component library, and a design knowledge base. Connected design guidelines, components, and AI generation, driving adoption of AI workflows across **5+ teams** and improving baseline team delivery efficiency by approximately **200%**.
 
 ### Product Designer <!-- id: ecidi -->
@@ -60,7 +60,7 @@ Responsibilities:
 - **Overseas SaaS growth exploration:** Advanced product positioning and growth journey exploration, designing website discovery, registration, simulated-data trials, payment, and retention journeys, with event tracking and validation strategies.
 
 Achievements:
-- Application generation adoption **15% → 60%**, supporting delivery to **5+ paying customers**.
+- Application generation adoption **15% → 60%**, supporting delivery to **4 paying customers**.
 
 ### AI Design Engineering <!-- id: design-engineering -->
 
@@ -68,7 +68,7 @@ Achievements:
 
 > Sep 2025 – Nov 2026
 
-Project background: Supported the team’s AI transition by exploring component- and rule-guided product design and code delivery, addressing inconsistent design standards and generated output across products.
+Project background: Supported the team’s AI transition by aligning design standards across products and using components and rules to constrain AI to standardized output, supporting design and code delivery.
 
 Responsibilities:
 - **Design asset development:** Led Design Token and Agent Ready component library development, aligning foundation variables, component semantics, and usage rules to guide AI understanding, selection, and reuse;
