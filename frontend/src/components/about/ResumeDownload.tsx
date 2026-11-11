@@ -46,7 +46,7 @@ export function ResumeDownload() {
       </div>
       <div className="resume-download-actions">
         <button className="ui-button" type="button" autoFocus onClick={() => setOpen(false)}>取 消</button>
-        <a className="ui-button ui-button--primary" href="/任文倩_产品设计师简历.pdf" download="任文倩_产品设计师简历.pdf" onClick={() => setOpen(false)}>下 载</a>
+        <a className="ui-button ui-button--primary" href="/任文倩_产品设计师简历.pdf?v=d17f3f83449f" download="任文倩_产品设计师简历.pdf" onClick={() => setOpen(false)}>下 载</a>
       </div>
     </dialog>, document.body)}
   </>
