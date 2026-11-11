@@ -135,3 +135,5 @@ DataPilot「背景目标」复用数据库运维平台的布局方式：背景�
 - AI 问数体验正文通过 `DataPilotSection.group` 归为「持续对话体验」与「Agent 问题排查」，子节保留原 ID 与深链接；目录仅显示分组，聊天语料保留分组和子节层级。背景目标、产品演进、验证结果继续独立展示。
 
 - AI 问数验证结果由 `DataPilotResults.tsx` 以并排大数字与比例图展示，数据来自 `dataPilot.ts` 的 `adoptionResult`，保留发布应用数 / 创建应用数口径。导航分类显示「平台工具」，稳定分类 ID 仍为 `data-tools`。
+
+- 聊天的 AI 问数语料读取当前展示的首屏 lead 与正文分组，不再导入已隐藏的 paragraphs / metadata；仅保留真实配图说明，排除配图占位。回答以最新站点资料为准，项目详情中的状态、指标及统计口径优先于历史回答，规则维护在 `lib/chat/interviewPrompt.ts`。

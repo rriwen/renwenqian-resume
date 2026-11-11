@@ -109,7 +109,7 @@ function serializeProjectBlock(block: ProjectDetailBlock): string {
 /** Serialize the same content that the three case-study tabs render. */
 function serializeDataPilot(locale: Locale): string {
   const content = getDataPilotContent(locale)
-  const lines = [...content.paragraphs, ...content.metadata, `Link: ${content.demoUrl}`]
+  const lines = [content.lead, `Link: ${content.demoUrl}`]
   for (const part of Object.values(content.parts)) {
     lines.push(`#### ${part.title}`)
     let previousGroup: string | undefined
@@ -130,7 +130,7 @@ function serializeDataPilot(locale: Locale): string {
       if (section.related) lines.push(`${content.labels.relatedIntro} ${content.labels.relatedProject} (/project/agentops)`)
       lines.push(...(section.stats ?? []))
       lines.push(...(section.bullets ?? []).map((bullet) => `- ${bullet}`))
-      lines.push(...section.images.map((image) => image.caption).filter(Boolean))
+      lines.push(...section.images.filter(image => image.display === 'image').map(image => image.caption).filter(Boolean))
     }
   }
   return lines.join('\n\n')

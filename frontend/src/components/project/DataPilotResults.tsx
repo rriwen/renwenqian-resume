@@ -10,7 +10,7 @@ export function DataPilotResults({ result, description, formula }: {
     <div className="datapilot-results-comparison">
       {[{ label: result.beforeLabel, value: result.before }, { label: result.afterLabel, value: result.after }].map((item, index) =>
         <div className={`datapilot-result-pair${index === 1 ? ' is-current' : ''}`} key={item.label}>
-          <dl><dt>{item.label} · {result.label}</dt><dd>{item.value}<span>%</span></dd></dl>
+          <dl><dt>{item.label}</dt><dd>{item.value}<span>%</span></dd></dl>
           <div className="datapilot-result-column" aria-hidden="true"><span style={{ height: `${item.value}%` }} /></div>
         </div>
       )}

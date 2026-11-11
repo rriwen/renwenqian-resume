@@ -247,7 +247,16 @@ for (const locale of locales) {
     assert.deepEqual(detail.paragraphs, content.paragraphs)
     assert.ok(corpus.includes(DATA_PILOT_DEMO_URL))
     assert.ok(!corpus.includes('datapilot-rho-gilt.vercel.app'))
-    for (const paragraph of content.paragraphs) assert.ok(corpus.includes(paragraph))
+    assert.ok(corpus.includes(content.lead))
+    for (const paragraph of content.paragraphs) assert.ok(!corpus.includes(paragraph), 'Hidden legacy introductions must not override current page content')
+    for (const part of Object.values(content.parts)) {
+      for (const section of part.sections) {
+        if (section.group) assert.ok(corpus.includes(section.group.title))
+        for (const image of section.images) {
+          if (/占位图|placeholder/i.test(image.caption)) assert.ok(!corpus.includes(image.caption))
+        }
+      }
+    }
     for (const part of Object.values(content.parts)) {
       assert.ok(part.title.trim())
       assert.ok(part.sections.length)
