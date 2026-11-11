@@ -5,6 +5,7 @@ import { getProjectBySlug, getProjectTitle } from '../projects'
 export type DataPilotPart = 'experience' | 'poc' | 'growth'
 export type DataPilotSection = {
   id: string
+  group?: { id: string; title: string }
   index: string
   title: string
   intro: string
@@ -12,9 +13,13 @@ export type DataPilotSection = {
   table?: ProjectDetailTable
   steps?: { title: string; detail: string }[]
   bullets?: string[]
+  evolutionMedia?: { src?: string; caption: string }[]
+  adoptionResult?: { before: number; after: number; label: string; beforeLabel: string; afterLabel: string; changeLabel: string }
   stats?: string[]
   related?: boolean
   applicationTypes?: { title: string; scene: string; problem: string; solution: string; screenshot: string }[]
+  /** Editorial design brief; excluded from chat facts and media. */
+  designPlaceholder?: string
   images: { src: string; caption: string; display?: 'image'; alt?: string }[]
 }
 
@@ -29,197 +34,374 @@ function createDataPilotContent(locale: Locale) {
   {
     "id": "overview",
     "index": "01",
-    "title": "从问数到应用：0 → 1 的产品演进",
-    "intro": "让一次分析，成为可以继续使用的工作成果",
-    "body": "DataPilot 最初解决用自然语言查询数据，随后扩展到应用生成。我从 0 到 1 参与产品建设，负责多轮对话、应用生成和智能体回放的设计与前端实现。\n\n体验设计的重点也随之变化：问数阶段澄清业务口径，应用阶段支持连续修改，交付阶段依据执行证据定位偏差。三个能力围绕同一条任务链连接起来。",
+    "title": "背景目标",
+    "intro": "",
+    "body": "基于对公司内部 BI 人员的访谈，我们将分析任务从查询数据、生成图表，进一步梳理到整理报告、分享结果，以及围绕报告继续分析。用户需要的不只是一次查询答案，还包括可反复使用、能够继续追问的数据应用。",
+    "images": [],
+    "table": {
+      "columns": [
+        "项目",
+        "说明"
+      ],
+      "rows": [
+        {
+          "id": "target-users",
+          "cells": [
+            "目标用户",
+            "数据分析师、开发人员等\n有数据分析需求的用户"
+          ]
+        },
+        {
+          "id": "product-goal",
+          "cells": [
+            "产品目标",
+            "利用 AI 快速完成查询、追问、生成应用等任务，降低数据分析门槛"
+          ]
+        },
+        {
+          "id": "evaluation",
+          "cells": [
+            "衡量标准",
+            "AI 生成准确率\n应用生成采纳率"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "product-evolution",
+    "title": "产品演进",
+    "intro": "",
+    "body": "用户需求从获取一次查询结果，逐步扩展到生成可分享的分析报告，并围绕报告继续追问和下钻分析。为承接这些任务，产品先后探索了基础对话、无限画布和三栏布局。",
     "bullets": [
-      "对话：让业务目标可确认。",
-      "应用：让分析成果可继续修改与使用。",
-      "回放：让执行偏差可追查。"
+      "早期版本 - 简单问数：希望解决用户在日常分析中临时查数、查看趋势的需求，例如直接提问“最近三个月的销量如何”，快速获得数据和图表。基础对话将数据与图表放在回答中，支持保留条件、继续追问。这个形式适合逐个问题展开，但图表和结论分散在消息中，不便于作为完整报告反复阅读和分享。",
+      "中期探索 - 生成报告：希望解决用户在业务复盘、汇报时，需要将多次查询结果整理成完整报告并分享给同事的问题，减少手动汇总图表与结论的工作。无限画布尝试把图表、指标和结论从消息流中独立出来，提供自由组织内容的空间。但对目标用户而言，理解画布操作和组织方式有学习成本，因此后续转向更便于直接阅读报告的布局。",
+      "当前版本 - 持续对话：希望解决用户阅读或共享报告后，遇到异常数据还需要继续追查的问题，例如“本月销量为什么下降，按地区拆开看看”，直接围绕报告追问和下钻分析。三栏分别承载数据资产、应用和 AI 对话：数据资产提供可信的分析基础，应用呈现最终报告，对话既用于生成应用，也用于围绕报告继续追问、下钻分析。为让报告有足够的展示空间，各栏支持展开与收起，用户可在完整阅读和边看边问之间切换。"
     ],
-    "images": []
+    "designPlaceholder": "画布探索稿｜展示应用从聊天消息中独立出来后的完整画布，以及生成报表或看板的对话入口。",
+    "evolutionMedia": [
+      {
+        "src": "/images/datapilot-hero.png",
+        "caption": "问数：在对话中查看结果与继续追问"
+      },
+      {
+        "caption": "生成应用：画布方案探索"
+      },
+      {
+        "src": "/images/datapilot-application-dialogue.png",
+        "caption": "持续对话：应用与 AI 对话并列展示"
+      }
+    ],
+    "images": [],
+    "index": "02"
   },
   {
     "id": "conversation",
-    "index": "02",
-    "title": "多轮对话：把澄清留在任务里",
-    "intro": "只问影响决策的问题",
-    "body": "直接回答含糊问题容易把错误口径带进后续应用；每一步都询问，又会让业务人员替 Agent 做技术决策。我的取舍是让用户决定业务目标与口径，Agent 负责组织工具执行。\n\n实现上，原始请求、待回答的问题与用户答复关联到同一任务。界面恢复时能够继续呈现待处理交互，避免把刷新当成新任务。这个机制支持中途澄清，不等于模型可以无误记住所有历史。",
-    "bullets": [
-      "明确条件直接推进，关键歧义才澄清。",
-      "保留请求与答复的关联，支持恢复后的继续交互。",
-      "新旧条件冲突时，让变化可核对。"
-    ],
-    "images": []
-  },
-  {
-    "id": "continuous-analysis-example",
     "index": "03",
-    "title": "海尔生产场景：一条连续任务",
-    "intro": "交互构思示范，与已有 POC 衔接",
-    "body": "以下对话是基于 DataPilot 能力构思的交互示范，不是海尔客户访谈原话、真实故障或已完成的验证结果。它承接已有 POC 的生产进度场景，说明如何从分析走向可复用应用。\n\n生产落后的原因仍需结合排产与工单核实，不能直接归因为 OEE。",
+    "title": "承接追问：保留条件，标出变化",
+    "intro": "",
+    "body": "用户追问“这条线呢”“换成夜班”时，不会重复工厂、日期和指标。方案保留已确认的条件，在回答旁显示本轮查询范围；只有指代不清或条件缺失时才询问。",
+    "images": [],
     "bullets": [
-      "用户：“看看哪些产线进度落后。”Agent：“看哪个日期和班次？按计划完成率，还是计划与实际数量差判断？”",
-      "用户：“昨天白班，按计划完成率。”保留工厂范围，核对日期、班次和计算口径。",
-      "用户：“把这条产线的停机和质量记录放进应用，每天复盘用。”缺少节拍等必要定义时说明限制，不补造 OEE。",
-      "用户：“改为夜班，保留布局，按完成率排序。”保留已认可的结构，同时更新关联数据。"
+      "“看看产线 A”：只切换产线，保留日期、班次和指标。",
+      "“改成夜班”：替换班次，标出变化，并核对跨日时间范围。",
+      "“这条线”：有多个候选时让用户选择，不替用户猜。"
     ],
-    "images": []
+    "designPlaceholder": "图 01｜多轮上下文变化图。并排放置首次提问、追问产线、切换班次三个状态；标注每轮继承、替换与待确认的条件，突出当前分析对象。",
+    "group": {
+      "id": "continuous-dialogue",
+      "title": "持续对话体验"
+    }
   },
   {
     "id": "continuous-analysis-validation",
     "index": "04",
-    "title": "应用修改：保留结构，更新关联结果",
-    "intro": "局部修改不能变成只改一张图",
-    "body": "“改为夜班，布局不变”包含两个约束：保留已认可的页面结构，同时更新受班次影响的进度、排序和明细。只更新当前图表，其余模块仍显示白班数据，会造成看似完成、结果却矛盾的页面。\n\n设计上将保留项与变更项分开表达，修改后核对关联结果。实现通过应用与版本上下文承接继续编辑；是否正确更新全部依赖，需要跨模块测试，不能以生成成功代替业务验证。",
+    "title": "澄清确认：让用户选择，允许补充",
+    "intro": "",
+    "body": "“夜班效率为什么低？”中的“效率”可能有不同定义。直接查询容易用错口径，要求用户重新描述又太费力。方案用选择卡片确认班次和指标，同时允许自然语言补充。",
+    "images": [],
     "bullets": [
-      "保留：布局、模块顺序和未改变的分析范围。",
-      "更新：班次条件、查询结果、汇总值与排序。",
-      "核对：所有视图口径一致；新数据失败时明确提示旧结果。"
+      "只问影响结果的条件；用户确认业务含义，AI 负责查询执行。",
+      "推荐选项附理由，不自动提交；独立问题一起确认，有依赖的问题分步询问。",
+      "提交后显示已确认条件；取消保留对话，修改条件时显示替换内容。"
     ],
-    "images": []
+    "designPlaceholder": "图 03｜澄清卡片与确认回执。展示班次和效率口径选择、推荐理由、自由输入、提交和取消；补一张修改已有条件后的回显状态。",
+    "group": {
+      "id": "continuous-dialogue",
+      "title": "持续对话体验"
+    }
+  },
+  {
+    "id": "continuous-analysis-example",
+    "index": "05",
+    "title": "连续分析案例：从进度落后查到具体记录",
+    "intro": "",
+    "body": "以生产管理人员排查进度落后为例，交互构思用同一段对话完成以下任务。停机和质量记录用于核查，不直接作为落后原因。",
+    "images": [],
+    "designPlaceholder": "图 02｜连续问数故事板。四屏对应查看进度、定位产线、核查记录、切换夜班；用模拟数据标识代替真实数值，标注用户目标、AI 反馈与下一步入口。",
+    "bullets": [
+      "“昨天哪些产线进度落后？”——确认班次和完成率口径，展示产线列表。",
+      "“看看产线 A 的情况。”——展示计划、实际与明细，保留上一轮条件。",
+      "“把停机和质量记录列出来。”——查看该产线的相关记录，并标明来源。",
+      "“改为夜班，其他不变。”——更新条件和结果，继续沿用分析路径。"
+    ],
+    "group": {
+      "id": "continuous-dialogue",
+      "title": "持续对话体验"
+    }
   },
   {
     "id": "applications",
-    "index": "05",
-    "title": "应用生成：区分预览、保存与使用",
-    "intro": "让用户知道自己拿到的是哪一步成果",
-    "body": "候选预览、保存版本与发布代表不同的完成状态。预览可打开说明界面可呈现，保存成功说明版本已保留，发布成功说明选定版本可以访问。这些都不能单独证明数据正确或用户已经采纳。\n\n用户围绕当前应用继续修改，系统保留版本语境。发布失败时不替换已有发布版本，避免破坏已经使用的成果。我的职责是将这些机制转译为前端体验，不将全部服务端能力归为个人实现。",
+    "index": "06",
+    "title": "应用中的持续对话：反馈进度，支持纠正",
+    "intro": "",
+    "body": "“把这些记录做成看板，再改为夜班。”用户需要知道生成到哪一步，以及修改是否生效。方案将执行状态与应用结果分开展示，修改时保留布局，更新受班次影响的图表、汇总和明细。",
+    "images": [],
     "bullets": [
-      "候选预览：检查界面和关键交互。",
-      "保存版本：形成可以继续编辑的稳定对象。",
-      "业务核对：与相同日期、班次和口径的记录对照。",
-      "发布与使用：分别观察发布成功和后续有效使用。"
+      "等待时显示当前步骤；需要补充条件时显示确认入口，停止后标明未完成内容。",
+      "没有数据、部分结果和查询失败分别提示，并提供调整范围、查看记录或重试入口。",
+      "更新失败的模块标注旧结果；预览、保存和发布分别反馈。"
     ],
-    "images": []
+    "designPlaceholder": "图 04｜执行与恢复状态板。展示执行中、待确认、停止、部分结果和失败重试；配一组“布局保留、班次更新”的前后对比，标明旧结果提示。",
+    "group": {
+      "id": "continuous-dialogue",
+      "title": "持续对话体验"
+    }
   },
   {
     "id": "agent-replay",
-    "index": "06",
-    "title": "智能体回放：从异常回到证据",
-    "intro": "执行成功，不代表回答了正确的问题",
-    "body": "回放沿执行阶段查看输入、工具结果和状态，也可沿数据对象查看关联证据。两个入口帮助定位首次出现偏差的位置，而不是让人阅读完整日志。回放重建已持久化的记录，不是重新执行，也不等于展示模型全部内部思考。\n\n构思示例：夜班分析返回空结果，但业务人员认为当天有生产。先核对班次条件，再检查查询参数、跨日时间边界和返回记录。如果跨日夜班被自然日截断，应作为待核实的口径问题，不能直接认定没有业务数据。",
+    "index": "07",
+    "title": "回放方案：从异常回答查到执行步骤",
+    "intro": "",
+    "body": "切换夜班后结果为空，但用户认为当晚有生产。只看答案无法判断是时间条件错了，还是查询没有返回数据。回放方案让实施与调试人员从这条回答进入执行记录；回放读取已有记录，不是重新执行。",
+    "images": [],
     "bullets": [
-      "步骤入口：从异常追到输入、参数和工具输出。",
-      "对象入口：查看数据与执行证据之间的关系。",
-      "区分证据与诊断：AI 提出的原因是线索，不是已核实结论。"
+      "提交问题时带上原始提问、查询条件和回答，减少重复描述。",
+      "默认展示步骤与状态，选中后查看输入、查询参数和工具输出。",
+      "从结果表也能找到关联步骤；记录缺失时明确提示，不补推测内容。"
     ],
-    "images": []
+    "designPlaceholder": "图 05｜回放工作台主流程。展示回答上的问题入口、执行步骤列表和证据详情；选中查询步骤，核对跨日时间参数与空结果。补充对象与关联步骤的切换示意。",
+    "group": {
+      "id": "agent-troubleshooting",
+      "title": "Agent 问题排查"
+    }
   },
   {
     "id": "accuracy",
-    "index": "07",
-    "title": "Agent 调优：把个案变成回归任务",
-    "intro": "先定位偏差，再选择修正层级",
-    "body": "调优方案从原始问题、预期结果与实际输出开始。依据回放证据，区分指标定义、字段映射、工具参数与交互澄清问题，避免一律增加提示词或确认步骤。\n\n在跨日夜班的构思中，补齐班次定义后重新测试原问题，再扩展到日班、跨月和缺失记录。配置修改后在新会话验证，避免旧会话保留的执行配置干扰判断。以下是拟议回归方案，不是已完成实验或自动修复闭环。",
-    "bullets": [
-      "知识层：明确完成率、良品与返工口径。",
-      "工具层：检查筛选字段、时间边界和参数映射。",
-      "交互层：只澄清会改变结论的缺失条件。",
-      "回归层：验证原问题、邻近场景和修改后的关联视图。"
-    ],
-    "images": []
-  },
-  {
-    "id": "delivery",
     "index": "08",
-    "title": "采纳优化：从生成成功走向持续使用",
-    "intro": "建立可以验证的优化故事",
-    "body": "待验证假设：初次口径不符、修改成本高和成果状态不清，会使用户放弃应用。对应的优化是关键澄清、连续编辑和清晰的版本状态；回放帮助团队定位重复错误。\n\n先观察生成保存是否成功，再观察用户是否发布或用于工作，最后检查是否持续使用。当前没有可核实的采纳提升数据，因此不将历史草稿中的数值写成实绩。",
+    "title": "设计取舍：先看步骤，再看详情",
+    "intro": "",
+    "body": "全部展开日志难以找到重点，只展示结果又缺少排查依据。第一版拟采用“步骤概览＋按需展开详情”，保留从结果表回查步骤的入口，暂不加入自动诊断和修复。",
+    "images": [],
     "bullets": [
-      "关键澄清 → 检查口径错误是否减少。",
-      "连续编辑 → 检查修改完成率与放弃情况。",
-      "版本状态 → 检查保存到发布的流失。",
-      "回放调优 → 检查同类错误的回归复现。"
+      "定位：检查夜班查询是否错误使用自然日边界。",
+      "判断：结合参数和返回记录确认原因；AI 解释仅作线索。",
+      "复测：修正后在新会话重测，再检查日班、跨月和缺失记录。"
     ],
-    "images": []
+    "designPlaceholder": "图 06｜回放方案取舍与排查闭环。对照“完整日志”和“步骤概览＋证据详情”两种信息组织方式；下方展示定位、人工判断、修正、复测四步。",
+    "group": {
+      "id": "agent-troubleshooting",
+      "title": "Agent 问题排查"
+    }
   },
   {
     "id": "role",
     "index": "09",
-    "title": "指标验证：明确分母与观察期",
-    "intro": "发布转化是中间指标，持续使用才接近采纳",
-    "body": "对需要发布的任务，建议以首次生成并保存成功、且有完整 7 天观察期的唯一应用为分母；分子为期间用户主动发布、服务端确认成功的唯一应用。重复编辑或发布不重复计数。\n\n自用分析在任务开始前单独归类，观察重复有效使用；发布后的业务使用另行跟踪，不能只数页面打开。生成或保存失败作为上游损失单列，不能事后排除失败样本来美化转化。\n\nPOC 样本有限时，优先记录独立完成数、人工介入次数、任务耗时中位数与重复错误。固定前后比较的任务条件，再讨论提升幅度。",
+    "title": "验证结果",
+    "adoptionResult": { "before": 15, "after": 60, "label": "应用生成采纳率", "beforeLabel": "早期", "afterLabel": "迭代后", "changeLabel": "提升 45 个百分点" },
+    "intro": "",
+    "body": "随着产品逐步迭代，应用生成采纳率从 15% 逐步提升到 60%。",
+    "images": [],
     "bullets": [
-      "核心：7 天发布转化与后续有效使用。",
-      "护栏：生成保存成功率、正确性与放弃率。",
-      "状态：验证方案已定义，实际效果待数据验证。"
-    ],
-    "images": []
+      "统计口径：应用生成采纳率 = 用户发布应用数 ÷ 创建应用数 × 100%"
+    ]
   }
 ]
     : [
   {
     "id": "overview",
     "index": "01",
+    "title": "Background and goals",
+    "intro": "",
+    "body": "Interviews with internal BI staff informed a broader view of analysis tasks: querying data, generating charts, organizing reports, sharing results and continuing analysis around those reports. Users need more than a one-off answer; they need reusable data applications that support further questions.",
+    "images": [],
+    "table": {
+      "columns": [
+        "Item",
+        "Description"
+      ],
+      "rows": [
+        {
+          "id": "target-users",
+          "cells": [
+            "Target users",
+            "Data analysts, developers and other users with data analysis needs"
+          ]
+        },
+        {
+          "id": "product-goal",
+          "cells": [
+            "Product goal",
+            "Use AI to quickly complete queries, follow-up questions and application generation, lowering the barrier to data analysis"
+          ]
+        },
+        {
+          "id": "evaluation",
+          "cells": [
+            "Evaluation criteria",
+            "AI generation accuracy\nAdoption rate of AI-generated applications"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "product-evolution",
     "title": "Product evolution",
     "intro": "",
-    "body": "I participated in DataPilot from zero to one, owning design and frontend implementation of multi-turn conversations, application generation and Agent replay.",
-    "images": []
+    "body": "User needs expanded from a single query result to shareable analysis reports and continued questions and drill-down analysis around those reports. To support these tasks, the product explored basic dialogue, an infinite canvas and a three-column layout.",
+    "bullets": [
+      "Early version - Simple queries: the goal is to support ad hoc data queries and trend checks during everyday analysis, such as asking about sales over the last three months and quickly receiving data and charts. Basic dialogue presents data and charts within answers, retaining scope for follow-up questions. It works for individual questions, but charts and conclusions scattered across messages are harder to read and share as a complete report.",
+      "Intermediate exploration - Report generation: the goal is to help users preparing business reviews and presentations turn multiple query results into a complete report to share with colleagues, reducing manual consolidation of charts and conclusions. An infinite canvas separates charts, metrics and conclusions from the message stream and offers flexible arrangement. However, learning its controls and organization adds effort for the target users, prompting a shift toward a layout suited to reading reports directly.",
+      "Current version - Ongoing dialogue: the goal is to help users investigate anomalies while reviewing or sharing a report, such as asking why monthly sales declined and breaking them down by region, with follow-up questions and drill-down analysis grounded in the report. Three columns hold data assets, applications and AI dialogue. Data assets provide a trusted basis for analysis; applications present the final reports; dialogue supports both application generation and further questions and drill-down analysis. Columns can expand or collapse to give reports sufficient space and let users switch between focused reading and asking questions alongside a report."
+    ],
+    "designPlaceholder": "Canvas exploration | Show the application outside the message stream, with the dialogue entry for generating a report or dashboard.",
+    "evolutionMedia": [
+      {
+        "src": "/images/datapilot-hero.png",
+        "caption": "Query: inspect results and ask follow-ups"
+      },
+      {
+        "caption": "Generate: canvas exploration"
+      },
+      {
+        "src": "/images/datapilot-application-dialogue.png",
+        "caption": "Continue the conversation: view the application alongside AI dialogue"
+      }
+    ],
+    "images": [],
+    "index": "02"
   },
   {
     "id": "conversation",
-    "index": "02",
-    "title": "Multi-turn conversation",
-    "intro": "",
-    "body": "Clarify only material business ambiguities. Persist requests, pending questions and replies within the task so interaction can resume. This does not guarantee perfect model memory.",
-    "images": []
-  },
-  {
-    "id": "continuous-analysis-example",
     "index": "03",
-    "title": "Manufacturing interaction example",
+    "title": "Follow-ups: retain scope and show changes",
     "intro": "",
-    "body": "This hypothetical dialogue extends the existing Haier manufacturing POC. It is not a customer quotation or verified outcome. A user reviews progress, investigates a line and creates an application. OEE alone does not establish causes of delay.",
-    "images": []
+    "body": "Follow-ups such as “What about this line?” omit previously supplied filters. Retain confirmed conditions and show the active scope beside the answer. Ask only when a reference or necessary condition is unclear.",
+    "images": [],
+    "bullets": [
+      "“Inspect Line A”: change the line, retain date, shift and metric.",
+      "“Switch to night shift”: highlight the change and confirm cross-day boundaries.",
+      "“This line”: offer a choice when multiple lines could match."
+    ],
+    "designPlaceholder": "Figure 01 | Three dialogue states: initial query, line follow-up and shift change. Annotate inherited, replaced and unresolved conditions.",
+    "group": {
+      "id": "continuous-dialogue",
+      "title": "Continuous dialogue experience"
+    }
   },
   {
     "id": "continuous-analysis-validation",
     "index": "04",
-    "title": "Consistent revisions",
+    "title": "Clarification: choices with room for explanation",
     "intro": "",
-    "body": "Changing shifts while preserving layout should update all dependent views. Application version context supports continued edits; correctness needs cross-view validation.",
-    "images": []
+    "body": "“Why was night-shift efficiency low?” leaves the metric undefined. Guessing risks the wrong query; asking for a full rewrite adds effort. Offer choices for shifts and metrics, with free-text input.",
+    "images": [],
+    "bullets": [
+      "Ask only about consequential conditions; users define business meaning and AI executes queries.",
+      "Explain recommendations without submitting them automatically. Group independent questions and sequence dependent ones.",
+      "Show confirmed scope after submission, retain dialogue on cancellation and display changed conditions."
+    ],
+    "designPlaceholder": "Figure 03 | Clarification card, recommendation rationale, free text, submit/cancel actions and a receipt showing changed conditions.",
+    "group": {
+      "id": "continuous-dialogue",
+      "title": "Continuous dialogue experience"
+    }
+  },
+  {
+    "id": "continuous-analysis-example",
+    "index": "05",
+    "title": "Analysis example: from delays to underlying records",
+    "intro": "",
+    "body": "This proposed conversation helps a production manager investigate delays. Downtime and quality records support investigation; they do not establish causation.",
+    "images": [],
+    "designPlaceholder": "Figure 02 | Four screens for progress, line inspection, records and night-shift changes, with explicit simulated-data labels.",
+    "bullets": [
+      "“Which lines fell behind yesterday?” — Confirm shift and metric, then list lines.",
+      "“Inspect Line A.” — Show plan, actual output and records with prior filters retained.",
+      "“List downtime and quality records.” — Show related records and sources.",
+      "“Switch to night shift; keep everything else.” — Update scope and results within the same analysis."
+    ],
+    "group": {
+      "id": "continuous-dialogue",
+      "title": "Continuous dialogue experience"
+    }
   },
   {
     "id": "applications",
-    "index": "05",
-    "title": "Preview, save and use",
+    "index": "06",
+    "title": "Dialogue with applications: progress and corrections",
     "intro": "",
-    "body": "Preview, save, publication and business use are distinct. Failed publication preserves the existing released version. Backend mechanisms are not presented as my sole implementation.",
-    "images": []
+    "body": "“Build a dashboard from these records, then switch it to night shift.” Users need to see progress and whether revisions took effect. Separate execution status from application output; retain layout while updating affected charts, summaries and records.",
+    "images": [],
+    "bullets": [
+      "Show the current step, confirmation requests and unfinished output after stopping.",
+      "Distinguish empty, partial and failed results with appropriate recovery actions.",
+      "Label stale modules when updates fail; report preview, save and publication separately."
+    ],
+    "designPlaceholder": "Figure 04 | Running, confirmation, stopped, partial and failed states; before/after shift revision with stale-result labels.",
+    "group": {
+      "id": "continuous-dialogue",
+      "title": "Continuous dialogue experience"
+    }
   },
   {
     "id": "agent-replay",
-    "index": "06",
-    "title": "Agent replay",
+    "index": "07",
+    "title": "Replay proposal: trace an abnormal answer to execution steps",
     "intro": "",
-    "body": "Replay reconstructs persisted evidence, not re-execution or all internal reasoning. A hypothetical empty night-shift result requires checking cross-day boundaries. AI diagnoses remain hypotheses.",
-    "images": []
+    "body": "A night-shift query returns no rows despite expected production. The answer alone cannot distinguish wrong time filters from missing data. Let implementation and debugging staff open the execution record from that answer. Replay reads saved records; it does not re-execute the task.",
+    "images": [],
+    "bullets": [
+      "Include the question, filters and answer with issue reports.",
+      "Show steps and status first; reveal inputs, query parameters and tool output on selection.",
+      "Link result tables to related steps and explicitly label missing records."
+    ],
+    "designPlaceholder": "Figure 05 | Answer entry, execution timeline and evidence panel showing cross-day parameters and empty results; object-to-step navigation.",
+    "group": {
+      "id": "agent-troubleshooting",
+      "title": "Agent troubleshooting"
+    }
   },
   {
     "id": "accuracy",
-    "index": "07",
-    "title": "Agent tuning",
-    "intro": "",
-    "body": "Capture expected and actual results, locate evidence, correct knowledge, tools or interaction, then run original and adjacent regression cases. Validate configuration changes in a new session. This is a proposed plan.",
-    "images": []
-  },
-  {
-    "id": "delivery",
     "index": "08",
-    "title": "Adoption hypotheses",
+    "title": "Design trade-offs: steps first, details on demand",
     "intro": "",
-    "body": "Test whether clarification, continued editing and version states reduce abandonment and recurring errors. No verified adoption uplift is available.",
-    "images": []
+    "body": "Expanded logs are hard to scan, while output alone lacks diagnostic evidence. The proposed first version uses a step overview with on-demand details and links from result tables. Automatic diagnosis and repair are outside this scope.",
+    "images": [],
+    "bullets": [
+      "Locate: check whether the night-shift query used calendar-day boundaries.",
+      "Judge: corroborate causes with parameters and records; treat AI explanations as leads.",
+      "Retest: use a new session, then cover day shifts, month boundaries and missing records."
+    ],
+    "designPlaceholder": "Figure 06 | Compare full logs with progressive evidence disclosure; show locate, judge, correct and retest.",
+    "group": {
+      "id": "agent-troubleshooting",
+      "title": "Agent troubleshooting"
+    }
   },
   {
     "id": "role",
     "index": "09",
-    "title": "Measurement plan",
+    "title": "Validation results",
+    "adoptionResult": { "before": 15, "after": 60, "label": "Application adoption rate", "beforeLabel": "Initially", "afterLabel": "After iteration", "changeLabel": "Up 45 percentage points" },
     "intro": "",
-    "body": "Measure unique first-saved applications with a complete seven-day observation window and explicit successful publication. Track meaningful use separately, preclassify self-use tasks and report upstream failures, correctness and abandonment. POC evaluation also tracks independent completion, interventions and median duration.",
-    "images": []
+    "body": "As the product evolved, adoption of generated applications gradually increased from 15% to 60%.",
+    "images": [],
+    "bullets": [
+      "Measurement: application adoption rate = applications published by users ÷ applications created × 100%"
+    ]
   }
 ]
 
@@ -298,9 +480,9 @@ function createDataPilotContent(locale: Locale) {
   const pocSections: DataPilotSection[] = [
     {
       id: "poc-validation", index: "01",
-      title: isZh ? "海尔生产场景 POC" : "Haier manufacturing POC",
+      title: isZh ? "客户场景 POC" : "Customer manufacturing POC",
       intro: isZh ? "验证智能问数能否帮助业务人员追查生产进度" : "Validate analytics for investigating production progress",
-      body: isZh ? "我参与海尔客户 POC，围绕“生产进度落后，怎样定位工厂、产线和效率损失”组织案例。客户已有运营看板与日报，POC 聚焦从总览继续追查的业务价值：找到关注对象、核对指标口径，再回到具体记录。" : "I participated in the Haier customer POC. This case centers on locating factories, lines, and efficiency losses when production falls behind. With dashboards and daily reports already available, the POC focuses on deeper investigation: identify relevant objects, reconcile definitions, and inspect business records.",
+      body: isZh ? "我参与客户 POC，围绕“生产进度落后，怎样定位工厂、产线和效率损失”组织案例。客户已有运营看板与日报，POC 聚焦从总览继续追查的业务价值：找到关注对象、核对指标口径，再回到具体记录。" : "I participated in the customer POC. This case centers on locating factories, lines, and efficiency losses when production falls behind. With dashboards and daily reports already available, the POC focuses on deeper investigation: identify relevant objects, reconcile definitions, and inspect business records.",
       images: [],
     },
     {
@@ -349,12 +531,14 @@ function createDataPilotContent(locale: Locale) {
     title: getProjectTitle(project, locale),
     tags: project.tags[locale],
     demoUrl: DATA_PILOT_DEMO_URL,
+    heroImage: '/images/datapilot-application-dialogue.png',
     paragraphs: [
-      isZh ? 'AI 智能问数是一款面向业务分析场景的自然语言数据产品。产品将业务数据、指标口径与语义知识加工为 AI 可理解的上下文，提升问数结果的准确性，并支持从查询结果继续生成报表、仪表盘等数据应用。' : 'DataAgent is a natural-language analytics product for business scenarios. It turns business data, metric definitions, and semantic knowledge into AI-readable context for more accurate answers, then supports continued creation of reports, dashboards, and other data applications.',
-      isZh ? '项目沿三条主线推进：产品体验设计，让 AI 结果可理解、可确认、可修正；POC 场景验证，通过客户演示与反馈验证业务场景价值；海外 SaaS 探索，通过 AI 模拟验证市场定位、首次使用与付费路径。' : 'The project followed three tracks: product experience design to make AI results understandable, confirmable, and editable; POC scenario validation through customer demos and feedback; and overseas SaaS exploration using AI simulation to validate market positioning, first use, and payment paths.',
+      isZh ? 'AI 智能问数是一款面向业务分析场景的自然语言数据产品。产品将业务数据、指标口径与语义知识加工为 AI 可理解的上下文，提升问数结果的准确性，并支持从查询结果继续生成报表、仪表盘等数据应用。' : 'The AI analytics product supports natural-language analysis for business scenarios. It turns business data, metric definitions, and semantic knowledge into AI-readable context for more accurate answers, then supports continued creation of reports, dashboards, and other data applications.',
+      isZh ? '本案例重点呈现多轮对话、人机交互与智能体回放孵化。围绕客户与用户问题，通过具体示例说明交互方案，将条件继承、业务澄清、执行反馈和证据回查串成一条连续任务；POC 与海外 SaaS 探索作为补充材料。' : 'This case focuses on multi-turn dialogue, human–AI interaction and Agent replay incubation, using concrete user questions to illustrate interaction proposals. POC and overseas SaaS exploration provide supplementary context.',
       isZh ? '我参与数据分析 Agent 的产品需求规划，主导 Agent 多轮对话体验设计，覆盖提问、指标确认、结果查看与继续追问；结合客户 POC 与场景验证梳理关键交互需求，并针对分析问题排查需求设计智能体回放方案。支持 4 家付费客户交付。' : 'I contributed to data analysis Agent requirements planning and led multi-turn Agent conversation experience design, covering question input, metric confirmation, result review, and follow-up questions. I used customer POC and scenario validation feedback to identify key interaction needs and designed an Agent replay solution for diagnosing analysis problems. Supported delivery to 4 paying customers.',
     ],
-    metadata: ['职责：设计与前端实现', '阶段：0 → 1 与持续迭代', '范围：对话 · 应用 · 回放'],
+    metadata: isZh ? ['职责：交互设计与方案探索', '场景：客户生产分析', '重点：多轮对话 · 人机交互 · 回放孵化'] : ['Role: interaction design and exploration', 'Context: Customer manufacturing POC', 'Focus: dialogue · human–AI interaction · replay incubation'],
+    lead: isZh ? '从自然语言问数到应用生成与持续对话，设计提问、追问与应用修改流程，孵化智能体回放能力。' : 'Design question, follow-up and application revision flows as the product evolves from natural-language queries to application generation and ongoing dialogue, while incubating Agent replay.',
     parts: {
       experience: { title: isZh ? '产品体验设计' : 'Product experience design', sections },
       poc: { title: isZh ? 'POC 场景验证' : 'POC scenario validation', sections: pocSections },

@@ -112,8 +112,11 @@ function serializeDataPilot(locale: Locale): string {
   const lines = [...content.paragraphs, ...content.metadata, `Link: ${content.demoUrl}`]
   for (const part of Object.values(content.parts)) {
     lines.push(`#### ${part.title}`)
+    let previousGroup: string | undefined
     for (const section of part.sections) {
-      lines.push(`##### ${section.title}`)
+      if (section.group && section.group.id !== previousGroup) lines.push(`##### ${section.group.title}`)
+      previousGroup = section.group?.id
+      lines.push(`${section.group ? '######' : '#####'} ${section.title}`)
       if (section.intro) lines.push(section.intro)
       lines.push(section.body)
       if (section.table) lines.push(...serializeTable(section.table))

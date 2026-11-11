@@ -182,7 +182,7 @@ button.sidebar-link { border: none; background: none; font-family: inherit; curs
     height: 40px;
     flex-shrink: 0;
     border: 0;
-    border-radius: var(--radius-md);
+    border-radius: 50%;
     background: transparent;
     color: var(--text);
     cursor: pointer;

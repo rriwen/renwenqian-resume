@@ -281,6 +281,22 @@ test('DataPilot experience keeps hypothetical scenarios and outcomes explicit', 
   assert.deepEqual(zh.map(({ id }) => id), en.map(({ id }) => id))
   assert.ok(zh.find(({ id }) => id === 'continuous-analysis-example')!.body.includes('构思'))
   assert.ok(zh.find(({ id }) => id === 'agent-replay')!.body.includes('不是重新执行'))
-  assert.ok(zh.find(({ id }) => id === 'role')!.body.includes('7 天'))
-  for (const sections of [zh, en]) assert.ok(!JSON.stringify(sections).includes('15%'))
+  assert.ok(zh.find(({ id }) => id === 'role')!.body.includes('15% 逐步提升到 60%'))
+  assert.ok(zh.find(({ id }) => id === 'role')!.bullets!.some(text => text.includes('用户发布应用数 ÷ 创建应用数')))
+  assert.ok(!zh.some(({ id }) => id === 'delivery'))
+  assert.deepEqual(zh.filter(section => section.group?.id === 'continuous-dialogue').map(section => section.id), ['conversation', 'continuous-analysis-validation', 'continuous-analysis-example', 'applications'])
+  assert.deepEqual(zh.filter(section => section.group?.id === 'agent-troubleshooting').map(section => section.id), ['agent-replay', 'accuracy'])
+  assert.deepEqual(zh.map(section => section.group?.id), en.map(section => section.group?.id))
+  for (const locale of ['zh', 'en'] as const) {
+    const sections = getDataPilotContent(locale).parts.experience.sections
+    const corpus = buildSiteCorpus(locale)
+    assert.equal(sections.filter((section) => section.designPlaceholder).length, 7)
+    for (const section of sections) {
+      if (section.designPlaceholder) assert.ok(!corpus.includes(section.designPlaceholder), 'Editorial image briefs must not become chat facts')
+    }
+  }
+  for (const sections of [zh, en]) {
+    const results = sections.find(({ id }) => id === 'role')!
+    assert.ok(results.body.includes('15%') && results.body.includes('60%'))
+  }
 })

@@ -28,7 +28,7 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { border-color
 .ui-button:hover:not(:disabled) { background: var(--hover-bg); }
 .ui-button--primary { background: var(--text); color: var(--page-bg); border-color: var(--text); }
 .ui-button--primary:hover:not(:disabled) { background: color-mix(in srgb, var(--text) 85%, var(--page-bg)); }
-.icon-button { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; width: var(--control-height); height: var(--control-height); border-radius: var(--radius-md); color: var(--text); }
+.icon-button { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; width: var(--control-height); height: var(--control-height); border-radius: 50%; color: var(--text); }
 .icon-button:hover { background: var(--hover-bg); }
 .empty-state { padding-block: var(--space-12); color: var(--muted); font-size: var(--text-base); }
 

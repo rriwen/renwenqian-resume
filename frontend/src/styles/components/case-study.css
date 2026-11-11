@@ -43,7 +43,7 @@
 .case-study-placeholder small { font-size: var(--text-xs); }
 .case-study-page .project-detail-image-placeholder { background: linear-gradient(130deg,#c5eafa,#d9d2fa); color: #475569; border: 0; border-radius: var(--radius-lg); }
 .case-study-page .datapilot-evidence { margin-top: 32px; }
-.case-study-page .datapilot-part-tabs { margin-top: 48px; }
+.case-study-page .datapilot-part-tabs { margin-top: 80px; }
 .case-study-page .datapilot-application-types { display: grid; grid-template-columns: minmax(0,1fr); gap: 40px; }
 .case-study-page .datapilot-application-types > section { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0,1.2fr); gap: 16px 32px; padding: 32px 0; border-top: 1px solid var(--rule); }
 .case-study-page .datapilot-application-types > section > :not(.case-study-media) { grid-column: 1; margin: 0; }
@@ -62,7 +62,14 @@
 }
 
 .case-study-page .datapilot-case-content { width: 100%; }
+.datapilot-background-facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; margin: 32px 0 0; padding-top: 24px; border-top: 1px solid var(--rule); }
+.datapilot-background-facts dt { color: var(--muted); font-size: var(--text-xs); margin-bottom: 8px; }
+.datapilot-background-facts dd { margin: 0; font-size: var(--text-prose); line-height: var(--leading-body); }
+@container site-main (max-width: 700px) {
+  .datapilot-background-facts { grid-template-columns: minmax(0, 1fr); gap: 24px; margin-top: 24px; }
+}
 .case-study-page .datapilot-case-layout { padding-top: 0; }
+.case-study-page .datapilot-case-content > .project-detail-section:first-child { margin-top: 80px; }
 .case-study-page .datapilot-evidence.is-single figure { max-width: 100%; }
 
 .case-study-page .case-study-demo { border-radius: var(--radius-pill); }
@@ -81,3 +88,8 @@
 [data-hero-palette="aidesignsystem"] { --showcase-ice: #e9edff; --showcase-sky: #bfc9f5; --showcase-blue: #879be0; --showcase-lavender: #dcdcf6; }
 .project-hero-gradient { isolation: isolate; background: linear-gradient(130deg, var(--showcase-ice), var(--showcase-sky) 45%, var(--showcase-blue), var(--showcase-lavender)); }
 .project-hero-gradient > .dbv-mesh-gradient { position: absolute; inset: 0; pointer-events: none; z-index: -1; }
+
+
+.datapilot-fact-text { white-space: pre-line; }
+.datapilot-background-facts dd ul { margin: 0; padding-left: 1.2em; }
+.datapilot-background-facts dd li { margin: 0; }

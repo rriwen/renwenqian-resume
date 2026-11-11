@@ -179,7 +179,7 @@ Text2SQL 原型通过详情页 Demo 链接进入，由 `pages/SqlEditorPrototype
 
 关于我和项目详情的正文块在挂载时以 8px 上移、480ms 淡入；不作用于吸顶页头和锚点容器。`LoadingImage.tsx` 为项目画廊及 DataPilot 图片提供加载扫光、完成淡入和失败提示，保留原图比例、裁剪与全屏入口。`PrototypePreview.tsx` 在 iframe 加载时显示状态，完成后启用交互，等待超过 15 秒提供独立打开链接（iframe load 不代表外部页面业务加载成功）。样式集中在 `styles/components/loading.css`，减少动态效果偏好下禁用动画与过渡。
 
-DataPilot 产品体验与海外 SaaS 正文复用数据库运维平台的 `project-detail-section` / `project-detail-section-copy` 排版：每节只保留一个 H2，优先显示原主标题 intro，无 intro 时使用 title；移除标题上方的编号小标题。正文、列表与章节间距复用通用详情样式，稳定锚点与原始文案数据保留。
+DataPilot 产品体验与海外 SaaS 正文复用数据库运维平台的 `project-detail-section` / `project-detail-section-copy` 排版：每节只保留一个 H2；产品体验仅显示 title，不展示 intro 副标题，海外 SaaS 仍优先显示 intro；移除标题上方的编号小标题。正文、列表与章节间距复用通用详情样式，稳定锚点与原始文案数据保留。
 
 数据库运维视觉版的全部配图展板复用 `MeshGradientBackground`。配色取自 OceanBase DataPilot「从问数到报告」四个面板（实际为冰蓝与紫粉两套交替），按素材路径稳定打散分配；`ProjectGallery.imageFrame` 仅在视觉版启用，原版布局不变。图注位于展板外，首屏继续隐藏图注。
 

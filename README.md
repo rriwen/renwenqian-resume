@@ -122,3 +122,16 @@ rg -n 'buildSiteCorpus|sendDeepseekChatStream' frontend/src/lib api
 工作经历支持在 Markdown 日期行后、职责列表前添加概述段落，由 `parseAboutContent.ts` 解析为 `summary`，`WorkEntry` 展示并同步进入聊天语料。
 
 发布快捷指令：`/deploy`，使用本地 `deploy` 技能验证、提交、推送并部署 Vercel 生产环境。
+
+
+DataPilot 产品体验正文以多轮对话、人机交互和智能体回放孵化为主线，正文以客户或用户问题举例，不展示客户名称，交互方案与验证结果保持区分；保留原章节 ID 与 POC、海外探索分组。`data/projects/dataPilot.ts` 的 `designPlaceholder` 保存七组待补设计稿说明，仅在页面展示，不进入聊天事实或媒体清单；首屏简介同样由该文件维护。产品体验正文仅显示 `title` 章节标题，不展示 `intro` 副标题。
+
+DataPilot 的 `product-evolution` 章节说明问数、应用生成、与应用持续对话三个阶段，分别对应现有问数示意、画布探索、三栏布局；画布阶段保留设计稿占位与配图说明，其他阶段使用已有截图。
+
+DataPilot「背景目标」复用数据库运维平台的布局方式：背景正文下以分割线衔接目标用户、产品目标、衡量标准三列信息，窄屏单列。
+
+- AI 问数产品演进通过 `DataPilotEvolution.tsx` 展示三阶段手动切换，左侧阶段说明、右侧截图；无自动轮播，支持方向键。素材来自 `dataPilot.ts` 的 `evolutionMedia`，缺失画布截图保留配图说明，真实截图同步供聊天使用。
+
+- AI 问数体验正文通过 `DataPilotSection.group` 归为「持续对话体验」与「Agent 问题排查」，子节保留原 ID 与深链接；目录仅显示分组，聊天语料保留分组和子节层级。背景目标、产品演进、验证结果继续独立展示。
+
+- AI 问数验证结果由 `DataPilotResults.tsx` 以并排大数字与比例图展示，数据来自 `dataPilot.ts` 的 `adoptionResult`，保留发布应用数 / 创建应用数口径。导航分类显示「平台工具」，稳定分类 ID 仍为 `data-tools`。

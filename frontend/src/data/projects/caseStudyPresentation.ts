@@ -14,7 +14,7 @@ export const getCaseStudyIntroduction = (slug: string, locale: Locale) => introd
 
 /** Methods shown in the case header, independent of project categories. */
 const methods: Record<string, [string[], string[]]> = {
-  dataagent: [['场景验证', '交互设计', 'AI 辅助开发'], ['Scenario validation', 'Interaction design', 'AI-assisted development']],
+  dataagent: [['场景验证', '交互设计', 'AI Native'], ['Scenario validation', 'Interaction design', 'AI Native']],
   databaseops: [['用户旅程', '埋点分析', '原型验证'], ['User journeys', 'Funnel analysis', 'Prototype validation']],
   agentops: [['场景分析', '交互设计', '原型设计'], ['Scenario analysis', 'Interaction design', 'Prototyping']],
   text2sql: [['交互设计', '界面设计', '原型设计'], ['Interaction design', 'UI design', 'Prototyping']],

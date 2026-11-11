@@ -21,8 +21,8 @@
   .project-loading-grid { grid-template-columns: minmax(0, 1fr); gap: var(--space-12); }
   .datapilot-case-hero { padding-bottom: var(--space-10); }
   .datapilot-meta { display: grid; gap: var(--space-2); }
-  .datapilot-part-tabs { display: flex; width: 100%; }
-  .datapilot-part-tabs button { flex: 1; min-width: 0; padding-inline: var(--space-2); }
+  .datapilot-part-tabs { display: flex; width: 100%; gap: 8px; overflow-x: auto; }
+  .datapilot-part-tabs button { flex: 0 0 auto; padding-inline: 12px; }
   .datapilot-stat-row, .datapilot-evidence.is-multi, .project-detail-gallery-grid { grid-template-columns: minmax(0, 1fr); }
   .datapilot-stat-row { gap: var(--space-4); }
   .datapilot-application-types p { grid-template-columns: minmax(0, 1fr); gap: var(--space-1); }

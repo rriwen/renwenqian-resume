@@ -2,7 +2,7 @@ import type { Locale } from '../i18n/translations'
 
 export const projectCategories = [
   { id: 'ai-products', label: { zh: 'AI 产品', en: 'AI Products' } },
-  { id: 'data-tools', label: { zh: '数据工具', en: 'Data Tools' } },
+  { id: 'data-tools', label: { zh: '平台工具', en: 'Platform Tools' } },
   { id: 'design-systems', label: { zh: '设计工程化', en: 'Design Engineering' } },
 ] as const
 
