@@ -65,4 +65,4 @@
 
 ## 发布快捷指令
 
-- 用户发送 `/部署` 时，读取 `/Users/rriwen/.codex/skills/as4x-deploy/SKILL.md` 并执行：验证当前修改、提交并推送 GitHub、部署 Vercel 生产环境、确认 Ready 后报告链接。该指令即本次发布请求。
+- 用户发送 `/deploy` 时，读取 `/Users/rriwen/.codex/skills/deploy/SKILL.md` 并执行：验证当前修改、提交并推送 GitHub、部署 Vercel 生产环境、确认 Ready 后报告链接。该指令即本次发布请求。

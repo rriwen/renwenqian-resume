@@ -152,6 +152,7 @@ function serializeAbout(locale: Locale): string {
     lines.push(`### ${entry.title}`)
     lines.push(stripMarkdownInline(entry.meta))
     lines.push(`> ${stripMarkdownInline(entry.period)}`)
+    if (entry.summary) lines.push(stripMarkdownInline(entry.summary))
     for (const bullet of entry.bullets) {
       lines.push(`- ${stripMarkdownInline(bullet)}`)
     }

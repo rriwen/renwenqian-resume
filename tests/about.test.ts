@@ -14,10 +14,10 @@ const sources = Object.fromEntries(['zh', 'en'].map((locale) => [
 ]))
 
 test('both About locales keep complete content and shared stable work IDs', () => {
-  for (const [locale, source] of Object.entries(sources)) {
+  for (const source of Object.values(sources)) {
     const content = parseAboutContent(source)
     assert.ok(content.heading)
-    assert.equal(content.introParagraphs.length, locale === 'zh' ? 2 : 3)
+    assert.equal(content.introParagraphs.length, 2)
     assert.deepEqual(content.work.map((work) => work.id), ['oceanbase', 'ecidi', 'leishu', 'puhuai'])
     for (const work of content.work) {
       assert.ok(work.title && work.meta && work.period && work.bullets.length)
@@ -80,5 +80,20 @@ test('project cards expose one stable control target per project independent of 
     const target = `about-project-${project.id}-content`
     assert.ok(targets.includes(target))
     assert.equal(html.split(`id="${target}"`).length - 1, 1)
+  }
+})
+
+ test('work summaries stay separate from metadata and responsibilities', () => {
+  for (const source of Object.values(sources)) {
+    const fixture = source.replace(/(> (?:2021\/08 – 2026\/11|Aug 2021 – Nov 2026)\n)/, '$1\nExample work summary.\n')
+    const content = parseAboutContent(fixture)
+    const entry = content.work.find(work => work.id === 'oceanbase')!
+    assert.ok(entry.summary)
+    assert.ok(!entry.meta.includes(entry.summary))
+    assert.equal(entry.bullets.length, 4)
+    const html = renderToStaticMarkup(createElement(WorkEntry, { entry }))
+    assert.ok(html.indexOf(entry.summary) > html.indexOf('</header>'))
+    assert.ok(html.indexOf(entry.summary) < html.indexOf('<ul'))
+    assert.equal(content.work.find(work => work.id === 'ecidi')!.summary, undefined)
   }
 })

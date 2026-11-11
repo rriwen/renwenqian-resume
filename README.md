@@ -118,3 +118,7 @@ rg -n 'buildSiteCorpus|sendDeepseekChatStream' frontend/src/lib api
 数据库运维视觉版的全部配图展板复用 `MeshGradientBackground`。配色取自 OceanBase DataPilot「从问数到报告」四个面板（实际为冰蓝与紫粉两套交替），按素材路径稳定打散分配；`ProjectGallery.imageFrame` 仅在视觉版启用，原版布局不变。图注位于展板外，首屏继续隐藏图注。
 
 - 数据库运维平台仅展示当前视觉版本，导航以「数据库运维平台」指向 `/project/databaseops`；旧 `/project/databaseops-visual` 重定向到正式地址并保留查询参数和 Hash，不再展示原版布局及阅读原版入口。原始项目数据继续供当前版与聊天共用。
+
+工作经历支持在 Markdown 日期行后、职责列表前添加概述段落，由 `parseAboutContent.ts` 解析为 `summary`，`WorkEntry` 展示并同步进入聊天语料。
+
+发布快捷指令：`/deploy`，使用本地 `deploy` 技能验证、提交、推送并部署 Vercel 生产环境。

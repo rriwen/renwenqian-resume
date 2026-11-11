@@ -87,6 +87,9 @@ export function StandardProjectDetail({ project, detail }: Props) {
   const title = getProjectTitle(project, locale)
   const introduction = getCaseStudyIntroduction(project.slug, locale)
   const bodyParagraphs = introduction ? detail.paragraphs : detail.paragraphs.slice(1)
+  const heroArchitecture = project.slug === 'aidesignsystem'
+    ? detail.sections?.find(section => section.architecture)?.architecture
+    : undefined
   const anchors = getProjectAnchors(detail, locale)
   const titleFor = (id: string) => anchors.find((anchor) => anchor.id === id)!.title
   const renderSection = (section: ProjectDetailSection) => (
@@ -98,7 +101,7 @@ export function StandardProjectDetail({ project, detail }: Props) {
           <p key={idx}>{renderParagraphContent(para)}</p>
         ))}
         {section.table && <DetailTable table={section.table} titleId={`${section.id}-title`} />}
-        {section.architecture && <ProjectArchitecture architecture={section.architecture} />}
+        {section.architecture && section.architecture !== heroArchitecture && <ProjectArchitecture architecture={section.architecture} />}
         {section.subsections?.map((subsection) => (
           <div key={subsection.id} className="project-detail-subsection">
             <h3 id={`${section.id}-${subsection.id}-title`} hidden={subsection.hideTitle}>{subsection.title}</h3>
@@ -171,7 +174,8 @@ export function StandardProjectDetail({ project, detail }: Props) {
             {getCaseStudyMethods(project.slug, locale).map(tag => <span className="project-case-tag" key={tag}>{tag}</span>)}
           </div>
           <div className="project-case-cover"><CaseStudyHeroPalette slug={project.slug}>
-            {detail.overviewPrototype ? <CaseStudyMediaFrame><PrototypePreview {...detail.overviewPrototype} /></CaseStudyMediaFrame>
+            {heroArchitecture ? <ProjectArchitecture architecture={heroArchitecture} />
+              : detail.overviewPrototype ? <CaseStudyMediaFrame><PrototypePreview {...detail.overviewPrototype} /></CaseStudyMediaFrame>
               : ['design-token', 'design-md'].includes(project.slug) ? <CaseStudyPlaceholder title={title} />
               : <CaseStudyGallery items={[{ src: project.image, caption: title, hideCaption: true, previewCrop: { aspectRatio: 1.88, objectPosition: 'top' } }]} />}
           </CaseStudyHeroPalette></div>

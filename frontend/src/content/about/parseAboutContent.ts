@@ -9,6 +9,7 @@ export type AboutWorkEntry = {
   meta: string
   period: string
   bullets: string[]
+  summary?: string
 }
 
 export type AboutEducationEntry = {
@@ -115,8 +116,9 @@ function requireBlock(blocks: RawBlock[], id: string): RawBlock {
   return block
 }
 
-function parseArticle(lines: string[]): { meta: string; period: string; bullets: string[] } {
+function parseArticle(lines: string[]): { meta: string; period: string; bullets: string[]; summary?: string } {
   const metaLines: string[] = []
+  const summaryLines: string[] = []
   const bullets: string[] = []
   let period = ''
   let seenStructuredBlock = false
@@ -141,11 +143,13 @@ function parseArticle(lines: string[]): { meta: string; period: string; bullets:
       bullets.push(line.slice(2).trim())
       continue
     }
-    appendMetaLine(line)
+    if (period && bullets.length === 0) summaryLines.push(line)
+    else appendMetaLine(line)
   }
 
   return {
     meta: metaLines.join(' ').trim(),
+    summary: summaryLines.length ? summaryLines.join(' ') : undefined,
     period,
     bullets,
   }
@@ -292,6 +296,7 @@ export function parseAboutContent(source: string): AboutContent {
       id: article.id,
       title: article.title,
       meta: parsed.meta,
+      summary: parsed.summary,
       period: parsed.period,
       bullets: parsed.bullets,
     }
