@@ -66,3 +66,10 @@
 ## 发布快捷指令
 
 - 用户发送 `/deploy` 时，读取 `/Users/rriwen/.codex/skills/deploy/SKILL.md` 并执行：验证当前修改、提交并推送 GitHub、部署 Vercel 生产环境、确认 Ready 后报告链接。该指令即本次发布请求。
+
+## PDF 简历与网站下载同步
+
+- `output/pdf/任文倩_产品设计师简历.pdf` 是 PDF 简历的唯一发布源。每次修改或重新生成此文件，必须在同一任务中同步覆盖 `frontend/public/任文倩_产品设计师简历.pdf` 和兼容旧链接的 `frontend/public/任文倩的简历_AI产品设计师.pdf`，不允许网站附件与源文件版本分离。
+- 同步更新 `frontend/src/components/about/ResumeDownload.tsx` 下载链接的 `v` 参数为源 PDF 的 SHA-256 前 12 位，避免沿用旧缓存；下载文件名保持不变。
+- 交付前核对三个 PDF 的 SHA-256 完全一致，并检查源 PDF 的分页与渲染。部署后从网站下载入口获取附件，与源文件逐字节比对。
+- 本规则要求同步本地网站附件，不自动授权每次修改后发布生产环境；未部署时明确说明网站源附件已同步、线上待部署。用户要求部署时按部署技能执行。
