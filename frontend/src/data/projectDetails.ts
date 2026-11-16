@@ -942,7 +942,7 @@ const details: Record<string, { en: ProjectDetailBlock; zh: ProjectDetailBlock }
     zh: {
       showCover: false,
       tags: ['设计工程', 'Skills'],
-      paragraphs: ['将组件用法、工程安装与交互约束整理为 Skill，结合组件库应用于 AI 智能问数、记忆插件及官网开发，交付页面与组件代码。'],
+      paragraphs: ['将组件用法、工程安装与交互约束整理为 Skill，结合组件库应用于 Data Agent、记忆插件及官网开发，交付页面与组件代码。'],
       gallery: [
         { src: '/images/aidesignsystem-skill-exploration.jpg', caption: 'Skill 探索' },
         { src: '/images/aidesignsystem-design-agent.jpg', caption: '设计 Agent 搭建' },
@@ -1484,7 +1484,7 @@ const details: Record<string, { en: ProjectDetailBlock; zh: ProjectDetailBlock }
         },
         {
           label: "Presented work",
-          value: "Product demo and DataPilot replay exploration"
+          value: "Product demo and Data Agent replay exploration"
         }
       ],
       demoUrl: "https://aiops-phi.vercel.app/",
@@ -1501,7 +1501,7 @@ const details: Record<string, { en: ProjectDetailBlock; zh: ProjectDetailBlock }
             text: "."
           }
         ],
-        "The demo organizes application status, individual executions, and step-level evidence into an investigation workflow. A later exploration in DataPilot extends the same question to customers: how can replay help them understand what an agent did and how that process affected its output?"
+        "The demo organizes application status, individual executions, and step-level evidence into an investigation workflow. A later exploration in Data Agent extends the same question to customers: how can replay help them understand what an agent did and how that process affected its output?"
       ],
       showCover: false,
       sections: [
@@ -1654,7 +1654,7 @@ const details: Record<string, { en: ProjectDetailBlock; zh: ProjectDetailBlock }
           title: "From internal investigation to customer-facing replay",
           paragraphs: [
             "The current artifact is a product demo covering application overview, execution selection, and step-level investigation. Its effect on investigation time and comprehension still needs validation through real use, particularly when traces contain many technical steps.",
-            "The later DataPilot exploration brings execution replay into the customer experience. It asks which parts of a run help customers understand the completed work: the steps taken, the data used, exceptions encountered, and their implications for the result.",
+            "The later Data Agent exploration brings execution replay into the customer experience. It asks which parts of a run help customers understand the completed work: the steps taken, the data used, exceptions encountered, and their implications for the result.",
             [
               {
                 text: "This extends the same design question to a different audience. Internal investigation needs detailed evidence; customer-facing replay needs "
@@ -1682,7 +1682,7 @@ const details: Record<string, { en: ProjectDetailBlock; zh: ProjectDetailBlock }
       overviewFacts: [
         {
           label: "项目起点",
-          value: "智能问数客户 POC"
+          value: "Data Agent客户 POC"
         },
         {
           label: "产品范围",
@@ -1690,14 +1690,14 @@ const details: Record<string, { en: ProjectDetailBlock; zh: ProjectDetailBlock }
         },
         {
           label: "呈现内容",
-          value: "产品 Demo 与 DataPilot 回放探索"
+          value: "产品 Demo 与 Data Agent 回放探索"
         }
       ],
       demoUrl: "https://aiops-phi.vercel.app/",
       paragraphs: [
         [
           {
-            text: "项目起源于智能问数客户 POC 中的一次具体困难：AI 执行出错后，团队难以判断应该排查哪个环节。项目先接入 OpenObserve 辅助查看运行信息，随后在使用中发现 Trace 阅读繁琐、执行过程理解成本高。随着内部多个 AI 应用出现类似需求，"
+            text: "项目起源于Data Agent客户 POC 中的一次具体困难：AI 执行出错后，团队难以判断应该排查哪个环节。项目先接入 OpenObserve 辅助查看运行信息，随后在使用中发现 Trace 阅读繁琐、执行过程理解成本高。随着内部多个 AI 应用出现类似需求，"
           },
           {
             text: "逐步孵化出 Agent 可观测产品",
@@ -1707,7 +1707,7 @@ const details: Record<string, { en: ProjectDetailBlock; zh: ProjectDetailBlock }
             text: "。"
           }
         ],
-        "设计围绕应用概览、执行筛选与步骤核查组织排查路径。后续在 DataPilot 中，进一步探索面向客户的智能体回放，让客户理解 Agent 做了什么，以及执行过程如何影响最终结果。"
+        "设计围绕应用概览、执行筛选与步骤核查组织排查路径。后续在 Data Agent 中，进一步探索面向客户的智能体回放，让客户理解 Agent 做了什么，以及执行过程如何影响最终结果。"
       ],
       showCover: false,
       sections: [
@@ -1731,7 +1731,7 @@ const details: Record<string, { en: ProjectDetailBlock; zh: ProjectDetailBlock }
           id: "project-origin",
           title: "起点：客户 POC 中难以解释的异常",
           paragraphs: [
-            "问题最早出现在智能问数的客户 POC 中。团队能够看到回答错误或执行异常，却难以仅凭最终结果判断问题发生在哪一步。继续排查之前，需要先还原这次执行的经过，才能确定接下来应该检查什么。",
+            "问题最早出现在Data Agent的客户 POC 中。团队能够看到回答错误或执行异常，却难以仅凭最终结果判断问题发生在哪一步。继续排查之前，需要先还原这次执行的经过，才能确定接下来应该检查什么。",
             "设计需要让参与排查的人从异常结果进入对应执行，找到值得核查的步骤，并查看相关信息。任务、执行步骤与排查依据之间的联系，成为后续方案的重点。"
           ],
           images: []
@@ -1762,7 +1762,7 @@ const details: Record<string, { en: ProjectDetailBlock; zh: ProjectDetailBlock }
           paragraphs: [
             [
               {
-                text: "随着公司内部多个 AI 应用出现类似需求，问题逐渐超出了智能问数项目本身。不同应用执行的任务各异，但"
+                text: "随着公司内部多个 AI 应用出现类似需求，问题逐渐超出了Data Agent项目本身。不同应用执行的任务各异，但"
               },
               {
                 text: "排查时需要回答的问题具有共性",
@@ -1857,7 +1857,7 @@ const details: Record<string, { en: ProjectDetailBlock; zh: ProjectDetailBlock }
           title: "从内部排错，延伸到客户回放",
           paragraphs: [
             "目前呈现的成果是产品 Demo，覆盖应用概览、执行筛选与步骤核查。它对排查耗时和理解成本的实际改善，仍需在真实使用中验证，尤其需要关注复杂链路中的信息负担。",
-            "后续在 DataPilot 中，进一步探索面向客户的智能体回放。设计问题转向：哪些步骤帮助客户理解任务完成情况，使用了哪些数据，遇到了什么异常，以及这些情况如何影响结果。",
+            "后续在 Data Agent 中，进一步探索面向客户的智能体回放。设计问题转向：哪些步骤帮助客户理解任务完成情况，使用了哪些数据，遇到了什么异常，以及这些情况如何影响结果。",
             [
               {
                 text: "这一探索延续了对执行过程可理解性的关注。内部排查需要详细依据；面向客户的回放，则需要"

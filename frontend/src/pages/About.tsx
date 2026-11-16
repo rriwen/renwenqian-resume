@@ -77,6 +77,13 @@ export function About() {
           <div style={proseColumn}>
             <h3 style={workArticleTitle}>{renderMarkdownInline(about.education.title)}</h3>
             <p style={workArticleMeta}>{renderMarkdownInline(about.education.period)}</p>
+            <ul style={workArticleList}>
+              {about.education.items.map((item, index) => (
+                <li key={item} style={{ marginBottom: index < about.education.items.length - 1 ? 'var(--space-3)' : 0 }}>
+                  {renderMarkdownInline(item)}
+                </li>
+              ))}
+            </ul>
           </div>
         </section>
 

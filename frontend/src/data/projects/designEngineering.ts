@@ -73,7 +73,7 @@ export function getDesignEngineeringContent(locale: Locale): ProjectDetailBlock 
               id: 'applications',
               title: t('项目应用', 'Applications'),
               nodes: [
-                { id: 'analytics', title: t('智能问数', 'AI analytics') },
+                { id: 'analytics', title: t('Data Agent', 'Data Agent') },
                 { id: 'memory', title: t('记忆插件', 'Memory plugin') },
                 { id: 'websites', title: t('产品官网', 'Product websites') },
               ],
@@ -203,8 +203,8 @@ export function getDesignEngineeringContent(locale: Locale): ProjectDetailBlock 
         title: t('项目应用', 'Project applications'),
         paragraphs: [
           t(
-            '我将 Skill 与组件库应用于智能问数、记忆插件及官网开发，参与页面与组件代码交付。在记忆插件项目中，独立完成产品官网与记忆管理后台的视觉设计、内容规划和前端代码，使设计工作延伸到可运行的产品实现。',
-            'I applied the Skill and component library to AI analytics, the memory plugin, and product websites, delivering page and component code. For the memory plugin, I independently delivered visual design, content planning, and frontend code for its website and administration interface, extending design work into running product implementations.',
+            '我将 Skill 与组件库应用于Data Agent、记忆插件及官网开发，参与页面与组件代码交付。在记忆插件项目中，独立完成产品官网与记忆管理后台的视觉设计、内容规划和前端代码，使设计工作延伸到可运行的产品实现。',
+            'I applied the Skill and component library to Data Agent, the memory plugin, and product websites, delivering page and component code. For the memory plugin, I independently delivered visual design, content planning, and frontend code for its website and administration interface, extending design work into running product implementations.',
           ),
         ],
         subsections: [

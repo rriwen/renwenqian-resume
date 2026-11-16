@@ -40,6 +40,8 @@
   --space-40: 10rem;
   --site-content-max: 1520px;
   --detail-prose-width: 832px;
+  --reading-shell-width: 1120px;
+  --reading-gutter: clamp(24px, 4vw, 64px);
   --detail-media-width: 974px;
   --page-gutter: clamp(1.25rem, 5vw, 4.75rem);
   --page-top: 10rem;

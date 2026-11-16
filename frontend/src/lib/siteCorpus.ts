@@ -116,11 +116,35 @@ function serializeDataPilot(locale: Locale): string {
     for (const section of part.sections) {
       if (section.group && section.group.id !== previousGroup) lines.push(`##### ${section.group.title}`)
       previousGroup = section.group?.id
-      lines.push(`${section.group ? '######' : '#####'} ${section.title}`)
+      if (!section.continuationOf && !section.groupIntro) lines.push(`${section.group ? '######' : '#####'} ${section.title}`)
       if (section.intro) lines.push(section.intro)
       lines.push(section.body)
+      if (section.qaExperience) {
+        for (const decision of section.qaExperience.decisions) lines.push(`${decision.title}: ${decision.body}`)
+        if (section.qaExperience.bridge) lines.push(section.qaExperience.bridge)
+      }
+      if (section.dialogue) {
+        if (section.dialogue.tradeoff) lines.push(section.dialogue.tradeoff)
+        for (const decision of section.dialogue.decisions) lines.push(`${decision.title}: ${decision.body}`)
+        const { visual } = section.dialogue
+        lines.push(visual.caption, visual.note)
+        for (const frame of visual.frames) {
+          lines.push(frame.title, frame.prompt, frame.response)
+          lines.push(...frame.fields.map(field => `${field.label}: ${field.value}`))
+        }
+      }
       if (section.table) lines.push(...serializeTable(section.table))
+      if (section.afterTable) lines.push(section.afterTable)
       for (const step of section.steps ?? []) lines.push(`${step.title}: ${step.detail}`)
+      if (section.diagram) {
+        lines.push(section.diagram.caption)
+        for (const lane of section.diagram.lanes) {
+          lines.push(lane.title)
+          if (lane.summary) lines.push(lane.summary)
+          if (lane.processingLabel) lines.push(lane.processingLabel)
+          for (const step of lane.steps) lines.push([step.actorLabel, step.title, step.detail, step.response].filter(Boolean).join('：'))
+        }
+      }
       for (const application of section.applicationTypes ?? []) {
         lines.push(application.title)
         lines.push(`${content.labels.scene}: ${application.scene}`)

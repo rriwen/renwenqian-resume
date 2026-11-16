@@ -10,10 +10,10 @@ export function CaseStudyHeroPalette({ slug, children }: { slug: string; childre
 }
 
 /** Shared exhibition frame; the original image remains available in the lightbox. */
-export function CaseStudyMediaFrame({ children, index = 0, item }: { children: ReactNode; index?: number; item?: ProjectGalleryItem }) {
+export function CaseStudyMediaFrame({ children, index = 0, item, animated = false }: { children: ReactNode; index?: number; item?: ProjectGalleryItem; animated?: boolean }) {
   const heroPalette = useContext(HeroPaletteContext)
   const palette = item ? Array.from(item.src).reduce((sum, char) => sum + char.charCodeAt(0), 0) % 4 : index % 4
-  return <div className={`case-study-media case-study-media--${palette}${heroPalette ? " project-hero-gradient" : ""}`} data-hero-palette={heroPalette}>{heroPalette && <MeshGradientBackground />}{children}</div>
+  return <div className={`case-study-media case-study-media--${palette}${heroPalette || animated ? " project-hero-gradient" : ""}`} data-hero-palette={heroPalette}>{(heroPalette || animated) && <MeshGradientBackground />}{children}</div>
 }
 
 export function CaseStudyGallery({ items }: { items: ProjectGalleryItem[] }) {

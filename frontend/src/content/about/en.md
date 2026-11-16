@@ -12,7 +12,7 @@ Ant Group · OceanBase
 
 > Aug 2021 – Nov 2026
 
-- **AI product planning and validation:** Identified product opportunities through business goals, user research, and customer POC feedback. Contributed to capability planning and requirements breakdown for AI analytics and an Agent observability platform, driving product incubation and iteration and supporting delivery to **4 paying customers**;
+- **AI product planning and validation:** Identified product opportunities through business goals, user research, and customer POC feedback. Contributed to capability planning and requirements breakdown for Data Agent and an Agent observability platform, driving product incubation and iteration and supporting delivery to **4 paying customers**;
 - **Agent product design:** Led multi-turn conversation and analytics application generation experiences. Helped users understand, verify, and correct generated results through metric confirmation, application version management, and revision and retry flows, driving application generation adoption **15% → 60%**. Designed Agent replay around customer troubleshooting needs and incubated an Agent observability platform;
 - **Data tool experience:** Designed core workflows, interaction architecture, and UI for SQL editing, task orchestration, database operations, and a MaaS platform, using user research, event-tracking data, and frontline feedback to drive improvements; migration task completion **16.8% → 75%**, and data tool satisfaction **4.7 → 6.2 (out of 7)**;
 - **AI design engineering:** Led the development of Design Tokens, an AI component library, and a design knowledge base. Connected design guidelines, components, and AI generation, driving adoption of AI workflows across **5+ teams** and improving baseline team delivery efficiency by approximately **200%**.
@@ -45,7 +45,7 @@ Shanghai Puhuai Technology
 
 ## Projects <!-- id: projects -->
 
-### Intelligent Analytics Q&A <!-- id: analytics -->
+### Data Agent <!-- id: analytics -->
 
 > Product Designer
 

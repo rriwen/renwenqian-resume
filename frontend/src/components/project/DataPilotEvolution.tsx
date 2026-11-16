@@ -27,7 +27,7 @@ export function DataPilotEvolution({ section }: { section: DataPilotSection }) {
             buttons.current[next]?.focus()
           }}>
           <span className="datapilot-evolution-name"><span className="datapilot-evolution-label"><span className="datapilot-tab-number" aria-hidden="true">{index + 1}</span>{title}</span><CaretDown size={16} aria-hidden="true" /></span>
-          {selected === index && <span className="datapilot-evolution-description" role="list">
+          {selected === index && <span className="datapilot-evolution-description" role="list" onClick={event => event.stopPropagation()}>
             {description.slice(separator + 1).trim().split(/(?<=[。.!?])\s*(?=[^”’"'])/u).filter(Boolean).map((point, pointIndex, points) =>
               <span role="listitem" key={pointIndex}>{pointIndex < points.length - 1 ? point.replace(/[。.!?]$/, point.endsWith('。') ? '；' : ';') : point}</span>
             )}
@@ -35,7 +35,7 @@ export function DataPilotEvolution({ section }: { section: DataPilotSection }) {
         </button>
       })}
     </div>
-    <div id="evolution-panel" role="tabpanel" aria-labelledby={`evolution-tab-${selected}`} tabIndex={0}>
+    <div id="evolution-panel" data-stage={selected} role="tabpanel" aria-labelledby={`evolution-tab-${selected}`} tabIndex={0}>
       {media[selected]?.src
         ? <CaseStudyGallery items={[{ src: media[selected].src!, caption: media[selected].caption, hideCaption: true }]} />
         : <CaseStudyPlaceholder title={section.designPlaceholder ?? media[selected]?.caption} />}

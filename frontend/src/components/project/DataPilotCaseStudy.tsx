@@ -1,4 +1,8 @@
+import { DataPilotDialogueTabs } from './DataPilotDialogueTabs'
+import { DataPilotQATabs } from './DataPilotQATabs'
+import { DataPilotDialogue } from './DataPilotDialogue'
 import { DataPilotResults } from './DataPilotResults'
+import { DataPilotJourney } from './DataPilotJourney'
 import { DataPilotEvolution } from './DataPilotEvolution'
 import { getCaseStudyMethods } from '../../data/projects/caseStudyPresentation'
 import { useEffect, useRef, useState } from 'react'
@@ -24,7 +28,7 @@ export function DataPilotCaseStudy({ locale }: Props) {
   const preserveTabScroll = navigationType === 'PUSH' && location.state?.preserveDataPilotTabScroll === true
   const visibleSections = content.parts[activePart].sections
   const sectionGroups = visibleSections.reduce<{ id: string; title?: string; sections: DataPilotSection[] }[]>((groups, section) => {
-    const id = section.group?.id ?? section.id
+    const id = section.continuationOf ?? section.group?.id ?? section.id
     const existing = groups.find(group => group.id === id)
     if (existing) existing.sections.push(section)
     else groups.push({ id, title: section.group?.title, sections: [section] })
@@ -75,19 +79,20 @@ export function DataPilotCaseStudy({ locale }: Props) {
           <article className={`datapilot-case-content project-case-content${activePart === 'poc' ? ' datapilot-poc-content' : ''}`}>
             {sectionGroups.map(group => <section key={group.id} id={group.title ? group.id : undefined} className={group.title ? 'datapilot-content-group project-detail-section' : 'project-detail-section'} aria-labelledby={group.title ? `${group.id}-title` : undefined}>
             {group.title && <h2 id={`${group.id}-title`}>{group.title}</h2>}
-            {group.sections.map((section, sectionIndex) => activePart === 'poc' ? <DataPilotPocSection key={section.id} section={section} /> : (
-              <section className="project-detail-section" id={section.id} key={section.id} aria-labelledby={`${section.id}-title`}>
+            {group.sections.map((section, sectionIndex) => activePart === 'poc' ? <DataPilotPocSection key={section.id} section={section} /> : section.dialogue && !section.groupIntro ? (section.id === group.sections.find(item => item.dialogue && !item.groupIntro)?.id ? <DataPilotDialogueTabs key="dialogue-tabs" sections={group.sections} locale={locale} /> : null) : section.qaExperience ? (section.id === group.sections.find(item => item.qaExperience)?.id ? <DataPilotQATabs key="qa-tabs" sections={group.sections} locale={locale} /> : null) : (
+              <section className={`project-detail-section${section.continuationOf ? ' datapilot-section-continuation' : ''}`} id={section.id} key={section.id} aria-label={section.continuationOf || section.groupIntro ? section.title : undefined} aria-labelledby={section.continuationOf || section.groupIntro ? undefined : `${section.id}-title`}>
                 <div className="project-detail-section-copy">
-                <HeadingTag id={`${section.id}-title`} grouped={Boolean(group.title)}>{group.title ? `${['①', '②', '③', '④'][sectionIndex] ?? sectionIndex + 1} ` : ''}{activePart === 'experience' ? section.title : section.intro || section.title}</HeadingTag>
-                {section.adoptionResult ? <DataPilotResults result={section.adoptionResult} description={section.body} formula={section.bullets?.[0] ?? ''} /> : section.body.split('\n\n').map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
-                {section.table && (section.id === 'overview'
-                  ? <dl className="datapilot-background-facts">{section.table.rows.map(row => <div key={row.id}>
-                      <dt>{typeof row.cells[0] === 'string' ? row.cells[0] : row.cells[0]?.text}</dt>
-                      <dd>{row.id === 'evaluation'
-                        ? <ul>{(typeof row.cells[1] === 'string' ? row.cells[1] : row.cells[1]?.text ?? '').split('\n').map(item => <li key={item}>{item}</li>)}</ul>
-                        : <span className="datapilot-fact-text">{typeof row.cells[1] === 'string' ? row.cells[1] : row.cells[1]?.text}</span>}</dd>
-                    </div>)}</dl>
-                  : <DetailTable table={section.table} titleId={`${section.id}-title`} />)}
+                {!section.continuationOf && !section.groupIntro && <HeadingTag id={`${section.id}-title`} grouped={Boolean(group.title)}>{group.title ? `${['①', '②', '③', '④'][group.sections.slice(0, sectionIndex).filter(item => !item.groupIntro).length] ?? sectionIndex + 1} ` : ''}{activePart === 'experience' ? section.title : section.intro || section.title}</HeadingTag>}
+                {section.adoptionResult ? <DataPilotResults result={section.adoptionResult} description={section.body} formula={section.bullets?.[0] ?? ''} /> : section.body.split('\n\n').map((paragraph) => <p key={paragraph}>{section.bodyEmphasis ? paragraph.split(section.bodyEmphasis).map((part, index) => <span key={index}>{index > 0 && <strong>{section.bodyEmphasis}</strong>}{part}</span>) : paragraph}</p>)}
+                {section.adoptionResult && section.bullets?.slice(1).map(paragraph => <p key={paragraph}>{paragraph}</p>)}
+                {section.groupIntro && !['continuous-dialogue', 'agent-troubleshooting'].includes(section.group?.id ?? '') && section.steps && <ul className="qa-overview-labels">{section.steps.map(step => <li key={step.title}><strong>{step.title}{locale === 'zh' ? '：' : ': '}</strong><span>{step.detail}</span></li>)}</ul>}
+                {section.dialogue && !section.groupIntro && <DataPilotDialogue dialogue={section.dialogue} locale={locale} />}
+                {section.diagram && section.id === 'overview' ? <DataPilotJourney diagram={section.diagram} /> : null}
+                {section.table ? section.id === 'overview' ? <dl className="datapilot-background-facts">{section.table.rows.map(row => <div key={row.id} className={['core-responsibilities', 'design-challenge'].includes(row.id) ? 'datapilot-background-fact-wide' : undefined}>{row.cells.map((cell, index) => {
+                  const text = typeof cell === 'string' ? cell : cell?.text
+                  return index === 0 ? <dt key={index}>{text}</dt> : <dd key={index}>{text}</dd>
+                })}</div>)}</dl> : <DetailTable table={section.table} titleId={`${section.groupIntro ? group.id : section.id}-title`} /> : null}
+                {section.afterTable && <p>{section.afterTable}</p>}
                 {section.applicationTypes ? <div className="datapilot-application-types">{section.applicationTypes.map((item) => <section key={item.title}>
                   <h4>{item.title}</h4>
                   <p><strong>{content.labels.scene}</strong>{item.scene}</p>
@@ -98,11 +103,12 @@ export function DataPilotCaseStudy({ locale }: Props) {
                 {section.related ? <p className="datapilot-related-link">{content.labels.relatedIntro} <Link to="/project/agentops">{content.labels.relatedProject}</Link>。</p> : null}
                 {section.stats ? <div className="datapilot-stat-row">{section.stats.map((stat) => <strong key={stat}>{stat}</strong>)}</div> : null}
                 {section.bullets && section.id !== 'overview' && !section.evolutionMedia && !section.adoptionResult ? <ul className="project-detail-subsection-list">{section.bullets.map((bullet) => {
-                  const separator = section.id === 'accuracy' ? bullet.indexOf('：') : -1
+                  const separator = section.group?.id === 'agent-troubleshooting' ? bullet.search(/[：:]/) : -1
                   return <li key={bullet}>{separator > -1 ? <><strong>{bullet.slice(0, separator)}</strong>{bullet.slice(separator)}</> : bullet}</li>
                 })}</ul> : null}
+                {section.diagram && section.id !== 'overview' ? <DataPilotJourney diagram={section.diagram} /> : null}
                 {section.evolutionMedia ? <DataPilotEvolution section={section} /> : null}
-                {section.designPlaceholder && !section.evolutionMedia ? <div className="datapilot-evidence"><CaseStudyPlaceholder title={section.designPlaceholder} /></div> : null}
+                {section.designPlaceholder && !section.evolutionMedia && !section.dialogue ? <div className="datapilot-evidence"><CaseStudyPlaceholder title={section.designPlaceholder} /></div> : null}
                 {section.images.length ? <div className={`datapilot-evidence ${section.images.length > 1 ? 'is-multi' : 'is-single'}`}>
                   {section.images.map(image => image.display === 'image'
                     ? <CaseStudyGallery key={image.src + image.caption} items={[{ src: image.src, caption: image.caption }]} />

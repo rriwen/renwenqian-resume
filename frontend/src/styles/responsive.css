@@ -47,3 +47,11 @@
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }
+
+/* Reading pages use the available main column, including collapsed sidebar layouts. */
+@container site-main (max-width: 900px) {
+  .about-page, .case-study-page, .dbv-page { --reading-gutter: 32px; }
+}
+@container site-main (max-width: 700px) {
+  .about-page, .case-study-page, .dbv-page { --reading-gutter: 20px; }
+}

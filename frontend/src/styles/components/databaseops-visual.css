@@ -1,7 +1,7 @@
 /* Editorial presentation of the existing case, scoped to its separate route.
    Native CSS, existing site tokens; restrained layout / motion / density: 6 / 3 / 4. */
 .dbv-page { background: var(--page-bg); color: var(--text); min-height: 100dvh; }
-.dbv-shell { width: min(1120px, 100%); box-sizing: border-box; padding: var(--page-top) clamp(24px, 4vw, 64px) 96px; margin-inline: auto; }
+.dbv-shell { width: 100%; max-width: var(--reading-shell-width); box-sizing: border-box; padding: var(--page-top) var(--reading-gutter) 96px; margin-inline: auto; }
 .dbv-page :is(section[id], header[id], .dbv-stepper) { scroll-margin-top: var(--header-clearance); }
 .dbv-page :is(p, h1, h2, h3, h4, dl, dd, ul, ol) { margin: 0; }
 .dbv-page p, .dbv-page dd, .dbv-page li { font-size: var(--text-prose); line-height: var(--leading-body); }
@@ -86,16 +86,16 @@
 .dbv-page .dbv-metric-value { font-size: var(--text-metric); font-weight: var(--weight-medium); line-height: 1.2; letter-spacing: -.045em; margin: 16px 0 8px; font-variant-numeric: tabular-nums; }
 .dbv-metrics dd > span { font-size: var(--text-section); margin-left: 4px; }
 .dbv-metrics > div:last-child .dbv-metric-value { color: var(--accent); }
-.dbv-page .dbv-measurement { font-size: var(--text-sm); color: var(--muted); margin: 20px 0 28px; max-width: 740px; }
+.dbv-page .dbv-measurement { font-size: var(--text-sm); color: var(--muted); margin: 20px 0 28px; max-width: 100%; }
 .dbv-page :is(summary, a, button):focus-visible { outline: 2px solid var(--accent); outline-offset: 5px; }
 @container site-main (max-width: 900px) {
-  .dbv-shell { padding-inline: 32px; }
+  .dbv-shell { padding-inline: var(--reading-gutter); }
   .dbv-editorial { grid-template-columns: minmax(0,1fr); gap: 28px; }
-  .dbv-editorial .dbv-copy { max-width: 680px; }
+  .dbv-editorial .dbv-copy { max-width: 100%; }
   .dbv-background { gap: 32px; }
 }
 @container site-main (max-width: 700px) {
-  .dbv-shell { padding: var(--page-top) 20px 64px; }
+  .dbv-shell { padding: var(--page-top) var(--reading-gutter) 64px; }
   .dbv-section { margin-top: 80px; }
   .dbv-background, .dbv-findings, .dbv-stepper-options, .dbv-decision, .dbv-object-options > div { grid-template-columns: minmax(0,1fr); gap: 24px; }
   .dbv-background .dbv-facts { grid-template-columns: minmax(0, 1fr); gap: 24px; }

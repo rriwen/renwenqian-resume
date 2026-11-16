@@ -1,5 +1,7 @@
 .about-page {
-  max-width: calc(var(--detail-prose-width) + var(--page-gutter) * 2);
+  max-width: var(--reading-shell-width);
+  box-sizing: border-box;
+  padding-inline: var(--reading-gutter);
   margin-inline: auto;
 }
 

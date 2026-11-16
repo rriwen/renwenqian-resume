@@ -16,8 +16,8 @@ test('suggested questions become short subject labels instead of copied prompts'
 })
 
 test('project topics retain the project identity and requested focus', () => {
-  assert.equal(conversationTitle('AI 智能问数的采纳率是怎么提升的？'), 'AI 智能问数 · 项目成果')
-  assert.equal(conversationTitle('聊聊 DataPilot 的设计决策和最终成果'), 'AI 智能问数 · 项目复盘')
+  assert.equal(conversationTitle('AI 智能问数的采纳率是怎么提升的？'), 'Data Agent · 项目成果')
+  assert.equal(conversationTitle('聊聊 DataPilot 的设计决策和最终成果'), 'Data Agent · 项目复盘')
   assert.equal(conversationTitle('你在数据库运维平台中负责什么？'), '数据库运维平台 · 职责与贡献')
   assert.equal(conversationTitle('介绍一下 Agent 记忆插件'), 'Agent 记忆插件 · 项目概览')
   for (const name of ['AI 设计系统', 'Design Token、Design Skill']) {

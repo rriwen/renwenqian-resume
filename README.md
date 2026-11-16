@@ -65,6 +65,10 @@ npm run dev
 | 线上 API 入口与部署 | [`api/`](api/)、[`vercel.json`](vercel.json) |
 | 内容与交互回归测试 | [`tests/`](tests/)，运行器 [`scripts/test.mjs`](scripts/test.mjs) 使用 Vite 转换 TS/TSX 与 Markdown |
 
+持续对话展示由 `frontend/src/components/project/DataPilotDialogueTabs.tsx` 管理「结果追问、上下文与记忆、定时任务」三个手动 Tab；每个 Tab 采用整块动态渐变展板，左侧文字紧凑排列，右侧为 4:3 截图轮播占位，`DataPilotDialogue.tsx` 保留原生方案示意组件，文案仍来自 `dataPilot.ts`，保留原章节深链接。
+
+截图轮播由 `frontend/src/components/project/ScreenshotCarousel.tsx` 共用：5 秒自动切换、横条进度倒计时与手动选择；离屏、后台、截图悬停、键盘聚焦和减少动态效果时暂停。
+
 ## 内容来源
 
 - 当前会话的追问携带问答历史与站点资料，刷新后继续沿用该会话内容；不同会话的记忆独立。[`lib/chat/context.ts`](frontend/src/lib/chat/context.ts) 为前后端共用的预算与完整轮次选择逻辑，使用应用侧 64,000 token 预算（含 2,048 token 回复预留）与 500,000 字节请求上限，不再固定截取 99 条消息。超出容量的早期消息仍留在本地历史，但不参与当前回复；最新一轮过长时阻止请求。聊天发送按钮左侧的 [`ContextMeter.tsx`](frontend/src/components/chat/ContextMeter.tsx) 显示估算余量，计入站点资料、历史和草稿，支持悬停、聚焦或点击查看说明。这是应用预算与本地估算，不是模型标称窗口或服务商账单用量。
@@ -128,7 +132,7 @@ DataPilot 产品体验正文以多轮对话、人机交互和智能体回放孵�
 
 DataPilot 的 `product-evolution` 章节说明问数、应用生成、与应用持续对话三个阶段，分别对应现有问数示意、画布探索、三栏布局；画布阶段保留设计稿占位与配图说明，其他阶段使用已有截图。
 
-DataPilot「背景目标」复用数据库运维平台的布局方式：背景正文下以分割线衔接目标用户、产品目标、衡量标准三列信息，窄屏单列。
+DataPilot 页面不再展示目标用户、产品目标、衡量标准三列信息，产品演进直接衔接持续对话体验；原始背景数据保留供聊天使用。
 
 - AI 问数产品演进通过 `DataPilotEvolution.tsx` 展示三阶段手动切换，左侧阶段说明、右侧截图；无自动轮播，支持方向键。素材来自 `dataPilot.ts` 的 `evolutionMedia`，缺失画布截图保留配图说明，真实截图同步供聊天使用。
 
@@ -137,3 +141,33 @@ DataPilot「背景目标」复用数据库运维平台的布局方式：背景�
 - AI 问数验证结果由 `DataPilotResults.tsx` 以并排大数字与比例图展示，数据来自 `dataPilot.ts` 的 `adoptionResult`，保留发布应用数 / 创建应用数口径。导航分类显示「平台工具」，稳定分类 ID 仍为 `data-tools`。
 
 - 聊天的 AI 问数语料读取当前展示的首屏 lead 与正文分组，不再导入已隐藏的 paragraphs / metadata；仅保留真实配图说明，排除配图占位。回答以最新站点资料为准，项目详情中的状态、指标及统计口径优先于历史回答，规则维护在 `lib/chat/interviewPrompt.ts`。
+
+AI 问数的背景目标与全链路梳理通过 `dataPilot.ts` 的双语 `diagram` 数据展示取数路径和分析任务示意；`DataPilotJourney.tsx` 渲染原生响应式流程图，同一内容同步进入聊天语料。示意表达设计目标与关注点，不作为自动路由、权限申请等能力的上线证据。
+
+Data Agent 分为「项目背景」（`overview`）与「产品演进」（`product-evolution`）两个独立章节，各自显示标题与目录项。背景包含初衷、取数路径图与三列摘要；产品演进包含访谈发现与三阶段手动切换。保留原深链接，聊天语料同步章节层级。
+
+持续对话体验通过 `DataPilotDialogue.tsx` 展示连续任务、条件继承切换、三栏信息分工与分析／报告更新分支。双语正文、设计取舍与示意内容统一维护在 `dataPilot.ts` 的 `dialogue` 字段，`siteCorpus.ts` 同步读取且保留方案性质说明。原章节 ID 不变，`designPlaceholder` 保留为后续真实设计稿说明，在已有原生示意的章节不重复显示占位展板。样式位于 `styles/components/datapilot.css`，支持键盘、深浅主题和窄屏。
+
+持续对话首节通过 `groupIntro` 作为分组导语展示，保留 `continuous-analysis-example` 深链接与任务示意，不显示独立标题、不占子节编号；页面与聊天保持相同层级。
+
+Data Agent 持续对话体验以个人贡献描述产品规则、交互设计及工程协作，区分条件继承、对象关联、执行反馈；状态存储、上下文组装、权限校验、工具调用和重试实现归工程，不写为个人底层技术交付。图注保留行为规则与联合验收重点，不将方案写为已验证成果，双语正文与聊天语料同步。
+
+Data Agent 在持续对话前增加「问答体验」分组（`qa-experience`），以 `qa-overview` 展示导语与三行标签说明（`steps`），标签为问答前、问答中、问答后，每行将用户目标与设计判断合并为一句话，后接 `qa-entry`、`qa-execution`、`qa-result` 三个稳定 ID，分别讲问答前入口与首次澄清、问答中过程与产物分离、问答后结果阅读与核查。`DataPilotQA.tsx` 采用顶部问题说明、下方左侧渐变交互示意与右侧判断／取舍／验收的布局，窄屏按问题、示意、说明顺序堆叠；衔接持续对话的文案置于第三环节末尾。该组件渲染渐变展板上的模拟界面，支持首次范围确认、执行中／无数据／查询失败／生成失败状态切换、报告／明细切换与来源展开；正文按具体问题、设计判断、关键取舍、协作与验收组织，首次问答聚焦范围明确、异常反馈与结果核查，条件继承和报告更新留在持续对话部分。正文与双语示意内容来自 `dataPilot.ts` 的 `qaExperience`；`siteCorpus.ts` 仅收录正文、设计判断和衔接段，排除 `mockup` 模拟数据及界面内容，不将参考截图中的自动授权、置信度检测、Skill 和定时任务写成上线成果。 布局研究与调整说明见 [docs/dataagent-qa-layout.md](docs/dataagent-qa-layout.md)。
+
+Data Agent 案例以“持续探索数据，同时保留可阅读、可修改、可分享的报告”为主线；背景保留自然语言问数的初衷与 BI 访谈发现，演进保留简单问数、生成报告、持续对话的三阶段说明，问答体验压缩为三阶段铺垫，持续对话重点讲条件承接、分析与报告修改的边界、任务与产物状态。结果区明确 15%→60% 为整体迭代结果，`bullets` 首项保留公式，其余项展示反思；POC、海外与 Agent 排查内容保留。
+
+Data Agent 在取数路径图后、产品演进前展示三列背景摘要，参考数据库运维平台的无边框呈现，包含目标用户、设计目标与衡量标准；窄屏纵向排列。双语内容由 `data/projects/dataPilot.ts` 的 overview.table 维护并同步进入聊天；采纳率仅作为整体迭代指标，不归因于单项设计。
+
+问答体验使用 `DataPilotQATabs.tsx` 以问答前、问答中、问答后三个手动 Tab 展示，参考 LakeBase 应用场景的居中 Tab 与整块渐变左文右图布局，窄屏堆叠。原 qa-entry / qa-execution / qa-result 深链接、刷新与前进后退保留；Tab 切换原地更新 Hash，支持方向键与 Home / End，“算什么、怎么算、如何查”说明分别放入对应 Tab；内容仍由 dataPilot.ts 统一维护。
+
+Data Agent 取数路径图使用 `MeshGradientBackground` 实时网格渐变，沿用 LakeBase 首屏的蓝白配色；色块内部连续流动，不使用背景图片平移缩放。保留离屏／后台暂停、减少动态效果静止与静态渐变回退。`lakebase-banner-background.jpg` 保留为历史参考素材。
+
+截图轮播仅保留可点击的进度横条；点击后重置计时并继续自动轮播，不因鼠标停留在横条或点击聚焦而暂停。未选中横条使用浅底，当前倒计时轨道使用深底，填充使用深色。
+
+问题排查复用 `DataPilotDialogueTabs.tsx` 的渐变展板与截图轮播，按找到步骤、核对依据、修正复测展示；保留 `agent-replay`、`accuracy` 深链接，补充 `agent-evidence`。
+
+Data Agent 的 `screenshotBriefs` 保存各 Tab 截图的准备要求，由 `ScreenshotCarousel` 展示，独立于产品事实与聊天语料。新增操作边界保持方案表述，整体采纳率不作为单项规则的验证证据。
+
+Data Agent 产品体验采用客观表述，职责覆盖对客需求与场景、产品需求规划、前端设计研发与验证、后端接口协作，以应用采纳率为目标。产品演进按用户要求保留原有两段正文与三阶段说明，不在该节追加上线状态与职责叙述。问答体验、持续对话与问题排查按用户要求恢复审查改写前的表述，保留方案与实际效果的区分；中英文与聊天语料同步，成果与反思保持独立。
+
+Data Agent 背景摘要由 overview.table 统一维护：上排目标用户、产品目标、衡量标准三列，下排核心职责、设计挑战两列；整体使用外边框和内部细分隔线网格，窄屏纵向排列。职责与挑战使用精简客观表述，不在背景正文重复长段说明，中英文与聊天语料同步。

@@ -262,8 +262,16 @@ for (const locale of locales) {
       assert.ok(part.sections.length)
       assert.equal(new Set(part.sections.map((section) => section.id)).size, part.sections.length)
       for (const section of part.sections) {
-        assert.ok(corpus.includes(section.title), `Missing title: ${section.id}`)
+        if (section.continuationOf) {
+          const parent = part.sections.find(item => item.id === section.continuationOf)
+          assert.ok(parent && corpus.includes(parent.title), `Missing parent: ${section.id}`)
+          assert.ok(part.sections.indexOf(parent) < part.sections.indexOf(section))
+        } else if (section.groupIntro) {
+          assert.ok(section.group && corpus.includes(section.group.title), `Missing group: ${section.id}`)
+          assert.ok(!corpus.includes(`###### ${section.title}`), `Intro must not create a subsection: ${section.id}`)
+        } else assert.ok(corpus.includes(section.title), `Missing title: ${section.id}`)
         assert.ok(corpus.includes(section.body), `Missing body: ${section.id}`)
+        if (section.afterTable) assert.ok(corpus.includes(section.afterTable))
         for (const row of section.table?.rows ?? []) {
           for (const cell of row.cells) {
             if (cell !== null) assert.ok(corpus.includes(typeof cell === 'string' ? cell : cell.text), `Missing table content: ${section.id}`)
@@ -284,17 +292,19 @@ for (const locale of locales) {
 }
 
 
-test('DataPilot experience keeps hypothetical scenarios and outcomes explicit', () => {
+test('DataPilot experience keeps product proposals and outcomes explicit', () => {
   const zh = getDataPilotContent('zh').parts.experience.sections
   const en = getDataPilotContent('en').parts.experience.sections
   assert.deepEqual(zh.map(({ id }) => id), en.map(({ id }) => id))
-  assert.ok(zh.find(({ id }) => id === 'continuous-analysis-example')!.body.includes('构思'))
-  assert.ok(zh.find(({ id }) => id === 'agent-replay')!.body.includes('不是重新执行'))
+  assert.ok(zh.find(({ id }) => id === 'continuous-analysis-example')!.dialogue!.visual.note.includes('不代表已验证'))
+  assert.ok(zh.find(({ id }) => id === 'accuracy')!.body.includes('区分查看历史记录与重新执行'))
   assert.ok(zh.find(({ id }) => id === 'role')!.body.includes('15% 逐步提升到 60%'))
-  assert.ok(zh.find(({ id }) => id === 'role')!.bullets!.some(text => text.includes('用户发布应用数 ÷ 创建应用数')))
+  assert.ok(zh.find(({ id }) => id === 'role')!.bullets!.some(text => text.includes('用户发布应用数 / 创建应用数')))
   assert.ok(!zh.some(({ id }) => id === 'delivery'))
-  assert.deepEqual(zh.filter(section => section.group?.id === 'continuous-dialogue').map(section => section.id), ['conversation', 'continuous-analysis-validation', 'continuous-analysis-example', 'applications'])
-  assert.deepEqual(zh.filter(section => section.group?.id === 'agent-troubleshooting').map(section => section.id), ['agent-replay', 'accuracy'])
+  assert.deepEqual(zh.filter(section => section.group?.id === 'qa-experience').map(section => section.id), ['qa-overview', 'qa-entry', 'qa-execution', 'qa-result'])
+  assert.ok(zh.findIndex(section => section.id === 'qa-result') < zh.findIndex(section => section.id === 'continuous-analysis-example'))
+  assert.deepEqual(zh.filter(section => section.group?.id === 'continuous-dialogue').map(section => section.id), ['continuous-analysis-example', 'conversation', 'continuous-analysis-validation', 'applications'])
+  assert.deepEqual(zh.filter(section => section.group?.id === 'agent-troubleshooting').map(section => section.id), ['agent-troubleshooting-overview', 'agent-replay', 'agent-evidence', 'accuracy'])
   assert.deepEqual(zh.map(section => section.group?.id), en.map(section => section.group?.id))
   for (const locale of ['zh', 'en'] as const) {
     const sections = getDataPilotContent(locale).parts.experience.sections
@@ -302,6 +312,25 @@ test('DataPilot experience keeps hypothetical scenarios and outcomes explicit', 
     assert.equal(sections.filter((section) => section.designPlaceholder).length, 7)
     for (const section of sections) {
       if (section.designPlaceholder) assert.ok(!corpus.includes(section.designPlaceholder), 'Editorial image briefs must not become chat facts')
+      if (section.qaExperience) {
+        for (const decision of section.qaExperience.decisions) assert.ok(corpus.includes(decision.body))
+        if (section.qaExperience.bridge) assert.ok(corpus.includes(section.qaExperience.bridge))
+        const mockup = section.qaExperience.mockup
+        assert.ok(!corpus.includes(mockup.label), 'Mock interface labels must not enter personal facts')
+        if (mockup.kind === 'result') assert.ok(!corpus.includes(mockup.prompt), 'Simulated chart findings must not enter personal facts')
+      }
+      if (section.dialogue) {
+        assert.ok(corpus.includes(section.dialogue.visual.note), 'Interaction proposal boundaries must reach the shared corpus')
+        for (const decision of section.dialogue.decisions) assert.ok(corpus.includes(decision.body))
+        for (const frame of section.dialogue.visual.frames) {
+          assert.ok(corpus.includes(frame.prompt))
+          assert.ok(corpus.includes(frame.response))
+          for (const field of frame.fields) assert.ok(corpus.includes(field.value))
+        }
+      }
+      for (const lane of section.diagram?.lanes ?? []) {
+        for (const step of lane.steps) assert.ok(corpus.includes(step.response ?? step.title), 'Diagram content must reach the shared corpus')
+      }
     }
   }
   for (const sections of [zh, en]) {

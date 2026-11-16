@@ -24,8 +24,8 @@ export type Project = {
 
 export const projects: Project[] = [
   {
-    navigationTitle: { zh: 'AI 智能问数' },
-    id: 1, slug: 'dataagent', title: 'AI 智能问数', titleEn: 'DataAgent',
+    navigationTitle: { zh: 'Data Agent' },
+    id: 1, slug: 'dataagent', title: 'Data Agent', titleEn: 'Data Agent',
     category: 'ai-products',
     image: '/images/datapilot-hero.png',
     tags: { zh: ['AI Native', '用户增长', '商业化'], en: ['AI Native', 'Growth', 'Commercialization'] },

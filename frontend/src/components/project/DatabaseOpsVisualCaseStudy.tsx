@@ -192,8 +192,7 @@ export function DatabaseOpsVisualCaseStudy({ project, detail }: Props) {
       </section>
 
       <section id="outcomes" className="dbv-section dbv-outcomes" aria-labelledby="outcomes-title">
-        <div className="dbv-copy"><h2 id="outcomes-title">{copy.resultsTitle}</h2><Copy paragraphs={outcomes.paragraphs} /></div>
-        <p className="dbv-measurement">{copy.measurement}</p>
+        <div className="dbv-copy"><h2 id="outcomes-title">{copy.resultsTitle}</h2><p>{outcomes.paragraphs?.map((value, index) => <Paragraph key={index} value={value} />)}{locale === 'en' ? ' ' : ''}{copy.measurement}</p></div>
         <div className="dbv-result-funnels">{getDatabaseOpsResultFunnels(locale).map((funnel, panel) => {
           const stages = funnel.stages.filter(stage => stage.id !== 'type')
           return <div className="dbv-result-pair" key={funnel.title}>

@@ -4,7 +4,7 @@ import { ShaderMount, ShaderFitOptions, getShaderColorFromString, meshGradientFr
 const paletteTokens = ['--showcase-ice', '--showcase-sky', '--showcase-blue', '--showcase-lavender']
 
 /** Matches the mesh gradient and motion settings on oceanbase.com/product/datapilot. */
-export function MeshGradientBackground() {
+export function MeshGradientBackground({ speed = 1 }: { speed?: number } = {}) {
   const hostRef = useRef<HTMLDivElement>(null)
   const [generation, setGeneration] = useState(0)
 
@@ -25,7 +25,7 @@ export function MeshGradientBackground() {
       if (!mount) return
       const colors = readColors()
       if (colors) mount.setUniforms({ u_colors: colors })
-      mount.setSpeed(motion.matches ? 0 : 1)
+      mount.setSpeed(motion.matches ? 0 : speed)
     }
     const onLost = (event: Event) => {
       event.preventDefault()
@@ -55,7 +55,7 @@ export function MeshGradientBackground() {
           u_originY: 0.5,
           u_worldWidth: 1280,
           u_worldHeight: 720,
-        }, { powerPreference: 'low-power' }, motion.matches ? 0 : 1, 0, 1, 1920 * 1080)
+        }, { powerPreference: 'low-power' }, motion.matches ? 0 : speed, 0, 1, 1920 * 1080)
         mount.canvasElement.addEventListener('webglcontextlost', onLost)
         mount.canvasElement.addEventListener('webglcontextrestored', onRestored)
       } catch {
@@ -81,7 +81,7 @@ export function MeshGradientBackground() {
         mount.dispose()
       }
     }
-  }, [generation])
+  }, [generation, speed])
 
   return <div ref={hostRef} className="dbv-mesh-gradient" aria-hidden="true" />
 }
