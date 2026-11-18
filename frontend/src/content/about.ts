@@ -3,18 +3,14 @@ import { parseAboutContent, type AboutContent } from './about/parseAboutContent'
 
 export * from './about/parseAboutContent'
 
-const aboutSources = import.meta.glob('./about/*.md', {
-  eager: true,
-  query: '?raw',
-  import: 'default',
-}) as Record<string, string>
+import aboutSource from './about/zh.md?raw'
 
 const contentCache = new Map<Locale, AboutContent>()
 
 export function getAboutContent(locale: Locale): AboutContent {
   const cached = contentCache.get(locale)
   if (cached) return cached
-  const source = aboutSources[`./about/${locale}.md`]
+  const source = aboutSource
   if (typeof source !== 'string') {
     throw new Error(`Missing About markdown source for locale: ${locale}`)
   }

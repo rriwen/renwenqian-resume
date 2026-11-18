@@ -20,7 +20,7 @@ function safeLink(href: string | undefined): string | undefined {
   return /^(?:https?:\/\/|mailto:|\/(?!\/)|#)/i.test(href) ? href : undefined
 }
 
-function ProjectImage({ image, locale }: { image: ChatProjectImage; locale: Locale }) {
+function ProjectImage({ image, locale: _locale }: { image: ChatProjectImage; locale: Locale }) {
   const [failed, setFailed] = useState(false)
   const caption = image.caption || image.projectTitle
 
@@ -28,11 +28,11 @@ function ProjectImage({ image, locale }: { image: ChatProjectImage; locale: Loca
     <span className="chatbot-project-image">
       {failed ? (
         <span className="chatbot-image-unavailable">
-          {locale === 'zh' ? '图片暂时无法加载。' : 'This image could not be loaded.'}
+          {'图片暂时无法加载。'}
         </span>
       ) : (
         <a href={image.src} target="_blank" rel="noopener noreferrer" className="chatbot-project-image-link"
-          aria-label={locale === 'zh' ? `查看原图：${caption}（新窗口）` : `Open original image: ${caption} (new window)`}>
+          aria-label={`查看原图：${caption}（新窗口）`}>
           <img src={image.src} alt={caption} loading="lazy" decoding="async" onError={() => setFailed(true)} />
         </a>
       )}
@@ -55,11 +55,11 @@ export function ChatMessageContent({ content, locale }: ChatMessageContentProps)
       },
       img: ({ src }) => {
         const image = src ? images.get(src) : undefined
-        if (!image) return <span className="chatbot-image-unavailable">{locale === 'zh' ? '图片暂不可用。' : 'This image is unavailable.'}</span>
+        if (!image) return <span className="chatbot-image-unavailable">{'图片暂不可用。'}</span>
         return <ProjectImage key={image.src} image={image} locale={locale} />
       },
       table: ({ children }) => (
-        <div className="chatbot-table-scroll" role="region" tabIndex={0} aria-label={locale === 'zh' ? '表格，可横向滚动' : 'Table, scroll horizontally'}>
+        <div className="chatbot-table-scroll" role="region" tabIndex={0} aria-label={'表格，可横向滚动'}>
           <table>{children}</table>
         </div>
       ),

@@ -81,9 +81,9 @@ export function SiteSidebar({ onNewChat, open, onClose, triggerRef, launcherRef,
       <aside ref={panelRef} id="site-sidebar" className={`site-sidebar${desktopCollapsed ? ' is-collapsed' : ''}${open ? ' is-open' : ''}`} role={open ? 'dialog' : undefined} aria-modal={open ? true : undefined} aria-label={m.header.navAria}>
         <div className="sidebar-heading">
           <Link to="/" className="header-logo" onClick={onClose}>DESIGN.4x</Link>
-          <button ref={collapseButtonRef} type="button" className="icon-button sidebar-collapse-button" aria-label={locale === 'zh' ? '收起侧栏' : 'Collapse sidebar'} title={locale === 'zh' ? '收起侧栏' : 'Collapse sidebar'} aria-controls="site-sidebar" aria-expanded={true} onClick={onToggleSidebar}><IconSidebarToggle expanded /></button>
-          <button ref={expandButtonRef} type="button" className="icon-button sidebar-expand-button sidebar-tooltip-host" aria-label={locale === 'zh' ? '展开侧栏' : 'Expand sidebar'} aria-controls="site-sidebar" aria-expanded={false} onClick={onToggleSidebar}><span className="sidebar-expand-brand" aria-hidden="true">4x</span><span className="sidebar-expand-icon" aria-hidden="true"><IconSidebarToggle expanded={false} /></span><span className="sidebar-tooltip" aria-hidden="true">{locale === 'zh' ? '展开侧栏' : 'Expand sidebar'}</span></button>
-          <button ref={closeRef} type="button" className="icon-button sidebar-close" aria-label={locale === 'zh' ? '关闭导航' : 'Close navigation'} onClick={onClose}><IconClose /></button>
+          <button ref={collapseButtonRef} type="button" className="icon-button sidebar-collapse-button" aria-label={'收起侧栏'} title={'收起侧栏'} aria-controls="site-sidebar" aria-expanded={true} onClick={onToggleSidebar}><IconSidebarToggle expanded /></button>
+          <button ref={expandButtonRef} type="button" className="icon-button sidebar-expand-button sidebar-tooltip-host" aria-label={'展开侧栏'} aria-controls="site-sidebar" aria-expanded={false} onClick={onToggleSidebar}><span className="sidebar-expand-brand" aria-hidden="true">4x</span><span className="sidebar-expand-icon" aria-hidden="true"><IconSidebarToggle expanded={false} /></span><span className="sidebar-tooltip" aria-hidden="true">{'展开侧栏'}</span></button>
+          <button ref={closeRef} type="button" className="icon-button sidebar-close" aria-label={'关闭导航'} onClick={onClose}><IconClose /></button>
         </div>
         <nav id="site-navigation" className="sidebar-navigation" aria-label={m.header.navAria} onClick={(event) => { if ((event.target as HTMLElement).closest('a')) onClose() }}>
           <button type="button" className="sidebar-link" aria-current={selectedPathname === '/' && !hash ? 'page' : undefined} onClick={() => { onClose(); onNewChat() }}><IconNewChat /><span>{m.header.home}</span></button>
@@ -107,9 +107,9 @@ export function SiteSidebar({ onNewChat, open, onClose, triggerRef, launcherRef,
             </div>
             )
           })}
-          <Link to="/photography" className="sidebar-link sidebar-photography" aria-current={selectedPathname === '/photography' ? 'page' : undefined}><IconCamera /><span>{locale === 'zh' ? '摄影记录' : 'Photography journal'}</span></Link>
+          <Link to="/photography" className="sidebar-link sidebar-photography" aria-current={selectedPathname === '/photography' ? 'page' : undefined}><IconCamera /><span>{'摄影记录'}</span></Link>
 
-          <a hidden className="sidebar-link sidebar-blog" href="https://app.notion.com/p/rriwen/Hi-I-m-4x-204195a9bba880f787b4dc0eec18a101?source=copy_link" target="_blank" rel="noopener noreferrer"><BookOpenIcon size={18} aria-hidden="true" /><span>{locale === 'zh' ? '博客' : 'Blog'}</span><span className="external-link-icon" aria-hidden="true">↗</span></a>
+          <a hidden className="sidebar-link sidebar-blog" href="https://app.notion.com/p/rriwen/Hi-I-m-4x-204195a9bba880f787b4dc0eec18a101?source=copy_link" target="_blank" rel="noopener noreferrer"><BookOpenIcon size={18} aria-hidden="true" /><span>{'博客'}</span><span className="external-link-icon" aria-hidden="true">↗</span></a>
         </nav>
         {desktopCollapsed && <SidebarRail onNewChat={onNewChat} />}
       </aside>

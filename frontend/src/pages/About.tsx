@@ -26,10 +26,10 @@ export function About() {
   const title = renderMarkdownInline(about.heading)
   const { activeTimelineId, navigateTimeline } = useAboutTimeline()
   const timelineEntries: TimelineEntry[] = [
-    { id: 'about-2026', label: locale === 'zh' ? '简介' : 'About' },
-    { id: 'experience', label: locale === 'zh' ? '工作经历' : 'Experience' },
-    { id: 'education', label: locale === 'zh' ? '教育经历' : 'Education' },
-    { id: 'about-contact', label: locale === 'zh' ? '联系方式' : 'Contact' },
+    { id: 'about-2026', label: '简介' },
+    { id: 'experience', label: '工作经历' },
+    { id: 'education', label: '教育经历' },
+    { id: 'about-contact', label: '联系方式' },
   ]
 
   useEffect(() => {
@@ -57,7 +57,7 @@ export function About() {
 
         <section id="experience" style={{ ...anchorTarget, marginTop: 'var(--section-gap)' }}>
           <h2 style={{ margin: '0 0 var(--space-8)', fontSize: 'var(--text-section)', fontWeight: 600 }}>
-            {locale === 'zh' ? '工作经历' : 'Experience'}
+            {'工作经历'}
           </h2>
           {about.work.map((entry) => (
             <Fragment key={entry.id}>
@@ -72,7 +72,7 @@ export function About() {
 
         <section id="education" style={{ ...anchorTarget, marginTop: 'var(--space-12)', paddingTop: 'var(--space-8)' }}>
           <h2 style={{ margin: '0 0 var(--space-8)', fontSize: 'var(--text-section)', fontWeight: 600 }}>
-            {locale === 'zh' ? '教育经历' : 'Education'}
+            {'教育经历'}
           </h2>
           <div style={proseColumn}>
             <h3 style={workArticleTitle}>{renderMarkdownInline(about.education.title)}</h3>
@@ -93,7 +93,7 @@ export function About() {
         >
           <div style={proseColumn}>
             <h2 style={{ margin: '0 0 var(--space-8)', fontSize: 'var(--text-section)', fontWeight: 600 }}>
-              {locale === 'zh' ? '联系方式' : 'Contact'}
+              {'联系方式'}
             </h2>
             <ul style={{ ...workArticleList, marginTop: 'var(--space-4)', marginBottom: 0 }}>
               {about.contact.items.map((item, i, arr) => {
@@ -101,7 +101,7 @@ export function About() {
                 return (
                   <li key={item.label} style={{ marginBottom: i < arr.length - 1 ? 'var(--space-3)' : 0 }}>
                     {renderMarkdownInline(item.label)}
-                    {locale === 'zh' ? ' ： ' : ': '}
+                    {' ： '}
                     {href ? (
                       <a href={href} style={contactLink}>
                         {renderMarkdownInline(item.value)}

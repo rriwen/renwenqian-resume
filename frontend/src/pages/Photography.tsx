@@ -34,7 +34,7 @@ export function Photography() {
   const [feed, setFeed] = useState<InstagramFeed | null>(null)
 
   useEffect(() => {
-    document.title = `${locale === 'zh' ? '摄影' : 'Photography'} | ${locale === 'zh' ? '泗澄' : 'SICHENG'}`
+    document.title = `${'摄影'} | ${'泗澄'}`
   }, [locale])
 
   useEffect(() => {
@@ -76,13 +76,13 @@ export function Photography() {
       </header>
 
       {feed === null ? (
-        <section className="photography-loading" aria-label={locale === 'zh' ? '正在载入照片' : 'Loading photographs'}>
+        <section className="photography-loading" aria-label={'正在载入照片'}>
           <span />
           <span />
           <span />
         </section>
-      ) : items.length === 0 ? <p className="empty-state">{locale === 'zh' ? '暂时没有照片。' : 'No photographs available yet.'}</p> : (
-        <section className="photography-grid" aria-label={locale === 'zh' ? '照片' : 'Photographs'}>
+      ) : items.length === 0 ? <p className="empty-state">{'暂时没有照片。'}</p> : (
+        <section className="photography-grid" aria-label={'照片'}>
           <div className="photography-item photography-item-placeholder" aria-label="To Be Continued...">
             <span>To Be Continued...</span>
           </div>
@@ -93,7 +93,7 @@ export function Photography() {
               target="_blank"
               rel="noreferrer"
               key={item.id}
-              aria-label={item.caption || item.alt || (locale === 'zh' ? '在 Instagram 查看照片' : 'View photograph on Instagram')}
+              aria-label={item.caption || item.alt || ('在 Instagram 查看照片')}
             >
               <img src={item.image} alt={item.alt} loading={index < 6 ? 'eager' : 'lazy'} />
               {item.mediaType === 'VIDEO' ? <span className="photography-video-mark" aria-hidden="true">▶</span> : null}

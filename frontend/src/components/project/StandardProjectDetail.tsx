@@ -51,8 +51,7 @@ function SectionGallery({ items, disclosure, layout }: { items: ProjectGalleryIt
 }
 
 function DesignComparison({ comparison }: { comparison: ProjectDetailComparison }) {
-  const { locale } = useLanguage()
-  const labels = locale === 'zh' ? ['优势', '局限'] : ['Strengths', 'Limitations']
+  const labels = ['优势', '局限']
   return (
     <details id={comparison.id} className="project-detail-design-comparison project-detail-evidence" aria-labelledby={`${comparison.id}-title`}>
       <summary id={`${comparison.id}-title`}><span className="project-detail-comparison-heading"><span>{comparison.title}</span>{comparison.description && <span className="project-detail-comparison-subtitle">{comparison.description}</span>}</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg></summary>
@@ -131,18 +130,18 @@ export function StandardProjectDetail({ project, detail }: Props) {
               </div>
               {subsection.comparison && <DesignComparison comparison={subsection.comparison} />}
               {subsection.comparisonPlaceholder && (
-                <div className="project-detail-comparison" role="group" aria-label={locale === 'zh' ? '方案前后对比，配图待补' : 'Before-and-after comparison, images pending'}>
+                <div className="project-detail-comparison" role="group" aria-label={'方案前后对比，配图待补'}>
                   {(['before', 'after'] as const).map((side) => {
                     const item = subsection.comparisonPlaceholder![side]
                     return (
                       <figure key={side} className="project-detail-comparison-panel">
                         <figcaption>
-                          <span className="project-detail-comparison-label">{locale === 'zh' ? (side === 'before' ? '优化前' : '优化后') : (side === 'before' ? 'Before' : 'After')}</span>
+                          <span className="project-detail-comparison-label">{(side === 'before' ? '优化前' : '优化后')}</span>
                           <strong>{item.title}</strong>
                         </figcaption>
                         <div className="project-detail-image-placeholder">
                           <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2" /><circle cx="8" cy="8" r="1.5" /><path d="m3 17 6-6 4 4 3-3 5 5" /></svg>
-                          <span>{locale === 'zh' ? '配图待补' : 'Image to be added'}</span>
+                          <span>{'配图待补'}</span>
                         </div>
                         <span className="project-detail-comparison-description">{item.description}</span>
                       </figure>
@@ -179,7 +178,7 @@ export function StandardProjectDetail({ project, detail }: Props) {
               : ['design-token', 'design-md'].includes(project.slug) ? <CaseStudyPlaceholder title={title} />
               : <CaseStudyGallery items={[{ src: project.image, caption: title, hideCaption: true, previewCrop: { aspectRatio: 1.88, objectPosition: 'top' } }]} />}
           </CaseStudyHeroPalette></div>
-          {(detail.demoUrl || detail.externalUrl) && <a className="ui-button case-study-demo" href={detail.demoUrl || detail.externalUrl} target="_blank" rel="noopener noreferrer">{detail.demoUrl ? (locale === 'zh' ? '体验交互原型' : 'Try prototype') : m.workDetail.viewSite} ↗</a>}
+          {(detail.demoUrl || detail.externalUrl) && <a className="ui-button case-study-demo" href={detail.demoUrl || detail.externalUrl} target="_blank" rel="noopener noreferrer">{detail.demoUrl ? ('体验交互原型') : m.workDetail.viewSite} ↗</a>}
         </header>
         <article className="datapilot-case-content project-case-content">
           {bodyParagraphs.length > 0 && <div className="case-study-introduction">{bodyParagraphs.map((para, idx) => <p key={idx}>{renderParagraphContent(para)}</p>)}</div>}
@@ -211,7 +210,7 @@ export function StandardProjectDetail({ project, detail }: Props) {
                     <strong style={{ fontWeight: 700 }}>{item.title}</strong>
                     {item.body ? (
                       <>
-                        {locale === 'zh' ? '：' : ': '}
+                        {'：'}
                         {item.body}
                       </>
                     ) : null}
@@ -226,7 +225,7 @@ export function StandardProjectDetail({ project, detail }: Props) {
                         {item.nested.map((sub, j) => (
                           <li key={j} style={{ marginBottom: 'var(--space-2)' }}>
                             <strong style={{ fontWeight: 700 }}>{sub.title}</strong>
-                            {locale === 'zh' ? '：' : ': '}
+                            {'：'}
                             {sub.body}
                           </li>
                         ))}
@@ -257,7 +256,7 @@ export function StandardProjectDetail({ project, detail }: Props) {
                 detail.highlightBullets.map((item, idx) => (
                   <li key={idx} style={{ marginBottom: 'var(--space-2)' }}>
                     <strong style={{ fontWeight: 700 }}>{item.keyword}</strong>
-                    {locale === 'zh' ? '：' : ': '}
+                    {'：'}
                     {item.text}
                   </li>
                 )),
@@ -274,7 +273,7 @@ export function StandardProjectDetail({ project, detail }: Props) {
           </section>}
         </article>
       </div>
-      <ProjectAnchorNav sections={anchors} label={locale === 'zh' ? '项目目录' : 'Project contents'} />
+      <ProjectAnchorNav sections={anchors} label={'项目目录'} />
     </main>
   )
 }

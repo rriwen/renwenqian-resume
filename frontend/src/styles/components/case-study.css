@@ -62,11 +62,11 @@
 }
 
 .case-study-page .datapilot-case-content { width: 100%; }
-.datapilot-background-facts { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 1px; margin: 32px 0 0; padding: 0; border: 1px solid var(--rule); background: var(--rule); }
+.datapilot-background-facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px 24px; margin: 32px 0 0; padding: 24px 0 0; border: 0; border-top: 1px solid var(--rule); background: transparent; }
 .datapilot-background-facts dt { color: var(--muted); font-size: var(--text-xs); margin-bottom: 8px; }
-.datapilot-background-facts dd { margin: 0; font-size: var(--text-prose); line-height: var(--leading-body); }
+.datapilot-background-facts dd { margin: 0; font-size: var(--text-sm); line-height: var(--leading-body); }
 @container site-main (max-width: 700px) {
-  .datapilot-background-facts { grid-template-columns: minmax(0, 1fr); gap: 1px; margin-top: 24px; }
+  .datapilot-background-facts { grid-template-columns: minmax(0, 1fr); gap: 24px; margin-top: 24px; }
 }
 .case-study-page .datapilot-case-layout { padding-top: 0; }
 .case-study-page .datapilot-case-content > .project-detail-section:first-child { margin-top: 80px; }

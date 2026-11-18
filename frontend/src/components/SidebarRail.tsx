@@ -14,7 +14,7 @@ export function SidebarRail({ onNewChat }: { onNewChat: () => void }) {
   const [openGroup, setOpenGroup] = useState<ProjectCategory | null>(null)
   const groupRefs = useRef<Partial<Record<ProjectCategory, HTMLDivElement | null>>>({})
   const triggerRefs = useRef<Partial<Record<ProjectCategory, HTMLButtonElement | null>>>({})
-  const photographyLabel = locale === 'zh' ? '摄影记录' : 'Photography journal'
+  const photographyLabel = '摄影记录'
 
   useEffect(() => { setOpenGroup(null) }, [key])
 
@@ -82,8 +82,8 @@ export function SidebarRail({ onNewChat }: { onNewChat: () => void }) {
           </div>
         </div>
       ))}
-      <Link to="/project/aidesignsystem" className="sidebar-rail-link sidebar-tooltip-host" aria-label={locale === 'zh' ? '设计工程化' : 'Design Engineering'} aria-current={isDesignEngineering ? 'page' : undefined}>
-        <IconPalette /><span className="sidebar-tooltip" aria-hidden="true">{locale === 'zh' ? '设计工程化' : 'Design Engineering'}</span>
+      <Link to="/project/aidesignsystem" className="sidebar-rail-link sidebar-tooltip-host" aria-label={'设计工程化'} aria-current={isDesignEngineering ? 'page' : undefined}>
+        <IconPalette /><span className="sidebar-tooltip" aria-hidden="true">{'设计工程化'}</span>
       </Link>
       <Link to="/photography" className="sidebar-rail-link sidebar-tooltip-host" aria-label={photographyLabel} aria-current={selectedPathname === '/photography' ? 'page' : undefined}>
         <IconCamera /><span className="sidebar-tooltip" aria-hidden="true">{photographyLabel}</span>

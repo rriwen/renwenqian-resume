@@ -118,7 +118,7 @@ export function DatabaseOpsVisualCaseStudy({ project, detail }: Props) {
   const journey = diagnosis.subsections!.find(sub => sub.id === 'journey-map')!
   const opportunityTargets: Record<string, string> = { 'shorten-creation': 'interaction', 'object-selection': 'object-selection' }
   const anchors = [
-    { id: 'project-overview', title: locale === 'zh' ? '项目概述' : 'Overview' },
+    { id: 'project-overview', title: '项目概述' },
     ...sections.map(({ id, title }) => ({ id, title })),
   ]
 
@@ -192,7 +192,7 @@ export function DatabaseOpsVisualCaseStudy({ project, detail }: Props) {
       </section>
 
       <section id="outcomes" className="dbv-section dbv-outcomes" aria-labelledby="outcomes-title">
-        <div className="dbv-copy"><h2 id="outcomes-title">{copy.resultsTitle}</h2><p>{outcomes.paragraphs?.map((value, index) => <Paragraph key={index} value={value} />)}{locale === 'en' ? ' ' : ''}{copy.measurement}</p></div>
+        <div className="dbv-copy"><h2 id="outcomes-title">{copy.resultsTitle}</h2><p>{outcomes.paragraphs?.map((value, index) => <Paragraph key={index} value={value} />)}{''}{copy.measurement}</p></div>
         <div className="dbv-result-funnels">{getDatabaseOpsResultFunnels(locale).map((funnel, panel) => {
           const stages = funnel.stages.filter(stage => stage.id !== 'type')
           return <div className="dbv-result-pair" key={funnel.title}>
@@ -202,7 +202,7 @@ export function DatabaseOpsVisualCaseStudy({ project, detail }: Props) {
               const half = stage.value / stages[0].value * 95
               const next = (stages[index + 1]?.value ?? stage.value) / stages[0].value * 95
               const rate = funnel.simulated && index > 0 ? stage.value / stages[index - 1].value * 100 : stage.conversionRate
-              const info = `${funnel.simulated ? (locale === 'zh' ? '模拟数据 · ' : 'Simulated · ') : ''}${stage.label} · ${stage.value.toLocaleString(locale)}${stage.estimated ? (locale === 'zh' ? '（估算）' : ' (estimated)') : ''}${rate !== undefined ? ` · ${locale === 'zh' ? '转化率' : 'Conversion'} ${rate.toFixed(2)}%` : ''}`
+              const info = `${funnel.simulated ? ('模拟数据 · ') : ''}${stage.label} · ${stage.value.toLocaleString(locale)}${stage.estimated ? ('（估算）') : ''}${rate !== undefined ? ` · ${'转化率'} ${rate.toFixed(2)}%` : ''}`
               const path = `M ${104-half} 3 H ${96+half} Q ${100+half} 3 ${100+half-1} 7 L ${100+next+1} 49 Q ${100+next} 53 ${96+next} 53 H ${104-next} Q ${100-next} 53 ${100-next-1} 49 L ${100-half+1} 7 Q ${100-half} 3 ${104-half} 3 Z`
               return <li key={stage.id}>
                 <button className="dbv-result-stage" type="button" aria-label={info}>
@@ -215,6 +215,6 @@ export function DatabaseOpsVisualCaseStudy({ project, detail }: Props) {
         })}</div>
       </section>
     </div>
-    <ProjectAnchorNav sections={anchors} label={locale === 'zh' ? '项目目录' : 'Project contents'} />
+    <ProjectAnchorNav sections={anchors} label={'项目目录'} />
   </main>
 }

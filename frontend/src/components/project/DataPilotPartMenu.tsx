@@ -1,5 +1,5 @@
 import { useEffect, useId, useRef, useState } from 'react'
-import { CaretDownIcon, CheckIcon } from '@phosphor-icons/react'
+import { CaretDownIcon } from '@phosphor-icons/react'
 import type { DataPilotPart } from '../../data/projects/dataPilot'
 
 type Props = {
@@ -69,7 +69,6 @@ export function DataPilotPartMenu({ label, value, options, onSelect }: Props) {
         onFocus={() => setFocusedIndex(index)}
         onClick={() => { closeAndFocus(); onSelect(option.value) }}>
         <span>{option.label}</span>
-        <CheckIcon size={16} aria-hidden="true" style={{ visibility: value === option.value ? 'visible' : 'hidden' }} />
       </button>)}
     </div>}
   </div>

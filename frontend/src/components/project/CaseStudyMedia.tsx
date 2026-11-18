@@ -16,8 +16,8 @@ export function CaseStudyMediaFrame({ children, index = 0, item, animated = fals
   return <div className={`case-study-media case-study-media--${palette}${heroPalette || animated ? " project-hero-gradient" : ""}`} data-hero-palette={heroPalette}>{(heroPalette || animated) && <MeshGradientBackground />}{children}</div>
 }
 
-export function CaseStudyGallery({ items }: { items: ProjectGalleryItem[] }) {
-  return <ProjectGallery items={items} layout="stacked" imageFrame={CaseStudyMediaFrame} />
+export function CaseStudyGallery({ items, lightboxItems }: { items: ProjectGalleryItem[]; lightboxItems?: ProjectGalleryItem[] }) {
+  return <ProjectGallery items={items} lightboxItems={lightboxItems} layout="stacked" imageFrame={CaseStudyMediaFrame} />
 }
 
 export function CaseStudyPlaceholder({ title }: { title: string }) {

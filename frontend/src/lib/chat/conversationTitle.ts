@@ -1,7 +1,7 @@
 import { projects, type Project } from '../../data/projects'
 
 const normalize = (text: string) => text.toLowerCase().replace(/\s+/g, '')
-const projectNames = (project: Project) => [project.title, project.titleEn, project.slug,
+const projectNames = (project: Project) => [project.title, project.slug,
   ...(project.slug === 'dataagent' ? ['DataPilot', 'DataAgent', 'AI 智能问数', '智能问数'] : []),
   ...(project.slug === 'aidesignsystem' ? ['AI 设计系统', 'AI Design System', 'Agent Ready 组件库', 'Agent Ready Component Library', 'Design Token、Design Skill', 'Design Token & Design Skill'] : [])]
 

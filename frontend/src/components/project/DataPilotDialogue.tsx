@@ -8,14 +8,13 @@ type Dialogue = NonNullable<DataPilotSection['dialogue']>
 type Frame = Dialogue['visual']['frames'][number]
 
 /** Native diagrams describe the proposal; they do not imitate shipped screenshots. */
-export function DataPilotDialogue({ dialogue, locale }: { dialogue: Dialogue; locale: Locale }) {
+export function DataPilotDialogue({ dialogue, locale: _locale }: { dialogue: Dialogue; locale: Locale }) {
   const { decisions, visual } = dialogue
   const [selected, setSelected] = useState(0)
   const id = useId()
-  const zh = locale === 'zh'
   const current = visual.frames[selected]
   const fields = (frame: Frame) => <dl className="dialogue-fields">{frame.fields.map(field => <div key={field.label} data-changed={field.changed || undefined}>
-    <dt>{field.label}</dt><dd>{field.value}{field.changed && visual.kind === 'context' && <small>{zh ? '本轮替换' : 'Replaced this turn'}</small>}</dd>
+    <dt>{field.label}</dt><dd>{field.value}{field.changed && visual.kind === 'context' && <small>{'本轮替换'}</small>}</dd>
   </div>)}</dl>
 
   return <div className="datapilot-dialogue">
@@ -32,7 +31,7 @@ export function DataPilotDialogue({ dialogue, locale }: { dialogue: Dialogue; lo
           type="button" key={frame.title} aria-pressed={index === selected} aria-controls={`${id}-state`}
           onClick={() => setSelected(index)}>{index + 1}. {frame.title}</button>)}</div>
         <div className="dialogue-context-state" id={`${id}-state`} aria-live="polite" aria-atomic="true">
-          <div className="dialogue-turn"><span>{zh ? '本轮请求' : 'Current request'}</span><p>{current.prompt}</p><p className="dialogue-response">{current.response}</p></div>
+          <div className="dialogue-turn"><span>{'本轮请求'}</span><p>{current.prompt}</p><p className="dialogue-response">{current.response}</p></div>
           {fields(current)}
         </div>
       </> : <div className={`dialogue-panels dialogue-panels--${visual.kind}`}>{visual.frames.map((frame, index) => <section className="dialogue-panel" key={frame.title}>

@@ -1,6 +1,6 @@
 import { interviewSystemPrompts } from '../lib/chat/interviewPrompt'
 
-export type Locale = 'en' | 'zh'
+export type Locale = 'zh'
 
 export type Messages = {
   header: {
@@ -107,115 +107,6 @@ export type Messages = {
 }
 
 export const translations: Record<Locale, Messages> = {
-  en: {
-    header: {
-      name: 'SICHENG',
-      role: 'Product Designer',
-      home: 'New chat',
-      projects: 'Projects',
-      projectsMenuAria: 'Project list',
-      about: 'Resume',
-      contact: 'Contact',
-      navAria: 'Primary navigation',
-    },
-    language: {
-      switcherAria: 'Language',
-      english: 'English',
-      chinese: '简体中文',
-    },
-    home: {
-      title: 'SICHENG | Product Designer',
-      greeting: "Hi, I'm Sicheng",
-      description: 'AI product designer focused on AI products, productivity tools and complex systems.',
-    },
-    experiments: {
-      title: 'Experiments',
-      placeholder: 'Coming soon.',
-    },
-    about: {
-      title: 'Resume | SICHENG',
-      contactCta: {
-        title: 'Feel free to contact me',
-        wechatPhoneLabel: 'WeChat / Phone',
-        emailLabel: 'Email',
-        phone: '18362976211',
-        email: 'rriwen@gmail.com',
-      },
-      timeline: {
-        navAria: 'Jump to experience on this page',
-      },
-    },
-    footer: {
-      bioLines: [
-        "I'm Sicheng, a product designer.",
-        'From business insight, through concept design, to building products.',
-        'I believe that great products care about both how they work and how they feel.',
-      ],
-      botLink: 'Talk to Me',
-    },
-    contact: {
-      dialogAria: 'Contact',
-      title: 'Feel free to reach out',
-      dismiss: 'Got it',
-      closeAria: 'Close',
-      intro: 'Feel free to contact me at any time! I typically reply within one day.',
-      wechatAria: 'WeChat 18362976211',
-    },
-    chatbot: {
-      dialogAria: 'Chat assistant',
-      backHome: 'Back',
-      placeholder: 'Type your message...',
-      sendAria: 'Send message',
-      stop: 'Stop generating',
-      stopped: 'Stopped',
-      contextRemaining: 'Context remaining',
-      contextEstimated: 'estimated',
-      contextTrimmed: 'Earlier messages are outside context but remain in your history.',
-      contextTooLong: 'Input too long. Shorten it or start a new conversation.',
-      interrupted: 'This response was interrupted. Saved content is shown above.',
-      generating: 'Generating…',
-      history: 'Chat history',
-      historyLocal: 'Saved in this browser',
-      historyEmpty: 'Your conversations will appear here.',
-      closeHistory: 'Close chat history',
-      deleteConversation: 'Delete conversation',
-      deleteConversationConfirm: 'Delete this conversation?',
-      deleteConversationError: 'Could not delete this conversation. Please try again.',
-      deleteAction: 'Delete',
-      cancelDelete: 'Cancel',
-      storageError: 'Chat history could not be saved in this browser. You can keep chatting on this page.',
-      queued: 'Sending after this reply: ',
-      quickServices: 'About me',
-      quickDesignDev: 'Areas of expertise',
-      quickTimeline: 'Work experience',
-      quickProjects: 'Project experience',
-      quickPromptServices:
-        'Briefly introduce yourself.',
-      quickPromptDesignDev:
-        'What are your areas of expertise? Please explain with examples from your projects.',
-      quickPromptTimeline:
-        'Tell me about your work history and timeline, and the highlights worth remembering.',
-      quickPromptProjects:
-        'Tell me about your most representative projects, including the context, your responsibilities, key design decisions, and outcomes.',
-      errorGeneric: 'Something went wrong. Please try again in a moment.',
-      thinking: 'Thinking…',
-      quickToggleAria: 'Show or hide suggested prompts',
-      systemPrompt: interviewSystemPrompts.en,
-    },
-    workDetail: {
-      back: 'Back',
-      viewSite: 'View the site ↗',
-      notFound: 'This project could not be found.',
-      galleryAria: 'Project imagery',
-      galleryOpenFullscreenAria: 'View image fullscreen',
-      galleryLightboxAria: 'Fullscreen image',
-      galleryPrevAria: 'Previous image',
-      galleryNextAria: 'Next image',
-      prevProject: 'Previous project',
-      nextProject: 'Next project',
-      projectNavAria: 'Adjacent projects',
-    },
-  },
   zh: {
     header: {
       name: '泗澄',

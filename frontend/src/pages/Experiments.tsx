@@ -5,7 +5,7 @@ export function Experiments() {
   const { locale, m } = useLanguage()
 
   useEffect(() => {
-    document.title = `${m.experiments.title} | ${locale === 'zh' ? '泗澄' : 'SICHENG'}`
+    document.title = `${m.experiments.title} | ${'泗澄'}`
   }, [locale, m.experiments.title])
 
   return (

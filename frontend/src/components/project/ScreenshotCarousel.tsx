@@ -1,10 +1,11 @@
 import { useEffect, useId, useRef, useState } from 'react'
+import { ProjectGallery } from './ProjectGallery'
 import type { Locale } from '../../i18n/translations'
 
 const DURATION = 5000
 
 /** Screenshot slots remain explicit placeholders until project images are supplied. */
-export function ScreenshotCarousel({ titles, descriptions, locale }: { titles: string[]; descriptions?: string[]; locale: Locale }) {
+export function ScreenshotCarousel({ titles, descriptions, images, locale: _locale }: { titles: string[]; descriptions?: string[]; images?: (string | null)[]; locale: Locale }) {
   const id = useId()
   const root = useRef<HTMLDivElement>(null)
   const elapsed = useRef(0)
@@ -15,7 +16,6 @@ export function ScreenshotCarousel({ titles, descriptions, locale }: { titles: s
   const [reduced, setReduced] = useState(false)
   const [hovered, setHovered] = useState(false)
   const [focused, setFocused] = useState(false)
-  const zh = locale === 'zh'
   const running = visible && pageVisible && !reduced && !hovered && !focused && titles.length > 1
   useEffect(() => {
     const observer = new IntersectionObserver(([entry]) => setVisible(entry.isIntersecting), { threshold: .1 })
@@ -51,20 +51,22 @@ export function ScreenshotCarousel({ titles, descriptions, locale }: { titles: s
   }
   return <div ref={root} className="screenshot-carousel"
     onFocusCapture={event => setFocused(event.target.matches(':focus-visible'))} onBlurCapture={event => { if (!event.currentTarget.contains(event.relatedTarget)) setFocused(false) }}>
-    <div id={`${id}-slide`} className="qa-screenshot-placeholder" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)} aria-live={running ? 'off' : 'polite'}>
-      <strong>{zh ? '截图轮播占位' : 'Screenshot carousel'}</strong>
-      <p>{zh ? `第 ${slide + 1} / ${titles.length} 张` : `${slide + 1} / ${titles.length}`}</p>
+    <div id={`${id}-slide`} className={images?.[slide] ? "qa-screenshot-image" : "qa-screenshot-placeholder"} onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)} aria-live={running ? 'off' : 'polite'}>
+      {images?.[slide] ? <ProjectGallery items={[{ src: images[slide]!, caption: titles[slide], hideCaption: true }]} layout="stacked" /> : <>
+      <strong>{'截图轮播占位'}</strong>
+      <p>{`第 ${slide + 1} / ${titles.length} 张`}</p>
       <p className="qa-placeholder-topics">{titles[slide]}</p>
       {descriptions?.[slide] && <p className="qa-placeholder-brief">{descriptions[slide]}</p>}
-      <small>{zh ? '截图待补充' : 'Screenshots to be added'}</small>
+      <small>{'截图待补充'}</small>
+      </>}
     </div>
-    <div className="qa-carousel-controls">
-      <div className="qa-carousel-dots" role="group" aria-label={zh ? '截图切换' : 'Choose screenshot'}>
-        {titles.map((title, index) => <button key={title} type="button" aria-label={`${zh ? '截图' : 'Screenshot'} ${index + 1}: ${title}`}
+    {titles.length > 1 && <div className="qa-carousel-controls">
+      <div className="qa-carousel-dots" role="group" aria-label={'截图切换'}>
+        {titles.map((title, index) => <button key={title} type="button" aria-label={`${'截图'} ${index + 1}: ${title}`}
           aria-pressed={slide === index} aria-controls={`${id}-slide`} onClick={() => select(index)}>
           <span><i style={{ transform: `scaleX(${slide === index ? progress : 0})` }} /></span>
         </button>)}
       </div>
-    </div>
+    </div>}
   </div>
 }

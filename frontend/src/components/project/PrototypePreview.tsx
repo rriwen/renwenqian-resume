@@ -1,10 +1,7 @@
 import { useEffect, useRef, useState, type PointerEvent } from 'react'
-import { useLanguage } from '../../i18n/LanguageContext'
 
 /** Keep page scrolling available until the reader deliberately dwells on the demo. */
 export function PrototypePreview({ url, title, viewportWidth }: { url: string; title: string; viewportWidth?: number }) {
-  const { locale } = useLanguage()
-  const zh = locale === 'zh'
   const container = useRef<HTMLDivElement>(null)
   const [scale, setScale] = useState(1)
   useEffect(() => {
@@ -73,13 +70,13 @@ export function PrototypePreview({ url, title, viewportWidth }: { url: string; t
       {loading && <span className="media-loading" role="status" aria-label="Demo 加载中"><span className="media-loading-dot" aria-hidden="true" /></span>}
       {loading && slow && <a className="media-load-fallback" href={url} target="_blank" rel="noopener noreferrer">加载较慢，单独打开 Demo ↗</a>}
       {!active && <button type="button" disabled={loading} className="project-detail-prototype-gate"
-        aria-label={zh ? `启用${title}，鼠标停留两秒或按 Enter` : `Activate ${title}: hover for two seconds or press Enter`}
+        aria-label={`启用${title}，鼠标停留两秒或按 Enter`}
         onPointerEnter={start} onPointerMove={trackPointer}
         onPointerDown={event => { if (event.pointerType !== 'mouse') activate() }}
         onClick={event => { if (event.detail === 0) activate(true) }}>
-        {remaining !== null && <span className="project-detail-prototype-countdown" style={{ left: position.x, top: position.y }} aria-hidden="true">{zh ? `${remaining} 秒后可交互` : `Interact in ${remaining}s`}</span>}
+        {remaining !== null && <span className="project-detail-prototype-countdown" style={{ left: position.x, top: position.y }} aria-hidden="true">{`${remaining} 秒后可交互`}</span>}
       </button>}
-      {active && <button type="button" className="project-detail-prototype-exit" onClick={reset}>{zh ? '退出交互' : 'Exit interaction'}</button>}
+      {active && <button type="button" className="project-detail-prototype-exit" onClick={reset}>{'退出交互'}</button>}
     </div>
   )
 }

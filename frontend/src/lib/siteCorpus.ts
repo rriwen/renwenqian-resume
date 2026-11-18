@@ -119,6 +119,7 @@ function serializeDataPilot(locale: Locale): string {
       if (!section.continuationOf && !section.groupIntro) lines.push(`${section.group ? '######' : '#####'} ${section.title}`)
       if (section.intro) lines.push(section.intro)
       lines.push(section.body)
+      for (const reference of section.references ?? []) lines.push(`${reference.label} (${reference.href})`)
       if (section.qaExperience) {
         for (const decision of section.qaExperience.decisions) lines.push(`${decision.title}: ${decision.body}`)
         if (section.qaExperience.bridge) lines.push(section.qaExperience.bridge)
@@ -133,7 +134,8 @@ function serializeDataPilot(locale: Locale): string {
           lines.push(...frame.fields.map(field => `${field.label}: ${field.value}`))
         }
       }
-      if (section.table) lines.push(...serializeTable(section.table))
+      if (section.beforeTable) lines.push(section.beforeTable)
+      if (section.table && section.id !== 'overview') lines.push(...serializeTable(section.table))
       if (section.afterTable) lines.push(section.afterTable)
       for (const step of section.steps ?? []) lines.push(`${step.title}: ${step.detail}`)
       if (section.diagram) {
@@ -145,6 +147,8 @@ function serializeDataPilot(locale: Locale): string {
           for (const step of lane.steps) lines.push([step.actorLabel, step.title, step.detail, step.response].filter(Boolean).join('：'))
         }
       }
+      lines.push(...(section.afterDiagram ?? []))
+      if (section.table && section.id === 'overview') lines.push(...serializeTable(section.table))
       for (const application of section.applicationTypes ?? []) {
         lines.push(application.title)
         lines.push(`${content.labels.scene}: ${application.scene}`)
@@ -153,15 +157,17 @@ function serializeDataPilot(locale: Locale): string {
       }
       if (section.related) lines.push(`${content.labels.relatedIntro} ${content.labels.relatedProject} (/project/agentops)`)
       lines.push(...(section.stats ?? []))
-      lines.push(...(section.bullets ?? []).map((bullet) => `- ${bullet}`))
+      if (section.evolutionMedia?.some(item => item.description)) {
+        for (const item of section.evolutionMedia) {
+          lines.push(item.title ?? item.caption, item.description ?? '')
+          lines.push(...(item.tradeoffs ?? []).map(point => `${point.kind === 'advantage' ? '优势' : '问题'}：${point.text}`))
+        }
+      } else lines.push(...(section.bullets ?? []).map((bullet) => `- ${bullet}`))
+      lines.push(...(section.evolutionRationale ?? []))
       lines.push(...section.images.filter(image => image.display === 'image').map(image => image.caption).filter(Boolean))
     }
   }
   return lines.join('\n\n')
-}
-
-function section(locale: Locale, zh: string, en: string): string {
-  return locale === 'zh' ? zh : en
 }
 
 function serializeAbout(locale: Locale): string {
@@ -174,7 +180,7 @@ function serializeAbout(locale: Locale): string {
   }
   lines.push('')
 
-  lines.push(`#### ${section(locale, '工作经历', 'Experience')}`)
+  lines.push(`#### ${'工作经历'}`)
   for (const entry of about.work) {
     lines.push(`### ${entry.title}`)
     lines.push(stripMarkdownInline(entry.meta))
@@ -187,7 +193,7 @@ function serializeAbout(locale: Locale): string {
   }
   lines.push('')
 
-  lines.push(`#### ${section(locale, '教育', 'Education')}`)
+  lines.push(`#### ${'教育'}`)
   lines.push(`### ${about.education.title}`)
   lines.push(`> ${stripMarkdownInline(about.education.period)}`)
   for (const item of about.education.items) {
@@ -195,7 +201,7 @@ function serializeAbout(locale: Locale): string {
   }
   lines.push('')
 
-  lines.push(`#### ${section(locale, '联系', 'Contact')}`)
+  lines.push(`#### ${'联系'}`)
   lines.push(`### ${about.contact.title}`)
   for (const item of about.contact.items) {
     lines.push(`- ${item.label}: ${item.value}`)
@@ -211,31 +217,31 @@ export function buildSiteCorpus(locale: Locale): string {
   const m = translations[locale]
   const lines: string[] = []
 
-  lines.push(section(locale, '# 本站正文（回答须以此为据）', '# Site copy (ground truth for answers)'))
+  lines.push('# 本站正文（回答须以此为据）')
   lines.push('')
 
-  lines.push(`## ${section(locale, '站点概览', 'Overview')}`)
+  lines.push(`## ${'站点概览'}`)
   lines.push(`${m.header.name} — ${m.header.role}`)
   lines.push(m.home.title)
   lines.push(m.home.greeting, m.home.description)
   lines.push('')
 
-  lines.push(`## ${section(locale, '页脚', 'Footer')}`)
+  lines.push(`## ${'页脚'}`)
   lines.push(m.footer.bioLines.join('\n'))
   lines.push('')
 
-  lines.push(`## ${section(locale, '联系', 'Contact')}`)
+  lines.push(`## ${'联系'}`)
   lines.push(m.contact.intro)
   lines.push(`${m.about.contactCta.title}`)
   lines.push(`${m.about.contactCta.wechatPhoneLabel}: ${m.about.contactCta.phone}`)
   lines.push(`${m.about.contactCta.emailLabel}: ${m.about.contactCta.email}`)
   lines.push('')
 
-  lines.push(`## ${section(locale, '关于页', 'About page')}`)
+  lines.push(`## ${'关于页'}`)
   lines.push(serializeAbout(locale))
   lines.push('')
 
-  lines.push(`## ${section(locale, '作品与项目详情', 'Projects & case studies')}`)
+  lines.push(`## ${'作品与项目详情'}`)
   for (const p of projects) {
     const detail = getProjectDetail(p.slug, locale)
     lines.push(`### ${getProjectTitle(p, locale)} (slug: ${p.slug})`)
@@ -244,12 +250,12 @@ export function buildSiteCorpus(locale: Locale): string {
     } else if (detail) {
       lines.push(serializeProjectBlock(detail))
     } else {
-      lines.push(section(locale, '（无详情文案）', '(No detail copy)'))
+      lines.push('（无详情文案）')
     }
     lines.push('')
   }
 
-  lines.push(`## ${section(locale, '可用项目配图（按相关性选择，保留原稿、探索或示意图的说明）', 'Available project figures (select relevant images and preserve draft/exploration/diagram context)')}`)
+  lines.push(`## ${'可用项目配图（按相关性选择，保留原稿、探索或示意图的说明）'}`)
   for (const image of getChatProjectImages(locale)) {
     lines.push(`- ${image.projectTitle} | ${image.caption} | ${image.src} | ${image.projectPath}`)
   }

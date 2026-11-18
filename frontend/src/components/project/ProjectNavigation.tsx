@@ -30,8 +30,8 @@ export function ProjectNavigation({ slug }: { slug: string }) {
                     style={{
                       margin: '0 0 0.35rem',
                       fontSize: 'var(--text-xs)',
-                      letterSpacing: locale === 'zh' ? '0.06em' : '0.1em',
-                      textTransform: locale === 'zh' ? 'none' : 'uppercase',
+                      letterSpacing: '0.06em',
+                      textTransform: 'none',
                       fontWeight: 600,
                       color: 'var(--muted)',
                     }}
@@ -60,8 +60,8 @@ export function ProjectNavigation({ slug }: { slug: string }) {
                     style={{
                       margin: '0 0 0.35rem',
                       fontSize: 'var(--text-xs)',
-                      letterSpacing: locale === 'zh' ? '0.06em' : '0.1em',
-                      textTransform: locale === 'zh' ? 'none' : 'uppercase',
+                      letterSpacing: '0.06em',
+                      textTransform: 'none',
                       fontWeight: 600,
                       color: 'var(--muted)',
                     }}

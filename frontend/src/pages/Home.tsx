@@ -5,12 +5,12 @@ import { useLanguage } from "../i18n/LanguageContext";
 type Props = { onAsk: (text: string) => void; dark: boolean; onToggleTheme: () => void };
 
 export function Home({ onAsk, dark, onToggleTheme }: Props) {
-  const { locale, m } = useLanguage();
+  const { m } = useLanguage();
   const [question, setQuestion] = useState("");
   const [waveVersion, setWaveVersion] = useState(0);
   const questionRef = useRef<HTMLTextAreaElement>(null);
   const isMac = typeof navigator !== "undefined" && /Mac|iPhone|iPad/.test(navigator.platform);
-  const questionPlaceholder = locale === "zh" ? "关于我的工作，有什么想问的吗？" : "Ask about my work…";
+  const questionPlaceholder = "关于我的工作，有什么想问的吗？";
   useEffect(() => {
     document.title = "DESIGN.4x";
   }, []);
@@ -46,7 +46,7 @@ export function Home({ onAsk, dark, onToggleTheme }: Props) {
           ><span key={waveVersion} className={`home-wave${waveVersion ? " is-clicked" : ""}`} aria-hidden="true">👋🏻</span></button></h1>
           <p className="home-intro">{m.home.description}</p>
           <div className="home-chat-entry">
-            <form className="home-chat-form prompt-composer" aria-label={locale === "zh" ? "向我提问" : "Ask me a question"} onSubmit={(event) => {
+            <form className="home-chat-form prompt-composer" aria-label={"向我提问"} onSubmit={(event) => {
               event.preventDefault();
               if (!question.trim()) return;
               questionRef.current?.focus();
@@ -77,7 +77,7 @@ export function Home({ onAsk, dark, onToggleTheme }: Props) {
                 <button className="home-chat-action home-chat-submit prompt-composer-action prompt-composer-submit" type="submit" disabled={!question.trim()} aria-label={m.chatbot.sendAria}><ArrowUpIcon size={18} aria-hidden="true" /></button>
               </div>
             </form>
-            <ul className="home-suggestions" aria-label={locale === "zh" ? "推荐问题" : "Suggested questions"}>
+            <ul className="home-suggestions" aria-label={"推荐问题"}>
               {suggestedQuestions.map(({ id, label, prompt }) => (
                 <li key={id}>
                   <button type="button" onClick={() => { setQuestion(prompt); questionRef.current?.focus(); }}>

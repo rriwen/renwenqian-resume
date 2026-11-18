@@ -1,6 +1,5 @@
 import { Link, useLocation } from 'react-router-dom'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { useLanguage } from '../i18n/LanguageContext'
 import { IconMenu } from './Icons'
 import { SiteSidebar } from './SiteSidebar'
 import { PageToolbar } from './PageToolbar'
@@ -9,7 +8,6 @@ type HeaderProps = { onNewChat: () => void; onSelectConversation: (id: string) =
 
 export function Header({ onNewChat, onSelectConversation, onOpenContact, dark, onToggleTheme, sidebarCollapsed, onToggleSidebar }: HeaderProps) {
   const location = useLocation()
-  const { locale } = useLanguage()
   const [menuOpen, setMenuOpen] = useState(false)
   const menuButtonRef = useRef<HTMLButtonElement>(null)
   const expandButtonRef = useRef<HTMLButtonElement>(null)
@@ -38,7 +36,7 @@ export function Header({ onNewChat, onSelectConversation, onOpenContact, dark, o
   return (
     <>
       <div ref={launcherRef} className="navigation-launcher">
-        <button ref={menuButtonRef} type="button" className="mobile-menu-button" aria-label={locale === 'zh' ? '打开导航' : 'Open navigation'} aria-controls="site-sidebar" aria-expanded={menuOpen} onClick={() => setMenuOpen(true)}><IconMenu size={17} /></button>
+        <button ref={menuButtonRef} type="button" className="mobile-menu-button" aria-label={'打开导航'} aria-controls="site-sidebar" aria-expanded={menuOpen} onClick={() => setMenuOpen(true)}><IconMenu size={17} /></button>
         <Link to="/" className="header-logo mobile-header-logo">DESIGN.4x</Link>
       </div>
       <PageToolbar onOpenContact={onOpenContact} onSelectConversation={onSelectConversation} showHistory={location.pathname === '/' || location.hash === '#chat'} dark={dark} onToggleTheme={onToggleTheme} />

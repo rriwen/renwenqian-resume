@@ -5,7 +5,7 @@ import { createConversationStorage, CONVERSATION_PREFIX } from '../frontend/src/
 import { translations } from '../frontend/src/i18n/translations'
 
 test('suggested questions become short subject labels instead of copied prompts', () => {
-  for (const locale of ['zh', 'en'] as const) {
+  for (const locale of ['zh'] as const) {
     const copy = translations[locale].chatbot
     assert.equal(conversationTitle(copy.quickPromptServices), '个人背景介绍')
     assert.equal(conversationTitle(copy.quickPromptDesignDev), '擅长领域与核心能力')

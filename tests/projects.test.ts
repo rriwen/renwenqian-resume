@@ -6,18 +6,28 @@ import { DATABASE_OPS_PROTOTYPE_URL, getProjectDetail } from '../frontend/src/da
 import { getProjectAnchors } from '../frontend/src/data/projectAnchors'
 import { DATA_PILOT_DEMO_URL, getDataPilotContent } from '../frontend/src/data/projects/dataPilot'
 import { getDatabaseOpsFunnel, getFunnelStageMetrics } from '../frontend/src/data/projects/databaseOps'
+import { translations } from '../frontend/src/i18n/translations'
+import { interviewSystemPrompts } from '../frontend/src/lib/chat/interviewPrompt'
 import { buildSiteCorpus } from '../frontend/src/lib/siteCorpus'
 
-const locales = ['zh', 'en'] as const
+const locales = ['zh'] as const
 
-test('design engineering architecture shares bilingual identities and reaches the chat corpus', () => {
-  const structure = (locale: typeof locales[number]) => getProjectDetail('aidesignsystem', locale)!.sections!.map((section) => ({
-    id: section.id,
-    legacyIds: section.legacyIds,
-    subsections: section.subsections?.map(({ id, images }) => ({ id, images: images?.map(({ src }) => src) })),
-    layers: section.architecture?.layers.map(({ id, nodes }) => ({ id, nodes: nodes.map(({ id }) => id) })),
-  }))
-  assert.deepEqual(structure('zh'), structure('en'))
+test('site content exposes only Chinese translations and retains complete case sections', () => {
+  assert.deepEqual(Object.keys(translations), ['zh'])
+  assert.deepEqual(Object.keys(interviewSystemPrompts), ['zh'])
+  assert.equal(existsSync('frontend/src/content/about/en.md'), false)
+  for (const project of projects) {
+    assert.equal('titleEn' in project, false)
+    assert.deepEqual(Object.keys(project.tags), ['zh'])
+  }
+  const parts = getDataPilotContent('zh').parts
+  for (const part of Object.values(parts)) {
+    assert.ok(part.sections.length > 0)
+    assert.equal(new Set(part.sections.map(section => section.id)).size, part.sections.length)
+  }
+})
+
+test('design engineering architecture shares stable identities and reaches the chat corpus', () => {
   for (const locale of locales) {
     const detail = getProjectDetail('aidesignsystem', locale)!
     const corpus = buildSiteCorpus(locale)
@@ -49,11 +59,8 @@ test('funnel details distinguish measured counts, estimated counts and step conv
   assert.equal(getFunnelStageMetrics(stages, 0).retainedRate, 100)
 })
 
-test('case-study anchors cover actual content and retain bilingual section identities', () => {
+test('case-study anchors cover actual content and retain stable section identities', () => {
   for (const project of projects.filter(({ slug }) => slug !== 'dataagent')) {
-    const zh = getProjectDetail(project.slug, 'zh')!
-    const en = getProjectDetail(project.slug, 'en')!
-    assert.deepEqual(getProjectAnchors(zh, 'zh').map(({ id }) => id), getProjectAnchors(en, 'en').map(({ id }) => id))
     for (const locale of locales) {
       const detail = getProjectDetail(project.slug, locale)!
       const anchors = getProjectAnchors(detail, locale)
@@ -69,7 +76,7 @@ test('case-study anchors cover actual content and retain bilingual section ident
   }
 })
 
-test('project categories cover every project once with stable bilingual groups', () => {
+test('project categories cover every project once with stable groups', () => {
   const groups = getProjectGroups()
   assert.deepEqual(groups.map(({ id, projects: items }) => [id, items.map(({ slug }) => slug)]), [
     ['ai-products', ['dataagent', 'agentops', 'text2sql', 'Memory']],
@@ -93,7 +100,7 @@ test('project categories cover every project once with stable bilingual groups',
   }
 })
 
-test('project routes have unique identities and bilingual content', () => {
+test('project routes have unique identities and complete Chinese content', () => {
   assert.equal(new Set(projects.map((project) => project.id)).size, projects.length)
   assert.equal(new Set(projects.map((project) => project.slug)).size, projects.length)
   for (const project of projects) {
@@ -116,15 +123,10 @@ test('project routes have unique identities and bilingual content', () => {
   }
 })
 
-test('database ops sections keep bilingual image associations and complete chat content', () => {
+test('database ops sections keep image associations and complete chat content', () => {
   const zhSections = getProjectDetail('databaseops', 'zh')!.sections!
-  const enSections = getProjectDetail('databaseops', 'en')!.sections!
   assert.deepEqual(zhSections.map(({ id }) => id), ['design-goals', 'diagnosis', 'migration-analysis', 'design-opportunities', 'interaction', 'object-selection', 'outcomes'])
   assert.equal(new Set(zhSections.map((section) => section.id)).size, zhSections.length)
-  assert.deepEqual(
-    zhSections.map(({ id, images, subsections }) => ({ id, images: images.map((image) => image.src), subsections: subsections?.map((part) => ({ id: part.id, images: part.images?.map((image) => image.src) })) })),
-    enSections.map(({ id, images, subsections }) => ({ id, images: images.map((image) => image.src), subsections: subsections?.map((part) => ({ id: part.id, images: part.images?.map((image) => image.src) })) })),
-  )
   for (const locale of locales) {
     const corpus = buildSiteCorpus(locale)
     assert.ok(corpus.includes(DATABASE_OPS_PROTOTYPE_URL))
@@ -187,16 +189,9 @@ test('database ops sections keep bilingual image associations and complete chat 
         }
       }
       for (const image of images) assert.ok(corpus.includes(image.caption))
-      const otherSection = getProjectDetail('databaseops', locale === 'zh' ? 'en' : 'zh')!.sections!.find(({ id }) => id === section.id)!
-      const tables = [
-        { table: section.table, otherTable: otherSection.table },
-        ...subsections.map((part) => ({ table: part.table, otherTable: otherSection.subsections?.find(({ id }) => id === part.id)?.table })),
-      ]
-      for (const { table, otherTable } of tables) {
+      const tables = [section.table, ...subsections.map(part => part.table)]
+      for (const table of tables) {
         if (!table) continue
-        assert.ok(otherTable)
-        assert.equal(table.columns.length, otherTable.columns.length)
-        assert.deepEqual(table.rows.map(({ id }) => id), otherTable.rows.map(({ id }) => id))
         assert.equal(new Set(table.rows.map(({ id }) => id)).size, table.rows.length)
         for (const column of table.columns) assert.ok(corpus.includes(column))
         const remainingSpans = Array(table.columns.length).fill(0)
@@ -226,7 +221,7 @@ test('database ops sections keep bilingual image associations and complete chat 
 
 test('reordering project cards preserves their tags and legacy routes resolve', () => {
   const reversed = [...projects].reverse()
-  assert.ok(reversed.find((project) => project.slug === 'dataagent')?.tags.en.includes('Commercialization'))
+  assert.ok(reversed.find((project) => project.slug === 'dataagent')?.tags.zh.includes('商业化'))
   assert.ok(reversed.find((project) => project.slug === 'Memory')?.tags.zh.includes('全栈设计'))
   assert.equal(getProjectBySlug('ai-智能问数'), getProjectBySlug('dataagent'))
   assert.equal(getProjectBySlug(undefined), undefined)
@@ -294,25 +289,33 @@ for (const locale of locales) {
 
 test('DataPilot experience keeps product proposals and outcomes explicit', () => {
   const zh = getDataPilotContent('zh').parts.experience.sections
-  const en = getDataPilotContent('en').parts.experience.sections
-  assert.deepEqual(zh.map(({ id }) => id), en.map(({ id }) => id))
   assert.ok(zh.find(({ id }) => id === 'continuous-analysis-example')!.dialogue!.visual.note.includes('不代表已验证'))
-  assert.ok(zh.find(({ id }) => id === 'accuracy')!.body.includes('区分查看历史记录与重新执行'))
+  assert.ok(zh.find(({ id }) => id === 'accuracy')!.body.includes('AgentOps Demo'))
+  assert.deepEqual(zh.filter(section => section.group?.id === 'agent-troubleshooting' && !section.groupIntro && !section.dialogueExtension).map(section => section.tabLabel), ['结果准确性', '执行异常', '执行耗时'])
   assert.ok(zh.find(({ id }) => id === 'role')!.body.includes('15% 逐步提升到 60%'))
   assert.ok(zh.find(({ id }) => id === 'role')!.bullets!.some(text => text.includes('用户发布应用数 / 创建应用数')))
   assert.ok(!zh.some(({ id }) => id === 'delivery'))
+  assert.ok(!zh.some(section => section.id === 'design-collaboration'))
+  assert.ok(buildSiteCorpus('zh').includes('https://design-md-reader-4x.vercel.app/'))
   assert.deepEqual(zh.filter(section => section.group?.id === 'qa-experience').map(section => section.id), ['qa-overview', 'qa-entry', 'qa-execution', 'qa-result'])
   assert.ok(zh.findIndex(section => section.id === 'qa-result') < zh.findIndex(section => section.id === 'continuous-analysis-example'))
-  assert.deepEqual(zh.filter(section => section.group?.id === 'continuous-dialogue').map(section => section.id), ['continuous-analysis-example', 'conversation', 'continuous-analysis-validation', 'applications'])
-  assert.deepEqual(zh.filter(section => section.group?.id === 'agent-troubleshooting').map(section => section.id), ['agent-troubleshooting-overview', 'agent-replay', 'agent-evidence', 'accuracy'])
-  assert.deepEqual(zh.map(section => section.group?.id), en.map(section => section.group?.id))
-  for (const locale of ['zh', 'en'] as const) {
+  assert.deepEqual(zh.filter(section => section.group?.id === 'continuous-dialogue').map(section => section.id), ['continuous-analysis-example', 'conversation', 'report-editing', 'continuous-analysis-validation'])
+  assert.deepEqual(zh.find(section => section.id === 'continuous-analysis-validation')!.legacyIds, ['applications'])
+  const reportEditing = zh.find(section => section.id === 'report-editing')!
+  assert.ok(reportEditing.dialogue!.decisions.some(item => `${item.title}${item.body}`.includes('回滚')))
+  assert.ok(reportEditing.dialogue!.visual.note.includes('交互方案'))
+  assert.deepEqual(zh.filter(section => section.group?.id === 'continuous-dialogue' && !section.groupIntro).map(section => section.tabLabel), ['连续追问', '修改应用', '使用应用'])
+  assert.ok(!zh.filter(section => section.group?.id === 'continuous-dialogue').some(section => section.body.includes('指代')))
+  assert.deepEqual(zh.filter(section => section.group?.id === 'agent-troubleshooting').map(section => section.id), ['agent-troubleshooting-overview', 'agent-replay', 'agent-evidence', 'agent-latency', 'accuracy'])
+  for (const locale of ['zh'] as const) {
     const sections = getDataPilotContent(locale).parts.experience.sections
     const corpus = buildSiteCorpus(locale)
     assert.equal(sections.filter((section) => section.designPlaceholder).length, 7)
     for (const section of sections) {
       if (section.designPlaceholder) assert.ok(!corpus.includes(section.designPlaceholder), 'Editorial image briefs must not become chat facts')
       if (section.qaExperience) {
+        assert.ok(corpus.includes(section.body), 'QA prose must reach chat in full')
+        if (section.qaExperience.materialBrief) assert.ok(!corpus.includes(section.qaExperience.materialBrief), 'Preparation notes must not become chat facts')
         for (const decision of section.qaExperience.decisions) assert.ok(corpus.includes(decision.body))
         if (section.qaExperience.bridge) assert.ok(corpus.includes(section.qaExperience.bridge))
         const mockup = section.qaExperience.mockup
@@ -320,6 +323,8 @@ test('DataPilot experience keeps product proposals and outcomes explicit', () =>
         if (mockup.kind === 'result') assert.ok(!corpus.includes(mockup.prompt), 'Simulated chart findings must not enter personal facts')
       }
       if (section.dialogue) {
+        assert.ok(corpus.includes(section.body), 'Dialogue scenarios must reach chat')
+        if (section.dialogue.tradeoff) assert.ok(corpus.includes(section.dialogue.tradeoff), 'Design challenges must reach chat')
         assert.ok(corpus.includes(section.dialogue.visual.note), 'Interaction proposal boundaries must reach the shared corpus')
         for (const decision of section.dialogue.decisions) assert.ok(corpus.includes(decision.body))
         for (const frame of section.dialogue.visual.frames) {
@@ -333,7 +338,7 @@ test('DataPilot experience keeps product proposals and outcomes explicit', () =>
       }
     }
   }
-  for (const sections of [zh, en]) {
+  for (const sections of [zh]) {
     const results = sections.find(({ id }) => id === 'role')!
     assert.ok(results.body.includes('15%') && results.body.includes('60%'))
   }

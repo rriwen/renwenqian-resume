@@ -53,7 +53,7 @@ Text2SQL 原型通过详情页 Demo 链接进入，由 `pages/SqlEditorPrototype
 - `ChatbotView`：按需加载 `components/chat/ChatPanel`，在当前页面的右侧内容区内显示，保留侧栏、当前 pathname 与主题控制，不使用全屏浮层；对话正文与输入框最大宽度为 720px，窄屏保留 `--page-gutter` 页边距。输入框与首页共用 `styles/components/composer.css`，统一两行高度、圆角、0.5px 弱描边、占位提示与发送按钮；对话流输入框默认不显示彩虹描边与柔光，仅聚焦激活时显示彩虹动画，失焦后隐藏；首页仍默认播放，两处输入框聚焦时均不增加蓝色外圈；`useChatThread` 连接多会话状态，切换到页面或其他聊天后保留正在生成的响应；同一会话每次只生成一条回复，不同会话可以并行。移除独立的空白聊天欢迎页；没有消息且没有待处理命令时回到首页，首次提问从首页输入框进入。聊天界面不提供返回按钮，使用侧栏或站点标志切换页面。顶部工具栏固定贴顶，默认无分割线，对话正文向上滚动后出现底部 1px 清晰分割线，回到顶部消失；右上角「历史对话」仅在首页对话入口和聊天界面展示，仅显示图标，使用与邮箱、主题图标一致的主文字色（保留提示与可访问名称），展开响应式历史列表，显示简短主题标题、更新时间和生成状态；标题由本地规则归纳首条问题，涉及项目时保留项目名称，未知主题去除提问套话并限制长度，已有记录读取时自动应用，支持查看、续聊与单条删除；桌面端每条记录的删除图标默认隐藏，悬停该行、键盘聚焦行内控件或进入删除确认时显示；无悬停能力的触屏设备常驻显示，点击后通过锚定移除按钮的 `Popconfirm` 气泡二次确认，浮层不撑开列表且自动避让屏幕边缘；取消或 Escape 恢复焦点，点击外部或滚动列表关闭气泡，删除失败保留记录并提供重试；支持 Escape、点击外部关闭及焦点恢复。用户消息气泡使用强调蓝色与页面背景混合的柔和蓝底，随深浅主题适配；已有对话的输入框上方不展示推荐问题及展开入口；生成时发送按钮切换为「停止生成」，只停止当前回复并保留已显示内容；在对应对话位置显示「已终止」，不在输入框上方显示停止提示，标记随消息保留并支持历史恢复。
 - `ChatMessageContent`：assistant 回复按 Markdown 呈现，用户原文及历史保存内容保持不变；遵循 `interviewPrompt.ts`，按需加粗关键词、使用 2–4 项有序列表，对比时使用小型表格并在窄屏横向滚动，自我介绍保持约 30 秒的短段落。项目配图仅取 `projectImages.ts` 与 `siteCorpus` 共享的现有媒体清单，保留原稿、探索或示意图说明，不编造路径；原始 HTML 与外部图片不渲染。
 - `hooks/useHashOverlay`：内嵌聊天的 Hash 状态和路由同步；页内聊天不响应 Escape，以免与移动导航冲突。联系弹窗不使用 Hash，由 `App` 的页面内状态控制。
-- `LanguageContext`：只读中文 locale 与公共文案，不再提供语言切换或读取旧语言偏好；保留原有双语内容数据。
+- `LanguageContext`：只读中文 locale 与公共文案，不再提供语言切换或读取旧语言偏好；仅保留中文内容数据。
 
 ## 视觉系统
 
@@ -142,7 +142,7 @@ Text2SQL 原型通过详情页 Demo 链接进入，由 `pages/SqlEditorPrototype
 - 关于页内容：`frontend/src/content/about/`
 - 静态图片：`frontend/public/images/`
 
-项目分类和双语标签直接保存在 `projects.ts` 的项目记录中，不依赖清单顺序。`projectCategories` 集中定义 `ai-products`、`data-tools`、`design-systems` 的顺序和双语名称，`getProjectGroups` 为侧栏提供统一分组。关于页 Markdown 的 `##` / `###` 标题使用 `<!-- id: stable-id -->` 隐藏注释；同文件 ID 唯一，同义内容跨语言保持一致。改标题、移动条目时保留 ID，新增工作经历会自动展示。章节使用 `work`、`projects`、`education`、`contact`；教育经历在工作经历和联系方式之间展示学校、专业、学历与时间，并加入右侧目录；完整教育内容保留在聊天语料中。纯解析位于 `content/about/parseAboutContent.ts`，加载与缓存位于 `content/about.ts`。
+项目分类和中文标签直接保存在 `projects.ts` 的项目记录中，不依赖清单顺序。`projectCategories` 集中定义 `ai-products`、`data-tools`、`design-systems` 的顺序和中文名称，`getProjectGroups` 为侧栏提供统一分组。关于页 Markdown 的 `##` / `###` 标题使用 `<!-- id: stable-id -->` 隐藏注释；同文件 ID 唯一，同义内容长期稳定保持一致。改标题、移动条目时保留 ID，新增工作经历会自动展示。章节使用 `work`、`projects`、`education`、`contact`；教育经历在工作经历和联系方式之间展示学校、专业、学历与时间，并加入右侧目录；完整教育内容保留在聊天语料中。纯解析位于 `content/about/parseAboutContent.ts`，加载与缓存位于 `content/about.ts`。
 
 ### 内容与聊天接口
 

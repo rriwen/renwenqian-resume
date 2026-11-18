@@ -8,7 +8,7 @@ import { Popconfirm } from '../Popconfirm'
 type Props = { conversations: ChatConversation[]; activeId: string; onSelect: (id: string) => void; onDelete: (id: string) => boolean }
 
 export function ChatHistory({ conversations, activeId, onSelect, onDelete }: Props) {
-  const { m, locale } = useLanguage()
+  const { m } = useLanguage()
   const [open, setOpen] = useState(false)
   const [pendingDelete, setPendingDelete] = useState<string | null>(null)
   const [deleteFailed, setDeleteFailed] = useState(false)
@@ -23,7 +23,7 @@ export function ChatHistory({ conversations, activeId, onSelect, onDelete }: Pro
   const history = conversations.filter((conversation) => conversation.messages.length)
     .sort((a, b) => b.updatedAt - a.updatedAt || b.createdAt - a.createdAt)
   const generating = history.filter((conversation) => conversation.status === 'generating').length
-  const dateFormat = new Intl.DateTimeFormat(locale === 'zh' ? 'zh-CN' : 'en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
+  const dateFormat = new Intl.DateTimeFormat('zh-CN', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
 
   useEffect(() => { if (!open) { setPendingDelete(null); setDeleteFailed(false) } }, [open])
   const cancelDelete = () => {

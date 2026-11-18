@@ -5,15 +5,17 @@ import { CaseStudyGallery, CaseStudyPlaceholder } from './CaseStudyMedia'
 
 /** Deliberately manual: readers keep control of the stage and screenshot. */
 export function DataPilotEvolution({ section }: { section: DataPilotSection }) {
-  const [selected, setSelected] = useState(0)
-  const buttons = useRef<(HTMLButtonElement | null)[]>([])
   const media = section.evolutionMedia ?? []
+  const lightboxItems = media.filter(item => item.src).map(item => ({ src: item.src!, caption: item.caption }))
+  const [selected, setSelected] = useState(() => Math.max(0, media.length - 1))
+  const buttons = useRef<(HTMLButtonElement | null)[]>([])
   return <div className="datapilot-evolution">
     <div role="tablist" aria-label={section.title} aria-orientation="vertical">
       {media.map((item, index) => {
         const description = section.bullets?.[index] ?? item.caption
         const separator = description.search(/[：:]/)
-        const title = separator >= 0 ? description.slice(0, separator) : description
+        const title = item.title ?? (separator >= 0 ? description.slice(0, separator) : description)
+        const stageTitle = title.match(/^(早期|探索|当前)\s*·\s*(.+)$/)
         return <button key={item.caption} type="button" role="tab"
           id={`evolution-tab-${index}`} aria-controls="evolution-panel" aria-selected={selected === index}
           tabIndex={selected === index ? 0 : -1} ref={node => { buttons.current[index] = node }}
@@ -26,18 +28,22 @@ export function DataPilotEvolution({ section }: { section: DataPilotSection }) {
             setSelected(next)
             buttons.current[next]?.focus()
           }}>
-          <span className="datapilot-evolution-name"><span className="datapilot-evolution-label"><span className="datapilot-tab-number" aria-hidden="true">{index + 1}</span>{title}</span><CaretDown size={16} aria-hidden="true" /></span>
-          {selected === index && <span className="datapilot-evolution-description" role="list" onClick={event => event.stopPropagation()}>
-            {description.slice(separator + 1).trim().split(/(?<=[。.!?])\s*(?=[^”’"'])/u).filter(Boolean).map((point, pointIndex, points) =>
-              <span role="listitem" key={pointIndex}>{pointIndex < points.length - 1 ? point.replace(/[。.!?]$/, point.endsWith('。') ? '；' : ';') : point}</span>
-            )}
+          <span className="datapilot-evolution-name"><span className="datapilot-evolution-label">{stageTitle && <span className="datapilot-evolution-stage">{stageTitle[1]}</span>}<span>{stageTitle?.[2] ?? title}</span></span><CaretDown size={16} aria-hidden="true" /></span>
+          {selected === index && <span className="datapilot-evolution-description" onClick={event => event.stopPropagation()}>
+            <span className="datapilot-evolution-summary">{item.description ?? description.slice(separator + 1).trim()}</span>
+            <span className="datapilot-evolution-tradeoffs" role="list" aria-label="优势与问题">
+              {item.tradeoffs?.map(point => <span role="listitem" key={point.text}>
+                <span className="datapilot-evolution-mark" data-kind={point.kind} role="img" aria-label={point.kind === 'advantage' ? '优势' : '问题'}>{point.kind === 'advantage' ? '✓' : '✕'}</span>
+                <span>{point.text}</span>
+              </span>)}
+            </span>
           </span>}
         </button>
       })}
     </div>
     <div id="evolution-panel" data-stage={selected} role="tabpanel" aria-labelledby={`evolution-tab-${selected}`} tabIndex={0}>
       {media[selected]?.src
-        ? <CaseStudyGallery items={[{ src: media[selected].src!, caption: media[selected].caption, hideCaption: true }]} />
+        ? <CaseStudyGallery lightboxItems={lightboxItems} items={[{ src: media[selected].src!, caption: media[selected].caption, hideCaption: true }]} />
         : <CaseStudyPlaceholder title={section.designPlaceholder ?? media[selected]?.caption} />}
     </div>
   </div>

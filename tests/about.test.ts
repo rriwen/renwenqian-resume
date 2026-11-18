@@ -8,12 +8,12 @@ import { parseAboutContent } from '../frontend/src/content/about/parseAboutConte
 import { WorkEntry } from '../frontend/src/components/about/WorkEntry'
 import { ProjectCards } from '../frontend/src/components/about/ProjectCards'
 
-const sources = Object.fromEntries(['zh', 'en'].map((locale) => [
+const sources = Object.fromEntries(['zh'].map((locale) => [
   locale,
   readFileSync(resolve(process.cwd(), `frontend/src/content/about/${locale}.md`), 'utf8'),
 ]))
 
-test('both About locales keep complete content and shared stable work IDs', () => {
+test('Chinese About content keeps complete content and stable work IDs', () => {
   for (const source of Object.values(sources)) {
     const content = parseAboutContent(source)
     assert.ok(content.heading)
@@ -33,7 +33,6 @@ test('both About locales keep complete content and shared stable work IDs', () =
   }
   // These are intentionally separate localized source documents, not positional translations.
   assert.equal(parseAboutContent(sources.zh).projects.length, 4)
-  assert.equal(parseAboutContent(sources.en).projects.length, 4)
 })
 
 test('moving or renaming sections does not change their meaning', () => {

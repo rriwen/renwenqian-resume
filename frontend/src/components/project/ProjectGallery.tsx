@@ -7,10 +7,10 @@ import { LoadingImage } from './LoadingImage'
 
 type ImageFrameProps = { children: ReactNode; item: ProjectGalleryItem; index: number }
 const PlainImageFrame = ({ children }: ImageFrameProps) => <>{children}</>
-type Props = { items: ProjectGalleryItem[]; layout?: 'grid' | 'stacked'; imageFrame?: ComponentType<ImageFrameProps> }
+type Props = { items: ProjectGalleryItem[]; lightboxItems?: ProjectGalleryItem[]; layout?: 'grid' | 'stacked'; imageFrame?: ComponentType<ImageFrameProps> }
 
-export function ProjectGallery({ items, layout = 'grid', imageFrame: ImageFrame = PlainImageFrame }: Props) {
-  const { locale, m } = useLanguage()
+export function ProjectGallery({ items, lightboxItems = items, layout = 'grid', imageFrame: ImageFrame = PlainImageFrame }: Props) {
+  const { m } = useLanguage()
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
   const triggerRef = useRef<HTMLButtonElement | null>(null)
   const closeLightbox = useCallback(() => setLightboxIndex(null), [])
@@ -39,7 +39,7 @@ export function ProjectGallery({ items, layout = 'grid', imageFrame: ImageFrame 
                 onClick={(event) => {
                   // Safari does not necessarily focus a button when it is clicked.
                   triggerRef.current = event.currentTarget
-                  setLightboxIndex(idx)
+                  setLightboxIndex(lightboxItems.findIndex(candidate => candidate.src === item.src && candidate.caption === item.caption))
                 }}
                 style={{
                   display: 'block',
@@ -83,7 +83,7 @@ export function ProjectGallery({ items, layout = 'grid', imageFrame: ImageFrame 
                     fontSize: 'var(--text-xs)',
                     lineHeight: 'var(--leading-ui)',
                     color: 'var(--muted)',
-                    letterSpacing: locale === 'zh' ? '0.01em' : '0.02em',
+                    letterSpacing: '0.01em',
                   }}
                 >
                   {item.caption}
@@ -94,8 +94,8 @@ export function ProjectGallery({ items, layout = 'grid', imageFrame: ImageFrame 
         </div>
       </section>
 
-      {lightboxIndex !== null && items[lightboxIndex] ? (
-        <ProjectLightbox items={items} index={lightboxIndex} onChange={setLightboxIndex} onClose={closeLightbox} returnFocusTo={triggerRef.current} />
+      {lightboxIndex !== null && lightboxItems[lightboxIndex] ? (
+        <ProjectLightbox items={lightboxItems} index={lightboxIndex} onChange={setLightboxIndex} onClose={closeLightbox} returnFocusTo={triggerRef.current} />
       ) : null}
     </>
   )

@@ -12,7 +12,7 @@ export function DataPilotQATabs({ sections, locale }: { sections: DataPilotSecti
   const buttons = useRef<(HTMLButtonElement | null)[]>([])
   const stages = sections.filter(section => section.qaExperience)
   const selected = Math.max(0, stages.findIndex(section => `#${section.id}` === location.hash))
-  const labels = locale === 'zh' ? ['问答前', '问答中', '问答后'] : ['Before asking', 'During execution', 'After answering']
+  const labels = ['问答前', '问答中', '问答后']
   const icons = [SlidersHorizontal, ListChecks, MagnifyingGlass]
   function select(index: number) {
     navigate({ pathname: location.pathname, search: location.search, hash: `#${stages[index].id}` }, {
@@ -20,7 +20,7 @@ export function DataPilotQATabs({ sections, locale }: { sections: DataPilotSecti
     })
   }
   return <div className="qa-capabilities">
-    <div className="qa-capability-tabs" role="tablist" aria-label={locale === 'zh' ? '问答体验阶段' : 'Question-answer stages'}>
+    <div className="qa-capability-tabs" role="tablist" aria-label={'问答体验阶段'}>
       {stages.map((section, index) => {
         const Icon = icons[index]
         return <button key={section.id} ref={node => { buttons.current[index] = node }}
@@ -34,7 +34,7 @@ export function DataPilotQATabs({ sections, locale }: { sections: DataPilotSecti
           event.preventDefault()
           select(next)
           buttons.current[next]?.focus()
-        }}><Icon size={16} weight="regular" aria-hidden="true" /><span>{labels[index]}</span></button>
+        }}><Icon size={16} weight="regular" aria-hidden="true" /><span>{section.tabLabel ?? labels[index]}</span></button>
       })}
     </div>
     {stages.map((section, index) => <div key={section.id} role="tabpanel" id={`${section.id}-panel`}

@@ -8,7 +8,7 @@ import { ChatMessageContent } from '../frontend/src/components/chat/ChatMessageC
 import { getChatProjectImages } from '../frontend/src/lib/chat/projectImages'
 import { buildSiteCorpus } from '../frontend/src/lib/siteCorpus'
 
-const locales = ['zh', 'en'] as const
+const locales = ['zh'] as const
 const render = (content: string) => renderToStaticMarkup(createElement(ChatMessageContent, { content, locale: 'zh' }))
 
 test('chat image catalogues contain unique existing public assets with contextual captions', () => {
@@ -33,7 +33,7 @@ test('chat image catalogues contain unique existing public assets with contextua
   }
 })
 
-test('each language exposes its image context in the corpus and preserves shared core figures', () => {
+test('Chinese image context reaches the corpus and preserves core figures', () => {
   for (const locale of locales) {
     const images = getChatProjectImages(locale)
     for (const src of ['/images/databaseops-rule-filter-component.png', '/images/datadevelop-sql-editor.jpg']) {

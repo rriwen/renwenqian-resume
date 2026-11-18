@@ -13,7 +13,7 @@ type Props = {
 }
 
 export function ProjectLightbox({ items, index, onChange, onClose, returnFocusTo }: Props) {
-  const { locale, m } = useLanguage()
+  const { m } = useLanguage()
   const galleryLen = items.length
   const region = items[index].sourceRegion
   const dialogRef = useRef<HTMLDivElement>(null)
@@ -220,7 +220,7 @@ export function ProjectLightbox({ items, index, onChange, onClose, returnFocusTo
             fontSize: 'var(--text-sm)',
             lineHeight: 'var(--leading-ui)',
             color: 'var(--muted)',
-            letterSpacing: locale === 'zh' ? '0.01em' : '0.02em',
+            letterSpacing: '0.01em',
           }}
         >
           {items[index].caption}

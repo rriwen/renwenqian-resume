@@ -14,7 +14,7 @@ export const projectViews: readonly ProjectView[] = [
     id: -1,
     slug: 'databaseops-visual',
     sourceSlug: 'databaseops',
-    title: { zh: '数据库运维平台', en: 'Database Operations' },
+    title: { zh: '数据库运维平台',},
   },
 ]
 
