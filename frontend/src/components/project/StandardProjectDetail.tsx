@@ -193,7 +193,7 @@ export function StandardProjectDetail({ project, detail, presentation, tabs, pan
             {heroArchitecture ? <ProjectArchitecture architecture={heroArchitecture} />
               : detail.overviewPrototype ? <CaseStudyMediaFrame><PrototypePreview {...detail.overviewPrototype} /></CaseStudyMediaFrame>
               : ['design-token', 'design-md'].includes(project.slug) ? <CaseStudyPlaceholder title={title} />
-              : <CaseStudyGallery items={[{ src: heroProject.image, caption: title, hideCaption: true, previewCrop: { aspectRatio: 1.88, objectPosition: 'top' } }]} />}
+              : <CaseStudyGallery items={[{ src: heroProject.image, caption: title, hideCaption: true, previewCrop: { aspectRatio: heroProject.slug === 'text2sql' ? 2 : 1.88, objectPosition: 'top' } }]} />}
           </CaseStudyHeroPalette></div>}
           {(detail.demoUrl || detail.externalUrl) && <a className="ui-button case-study-demo" href={detail.demoUrl || detail.externalUrl} target="_blank" rel="noopener noreferrer">{detail.demoUrl ? ('体验交互原型') : m.workDetail.viewSite} ↗</a>}
         </header>

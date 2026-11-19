@@ -337,7 +337,7 @@ const details: Record<string, {zh: ProjectDetailBlock }> = {
           "images": []
         }
       ],
-      "hideOverviewMedia": true
+      "hideOverviewMedia": false
     }
   },
   'workflow-editor': {

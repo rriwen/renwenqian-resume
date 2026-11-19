@@ -38,7 +38,7 @@ export const projects: Project[] = [
   },
   {
     id: 10, slug: 'text2sql', title: 'Text2SQL',
-    category: 'ai-products', image: '/images/text2sql-interaction-design.png',
+    category: 'ai-products', image: '/images/text2sql-overview.jpg',
     tags: { zh: ['AI 辅助', 'SQL 编辑器', '产品界面设计'],},
   },
   {

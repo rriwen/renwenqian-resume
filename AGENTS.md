@@ -157,7 +157,7 @@ AgentOps 案例由 projectDetails.ts 维护，以 Demo 销售日报异常串联�
 
 Text2SQL 案例围绕就近编辑、任务指令与结果审阅三项设计取舍组织中文叙事，保留原章节 ID；正文以 `sourceRegion` 展示早期交互稿的输入、指令、生成与审阅局部，正文图注隐藏，末尾不再展示完整原稿入口；原始素材保留。首屏本地原型明确为模拟演示，结果审阅和异常反馈保留探索边界；正文与聊天语料共用 `projectDetails.ts`。
 
-Text2SQL 首屏暂不展示媒体，`hideOverviewMedia` 隐藏展板，待补图片；详情页移除嵌入演示、原型按钮与操作说明，独立 `/prototype/text2sql` 路由保留。
+Text2SQL 首屏使用用户提供的 `public/images/text2sql-overview.jpg`，在标签下方以 2:1 比例顶部对齐展示，裁去部分底部内容，不显示图注，全屏预览保留完整原图；详情页移除嵌入演示、原型按钮与操作说明，独立 `/prototype/text2sql` 路由保留。
 
 Text2SQL 开篇以「项目背景」说明目标用户、SQL 编写与修改问题及主导产品设计的职责；保留 `context` 锚点与目录项，目标和设计方案不写为已验证成果，正文与聊天共用。
 
