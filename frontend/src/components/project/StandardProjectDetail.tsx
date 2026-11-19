@@ -1,4 +1,4 @@
-import { createElement, useRef, type CSSProperties } from 'react'
+import { createElement, useRef, type ReactNode, type CSSProperties } from 'react'
 import { type ProjectDetailBlock, type ProjectDetailComparison, type ProjectDetailParagraph, type ProjectDetailSection, type ProjectGalleryItem } from '../../data/projectDetails'
 import { getProjectTitle, type Project } from '../../data/projects'
 import { useLanguage } from '../../i18n/LanguageContext'
@@ -78,12 +78,20 @@ function DesignComparison({ comparison }: { comparison: ProjectDetailComparison 
   )
 }
 
-type Props = { project: Project; detail: ProjectDetailBlock }
+type Props = {
+  project: Project
+  detail: ProjectDetailBlock
+  presentation?: { project: Project; title: string; introduction: string }
+  tabs?: ReactNode
+  panelId?: string
+  labelledBy?: string
+}
 
-export function StandardProjectDetail({ project, detail }: Props) {
+export function StandardProjectDetail({ project, detail, presentation, tabs, panelId, labelledBy }: Props) {
   const { locale, m } = useLanguage()
   const titleRef = useRef<HTMLHeadingElement>(null)
-  const title = getProjectTitle(project, locale)
+  const heroProject = presentation?.project ?? project
+  const title = presentation?.title ?? getProjectTitle(project, locale)
   const introduction = getCaseStudyIntroduction(project.slug, locale)
   const bodyParagraphs = introduction ? detail.paragraphs : detail.paragraphs.slice(1)
   const heroArchitecture = project.slug === 'aidesignsystem'
@@ -91,6 +99,11 @@ export function StandardProjectDetail({ project, detail }: Props) {
     : undefined
   const anchors = getProjectAnchors(detail, locale)
   const titleFor = (id: string) => anchors.find((anchor) => anchor.id === id)!.title
+  const overviewFacts = detail.overviewFacts && (
+    <div className="project-overview-facts">
+      <dl>{detail.overviewFacts.map(fact => <div key={fact.label}><dt>{fact.label}</dt><dd>{fact.value}</dd></div>)}</dl>
+    </div>
+  )
   const renderSection = (section: ProjectDetailSection) => (
     <section key={section.id} id={section.id} className="project-detail-section" aria-labelledby={`${section.id}-title`}>
       <div className="project-detail-section-copy">
@@ -99,6 +112,7 @@ export function StandardProjectDetail({ project, detail }: Props) {
         {section.paragraphs.map((para, idx) => (
           <p key={idx}>{renderParagraphContent(para)}</p>
         ))}
+        {project.slug === 'agentops' && section.id === 'project-origin' && overviewFacts}
         {section.table && <DetailTable table={section.table} titleId={`${section.id}-title`} />}
         {section.architecture && section.architecture !== heroArchitecture && <ProjectArchitecture architecture={section.architecture} />}
         {section.subsections?.map((subsection) => (
@@ -160,7 +174,7 @@ export function StandardProjectDetail({ project, detail }: Props) {
     </section>
   )
   return (
-    <main className="datapilot-case-page project-detail-standard-page case-study-page">
+    <main className="datapilot-case-page project-detail-standard-page case-study-page" data-project-slug={project.slug}>
       <ReadingPageHeader title={title} titleRef={titleRef} />
       <div className="page-shell datapilot-case-shell">
         <header id="project-overview" className="datapilot-case-hero project-case-overview">
@@ -168,28 +182,24 @@ export function StandardProjectDetail({ project, detail }: Props) {
             {title}
           </h1>
 
-          {introduction ? <p className="case-study-lead">{introduction}</p> : detail.paragraphs.slice(0, 1).map((para, idx) => <p key={idx} className="case-study-lead">{renderParagraphContent(para)}</p>)}
+          {(presentation?.introduction ?? introduction) ? <p className="case-study-lead">{presentation?.introduction ?? introduction}</p> : detail.paragraphs.slice(0, 1).map((para, idx) => <p key={idx} className="case-study-lead">{renderParagraphContent(para)}</p>)}
           <div className="datapilot-meta project-case-tags project-case-tags--filled">
-            {getCaseStudyMethods(project.slug, locale).map(tag => <span className="project-case-tag" key={tag}>{tag}</span>)}
+            {getCaseStudyMethods(heroProject.slug, locale).map(tag => <span className="project-case-tag" key={tag}>{tag}</span>)}
           </div>
-          <div className="project-case-cover"><CaseStudyHeroPalette slug={project.slug}>
+          <div className="project-case-cover"><CaseStudyHeroPalette slug={heroProject.slug}>
             {heroArchitecture ? <ProjectArchitecture architecture={heroArchitecture} />
               : detail.overviewPrototype ? <CaseStudyMediaFrame><PrototypePreview {...detail.overviewPrototype} /></CaseStudyMediaFrame>
               : ['design-token', 'design-md'].includes(project.slug) ? <CaseStudyPlaceholder title={title} />
-              : <CaseStudyGallery items={[{ src: project.image, caption: title, hideCaption: true, previewCrop: { aspectRatio: 1.88, objectPosition: 'top' } }]} />}
+              : <CaseStudyGallery items={[{ src: heroProject.image, caption: title, hideCaption: true, previewCrop: { aspectRatio: 1.88, objectPosition: 'top' } }]} />}
           </CaseStudyHeroPalette></div>
           {(detail.demoUrl || detail.externalUrl) && <a className="ui-button case-study-demo" href={detail.demoUrl || detail.externalUrl} target="_blank" rel="noopener noreferrer">{detail.demoUrl ? ('体验交互原型') : m.workDetail.viewSite} ↗</a>}
         </header>
-        <article className="datapilot-case-content project-case-content">
+        {tabs}
+        <article id={panelId} role={tabs ? "tabpanel" : undefined} aria-labelledby={labelledBy} tabIndex={tabs ? 0 : undefined} className="datapilot-case-content project-case-content">
           {bodyParagraphs.length > 0 && <div className="case-study-introduction">{bodyParagraphs.map((para, idx) => <p key={idx}>{renderParagraphContent(para)}</p>)}</div>}
           {detail.sections?.filter((section) => section.placement === 'overview').map(renderSection)}
 
-          {detail.overviewFacts && (
-            <div className="project-overview-facts">
-              <dl>{detail.overviewFacts.map(fact => <div key={fact.label}><dt>{fact.label}</dt><dd>{fact.value}</dd></div>)}</dl>
-
-            </div>
-          )}
+          {project.slug !== 'agentops' && overviewFacts}
 
           {detail.responsibilities ? (
             <section id="responsibilities" className="project-detail-section" aria-labelledby="responsibilities-title">

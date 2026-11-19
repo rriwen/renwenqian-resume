@@ -3,7 +3,7 @@ import type { Locale } from '../../i18n/translations'
 /** Short display introductions; full case copy remains in projectDetails. */
 const introductions: Record<string, Record<Locale, string>> = {
   agentops: { zh: '从执行链路与结果回放入手，让 Agent 的运行过程可观察、可排查',},
-  text2sql: { zh: '将自然语言问数融入 SQL 编辑器，串联生成、执行与结果查看',},
+  text2sql: { zh: '用自然语言辅助 SQL 编写与修改',},
   datadevelop: { zh: '围绕数据库开发任务，持续打磨 SQL 编辑与数据操作体验',},
   'workflow-editor': { zh: '通过可视化编排，组织数据任务的执行顺序与依赖关系',},
   aidesignsystem: { zh: '串联设计资产、规则映射与代码交付，探索设计师参与 AI 研发的方式',},
@@ -14,7 +14,7 @@ export const getCaseStudyIntroduction = (slug: string, locale: Locale) => introd
 
 /** Methods shown in the case header, independent of project categories. */
 const methods: Record<string, string[]> = {
-  dataagent: ['场景验证', '交互设计', 'AI Native'],
+  dataagent: ['AI Native', '产品规划', '人机交互', '场景验证'],
   databaseops: ['用户旅程', '埋点分析', '原型验证'],
   agentops: ['场景分析', '交互设计', '原型设计'],
   text2sql: ['交互设计', '界面设计', '原型设计'],

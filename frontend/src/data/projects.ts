@@ -34,7 +34,7 @@ export const projects: Project[] = [
     id: 2, slug: 'agentops', title: 'Agent 可观测产品',
     category: 'ai-products',
     image: '/images/agentops-execution-trace.jpg',
-    tags: { zh: ['Demo', '可观测性', '产品设计'],},
+    tags: { zh: ['MVP', '可观测性', '产品设计'],},
   },
   {
     id: 10, slug: 'text2sql', title: 'Text2SQL',
@@ -56,12 +56,14 @@ export const projects: Project[] = [
   },
   {
     id: 5, slug: 'datadevelop', title: 'SQL 编辑器',
+    navigationTitle: { zh: '开发编辑器' },
     category: 'data-tools',
     image: '/images/datadevelop-hero.jpg',
     tags: { zh: ['工具应用', '数据库开发'],},
   },
   {
     id: 11, slug: 'workflow-editor', title: '任务流编辑器',
+    hiddenFromNavigation: true,
     category: 'data-tools', image: '/images/datadevelop-workflow.jpg',
     tags: { zh: ['任务编排', '复杂交互'],},
   },

@@ -96,3 +96,26 @@
 
 /* Full-width reading blocks share the same available column. */
 .about-page, .case-study-page, .dbv-page { --detail-prose-width: 100%; }
+
+#project-origin .project-overview-facts dd { white-space: pre-line; }
+
+.case-study-page :is(#decision-investigation-path, #decision-execution-structure, #decision-failure-context) .project-detail-subsection-body--text-image { grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 32px; align-items: start; }
+:is(#decision-investigation-path, #decision-execution-structure, #decision-failure-context) .project-detail-subsection-text strong { display: block; margin-bottom: 8px; }
+@container site-main (max-width: 800px) {
+  .case-study-page :is(#decision-investigation-path, #decision-execution-structure, #decision-failure-context) .project-detail-subsection-body--text-image { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* Text2SQL: keep design decisions beside their original interface evidence. */
+.case-study-page[data-project-slug="text2sql"] .project-detail-subsection-body--text-image {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr);
+  gap: var(--space-8);
+  align-items: start;
+}
+.case-study-page[data-project-slug="text2sql"] .project-detail-subsection-body--text-image .project-detail-gallery {
+  margin-top: 0;
+}
+@media (max-width: 1100px) {
+  .case-study-page[data-project-slug="text2sql"] .project-detail-subsection-body--text-image {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

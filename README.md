@@ -38,8 +38,9 @@ npm run dev
 | 项目名称、slug、分类、封面、顺序、中文标签 | [`frontend/src/data/projects.ts`](frontend/src/data/projects.ts) |
 | 同一项目的独立展示入口 | [`frontend/src/data/projectViews.ts`](frontend/src/data/projectViews.ts) 维护导航视图与来源项目映射；`getProjectNavigationGroups` 使用项目正式地址且不再增加别名入口，桌面侧栏、收起栏和移动抽屉共用；视图不加入 `projects` 清单，不重复生成聊天语料 |
 | 通用项目详情文案、图文章节和画廊 | [`frontend/src/data/projectDetails.ts`](frontend/src/data/projectDetails.ts)；`sections` 将章节标题、正文、可选表格与配图绑定，`subsections` 保存章节内的小标题、正文、圆点列表、可选表格与配图，页面和聊天共用 |
-| DataPilot 文案、链接、配图 | [`frontend/src/data/projects/dataPilot.ts`](frontend/src/data/projects/dataPilot.ts)，页面与聊天共用；POC 以海尔生产场景展开范围筛选、指标口径、演示任务、评价与阶段交付，保留 `poc-validation` 深链接；POC 使用 `DataPilotPocSection.tsx` 原生布局，与数据库运维平台共用 `DetailTable.tsx` |
+| DataPilot 文案、链接、配图 | [`frontend/src/data/projects/dataPilot.ts`](frontend/src/data/projects/dataPilot.ts)，页面与聊天共用；POC 以制造业为主线，依据演示准备材料组织业务理解、场景筛选、指标映射、演示数据、连续任务、评价要求和阶段产出；保留六个原章节深链接，新增 `poc-demo-data`，区分意向演示、正式验证与模拟数据；`DataPilotPocSection.tsx` 复用产品体验的单标题正文、加粗标签列表与 `DetailTable.tsx`，任务示例说明和验证边界同步进入聊天语料 |
 | 设计工程案例与分层架构图 | [`frontend/src/data/projects/designEngineering.ts`](frontend/src/data/projects/designEngineering.ts) 保存中文文案与架构数据，正文按设计资产、规则映射、项目应用组织，页面和聊天共用；[`ProjectArchitecture.tsx`](frontend/src/components/project/ProjectArchitecture.tsx) 与 [`project-architecture.css`](frontend/src/styles/components/project-architecture.css) 绘制四层架构，保留旧 `design-highlights` / `project-gallery` / `connections` 深链接 |
+| 开发编辑器合集 | [`DevelopmentEditorsCaseStudy.tsx`](frontend/src/components/project/DevelopmentEditorsCaseStudy.tsx) 在 `/project/datadevelop` 以 SQL 编辑器、任务流编辑器两个 Tab 复用原案例；`?editor=workflow` 保存所选内容，旧 `/project/workflow-editor` 保留查询与 Hash 重定向到对应 Tab；导航仅展示「开发编辑器」 |
 | 项目详情布局 | [`ProjectDetail.tsx`](frontend/src/pages/ProjectDetail.tsx) 分派；[`components/project/`](frontend/src/components/project/) 包含通用详情、DataPilot、画廊、图片查看器和共用锚点导航；DataPilot 正文 tab 切换保持滚动位置，顶部下拉菜单和深链接仍定位章节 |
 | 数据库运维视觉版 | [`DatabaseOpsVisualCaseStudy.tsx`](frontend/src/components/project/DatabaseOpsVisualCaseStudy.tsx) 在 `/project/databaseops` 按需加载，并导入 [`databaseops-visual.css`](frontend/src/styles/components/databaseops-visual.css)；[`data/projects/databaseOpsVisual.ts`](frontend/src/data/projects/databaseOpsVisual.ts) 保存中文展示标题、图注与素材入口，案例正文继续读取原 `databaseops` 详情；[`databaseops-visual-source-setup.jpg`](frontend/public/images/databaseops-visual-source-setup.jpg) 为现有原型的真实截图 |
 | 视觉版首屏动效 | [`MeshGradientBackground.tsx`](frontend/src/components/project/MeshGradientBackground.tsx) 使用 Paper Shaders Mesh Gradient，对齐 OceanBase DataPilot 官网首屏的四色色值和动画参数；仅自动播放，支持减少动态效果、离屏暂停和静态回退 |
@@ -188,3 +189,12 @@ Data Agent「问题排查」复用现有渐变展板与截图轮播，以结果�
 Data Agent 不再展示「设计落地与协同」章节，相关 DESIGN.md 实践集中在设计工程化项目中。设计工程化在 `project-design-rules` 详述视觉规则、组件状态与实现约束，在 `datapilot-design-collaboration` 展示研发使用与检查方式，区分方法参照、已做实践和后续验证。
 
 多轮对话与持续使用采用连续追问、修改应用、使用应用三个 Tab。连续追问聚焦结果引用、比较探索与选择写入；修改应用聚焦作用范围、关联影响与报告版本检查、发布及回滚；使用应用合并跨次复用与周期更新，区分报告版本和数据更新记录。内容与截图说明统一维护在 dataPilot.ts，聊天同步正文；applications 通过 legacyIds 映射到 continuous-analysis-validation，保留旧深链接。报告版本、回滚和自主发布为已确认能力，其余交互机制保留方案边界。
+
+Data Agent 的设计策略正文通过 `DataPilotWorkflow.tsx` 在流程说明末尾提供「Agent 工作流」文字链接，点击复用 `ProjectLightbox` 预览原始流程图。素材与裁剪范围由 `data/projects/dataPilot.ts` 的 `workflow.image` 统一维护；通过 `sourceRegion` 隐藏图片顶部标题，正文不再展示 SVG 流程展板。流程摘要与阶段说明继续供聊天使用。
+
+
+海外 SaaS 探索保留原名称与五个 growth-* 深链接，内容依次为背景与目标、官网价值表达、登录注册、积分试用、阶段交付与上线验证。范围为官网、登录注册与积分试用设计已完成、待上线，不含付费流程。官网与登录注册配图来自 dp-saas-demo.vercel.app 的真实页面截图；积分试用按通用产品逻辑描述，具体结算规则保留方案边界。中文内容统一由 dataPilot.ts 维护并进入聊天语料。
+
+AgentOps 案例由 projectDetails.ts 维护，以 Demo 销售日报异常串联定位执行、理解过程与核查异常；背景合并后通过 legacyIds 保留 openobserve-learning / shared-product-need 深链接，阶段成果与客户回放探索合并为「成果与后续」，明确已有产品 MVP、待内部验证，并通过 legacyIds 保留 customer-replay 深链接。截图保留无图注展示，演示内容不作为真实客户故障或效率成果。
+
+Text2SQL 案例围绕就近编辑、任务指令与结果审阅三项设计取舍组织中文叙事，保留原章节 ID；正文以 `sourceRegion` 展示早期交互稿的输入、指令、生成与审阅局部，正文图注隐藏，末尾不再展示完整原稿入口；原始素材保留。首屏本地原型明确为模拟演示，结果审阅和异常反馈保留探索边界；正文与聊天语料共用 `projectDetails.ts`。

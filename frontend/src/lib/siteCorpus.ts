@@ -119,6 +119,11 @@ function serializeDataPilot(locale: Locale): string {
       if (!section.continuationOf && !section.groupIntro) lines.push(`${section.group ? '######' : '#####'} ${section.title}`)
       if (section.intro) lines.push(section.intro)
       lines.push(section.body)
+      if (section.workflow) {
+        lines.push(section.workflow.summary, section.workflow.caption)
+        for (const stage of section.workflow.stages) lines.push(`${stage.title}: ${stage.steps.join(' → ')}。${stage.branch}`)
+      }
+      if (section.bodyLink) lines.push(`${section.bodyLink.label} (${section.bodyLink.href})`)
       for (const reference of section.references ?? []) lines.push(`${reference.label} (${reference.href})`)
       if (section.qaExperience) {
         for (const decision of section.qaExperience.decisions) lines.push(`${decision.title}: ${decision.body}`)

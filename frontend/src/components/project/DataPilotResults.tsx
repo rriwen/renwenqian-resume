@@ -7,6 +7,7 @@ export function DataPilotResults({ result, description, formula }: {
 }) {
   return <figure className="datapilot-results" aria-label={description}>
     <p>{description}</p>
+    <p className="datapilot-results-formula">{formula}</p>
     <div className="datapilot-results-comparison">
       {[{ label: result.beforeLabel, value: result.before }, { label: result.afterLabel, value: result.after }].map((item, index) =>
         <div className={`datapilot-result-pair${index === 1 ? ' is-current' : ''}`} key={item.label}>
@@ -18,6 +19,5 @@ export function DataPilotResults({ result, description, formula }: {
         </div>
       )}
     </div>
-    <figcaption>{formula}</figcaption>
   </figure>
 }

@@ -51,22 +51,27 @@ export function DataPilotDialogueTabs({ sections, locale }: { sections: DataPilo
 }
 
 function DialoguePanel({ section, index, locale }: { section: DataPilotSection; index: number; locale: Locale }) {
-  const { decisions, visual, tradeoff } = section.dialogue!
+  const { decisions, visual, tradeoff, hideMedia, status } = section.dialogue!
   const continuous = ['continuous-dialogue', 'agent-troubleshooting'].includes(section.group?.id ?? '')
   return <section id={section.id} className={continuous ? 'project-detail-section qa-case-section' : 'dialogue-feature-section'} aria-labelledby={`${section.id}-title`}>
     {section.legacyIds?.map(id => <span key={id} id={id} aria-hidden="true" />)}
     <CaseStudyMediaFrame animated index={index}>
-      <div className={continuous ? 'qa-case-layout' : 'dialogue-feature'}>
+      <div className={`${continuous ? 'qa-case-layout' : 'dialogue-feature'}${hideMedia ? ' dialogue-text-only' : ''}`}>
         <div className={continuous ? 'qa-case-copy' : 'dialogue-feature-copy'}>
-          <h3 id={`${section.id}-title`}>{section.title}</h3>
+          <h3 id={`${section.id}-title`}>{section.title}{status && <span className="dialogue-status-tag">{status}</span>}</h3>
           <p className={continuous ? 'qa-case-rationale' : undefined}>{section.body}</p>
           {tradeoff && <p className="dialogue-decision">{tradeoff}</p>}
           {continuous ? <ul className="qa-design-decisions">{decisions.map(item => <li key={item.title}><p><strong>{item.title}{item.body ? '：' : ''}</strong>{item.body}</p></li>)}</ul>
             : <ul>{decisions.map(item => <li key={item.title}>{item.body}</li>)}</ul>}
         </div>
-        <figure className={continuous ? 'qa-figure' : 'dialogue-feature-media'}>
-          <ScreenshotCarousel titles={visual.frames.map(frame => frame.title)} descriptions={section.screenshotBriefs} locale={locale} />
-        </figure>
+        {!hideMedia && <figure className={continuous ? 'qa-figure' : 'dialogue-feature-media'}>
+          <ScreenshotCarousel
+            key={section.images.map(image => image.src).join('|') || section.id}
+            titles={section.images.length ? section.images.map(image => image.caption) : visual.frames.map(frame => frame.title)}
+            images={section.images.length ? section.images.map(image => image.src) : undefined}
+            descriptions={section.images.length ? undefined : section.screenshotBriefs}
+            locale={locale} />
+        </figure>}
       </div>
     </CaseStudyMediaFrame>
     {section.related && <p className="datapilot-related-link"><Link to="/project/agentops">查看 AgentOps 案例与 Demo ↗</Link></p>}

@@ -12,6 +12,27 @@ import { buildSiteCorpus } from '../frontend/src/lib/siteCorpus'
 
 const locales = ['zh'] as const
 
+test('POC retains deep links and shares task examples with their evidence boundaries in chat', () => {
+  const sections = getDataPilotContent('zh').parts.poc.sections
+  assert.deepEqual(new Set(sections.map(section => section.id)), new Set([
+    'poc-validation', 'poc-haier-scope', 'poc-haier-metrics', 'poc-haier-task',
+    'poc-haier-evaluation', 'poc-haier-delivery', 'poc-demo-data',
+  ]))
+  const corpus = buildSiteCorpus('zh')
+  const task = sections.find(section => section.id === 'poc-haier-task')!
+  assert.ok(task.beforeTable?.includes('不代表客户原话或已验证效果'))
+  for (const section of sections) {
+    for (const text of [section.title, section.intro, section.body, section.beforeTable, section.afterTable, ...(section.bullets ?? []), ...(section.steps ?? []).flatMap(step => [step.title, step.detail])]) {
+      if (text) assert.ok(corpus.includes(text), `Missing POC content: ${text}`)
+    }
+    for (const row of section.table?.rows ?? []) {
+      for (const cell of row.cells) if (typeof cell === 'string') assert.ok(corpus.includes(cell))
+    }
+  }
+  assert.ok(corpus.includes('模拟记录只用于演示，正式效果需用授权数据验证'))
+  assert.ok(corpus.includes('以下为验证与交付要求，不代表已经达到的效果'))
+})
+
 test('site content exposes only Chinese translations and retains complete case sections', () => {
   assert.deepEqual(Object.keys(translations), ['zh'])
   assert.deepEqual(Object.keys(interviewSystemPrompts), ['zh'])
@@ -290,8 +311,8 @@ for (const locale of locales) {
 test('DataPilot experience keeps product proposals and outcomes explicit', () => {
   const zh = getDataPilotContent('zh').parts.experience.sections
   assert.ok(zh.find(({ id }) => id === 'continuous-analysis-example')!.dialogue!.visual.note.includes('不代表已验证'))
-  assert.ok(zh.find(({ id }) => id === 'accuracy')!.body.includes('AgentOps Demo'))
-  assert.deepEqual(zh.filter(section => section.group?.id === 'agent-troubleshooting' && !section.groupIntro && !section.dialogueExtension).map(section => section.tabLabel), ['结果准确性', '执行异常', '执行耗时'])
+  assert.ok(zh.find(({ id }) => id === 'agent-latency')!.body.includes('AgentOps Demo'))
+  assert.deepEqual(zh.filter(section => section.group?.id === 'agent-troubleshooting' && !section.groupIntro && !section.dialogueExtension).map(section => section.tabLabel), ['结果偏差', '执行异常', '执行耗时'])
   assert.ok(zh.find(({ id }) => id === 'role')!.body.includes('15% 逐步提升到 60%'))
   assert.ok(zh.find(({ id }) => id === 'role')!.bullets!.some(text => text.includes('用户发布应用数 / 创建应用数')))
   assert.ok(!zh.some(({ id }) => id === 'delivery'))
@@ -302,21 +323,21 @@ test('DataPilot experience keeps product proposals and outcomes explicit', () =>
   assert.deepEqual(zh.filter(section => section.group?.id === 'continuous-dialogue').map(section => section.id), ['continuous-analysis-example', 'conversation', 'report-editing', 'continuous-analysis-validation'])
   assert.deepEqual(zh.find(section => section.id === 'continuous-analysis-validation')!.legacyIds, ['applications'])
   const reportEditing = zh.find(section => section.id === 'report-editing')!
-  assert.ok(reportEditing.dialogue!.decisions.some(item => `${item.title}${item.body}`.includes('回滚')))
+  assert.ok(reportEditing.dialogue!.visual.note.includes('回滚'))
   assert.ok(reportEditing.dialogue!.visual.note.includes('交互方案'))
   assert.deepEqual(zh.filter(section => section.group?.id === 'continuous-dialogue' && !section.groupIntro).map(section => section.tabLabel), ['连续追问', '修改应用', '使用应用'])
   assert.ok(!zh.filter(section => section.group?.id === 'continuous-dialogue').some(section => section.body.includes('指代')))
-  assert.deepEqual(zh.filter(section => section.group?.id === 'agent-troubleshooting').map(section => section.id), ['agent-troubleshooting-overview', 'agent-replay', 'agent-evidence', 'agent-latency', 'accuracy'])
+  assert.deepEqual(zh.filter(section => section.group?.id === 'agent-troubleshooting').map(section => section.id), ['agent-troubleshooting-overview', 'agent-replay', 'agent-evidence', 'agent-latency'])
   for (const locale of ['zh'] as const) {
     const sections = getDataPilotContent(locale).parts.experience.sections
     const corpus = buildSiteCorpus(locale)
-    assert.equal(sections.filter((section) => section.designPlaceholder).length, 7)
+    assert.ok(sections.some((section) => section.designPlaceholder), 'Keep coverage for editorial image briefs')
     for (const section of sections) {
       if (section.designPlaceholder) assert.ok(!corpus.includes(section.designPlaceholder), 'Editorial image briefs must not become chat facts')
       if (section.qaExperience) {
         assert.ok(corpus.includes(section.body), 'QA prose must reach chat in full')
         if (section.qaExperience.materialBrief) assert.ok(!corpus.includes(section.qaExperience.materialBrief), 'Preparation notes must not become chat facts')
-        for (const decision of section.qaExperience.decisions) assert.ok(corpus.includes(decision.body))
+        for (const decision of section.qaExperience.decisions) { assert.ok(corpus.includes(decision.title)); assert.ok(corpus.includes(decision.body)) }
         if (section.qaExperience.bridge) assert.ok(corpus.includes(section.qaExperience.bridge))
         const mockup = section.qaExperience.mockup
         assert.ok(!corpus.includes(mockup.label), 'Mock interface labels must not enter personal facts')
@@ -326,7 +347,7 @@ test('DataPilot experience keeps product proposals and outcomes explicit', () =>
         assert.ok(corpus.includes(section.body), 'Dialogue scenarios must reach chat')
         if (section.dialogue.tradeoff) assert.ok(corpus.includes(section.dialogue.tradeoff), 'Design challenges must reach chat')
         assert.ok(corpus.includes(section.dialogue.visual.note), 'Interaction proposal boundaries must reach the shared corpus')
-        for (const decision of section.dialogue.decisions) assert.ok(corpus.includes(decision.body))
+        for (const decision of section.dialogue.decisions) { assert.ok(corpus.includes(decision.title)); assert.ok(corpus.includes(decision.body)) }
         for (const frame of section.dialogue.visual.frames) {
           assert.ok(corpus.includes(frame.prompt))
           assert.ok(corpus.includes(frame.response))

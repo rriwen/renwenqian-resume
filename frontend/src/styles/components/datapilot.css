@@ -183,62 +183,56 @@
 }
 
 .datapilot-case-content > .project-detail-section:first-child { margin-top: 0; }
-.datapilot-poc-content .datapilot-poc-intro { font-weight: var(--weight-semibold); }
-.datapilot-poc-content .project-detail-table th:first-child { width: 25%; }
-.datapilot-poc-content .project-detail-table th:last-child { width: 34%; }
-.datapilot-poc-content .project-detail-table--two-column th:last-child { width: auto; }
-
-.datapilot-poc-flow {
+.datapilot-poc-content .project-detail-section { min-width: 0; }
+.datapilot-poc-content > .project-detail-section { grid-template-columns: minmax(0, 1fr); }
+.datapilot-poc-content .datapilot-poc-intro { margin-bottom: var(--space-40); }
+@container site-main (max-width: 700px) {
+  .datapilot-poc-content .datapilot-poc-intro { margin-bottom: var(--space-24); }
+}
+.datapilot-poc-content .datapilot-poc-note {
+  color: var(--muted);
+  font-size: var(--text-sm);
+  line-height: var(--leading-body);
+}
+.datapilot-poc-data-principles {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-6);
   margin: var(--space-8) 0 0;
+  padding: var(--space-6) 0 0;
+  border-top: 1px solid var(--rule);
+  list-style: none;
+}
+.datapilot-poc-data-principles li { min-width: 0; margin: 0; }
+.datapilot-poc-data-principles strong { display: block; margin-bottom: var(--space-3); }
+.datapilot-poc-data-principles span { display: block; color: var(--muted); }
+.datapilot-poc-stage-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-6);
+  margin: var(--space-6) 0 0;
   padding: 0;
   list-style: none;
 }
-.datapilot-poc-flow li {
-  position: relative;
-  display: grid;
-  align-content: start;
-  gap: var(--space-2);
-  padding-right: var(--space-3);
-  font-size: var(--text-sm);
+.datapilot-poc-stage-cards li {
+  min-width: 0;
+  margin: 0;
+  padding: var(--space-6);
+  border: 1px solid var(--rule);
+  border-radius: 12px;
 }
-.datapilot-poc-flow li:not(:last-child)::before {
-  content: '';
-  position: absolute;
-  top: 16px;
-  left: 32px;
-  right: 0;
-  border-top: 1px solid var(--rule);
+.datapilot-poc-stage-cards strong { display: block; margin-bottom: var(--space-3); }
+.datapilot-poc-stage-cards span { display: block; color: var(--muted); }
+@container site-main (max-width: 700px) {
+  .datapilot-poc-data-principles,
+  .datapilot-poc-stage-cards { grid-template-columns: 1fr; }
 }
-.datapilot-poc-step {
-  display: grid;
-  place-items: center;
-  width: 32px;
-  height: 32px;
-  margin-bottom: var(--space-2);
-  border-radius: 50%;
-  background: var(--subtle);
-  color: var(--text);
-  font-family: var(--font-mono);
-}
-.datapilot-poc-flow strong { font-weight: var(--weight-semibold); }
-.datapilot-poc-flow li > span:last-child { color: var(--muted); }
+.datapilot-poc-content .project-detail-table th:first-child { width: 25%; }
+.datapilot-poc-content .project-detail-table-scroll + p { margin-top: var(--space-6); }
+.datapilot-poc-content .project-detail-table th:last-child { width: 34%; }
+.datapilot-poc-content .project-detail-table--two-column th:last-child { width: auto; }
+.datapilot-poc-content .project-detail-table--two-column th:first-child { width: 46%; }
 
-@media (max-width: 700px) {
-  .datapilot-poc-flow { grid-template-columns: 1fr; gap: var(--space-5); }
-  .datapilot-poc-flow li { grid-template-columns: 32px 1fr; column-gap: var(--space-4); }
-  .datapilot-poc-step { grid-row: span 2; margin: 0; }
-  .datapilot-poc-flow li > span:last-child { grid-column: 2; }
-  .datapilot-poc-flow li:not(:last-child)::before {
-    top: 32px;
-    left: 16px;
-    bottom: calc(-1 * var(--space-5));
-    right: auto;
-    border-top: 0;
-    border-left: 1px solid var(--rule);
-  }
-}
 
 .datapilot-application-types {
   display: grid;
@@ -464,6 +458,15 @@
 .datapilot-evolution .case-study-media > button { max-height: 100%; padding: 8px !important; background: rgb(255 255 255 / 6%) !important; box-shadow: 0 0 0 1px #fff; border-radius: 20px !important; }
 .datapilot-evolution .case-study-media img { max-height: calc(var(--evolution-height) - 80px); object-fit: contain; border-radius: 12px; }
 .datapilot-evolution .case-study-placeholder { height: 100%; aspect-ratio: auto; }
+@container site-main (max-width: 700px) {
+  .datapilot-evolution [role="tabpanel"],
+  .datapilot-evolution .project-detail-gallery,
+  .datapilot-evolution .project-detail-gallery-grid,
+  .datapilot-evolution .project-detail-gallery-grid > figure,
+  .datapilot-evolution .case-study-media { height: auto; }
+  .datapilot-evolution .case-study-media { padding-block: 20px; }
+  .datapilot-evolution .case-study-media img { max-height: none; }
+}
 
 .datapilot-content-group > .project-detail-section { margin-top: 48px; }
 .datapilot-content-group > .project-detail-section:first-of-type { margin-top: 32px; }
@@ -473,8 +476,8 @@
 .datapilot-content-group > .project-detail-section, .datapilot-case-content > section > .project-detail-section { scroll-margin-top: var(--header-clearance); }
 .datapilot-content-group h3 { margin: 0 0 24px; }
 
-.datapilot-results { margin: 0; }
-.datapilot-results-comparison { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px; margin-block: 28px 32px; }
+.datapilot-results { margin: 0 0 48px; }
+.datapilot-results-comparison { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px; margin-block: 28px 0; }
 .datapilot-result-pair { display: grid; grid-template-columns: max-content 40px; align-items: start; gap: 16px 48px; min-width: 0; }
 .datapilot-result-pair dl { display: contents; }
 .datapilot-result-pair dt { grid-column: 1 / -1; color: var(--muted); font-size: var(--text-sm); }
@@ -485,9 +488,17 @@
 .datapilot-result-ring-track { stroke: var(--subtle); }
 .datapilot-result-ring-value { stroke: var(--muted); }
 .datapilot-result-pair.is-current .datapilot-result-ring-value { stroke: var(--accent); }
-.datapilot-results figcaption { color: var(--muted); font-size: var(--text-sm); line-height: var(--leading-body); }
-@container site-main (max-width: 700px) { .datapilot-results-comparison { grid-template-columns: 1fr; gap: 32px; } }
-@container site-main (max-width: 400px) { .datapilot-result-pair { column-gap: 36px; grid-template-columns: max-content 35px; } .datapilot-result-ring { width: 35px; height: 35px; } }
+.case-study-page .datapilot-results .datapilot-results-formula { margin: 24px 0 0; color: var(--muted); font-size: var(--text-sm); line-height: var(--leading-body); }
+@container site-main (max-width: 700px) {
+  .datapilot-results-comparison { gap: 20px; }
+  .datapilot-result-pair { column-gap: 16px; grid-template-columns: max-content 32px; }
+  .datapilot-result-ring { width: 32px; height: 32px; }
+}
+@container site-main (max-width: 360px) {
+  .datapilot-results-comparison { gap: 16px; }
+  .datapilot-result-pair { column-gap: 8px; grid-template-columns: max-content 28px; }
+  .datapilot-result-ring { width: 28px; height: 28px; }
+}
 
 /* Semantic diagrams share the case study's content width and theme. */
 .datapilot-journey { margin: var(--space-8) 0 0; }
@@ -915,8 +926,8 @@
   .dialogue-feature-section > .case-study-media { padding: 24px; }
 }
 @container site-main (max-width: 480px) {
-  .dialogue-capabilities .qa-capability-tabs { width: 100%; }
-  .dialogue-capabilities .qa-capability-tabs button { flex: 1; padding-inline: 8px; gap: 4px; white-space: nowrap; }
+  .qa-capability-tabs { width: 100%; box-sizing: border-box; }
+  .qa-capability-tabs button { flex: 1; padding-inline: 8px; gap: 4px; white-space: nowrap; }
   .dialogue-feature-section > .case-study-media { padding: 20px 16px; }
 }
 
@@ -952,23 +963,157 @@
 .qa-screenshot-image .project-detail-gallery { margin: 0; }
 
 .qa-screenshot-image .project-detail-gallery button { border: 0 !important; border-radius: 12px !important; }
+.qa-capabilities .qa-case-section .qa-screenshot-image button { background: rgb(255 255 255 / 40%) !important; }
+.qa-capabilities .qa-case-section .qa-screenshot-image img { object-fit: contain !important; }
 
 @container site-main (min-width: 701px) {
-  .qa-capabilities:has(#qa-entry-panel, #conversation-panel) .qa-case-layout { min-height: 400px; grid-template-rows: minmax(400px, auto); }
-  .qa-capabilities:has(#qa-entry-panel, #conversation-panel) .qa-case-copy { padding-bottom: 28px; }
-  .qa-capabilities:has(#qa-entry-panel, #conversation-panel) .qa-design-decisions { margin-top: auto; padding-top: 28px; margin-bottom: 0; }
-  .qa-capabilities:has(#qa-entry-panel, #conversation-panel) .qa-figure { height: 100%; min-height: 0; }
-  .qa-capabilities:has(#qa-entry-panel, #conversation-panel) .screenshot-carousel { position: relative; height: 100%; padding-bottom: 28px; box-sizing: border-box; }
-  .qa-capabilities:has(#qa-entry-panel, #conversation-panel) .qa-screenshot-image,
-  .qa-capabilities:has(#qa-entry-panel, #conversation-panel) .qa-screenshot-placeholder { height: 100%; aspect-ratio: auto; }
-  .qa-capabilities:has(#qa-entry-panel, #conversation-panel) .qa-screenshot-image :is(.project-detail-gallery, .project-detail-gallery-grid, figure, button) { height: 100%; }
-  .qa-capabilities:has(#qa-entry-panel, #conversation-panel) .qa-screenshot-image img { height: 100% !important; object-fit: contain; }
-  .qa-capabilities #qa-result .qa-screenshot-image img { object-fit: cover !important; }
-  .qa-capabilities:has(#qa-entry-panel, #conversation-panel) .qa-carousel-controls { position: absolute; bottom: 0; width: 100%; }
+  .qa-capabilities .qa-case-layout { min-height: 400px; grid-template-rows: minmax(400px, auto); }
+  .qa-capabilities .qa-case-copy { padding-bottom: 28px; }
+  .qa-capabilities .qa-design-decisions { margin-top: auto; padding-top: 28px; margin-bottom: 0; }
+  .qa-capabilities .qa-figure { height: 100%; min-height: 0; }
+  .qa-capabilities .screenshot-carousel { position: relative; height: 100%; padding-bottom: 28px; box-sizing: border-box; }
+  .qa-capabilities .qa-screenshot-image,
+  .qa-capabilities .qa-screenshot-placeholder { height: 100%; aspect-ratio: auto; }
+  .qa-capabilities .qa-screenshot-image :is(.project-detail-gallery, .project-detail-gallery-grid, figure, button) { height: 100%; }
+  .qa-capabilities .qa-screenshot-image img { height: 100% !important; object-fit: contain; }
+  .qa-capabilities .qa-carousel-controls { position: absolute; bottom: 0; width: 100%; }
 }
 
-.qa-capabilities :is(#qa-entry, #qa-execution, #qa-result, #conversation, #report-editing, #continuous-analysis-validation) .qa-design-decisions { margin-bottom: 36px; }
-.qa-capabilities :is(#qa-entry, #qa-execution, #qa-result, #conversation, #report-editing, #continuous-analysis-validation) .qa-design-decisions strong { font-weight: 400; }
+.qa-capabilities .qa-design-decisions { margin-bottom: 36px; }
+.qa-capabilities .qa-design-decisions strong { font-weight: 400; }
 @container site-main (max-width: 700px) {
-  .qa-capabilities :is(#qa-entry, #qa-execution, #qa-result, #conversation, #report-editing, #continuous-analysis-validation) .qa-design-decisions { margin-bottom: 0; }
+  .qa-capabilities .qa-design-decisions { margin-bottom: 0; }
 }
+
+/* Strategy overview: a quiet numbered reading layout. */
+.datapilot-case-page #design-strategy .datapilot-evidence { margin-bottom: 32px; }
+.datapilot-case-page .datapilot-strategies { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; list-style: none; margin: 40px 0 0; padding: 0; }
+.datapilot-case-page .datapilot-strategies > li { display: flex; flex-direction: column; align-items: stretch; gap: 20px; min-width: 0; margin: 0; padding: 24px 0 0; border-top: 1px solid var(--rule); }
+.datapilot-case-page .datapilot-strategy-heading h3 { margin: 0; color: var(--text); font-size: var(--text-base); font-weight: var(--weight-semibold); line-height: 1.5; }
+.datapilot-case-page .datapilot-strategy-description { margin: 0; color: var(--muted); font-size: var(--text-sm); line-height: var(--leading-body); }
+@container site-main (max-width: 700px) {
+  .datapilot-case-page .datapilot-strategies { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .datapilot-case-page .datapilot-strategies > li { gap: 12px; padding: 24px 0; }
+}
+
+
+/* Full standard flowchart, arranged in four connected stage bands. */
+.datapilot-workflow { --showcase-ice: #e3d7fa; --showcase-sky: #d1bff2; --showcase-blue: #b1a3ee; --showcase-lavender: #dfc9ef; position: relative; isolation: isolate; overflow: hidden; margin: 32px 0; padding: 20px; border-radius: var(--radius-lg); background: linear-gradient(130deg,var(--showcase-ice),var(--showcase-sky) 45%,var(--showcase-blue),var(--showcase-lavender)); }
+.datapilot-workflow > .dbv-mesh-gradient { position: absolute; inset: 0; z-index: -1; pointer-events: none; }
+.datapilot-workflow-scroll { position: relative; overflow-x: auto; scrollbar-width: thin; }
+.datapilot-workflow-graph { display: block; width: 100%; min-width: 0; height: auto; font-family: inherit; }
+.workflow-stage-title { font-size: 28px; font-weight: 600; fill: #25374e; }
+.workflow-stage-divider { stroke: rgb(37 55 78 / .28); stroke-width: 1.5; stroke-dasharray: 8 7; }
+.workflow-node rect { fill: rgb(255 255 255 / .32); stroke: rgb(255 255 255 / .85); }
+.workflow-node text { font-size: 20px; fill: #202b38; }
+.workflow-node--decision polygon { fill: rgb(255 255 255 / .32); stroke: #fff; stroke-width: 2; }
+.workflow-node--decision text { fill: #202b38; font-weight: 400; }
+.workflow-node--end rect { fill: rgb(255 255 255 / .24); stroke: #fff; }
+.workflow-node--warning rect { fill: #fff; stroke: #fff; }
+.workflow-edge-label { font-size: 14px; font-weight: 500; fill: #666; stroke: none; }
+.case-study-page .datapilot-workflow figcaption { position: relative; margin-top: 16px; color: #46576a; font-size: var(--text-xs); }
+@container site-main (max-width: 700px) { .datapilot-workflow { padding: 16px; } }
+.datapilot-workflow { min-width: 0; max-width: 100%; box-sizing: border-box; contain: inline-size; }
+.datapilot-workflow-scroll { width: 100%; min-width: 0; max-width: 100%; }
+
+.workflow-legend { display: flex; flex-wrap: wrap; gap: 12px 24px; }
+.workflow-legend > span { display: inline-flex; align-items: center; gap: 8px; }
+.workflow-legend i { display: inline-block; width: 18px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+.workflow-legend-process { background: rgb(255 255 255 / .32); border: 1px solid rgb(255 255 255 / .85); }
+.workflow-legend i.workflow-legend-decision { width: 14px; height: 14px; border-radius: 0; background: rgb(255 255 255 / .32); border: 1.5px solid #fff; transform: rotate(45deg) scale(.75); }
+.workflow-legend-recovery { background: #fff; border: 1px solid #fff; }
+
+.workflow-node--input rect { fill: #202124; stroke: #202124; }
+.workflow-node--input text { fill: #fff; }
+.workflow-legend-input { background: #202124; border: 1px solid #202124; }
+
+.datapilot-workflow-link {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--accent);
+  font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.qa-capabilities .qa-case-layout.dialogue-text-only {
+  grid-template-rows: auto;
+  min-height: 0;
+}
+.qa-capabilities .dialogue-text-only .qa-case-copy { padding: 0; }
+.qa-capabilities .dialogue-text-only .qa-design-decisions { margin-top: 28px; }
+
+.dialogue-status-tag {
+  display: inline-block;
+  margin-left: 10px;
+  padding: 2px 8px;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 1.4;
+  vertical-align: middle;
+}
+
+.case-study-page .project-detail-section-copy a.datapilot-inline-link {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* POC uses the same mesh board and translucent nodes as the experience journey. */
+.datapilot-journey--paths.datapilot-poc-diagram { margin: var(--space-8) 0; padding: var(--space-10) var(--space-6); }
+.datapilot-poc-diagram .datapilot-poc-flow { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-6); align-items: stretch; padding: 0; }
+.datapilot-poc-diagram .datapilot-poc-flow li { padding: var(--space-5) var(--space-3); gap: var(--space-3); }
+.datapilot-poc-diagram .datapilot-poc-flow strong { font-size: var(--text-sm); font-weight: var(--weight-semibold); }
+.datapilot-poc-flow li > span { font-size: var(--text-sm); line-height: var(--leading-body); }
+.datapilot-poc-diagram .datapilot-path-connector { width: 24px; left: -25px; }
+@container site-main (max-width: 800px) {
+  .datapilot-journey--paths.datapilot-poc-diagram { padding: var(--space-8) var(--space-5); }
+  .datapilot-poc-diagram .datapilot-poc-flow { gap: var(--space-8); }
+  .datapilot-poc-diagram .datapilot-poc-flow li { max-width: none; }
+  .datapilot-poc-diagram .datapilot-path-connector { width: 32px; left: calc(50% - 16px); top: -25px; }
+}
+
+/* SaaS first-use journey: equal-width steps on the shared gradient board. */
+.datapilot-journey--flow ol { grid-template-columns: repeat(4, minmax(0, 1fr)); align-items: stretch; gap: 24px; }
+.datapilot-journey--flow .datapilot-journey-lane li,
+.datapilot-journey--flow .datapilot-journey-lane li:first-child,
+.datapilot-journey--flow .datapilot-journey-lane li:last-child { width: 100%; border-radius: 10px; min-height: 150px; padding: 20px 14px; }
+.datapilot-journey--flow .datapilot-journey-lane:last-child li:nth-child(2) { width: 100%; }
+.datapilot-journey--flow .datapilot-journey-lane:last-child li:nth-child(3) { margin-left: 0; }
+.datapilot-journey--flow strong { font-size: var(--text-base); font-weight: var(--weight-semibold); }
+.datapilot-journey--flow .datapilot-journey-lane li > p { font-size: 13px; line-height: 1.7; font-weight: 400; color: #526174; margin-top: 10px; }
+:root[data-theme='dark'] .datapilot-journey--flow .datapilot-journey-lane li > p { color: #c2ccd8; }
+.datapilot-journey--flow .datapilot-path-connector { width: 24px; left: -25px; }
+.datapilot-journey--flow figcaption { color: inherit; }
+@container site-main (max-width: 800px) {
+  .datapilot-journey--flow .datapilot-journey-lane li { max-width: none; min-height: 100px; }
+  .datapilot-journey--flow .datapilot-path-connector { width: 32px; left: calc(50% - 16px); top: -25px; }
+}
+
+.case-study-page .datapilot-reference-action a.case-study-demo { margin-top: 0; text-decoration: none; }
+.datapilot-reference-action a::after { content: none; }
+
+/* Registration decisions and their single supporting screenshot. */
+:is(#growth-context, #growth-funnel) > .project-detail-section-copy { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); column-gap: 32px; align-items: start; }
+:is(#growth-context, #growth-funnel) > .project-detail-section-copy > h2,
+:is(#growth-context, #growth-funnel) > .project-detail-section-copy > p { grid-column: 1 / -1; }
+:is(#growth-context, #growth-funnel) > .project-detail-section-copy > ul { grid-column: 1; margin-top: 24px; }
+:is(#growth-context, #growth-funnel) > .project-detail-section-copy > .datapilot-evidence { grid-column: 2; margin-top: 24px; }
+@container site-main (max-width: 800px) {
+  :is(#growth-context, #growth-funnel) > .project-detail-section-copy { grid-template-columns: minmax(0, 1fr); }
+  :is(#growth-context, #growth-funnel) > .project-detail-section-copy > .datapilot-evidence { grid-column: 1; }
+}
+
+:is(#growth-context, #growth-funnel) .project-detail-subsection-list strong { display: block; }
+:is(#growth-context, #growth-funnel) .datapilot-decision-description { display: block; margin-top: 6px; font-size: var(--text-sm); line-height: 1.75; color: var(--muted); }
+
+#growth-context > .project-detail-section-copy > .datapilot-reference-action { grid-column: 1; margin-top: 16px; }
+@container site-main (max-width: 800px) {
+  #growth-context > .project-detail-section-copy > .datapilot-reference-action { grid-column: 1; }
+}
+
+.case-study-page .project-detail-section-copy > .datapilot-section-subtitle { margin: -12px 0 24px; font-size: var(--text-sm); color: var(--muted); line-height: 1.7; }

@@ -141,3 +141,18 @@ Data Agent「问题排查」复用现有渐变展板与截图轮播，以结果�
 Data Agent 不再展示「设计落地与协同」章节，相关 DESIGN.md 实践集中在设计工程化项目中。设计工程化在 `project-design-rules` 详述视觉规则、组件状态与实现约束，在 `datapilot-design-collaboration` 展示研发使用与检查方式，区分方法参照、已做实践和后续验证。
 
 多轮对话与持续使用采用连续追问、修改应用、使用应用三个 Tab。连续追问聚焦结果引用、比较探索与选择写入；修改应用聚焦作用范围、关联影响与报告版本检查、发布及回滚；使用应用合并跨次复用与周期更新，区分报告版本和数据更新记录。内容与截图说明统一维护在 dataPilot.ts，聊天同步正文；applications 通过 legacyIds 映射到 continuous-analysis-validation，保留旧深链接。报告版本、回滚和自主发布为已确认能力，其余交互机制保留方案边界。
+
+Data Agent 的设计策略正文通过 `DataPilotWorkflow.tsx` 在流程说明末尾提供「Agent 工作流」文字链接，点击复用 `ProjectLightbox` 预览原始流程图。素材与裁剪范围由 `data/projects/dataPilot.ts` 的 `workflow.image` 统一维护；通过 `sourceRegion` 隐藏图片顶部标题，正文不再展示 SVG 流程展板。流程摘要与阶段说明继续供聊天使用。
+
+
+
+POC 场景验证依据演示准备材料分为业务理解、场景筛选、指标映射、演示数据、连续任务、评价要求和阶段产出七节；以制造业为主线，油气、交通和巡检为匿名补充示例。保留六个原章节 ID，新增 `poc-demo-data`，顺序以正文为准。区分意向演示与正式 POC，公开资料、客户资料、推断及模拟记录分别表述；验收要求不是已验证结果。`DataPilotPocSection.tsx` 复用产品体验的单标题正文与加粗标签列表，任务表使用 `DetailTable.tsx`；示例性质说明由 `beforeTable` 保存，结尾由 `afterTable` 保存，与正文、表格和列表同步进入聊天语料，不将验证计划当作已实现效果。
+
+海外 SaaS 探索保留原名称与五个 growth-* 深链接，内容依次为背景与目标、官网价值表达、登录注册、积分试用、阶段交付与上线验证。范围为官网、登录注册与积分试用设计已完成、待上线，不含付费流程。官网与登录注册配图来自 dp-saas-demo.vercel.app 的真实页面截图；积分试用按通用产品逻辑描述，具体结算规则保留方案边界。中文内容统一由 dataPilot.ts 维护并进入聊天语料。
+
+AgentOps 案例由 projectDetails.ts 维护，以 Demo 销售日报异常串联定位执行、理解过程与核查异常；背景合并后通过 legacyIds 保留 openobserve-learning / shared-product-need 深链接，阶段成果与客户回放探索合并为「成果与后续」，明确已有产品 MVP、待内部验证，并通过 legacyIds 保留 customer-replay 深链接。截图保留无图注展示，演示内容不作为真实客户故障或效率成果。
+
+
+开发编辑器入口统一为 `/project/datadevelop`，通过 `DevelopmentEditorsCaseStudy.tsx` 以 SQL 编辑器、任务流编辑器两个 Tab 展示原有内容，复用 Data Agent 的编号下划线样式。`?editor=workflow` 保存任务流 Tab，旧 `/project/workflow-editor` 保留其他查询与 Hash 重定向到此 Tab；切换原地更新 URL，支持键盘、刷新、历史恢复。`projects.ts` 仅合并导航，原两份案例数据与聊天语料保持独立。
+
+Text2SQL 案例围绕就近编辑、任务指令与结果审阅三项设计取舍组织中文叙事，保留原章节 ID；正文以 `sourceRegion` 展示早期交互稿的输入、指令、生成与审阅局部，正文图注隐藏，末尾不再展示完整原稿入口；原始素材保留。首屏本地原型明确为模拟演示，结果审阅和异常反馈保留探索边界；正文与聊天语料共用 `projectDetails.ts`。

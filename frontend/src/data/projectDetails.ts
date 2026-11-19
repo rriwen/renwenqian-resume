@@ -182,122 +182,248 @@ const details: Record<string, {zh: ProjectDetailBlock }> = {
     },
   },
   text2sql: {
-    zh: {
-      showCover: false,
-      overviewPrototype: { url: '/prototype/text2sql?embed=1', title: 'Text2SQL Demo', viewportWidth: 1280 },
-      tags: ['AI 辅助', 'SQL 编辑器', '产品界面设计'],
-      paragraphs: [
-        'Text2SQL 将自然语言输入与 SQL 编辑结合起来，围绕生成、纠错、改写和格式化，为数据库开发提供 AI 辅助。用户可以在光标处发起请求，也可以选中已有 SQL，就当前代码描述修改需求。',
-        '我负责产品界面设计，重点是让 AI 融入原有编辑流程：入口跟随编辑位置，指令明确当前任务，生成过程提供状态反馈与终止操作。这篇案例基于早期设计稿回顾关键决策；其中结果审阅部分保留了当时的方案探索。',
+    "zh": {
+      "showCover": false,
+      "overviewPrototype": {
+        "url": "/prototype/text2sql?embed=1",
+        "title": "Text2SQL 交互演示",
+        "viewportWidth": 1280
+      },
+      "demoUrl": "/prototype/text2sql",
+      "tags": [
+        "AI 辅助",
+        "SQL 编辑器",
+        "产品界面设计"
       ],
-      gallery: [],
-      sections: [
-        {
-          id: 'context',
-          title: '设计背景：让 AI 接上正在进行的编辑任务',
-          paragraphs: [
-            '在 SQL 编辑器里，用户可能正准备写一段查询，也可能已经有了需要纠错或调整的语句。两类任务都需要表达意图，但起点不同：前者从光标位置开始，后者围绕一段明确的选区展开。',
-            '设计需要回答三个问题：用户从哪里发起请求，如何知道 AI 正在处理什么任务，以及生成后如何判断是否采用。围绕这三个问题，方案把入口、输入、生成与结果处理串成连续流程，尽量减少在代码和辅助界面之间来回切换。',
-          ],
-          table: {
-            columns: ['任务起点', '交互安排', '设计关注点'],
-            rows: [
-              { id: 'from-cursor', cells: ['从当前光标开始', '空行弱提示，唤起后在光标上方输入', '让入口容易发现，同时保持编辑区域简洁'] },
-              { id: 'from-selection', cells: ['处理已有 SQL', '选中后出现操作入口，点击「编辑」在选区上方输入', '让请求位置与当前处理的代码建立联系'] },
-              { id: 'review-change', cells: ['判断是否采用结果', '探索差异展示与接受／忽略操作', '在修改应用前留出审阅与判断的空间'] },
-            ],
-          },
-          images: [],
-        },
-        {
-          id: 'contextual-entry',
-          title: '就近唤起：围绕光标与选区组织入口',
-          paragraphs: [
-            '入口采用渐进出现的方式：空行展示弱提示，选中 SQL 后再出现「编辑」和「添加到对话」。右键菜单与快捷键提供补充路径，让鼠标操作与键盘操作都能接入同一项能力。',
-          ],
-          subsections: [
-            {
-              id: 'inline-and-sidebar',
-              title: '把局部编辑放在代码旁边',
-              paragraphs: [
-                '点击「编辑」或使用 ⌘K 唤起嵌入式输入框：没有选区时出现在光标上方，有选区时出现在选中 SQL 的最上方。输入位置随编辑对象变化，让用户在描述需求时仍能看到相关代码。',
-                '「添加到对话」和 ⌘L 则提供侧边对话入口。这份稿件主要展开嵌入式编辑流程，侧边对话保留为另一条操作路径。就近输入的取舍是会占用部分编辑区域，因此方案同时提供清晰的关闭入口和 Esc 快捷键。',
-              ],
-            },
-            {
-              id: 'discoverability',
-              title: '把操作提示放在需要它的时刻',
-              paragraphs: [
-                '选区浮动按钮通过悬停背景反馈可点击状态，发送和关闭图标在悬停时显示操作名称与快捷键。提示跟随空行、选区和悬停出现，使常用操作可发现，也避免让说明文字长期占据编辑器。',
-              ],
-            },
-          ],
-          images: [],
-        },
-        {
-          id: 'task-commands',
-          title: '明确意图：用任务指令辅助自然语言输入',
-          paragraphs: [
-            '一个开放输入框可以表达很多需求，也容易让人不确定从何开始。方案通过「/」菜单呈现 SQL 生成、SQL 纠错、SQL 改写、SQL 格式化四类任务，再由用户补充具体要求。',
-            '选中的指令以标签持续回显，让当前任务类型在发送前保持可见。用户可以点击标签重新选择，也可以用 Delete 清除指令，避免任务切换后仍沿用旧的设置。',
-            '菜单只在指令输入场景出现：继续输入其他文本时隐藏，正文中出现「/」也不触发。这样既保留快捷选择，也不打断正常输入。原稿还将「SQL 优化」调整为「SQL 改写」。回看这一命名，「改写」更贴近操作本身，也避免暗示每次改写都能带来性能提升。',
-          ],
-          images: [],
-        },
-        {
-          id: 'generation-feedback',
-          title: '过程可控：让等待有反馈，也能主动结束',
-          paragraphs: [
-            '发送请求后，输入区下方显示「AI 生成中…」，发送位置切换为终止按钮。状态信息解释当前进度，操作位置则承接用户此时最直接的需求：结束这次生成。',
-            '终止后回到唤起状态，让用户重新组织请求。从等待到退出的路径保持在同一位置，用户可以根据当前任务主动结束这次生成。',
-            '输入区同时提示 AI 内容的准确性与完整性限制。对这类代码辅助能力而言，提示是起点，后续还需要通过结果呈现帮助用户检查具体改动。',
-          ],
-          images: [],
-        },
-        {
-          id: 'result-review',
-          title: '结果方案探索：先看清变化，再决定是否采用',
-          paragraphs: [
-            '留存稿中的「生成结果」仍标注为待定，本节呈现当时的设计探索：把 AI 生成与用户采用分成两个步骤，让代码修改经过一次明确判断。',
-          ],
-          subsections: [
-            {
-              id: 'diff-and-decision',
-              title: '用差异展示说明改了什么',
-              paragraphs: [
-                '方案以红色表示删除、绿色表示新增、灰色表示未变化的代码，并提供「接受」和「忽略」。接受后关闭面板，保留新增与未变化的代码；忽略后返回未发送状态。',
-                '这种处理增加了一次审阅，却给用户留下判断修改范围的机会。设计要解决的不只是结果是否出现，还包括用户能否理解变化，并明确表达自己的选择。',
-              ],
-            },
-            {
-              id: 'failure-feedback',
-              title: '区分无法生成与请求异常',
-              paragraphs: [
-                '当 AI 无法给出 SQL 时，原稿探索用多行注释说明原因；网络等问题导致无法返回内容时，则在输入区报错。前者解释内容层面的限制，后者反馈请求本身的异常，让两种失败具有不同的呈现位置。',
-                '回看这部分方案，仍需验证原因说明是否适合进入代码区，以及红绿差异是否需要额外的符号与文字标记。',
-              ],
-            },
-          ],
-          images: [],
-        },
-        {
-          id: 'delivery-and-reflection',
-          title: '上线与回顾',
-          paragraphs: [
-            '项目已上线，我承担产品界面设计工作。留存设计稿记录了从入口发现、任务输入到生成控制的交互规则，以及结果审阅和异常反馈的探索；上线后的具体反馈与指标尚未纳入本案例。',
-            '回看这次设计，核心思路是让自然语言操作依附于编辑任务：用光标与选区建立上下文，用指令标签表达意图，再通过状态反馈与结果审阅保留用户的判断空间。',
-            '后续复盘可以围绕入口是否容易发现、指令是否容易理解、生成后的修改是否容易审阅展开，并结合结果采纳情况与失败原因评估体验。',
-          ],
-          images: [
-            {
-              src: '/images/text2sql-interaction-design.png',
-              caption: 'Text2SQL 早期交互设计稿：入口、唤起、快捷指令、生成过程与结果方案；结果列在原稿中标注为「待定」。',
-            },
-          ],
-          imagesDisclosure: '查看早期交互设计稿',
-        },
+      "paragraphs": [
+        "面向 SQL 编写与修改场景，我负责产品界面设计，重点是就近操作、意图表达与生成控制。",
+        "本地原型基于早期稿制作，AI 回复与查询结果均为模拟。选中代码点击「编辑」，或按 ⌘K 体验。"
       ],
-    },
+      "gallery": [],
+      "sections": [
+        {
+          "id": "context",
+          "title": "设计背景",
+          "paragraphs": [
+            "用户既要说清怎么改，也要知道改哪段、是否采用。方案围绕光标与选区组织输入，让自然语言请求与代码保持联系。"
+          ],
+          "images": []
+        },
+        {
+          "id": "contextual-entry",
+          "title": "就近编辑",
+          "paragraphs": [],
+          "subsections": [
+            {
+              "id": "inline-and-sidebar",
+              "title": "输入跟随对象",
+              "paragraphs": [
+                [
+                  {
+                    "text": "就近输入：",
+                    "bold": true
+                  },
+                  {
+                    "text": "输入框跟随光标或选区，让用户描述需求时仍能参照代码。局部修改使用「编辑」，侧边对话保留为另一条路径。"
+                  }
+                ],
+                [
+                  {
+                    "text": "设计取舍：",
+                    "bold": true
+                  },
+                  {
+                    "text": "就近操作会占用编辑空间，因此提供关闭入口与 Esc 退出。"
+                  }
+                ]
+              ],
+              "images": [
+                {
+                  "src": "/images/text2sql-interaction-design.png",
+                  "caption": "早期稿局部：输入框位于选中 SQL 的上方，描述需求时仍保留代码参照。",
+                  "sourceRegion": {
+                    "x": 3210,
+                    "y": 1540,
+                    "width": 1530,
+                    "height": 660,
+                    "sourceWidth": 14000,
+                    "sourceHeight": 5120
+                  },
+                  "hideCaption": true
+                }
+              ],
+              "layout": "text-image",
+              "hideTitle": true
+            },
+            {
+              "id": "discoverability",
+              "title": "入口按需出现",
+              "paragraphs": [
+                "空行提示、选区入口与快捷键减少常驻控件，也使首次发现更依赖提示，需进一步验证。"
+              ]
+            }
+          ],
+          "images": []
+        },
+        {
+          "id": "task-commands",
+          "title": "明确意图",
+          "paragraphs": [],
+          "images": [],
+          "subsections": [
+            {
+              "id": "design-decision",
+              "title": "明确意图",
+              "hideTitle": true,
+              "layout": "text-image",
+              "paragraphs": [
+                [
+                  {
+                    "text": "辅助表达：",
+                    "bold": true
+                  },
+                  {
+                    "text": "「/」菜单提供生成、纠错、改写和格式化，指令以标签回显，可切换或清除；具体需求仍用自然语言补充。"
+                  }
+                ],
+                [
+                  {
+                    "text": "设计取舍：",
+                    "bold": true
+                  },
+                  {
+                    "text": "任务选择增加了一步操作。正文输入时收起菜单，避免打断；将「优化」改为「改写」，避免暗示性能提升。"
+                  }
+                ]
+              ],
+              "images": [
+                {
+                  "src": "/images/text2sql-interaction-design.png",
+                  "caption": "早期稿局部：四类任务作为输入辅助；选中后以标签回显，仍由用户补充具体需求。",
+                  "sourceRegion": {
+                    "x": 5820,
+                    "y": 380,
+                    "width": 1500,
+                    "height": 760,
+                    "sourceWidth": 14000,
+                    "sourceHeight": 5120
+                  },
+                  "hideCaption": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "generation-feedback",
+          "title": "生成控制",
+          "paragraphs": [],
+          "images": [],
+          "subsections": [
+            {
+              "id": "design-decision",
+              "title": "生成控制",
+              "hideTitle": true,
+              "layout": "text-image",
+              "paragraphs": [
+                "生成时显示状态，发送按钮切换为终止。结束后回到输入状态，便于调整请求。",
+                [
+                  {
+                    "text": "控制边界：",
+                    "bold": true
+                  },
+                  {
+                    "text": "终止操作让等待可控，内容正确性仍需通过结果审阅判断。"
+                  }
+                ]
+              ],
+              "images": [
+                {
+                  "src": "/images/text2sql-interaction-design.png",
+                  "caption": "早期稿局部：生成状态与终止按钮位于同一输入区域，等待和退出保持连续。",
+                  "sourceRegion": {
+                    "x": 8730,
+                    "y": 380,
+                    "width": 1530,
+                    "height": 610,
+                    "sourceWidth": 14000,
+                    "sourceHeight": 5120
+                  },
+                  "hideCaption": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "result-review",
+          "title": "结果审阅",
+          "paragraphs": [
+            "以下为早期稿中标注「待定」的方案探索。"
+          ],
+          "subsections": [
+            {
+              "id": "diff-and-decision",
+              "title": "确认修改",
+              "paragraphs": [
+                [
+                  {
+                    "text": "先看变化：",
+                    "bold": true
+                  },
+                  {
+                    "text": "用颜色区分删除、新增与未变代码，由用户选择接受或忽略。"
+                  }
+                ],
+                [
+                  {
+                    "text": "设计取舍：",
+                    "bold": true
+                  },
+                  {
+                    "text": "增加一次确认，留出检查改动的机会。仍需验证差异是否易懂，并用符号与文字补充颜色区分。"
+                  }
+                ]
+              ],
+              "images": [
+                {
+                  "src": "/images/text2sql-interaction-design.png",
+                  "caption": "结果方案探索：删除、新增与未变化代码分开呈现，接受或忽略由用户决定。原稿此部分标注为「待定」。",
+                  "sourceRegion": {
+                    "x": 11430,
+                    "y": 380,
+                    "width": 2200,
+                    "height": 780,
+                    "sourceWidth": 14000,
+                    "sourceHeight": 5120
+                  },
+                  "hideCaption": true
+                }
+              ],
+              "layout": "text-image",
+              "hideTitle": true
+            },
+            {
+              "id": "failure-feedback",
+              "title": "区分失败原因",
+              "paragraphs": [
+                "方案用代码注释解释无法生成的原因，在输入区反馈请求异常。注释可能与可执行内容混淆，呈现位置与重试方式仍需验证。"
+              ]
+            }
+          ],
+          "images": []
+        },
+        {
+          "id": "delivery-and-reflection",
+          "title": "交付与回顾",
+          "paragraphs": [
+            "项目已上线。本案例基于早期设计稿回顾，结果审阅与异常反馈保留探索边界，尚未收录上线反馈与效果指标。",
+            "后续重点验证入口发现、指令理解与改动审阅，判断这些取舍是否有效。"
+          ],
+          "images": []
+        }
+      ]
+    }
   },
   'workflow-editor': {
   "zh": {
@@ -876,210 +1002,189 @@ const details: Record<string, {zh: ProjectDetailBlock }> = {
     },
   },
   agentops: {
-    zh: {
-      tags: [
-        "Agent 可观测",
-        "产品孵化",
-        "AI 交互设计"
-      ],
-      overviewFacts: [
-        {
-          label: "项目起点",
-          value: "Data Agent客户 POC"
-        },
-        {
-          label: "产品范围",
-          value: "跨应用的 Agent 执行排查"
-        },
-        {
-          label: "呈现内容",
-          value: "产品 Demo 与 Data Agent 回放探索"
-        }
-      ],
-      demoUrl: "https://aiops-phi.vercel.app/",
-      paragraphs: [
-        [
-          {
-            text: "项目起源于Data Agent客户 POC 中的一次具体困难：AI 执行出错后，团队难以判断应该排查哪个环节。项目先接入 OpenObserve 辅助查看运行信息，随后在使用中发现 Trace 阅读繁琐、执行过程理解成本高。随着内部多个 AI 应用出现类似需求，"
-          },
-          {
-            text: "逐步孵化出 Agent 可观测产品",
-            bold: true
-          },
-          {
-            text: "。"
-          }
+  "zh": {
+    "tags": [
+      "Agent 可观测",
+      "产品孵化",
+      "AI 交互设计"
+    ],
+    "overviewFacts": [
+      {
+        "label": "目标用户",
+        "value": "内部参与 Agent 排查的\n研发与平台人员"
+      },
+      {
+        "label": "主要职责",
+        "value": "能力规划、需求拆解\n回放交互设计"
+      },
+      {
+        "label": "设计挑战",
+        "value": "让复杂执行过程易于理解\n同时保留排查所需细节"
+      }
+    ],
+    "demoUrl": "https://aiops-phi.vercel.app/",
+    "paragraphs": [],
+    "showCover": false,
+    "sections": [
+      {
+        "id": "project-origin",
+        "title": "项目背景",
+        "paragraphs": [
+          "项目起源于 Data Agent 客户 POC 中的排查困难：Agent 执行异常后，仅凭最终回答难以判断原因。早期接入 OpenObserve 查看技术记录，但仍需手动串联信息，才能还原执行经过。",
+          "随着多个内部 AI 应用出现类似需求，项目逐步扩展为跨应用的 Agent 可观测产品，支持从异常结果回溯执行过程、核查问题依据。"
         ],
-        "设计围绕应用概览、执行筛选与步骤核查组织排查路径。后续在 Data Agent 中，进一步探索面向客户的智能体回放，让客户理解 Agent 做了什么，以及执行过程如何影响最终结果。"
-      ],
-      showCover: false,
-      sections: [
-        {
-          placement: "overview",
-          id: "product-preview",
-          legacyIds: [
-            "project-gallery"
-          ],
-          title: "产品界面概览",
-          hideTitle: true,
-          paragraphs: [],
-          images: [
-            {
-              src: "/images/agentops-overview.jpg",
-              caption: "Demo · 应用切换与 Agent 概览，为不同 AI 应用提供一致的排查入口。"
-            }
-          ]
-        },
-        {
-          id: "project-origin",
-          title: "起点：客户 POC 中难以解释的异常",
-          paragraphs: [
-            "问题最早出现在Data Agent的客户 POC 中。团队能够看到回答错误或执行异常，却难以仅凭最终结果判断问题发生在哪一步。继续排查之前，需要先还原这次执行的经过，才能确定接下来应该检查什么。",
-            "设计需要让参与排查的人从异常结果进入对应执行，找到值得核查的步骤，并查看相关信息。任务、执行步骤与排查依据之间的联系，成为后续方案的重点。"
-          ],
-          images: []
-        },
-        {
-          id: "openobserve-learning",
-          title: "从接入工具，到明确设计问题",
-          paragraphs: [
-            "早期先接入 OpenObserve，借助已有产品查看执行信息。在当时的使用方式下，它对 Agent 任务的表达不够直接，阅读 Trace 比较繁琐。排查人员需要在较多技术记录之间建立联系，再还原 Agent 做了什么，理解成本较高。",
-            [
+        "images": [],
+        "legacyIds": [
+          "openobserve-learning",
+          "shared-product-need",
+          "product-preview",
+          "project-gallery"
+        ]
+      },
+      {
+        "id": "decision-investigation-path",
+        "title": "定位执行",
+        "paragraphs": [
+          "以“生成销售日报并定位退款波动”这一示例任务为例，任务未能完成最新数据查询，最终返回了上一周期摘要。排查从拓扑中的应用与 Agent 关系入手，先确定排查对象，再进入具体执行记录（Trace）。"
+        ],
+        "images": [],
+        "subsections": [
+          {
+            "id": "design-decisions",
+            "title": "设计取舍",
+            "hideTitle": true,
+            "layout": "text-image",
+            "paragraphs": [
+              [
+                {
+                  "text": "先看关系，缩小范围：",
+                  "bold": true
+                },
+                {
+                  "text": "拓扑展示应用、Agent 与模型、工具等节点的关联。选中 Agent 后突出相关节点，帮助用户聚焦排查对象，减少在无关信息之间切换。"
+                }
+              ],
+              [
+                {
+                  "text": "从运行概况进入具体执行：",
+                  "bold": true
+                },
+                {
+                  "text": "节点详情集中展示调用、延时与异常 Trace，并提供追踪和日志入口。用户先观察运行情况，再核查具体记录；拓扑关系用于导航，异常原因仍需结合执行详情判断。"
+                }
+              ]
+            ],
+            "images": [
               {
-                text: "这段使用经历帮助项目明确了方向："
-              },
-              {
-                text: "围绕 Agent 的任务结构组织信息",
-                bold: true
-              },
-              {
-                text: "，让用户能够先理解执行经过，再进入具体步骤查看依据。自建产品的切入点来自实际排查中的理解负担，以及后续出现的内部共性需求。"
+                "src": "/images/agentops-topology.jpg",
+                "hideCaption": true,
+                "caption": "拓扑中的 Agent 节点详情展示调用、延时与异常 Trace，衔接追踪和日志核查。"
               }
             ]
-          ],
-          images: []
-        },
-        {
-          id: "shared-product-need",
-          title: "从单个项目，到跨应用的产品需求",
-          paragraphs: [
-            [
-              {
-                text: "随着公司内部多个 AI 应用出现类似需求，问题逐渐超出了Data Agent项目本身。不同应用执行的任务各异，但"
-              },
-              {
-                text: "排查时需要回答的问题具有共性",
-                bold: true
-              },
-              {
-                text: "：哪个 Agent 值得关注、哪一次执行异常、内部经过了哪些步骤、最终如何结束。"
-              }
+          }
+        ]
+      },
+      {
+        "id": "decision-execution-structure",
+        "title": "理解过程",
+        "paragraphs": [
+          "进入这条执行后，可以看到日报规划、SQL 生成、查询、重试和降级摘要等步骤。每个步骤对应一条 Span 记录。此时需要回答的是：失败发生在什么位置，前后还执行了什么？"
+        ],
+        "images": [],
+        "subsections": [
+          {
+            "id": "design-decisions",
+            "title": "设计取舍",
+            "hideTitle": true,
+            "layout": "text-image",
+            "paragraphs": [
+              [
+                {
+                  "text": "结构与耗时放在一起：",
+                  "bold": true
+                },
+                {
+                  "text": "默认 Trace 图将步骤树与时间轴并列，用层级说明调用关系，用时间条说明先后与耗时。用户可以沿着同一条记录，在整体过程和具体步骤之间切换。"
+                }
+              ],
+              [
+                {
+                  "text": "完整信息与阅读负担之间的取舍：",
+                  "bold": true
+                },
+                {
+                  "text": "保留展开收起、展示层级和搜索入口，帮助用户控制关注范围；火焰图与拓扑图作为其他观察方式。当前界面仍有较多底层技术节点，如何让任务主线更突出，是需要继续验证的问题。"
+                }
+              ]
             ],
-            "Demo 通过应用切换与 Agent 概览承接这一共性。请求与错误次数、延迟和状态帮助用户建立整体判断，再进入具体执行。产品围绕应用、Agent、单次执行和具体步骤组织信息，使不同应用拥有一致的排查入口，同时保留各自的任务内容。"
-          ],
-          images: []
-        },
-        {
-          id: "decision-investigation-path",
-          title: "逐步缩小范围，找到需要排查的执行",
-          paragraphs: [
-            [
+            "images": [
               {
-                text: "进入产品时，用户未必已经知道需要查看哪条 Trace。因此，排查路径需要支持逐步缩小范围：先了解 Agent 的运行情况，再筛选值得关注的执行，随后进入详情。"
-              },
-              {
-                text: "每一层信息都为下一步判断提供上下文",
-                bold: true
-              },
-              {
-                text: "。"
-              }
-            ],
-            "追踪列表将请求速率、错误和耗时趋势，与具体执行的 Agent、输入和输出放在同一视图中。用户可以把一条记录与实际任务联系起来，判断应当从哪里开始核查。设计目标是降低寻找目标执行的成本，让后续的细节阅读有明确对象。"
-          ],
-          images: [
-            {
-              src: "/images/agentops-trace-list.jpg",
-              caption: "Demo · 追踪列表结合运行趋势与任务输入、输出，帮助选择需要核查的执行。"
-            }
-          ]
-        },
-        {
-          id: "decision-execution-structure",
-          title: "用层级与时间轴理解执行过程",
-          paragraphs: [
-            "进入详情后，核心问题变成了这些步骤如何组成一次任务。Demo 提供 Trace 图、火焰图与拓扑图，结合 Span 树和时间轴表达执行结构与耗时关系。可调展示层级让用户选择当前需要关注的范围。这些视图分别承载不同的观察角度，用户可以围绕当前问题选择视图，并结合节点详情继续核查。",
-            [
-              {
-                text: "选中具体 Span 后，可以继续查看错误、属性、事件、链接与相关日志，"
-              },
-              {
-                text: "把整体经过和局部依据联系起来",
-                bold: true
-              },
-              {
-                text: "。当前界面仍包含较多底层技术节点，如何突出任务步骤、控制信息密度，是后续需要继续优化的部分。"
+                "src": "/images/agentops-execution-trace.jpg",
+                "hideCaption": true,
+                "caption": "Demo · Span 树、时间轴与展示层级，共同呈现一次执行内部的步骤关系。"
               }
             ]
-          ],
-          images: [
-            {
-              src: "/images/agentops-execution-trace.jpg",
-              caption: "Demo · Span 树、时间轴与展示层级，共同呈现一次执行内部的步骤关系。"
-            }
-          ]
-        },
-        {
-          id: "decision-failure-context",
-          title: "在完整链路中核查异常与降级",
-          paragraphs: [
-            [
-              {
-                text: "执行中的一个节点失败后，任务可能继续重试或进入降级路径。理解最终输出，需要结合异常前后的步骤，"
-              },
-              {
-                text: "核查任务如何继续、最后通过什么路径产生结果",
-                bold: true
-              },
-              {
-                text: "。"
-              }
+          }
+        ]
+      },
+      {
+        "id": "decision-failure-context",
+        "title": "核查异常",
+        "paragraphs": [
+          "在示例中选中失败的 sql.query 步骤，右侧展开详情，执行树和时间轴仍然保留。用户可以查看错误、属性、事件、链接，并进入相关日志。"
+        ],
+        "images": [],
+        "subsections": [
+          {
+            "id": "design-decisions",
+            "title": "设计取舍",
+            "hideTitle": true,
+            "layout": "text-image",
+            "paragraphs": [
+              [
+                {
+                  "text": "证据不脱离执行过程：",
+                  "bold": true
+                },
+                {
+                  "text": "详情在侧面展开，让用户查看局部依据时仍能对照前后步骤，避免离开链路后失去排查位置。"
+                }
+              ],
+              [
+                {
+                  "text": "同时检查失败与后续影响：",
+                  "bold": true
+                },
+                {
+                  "text": "查询后的重试、快照读取与降级摘要仍在同一链路中。用户需要确认哪些步骤失败、后续使用了什么数据，以及最终返回了什么，不能仅凭“有输出”判断任务成功。"
+                }
+              ]
             ],
-            "Demo 中的一条示例任务要求生成销售日报并定位退款波动。链路展示了查询异常、多次重试，以及读取上一周期快照后生成降级摘要的过程。沿着这条路径，用户可以理解输出的来源，并找到需要进一步核查的环节。对排查而言，降级后的输出同样需要被理解：结果采用了哪些信息，哪些步骤发生异常，以及后续如何处理。",
-            "Span 详情将错误信息保留在执行上下文中，并提供查看日志的入口。用户既能深入检查具体调用，也能返回完整任务观察异常的后续影响。这条示例用于展示排查过程，具体原因仍需结合详情核查。"
-          ],
-          images: [
-            {
-              src: "/images/agentops-error-inspector.jpg",
-              caption: "Demo · 在执行上下文中查看错误详情，关联查询异常、重试与后续降级路径。"
-            }
-          ]
-        },
-        {
-          id: "validation-and-datapilot",
-          title: "从内部排错，延伸到客户回放",
-          paragraphs: [
-            "目前呈现的成果是产品 Demo，覆盖应用概览、执行筛选与步骤核查。它对排查耗时和理解成本的实际改善，仍需在真实使用中验证，尤其需要关注复杂链路中的信息负担。",
-            "后续在 Data Agent 中，进一步探索面向客户的智能体回放。设计问题转向：哪些步骤帮助客户理解任务完成情况，使用了哪些数据，遇到了什么异常，以及这些情况如何影响结果。",
-            [
+            "images": [
               {
-                text: "这一探索延续了对执行过程可理解性的关注。内部排查需要详细依据；面向客户的回放，则需要"
-              },
-              {
-                text: "选择和解释相关信息",
-                bold: true
-              },
-              {
-                text: "，将技术事件组织成客户能够理解的任务经过。"
+                "src": "/images/agentops-error-inspector.jpg",
+                "hideCaption": true,
+                "caption": "Demo · 在执行上下文中查看错误详情，关联查询异常、重试与后续降级路径。"
               }
             ]
-          ],
-          images: []
-        }
-      ],
-      gallery: []
-    }
-  },
+          }
+        ]
+      },
+      {
+        "id": "validation-and-datapilot",
+        "title": "当前阶段",
+        "paragraphs": [
+          "目前已有产品 MVP，覆盖应用与 Agent 概览、执行筛选、步骤时间轴和详情核查，待内部验证。"
+        ],
+        "images": [],
+        "legacyIds": [
+          "customer-replay"
+        ]
+      }
+    ],
+    "gallery": []
+  }
+},
 }
 
 export function getProjectDetail(slug: string, locale: Locale): ProjectDetailBlock | undefined {

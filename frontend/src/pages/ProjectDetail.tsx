@@ -1,6 +1,7 @@
 import { lazy, useEffect } from 'react'
 import { Link, Navigate, useLocation, useParams } from 'react-router-dom'
 import { DataPilotCaseStudy } from '../components/project/DataPilotCaseStudy'
+import { DevelopmentEditorsCaseStudy } from '../components/project/DevelopmentEditorsCaseStudy'
 import { StandardProjectDetail } from '../components/project/StandardProjectDetail'
 import { getProjectDetail } from '../data/projectDetails'
 import { getProjectBySlug, getProjectTitle } from '../data/projects'
@@ -18,7 +19,7 @@ export function ProjectDetail() {
   const detail = project ? getProjectDetail(project.slug, locale) : undefined
 
   useEffect(() => {
-    document.title = project ? `${view?.title[locale] ?? getProjectTitle(project, locale)} | ${m.header.name}` : m.home.title
+    document.title = project ? `${(['datadevelop', 'workflow-editor'].includes(project.slug) ? '开发编辑器' : view?.title[locale] ?? getProjectTitle(project, locale))} | ${m.header.name}` : m.home.title
   }, [project, view, locale, m.home.title, m.header.name])
 
   if (!project || !detail) {
@@ -35,6 +36,14 @@ export function ProjectDetail() {
   if (slug === 'databaseops-visual') {
     return <Navigate replace to={`/project/databaseops${location.search}${location.hash}`} />
   }
+
+  if (slug === 'workflow-editor') {
+    const search = new URLSearchParams(location.search)
+    search.set('editor', 'workflow')
+    return <Navigate replace to={`/project/datadevelop?${search}${location.hash}`} />
+  }
+
+  if (project.slug === 'datadevelop') return <DevelopmentEditorsCaseStudy />
 
   if (project.slug === 'dataagent') {
     return <DataPilotCaseStudy key={project.slug} locale={locale} />

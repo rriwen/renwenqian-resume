@@ -1,3 +1,4 @@
+import { DataPilotWorkflow } from './DataPilotWorkflow'
 import { DataPilotDialogueTabs } from './DataPilotDialogueTabs'
 import { DataPilotQATabs } from './DataPilotQATabs'
 import { DataPilotDialogue } from './DataPilotDialogue'
@@ -81,8 +82,10 @@ export function DataPilotCaseStudy({ locale }: Props) {
             {group.sections.map((section, sectionIndex) => activePart === 'poc' ? <DataPilotPocSection key={section.id} section={section} /> : section.dialogue && !section.groupIntro ? (section.id === group.sections.find(item => item.dialogue && !item.groupIntro)?.id ? <DataPilotDialogueTabs key="dialogue-tabs" sections={group.sections} locale={locale} /> : null) : section.qaExperience ? (section.id === group.sections.find(item => item.qaExperience)?.id ? <DataPilotQATabs key="qa-tabs" sections={group.sections} locale={locale} /> : null) : (
               <section className={`project-detail-section${section.continuationOf ? ' datapilot-section-continuation' : ''}`} id={section.id} key={section.id} aria-label={section.continuationOf || section.groupIntro ? section.title : undefined} aria-labelledby={section.continuationOf || section.groupIntro ? undefined : `${section.id}-title`}>
                 <div className="project-detail-section-copy">
-                {!section.continuationOf && !section.groupIntro && <HeadingTag id={`${section.id}-title`} grouped={Boolean(group.title)}>{group.title ? `${['①', '②', '③', '④'][group.sections.slice(0, sectionIndex).filter(item => !item.groupIntro).length] ?? sectionIndex + 1} ` : ''}{activePart === 'experience' ? section.title : section.intro || section.title}</HeadingTag>}
-                {section.adoptionResult ? <DataPilotResults result={section.adoptionResult} description={section.body} formula={section.bullets?.[0] ?? ''} /> : section.body.split('\n\n').map((paragraph) => <p key={paragraph}>{section.bodyEmphasis ? paragraph.split(section.bodyEmphasis).map((part, index) => <span key={index}>{index > 0 && <strong>{section.bodyEmphasis}</strong>}{part}</span>) : paragraph}</p>)}
+                {!section.continuationOf && !section.groupIntro && <HeadingTag id={`${section.id}-title`} grouped={Boolean(group.title)}>{group.title ? `${['①', '②', '③', '④'][group.sections.slice(0, sectionIndex).filter(item => !item.groupIntro).length] ?? sectionIndex + 1} ` : ''}{activePart === 'experience' || activePart === 'growth' ? section.title : section.intro || section.title}</HeadingTag>}
+                {activePart === 'growth' && section.intro && <p className="datapilot-section-subtitle">{section.intro}</p>}
+                {section.workflow && <DataPilotWorkflow workflow={section.workflow} />}
+                {section.adoptionResult ? <DataPilotResults result={section.adoptionResult} description={section.body} formula={section.bullets?.[0] ?? ''} /> : section.body.split('\n\n').map((paragraph) => <p key={paragraph}>{section.bodyLink ? paragraph.split(section.bodyLink.label).map((part, index) => <span key={index}>{index > 0 && <a className="datapilot-inline-link" href={section.bodyLink!.href} target="_blank" rel="noopener noreferrer">{section.bodyLink!.label}</a>}{part}</span>) : section.bodyEmphasis ? paragraph.split(section.bodyEmphasis).map((part, index) => <span key={index}>{index > 0 && <strong>{section.bodyEmphasis}</strong>}{part}</span>) : paragraph}</p>)}
                 {section.adoptionResult && section.bullets?.slice(1).map(paragraph => <p key={paragraph}>{paragraph}</p>)}
                 {section.groupIntro && !['continuous-dialogue', 'agent-troubleshooting'].includes(section.group?.id ?? '') && section.steps && <ul className="qa-overview-labels">{section.steps.map(step => <li key={step.title}><strong>{step.title}{'：'}</strong><span>{step.detail}</span></li>)}</ul>}
                 {section.dialogue && !section.groupIntro && <DataPilotDialogue dialogue={section.dialogue} locale={locale} />}
@@ -97,12 +100,23 @@ export function DataPilotCaseStudy({ locale }: Props) {
                   <p><strong>{content.labels.solution}</strong>{item.solution}</p>
                   <CaseStudyPlaceholder title={item.screenshot} />
                 </section>)}</div> : null}
-                {section.references && <p className="datapilot-related-link">{section.references.map((reference, index) => <span key={reference.href}>{index > 0 && ' · '}{reference.href.startsWith('/') ? <Link to={reference.href}>{reference.label}</Link> : <a href={reference.href} target="_blank" rel="noopener noreferrer">{reference.label} ↗</a>}</span>)}</p>}
+                {section.references && section.id !== 'growth-context' && <p className="datapilot-related-link">{section.references.map((reference, index) => <span key={reference.href}>{index > 0 && ' · '}{reference.href.startsWith('/') ? <Link to={reference.href}>{reference.label}</Link> : <a href={reference.href} target="_blank" rel="noopener noreferrer">{reference.label}</a>}</span>)}</p>}
                 {section.related ? <p className="datapilot-related-link">{content.labels.relatedIntro} <Link to="/project/agentops">{content.labels.relatedProject}</Link>。</p> : null}
                 {section.stats ? <div className="datapilot-stat-row">{section.stats.map((stat) => <strong key={stat}>{stat}</strong>)}</div> : null}
-                {section.bullets && section.id !== 'overview' && !section.evolutionMedia && !section.adoptionResult ? <ul className="project-detail-subsection-list">{section.bullets.map((bullet) => {
-                  const separator = section.group?.id === 'agent-troubleshooting' ? bullet.search(/[：:]/) : -1
-                  return <li key={bullet}>{separator > -1 ? <><strong>{bullet.slice(0, separator)}</strong>{bullet.slice(separator)}</> : bullet}</li>
+                {section.id === 'design-strategy' && section.bullets ? <ol className="datapilot-strategies">{section.bullets.map((bullet) => {
+                  const separator = bullet.indexOf('：')
+                  const heading = bullet.slice(0, separator)
+                  const titleEnd = heading.indexOf('，')
+                  return <li key={bullet}>
+                    <div className="datapilot-strategy-heading">
+                      <h3>{heading.slice(0, titleEnd)}</h3>
+                    </div>
+                    <p className="datapilot-strategy-description">{bullet.slice(separator + 1)}</p>
+                  </li>
+                })}</ol> : null}
+                {section.bullets && !['overview', 'design-strategy'].includes(section.id) && !section.evolutionMedia && !section.adoptionResult ? <ul className="project-detail-subsection-list">{section.bullets.map((bullet) => {
+                  const separator = (section.group?.id === 'agent-troubleshooting' || ['growth-context', 'growth-funnel'].includes(section.id)) ? bullet.search(/[：:]/) : -1
+                  return <li key={bullet}>{separator > -1 ? ['growth-context', 'growth-funnel'].includes(section.id) ? <><strong>{bullet.slice(0, separator)}</strong><span className="datapilot-decision-description">{bullet.slice(separator + 1)}</span></> : <><strong>{bullet.slice(0, separator)}</strong>{bullet.slice(separator)}</> : bullet}</li>
                 })}</ul> : null}
                 {section.diagram && section.id !== 'overview' ? <DataPilotJourney diagram={section.diagram} /> : null}
                 {section.evolutionMedia ? <DataPilotEvolution section={section} /> : null}
@@ -112,12 +126,13 @@ export function DataPilotCaseStudy({ locale }: Props) {
                   const text = typeof cell === 'string' ? cell : cell?.text
                   return index === 0 ? <dt key={index}>{text}</dt> : <dd key={index}>{text}</dd>
                 })}</div>)}</dl> : null}
-                {section.designPlaceholder && !section.evolutionMedia && !section.dialogue ? <div className="datapilot-evidence"><CaseStudyPlaceholder title={section.designPlaceholder} /></div> : null}
+                {section.designPlaceholder && section.id !== 'design-strategy' && !section.evolutionMedia && !section.dialogue ? <div className="datapilot-evidence"><CaseStudyPlaceholder title={section.designPlaceholder} /></div> : null}
                 {section.images.length ? <div className={`datapilot-evidence ${section.images.length > 1 ? 'is-multi' : 'is-single'}`}>
                   {section.images.map(image => image.display === 'image'
-                    ? <CaseStudyGallery key={image.src + image.caption} items={[{ src: image.src, caption: image.caption }]} />
+                    ? <CaseStudyGallery key={image.src + image.caption} items={[{ src: image.src, caption: image.caption, hideCaption: ['growth-context', 'growth-funnel'].includes(section.id) }]} />
                     : <CaseStudyPlaceholder key={image.src + image.caption} title={image.caption} />)}
                 </div> : null}
+                {section.id === 'growth-context' && section.references && <p className="datapilot-related-link datapilot-reference-action">{section.references.map(reference => <a key={reference.href} className="ui-button case-study-demo" href={reference.href} target="_blank" rel="noopener noreferrer">{reference.label}</a>)}</p>}
                 {section.bullets && section.id === 'overview' ? <ul className="project-detail-subsection-list">{section.bullets.map((bullet) => <li key={bullet}>{bullet}</li>)}</ul> : null}
                 </div>
               </section>
