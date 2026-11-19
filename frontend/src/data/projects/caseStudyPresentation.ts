@@ -17,7 +17,7 @@ const methods: Record<string, string[]> = {
   dataagent: ['AI Native', '产品规划', '人机交互', '场景验证'],
   databaseops: ['用户旅程', '埋点分析', '原型验证'],
   agentops: ['场景分析', '交互设计', '原型设计'],
-  text2sql: ['交互设计', '界面设计', '原型设计'],
+  text2sql: ['产品设计', 'AI 交互', '复杂流程设计'],
   datadevelop: ['用户访谈', '可用性测试', '设计规范'],
   'workflow-editor': ['流程梳理', '交互设计', '方案对比'],
   aidesignsystem: ['Design Token', '组件映射', 'AI 辅助开发'],

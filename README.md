@@ -198,3 +198,13 @@ Data Agent 的设计策略正文通过 `DataPilotWorkflow.tsx` 在流程说明�
 AgentOps 案例由 projectDetails.ts 维护，以 Demo 销售日报异常串联定位执行、理解过程与核查异常；背景合并后通过 legacyIds 保留 openobserve-learning / shared-product-need 深链接，阶段成果与客户回放探索合并为「成果与后续」，明确已有产品 MVP、待内部验证，并通过 legacyIds 保留 customer-replay 深链接。截图保留无图注展示，演示内容不作为真实客户故障或效率成果。
 
 Text2SQL 案例围绕就近编辑、任务指令与结果审阅三项设计取舍组织中文叙事，保留原章节 ID；正文以 `sourceRegion` 展示早期交互稿的输入、指令、生成与审阅局部，正文图注隐藏，末尾不再展示完整原稿入口；原始素材保留。首屏本地原型明确为模拟演示，结果审阅和异常反馈保留探索边界；正文与聊天语料共用 `projectDetails.ts`。
+
+Text2SQL 首屏暂不展示媒体，`hideOverviewMedia` 隐藏展板，待补图片；详情页移除嵌入演示、原型按钮与操作说明，独立 `/prototype/text2sql` 路由保留。
+
+Text2SQL 开篇以「项目背景」说明目标用户、SQL 编写与修改问题及主导产品设计的职责；保留 `context` 锚点与目录项，目标和设计方案不写为已验证成果，正文与聊天共用。
+
+Text2SQL 的四项方案合并为「设计策略」，按问答前、问答中、问答后三个小节展示，复用左右图文布局；`contextual-entry` 为章节 ID，原 `task-commands`、`generation-feedback`、`result-review` 经 `legacyIds` 保留。中文策略与聊天语料共用。
+
+Text2SQL 问答前的两张局部图通过 `imagesLayout: carousel` 复用 `ScreenshotCarousel`，5 秒自动切换并支持进度条手动选择；保持裁剪、无图注与全屏预览，悬停、键盘聚焦、离屏、后台及减少动态效果时暂停。
+
+Text2SQL 设计策略的问答前、中、后三阶段使用 1、2、3 圆形序号和竖向连接线，样式仅作用于本案例，窄屏保持纵向阅读。

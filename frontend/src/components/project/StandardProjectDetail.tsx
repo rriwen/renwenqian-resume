@@ -6,6 +6,7 @@ import { DetailTable } from './DetailTable'
 import { CaseStudyHeroPalette, CaseStudyGallery, CaseStudyMediaFrame, CaseStudyPlaceholder } from './CaseStudyMedia'
 import { ProjectFunnel } from './ProjectFunnel'
 import { ProjectArchitecture } from './ProjectArchitecture'
+import { ScreenshotCarousel } from './ScreenshotCarousel'
 import { PrototypePreview } from './PrototypePreview'
 import { ProjectAnchorNav } from './ProjectAnchorNav'
 import { getProjectAnchors } from '../../data/projectAnchors'
@@ -38,8 +39,10 @@ function renderParagraphContent(para: ProjectDetailParagraph) {
 }
 
 
-function SectionGallery({ items, disclosure, layout }: { items: ProjectGalleryItem[]; disclosure?: string; layout?: 'row' }) {
-  const gallery = layout === 'row'
+function SectionGallery({ items, disclosure, layout }: { items: ProjectGalleryItem[]; disclosure?: string; layout?: 'row' | 'carousel' }) {
+  const gallery = layout === 'carousel'
+    ? <ScreenshotCarousel locale="zh" titles={items.map(item => item.caption)} renderSlide={index => <CaseStudyGallery items={[items[index]]} lightboxItems={items} />} />
+    : layout === 'row'
     ? <div className="project-detail-gallery-row"><CaseStudyGallery items={items} /></div>
     : <CaseStudyGallery items={items} />
   return disclosure ? (
@@ -186,12 +189,12 @@ export function StandardProjectDetail({ project, detail, presentation, tabs, pan
           <div className="datapilot-meta project-case-tags project-case-tags--filled">
             {getCaseStudyMethods(heroProject.slug, locale).map(tag => <span className="project-case-tag" key={tag}>{tag}</span>)}
           </div>
-          <div className="project-case-cover"><CaseStudyHeroPalette slug={heroProject.slug}>
+          {!detail.hideOverviewMedia && <div className="project-case-cover"><CaseStudyHeroPalette slug={heroProject.slug}>
             {heroArchitecture ? <ProjectArchitecture architecture={heroArchitecture} />
               : detail.overviewPrototype ? <CaseStudyMediaFrame><PrototypePreview {...detail.overviewPrototype} /></CaseStudyMediaFrame>
               : ['design-token', 'design-md'].includes(project.slug) ? <CaseStudyPlaceholder title={title} />
               : <CaseStudyGallery items={[{ src: heroProject.image, caption: title, hideCaption: true, previewCrop: { aspectRatio: 1.88, objectPosition: 'top' } }]} />}
-          </CaseStudyHeroPalette></div>
+          </CaseStudyHeroPalette></div>}
           {(detail.demoUrl || detail.externalUrl) && <a className="ui-button case-study-demo" href={detail.demoUrl || detail.externalUrl} target="_blank" rel="noopener noreferrer">{detail.demoUrl ? ('体验交互原型') : m.workDetail.viewSite} ↗</a>}
         </header>
         {tabs}

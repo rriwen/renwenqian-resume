@@ -119,3 +119,54 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+.case-study-carousel-slide .case-study-media {
+  aspect-ratio: 1.65;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+}
+.case-study-page[data-project-slug="text2sql"] .qa-carousel-controls button span { background: var(--rule); }
+.case-study-page[data-project-slug="text2sql"] .qa-carousel-controls button[aria-pressed='true'] span { background: var(--muted); }
+.case-study-page[data-project-slug="text2sql"] .qa-carousel-dots i { background: var(--text); }
+.case-study-page[data-project-slug="text2sql"] .qa-carousel-dots button:focus-visible { outline-color: var(--accent); }
+
+/* Three reading stages form a quiet vertical stepper. */
+.case-study-page[data-project-slug="text2sql"] #contextual-entry > .project-detail-section-copy {
+  counter-reset: text2sql-stage;
+}
+.case-study-page[data-project-slug="text2sql"] #contextual-entry .project-detail-subsection {
+  position: relative;
+  counter-increment: text2sql-stage;
+  margin-left: 44px;
+}
+.case-study-page[data-project-slug="text2sql"] #contextual-entry .project-detail-subsection::before {
+  content: counter(text2sql-stage);
+  position: absolute;
+  left: -44px;
+  top: -2px;
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--rule);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text);
+  font-size: var(--text-sm);
+  line-height: 1;
+}
+.case-study-page[data-project-slug="text2sql"] #contextual-entry .project-detail-subsection:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: -30px;
+  top: 34px;
+  bottom: -54px;
+  width: 1px;
+  background: var(--rule);
+}
+@media (max-width: 700px) {
+  .case-study-page[data-project-slug="text2sql"] #contextual-entry .project-detail-subsection { margin-left: 36px; }
+  .case-study-page[data-project-slug="text2sql"] #contextual-entry .project-detail-subsection::before { left: -36px; }
+  .case-study-page[data-project-slug="text2sql"] #contextual-entry .project-detail-subsection:not(:last-child)::after { left: -22px; }
+}

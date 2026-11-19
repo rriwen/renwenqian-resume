@@ -113,7 +113,7 @@ export type ProjectDetailSection = {
     }
     images?: ProjectGalleryItem[]
     /** 桌面端将配图并排展示，窄屏按原图比例堆叠。 */
-    imagesLayout?: 'row'
+    imagesLayout?: 'row' | 'carousel'
     /** 原始过程材料默认折叠，使用此文案作为展开入口。 */
     imagesDisclosure?: string
     /** 桌面端左文右图，列宽为 2:1；窄屏按内容顺序堆叠。 */
@@ -124,6 +124,7 @@ export type ProjectDetailSection = {
 }
 
 export type ProjectDetailBlock = {
+  hideOverviewMedia?: boolean
   overviewPrototype?: { url: string; title: string; viewportWidth?: number }
   tags: string[]
   overviewFacts?: { label: string; value: string }[]
@@ -184,56 +185,58 @@ const details: Record<string, {zh: ProjectDetailBlock }> = {
   text2sql: {
     "zh": {
       "showCover": false,
-      "overviewPrototype": {
-        "url": "/prototype/text2sql?embed=1",
-        "title": "Text2SQL 交互演示",
-        "viewportWidth": 1280
-      },
-      "demoUrl": "/prototype/text2sql",
       "tags": [
-        "AI 辅助",
-        "SQL 编辑器",
-        "产品界面设计"
+        "产品设计",
+        "AI 交互",
+        "复杂流程设计"
       ],
-      "paragraphs": [
-        "面向 SQL 编写与修改场景，我负责产品界面设计，重点是就近操作、意图表达与生成控制。",
-        "本地原型基于早期稿制作，AI 回复与查询结果均为模拟。选中代码点击「编辑」，或按 ⌘K 体验。"
-      ],
+      "paragraphs": [],
       "gallery": [],
       "sections": [
         {
           "id": "context",
-          "title": "设计背景",
+          "title": "项目背景",
           "paragraphs": [
-            "用户既要说清怎么改，也要知道改哪段、是否采用。方案围绕光标与选区组织输入，让自然语言请求与代码保持联系。"
+            "Text2SQL 面向在编辑器中编写和修改 SQL 的数据库开发者，通过自然语言辅助生成、纠错、改写与格式化，目标是降低将查询需求转成代码、再反复调整的成本。",
+            "我主导产品设计。考虑到用户正在处理具体代码，方案将 AI 融入原有编辑流程，以光标和选区明确操作对象，串联需求表达、生成控制与结果审阅。"
           ],
           "images": []
         },
         {
           "id": "contextual-entry",
-          "title": "就近编辑",
-          "paragraphs": [],
+          "title": "设计策略",
+          "legacyIds": [
+            "task-commands",
+            "generation-feedback",
+            "result-review"
+          ],
+          "paragraphs": [
+            "围绕一次自然语言辅助编辑，将设计串成问答前明确需求、问答中控制过程、问答后检查结果三个环节。"
+          ],
           "subsections": [
             {
-              "id": "inline-and-sidebar",
-              "title": "输入跟随对象",
-              "paragraphs": [
+              "id": "before",
+              "imagesLayout": "carousel",
+              "title": "问答前：明确对象与意图",
+              "layout": "text-image",
+              "paragraphs": [],
+              "listItems": [
                 [
                   {
-                    "text": "就近输入：",
+                    "text": "就近编辑：",
                     "bold": true
                   },
                   {
-                    "text": "输入框跟随光标或选区，让用户描述需求时仍能参照代码。局部修改使用「编辑」，侧边对话保留为另一条路径。"
+                    "text": "在光标或选区上方唤起输入框，便于对照代码描述需求。为减少空间占用，输入框按需展开，支持关闭或 Esc 退出，随后继续编辑。"
                   }
                 ],
                 [
                   {
-                    "text": "设计取舍：",
+                    "text": "明确意图：",
                     "bold": true
                   },
                   {
-                    "text": "就近操作会占用编辑空间，因此提供关闭入口与 Esc 退出。"
+                    "text": "用生成、纠错、改写、格式化指令提示能力范围，并以标签显示当前任务。分类增加了选择步骤，但能帮助用户判断可以做什么；具体要求仍用自然语言自由表达。"
                   }
                 ]
               ],
@@ -250,53 +253,7 @@ const details: Record<string, {zh: ProjectDetailBlock }> = {
                     "sourceHeight": 5120
                   },
                   "hideCaption": true
-                }
-              ],
-              "layout": "text-image",
-              "hideTitle": true
-            },
-            {
-              "id": "discoverability",
-              "title": "入口按需出现",
-              "paragraphs": [
-                "空行提示、选区入口与快捷键减少常驻控件，也使首次发现更依赖提示，需进一步验证。"
-              ]
-            }
-          ],
-          "images": []
-        },
-        {
-          "id": "task-commands",
-          "title": "明确意图",
-          "paragraphs": [],
-          "images": [],
-          "subsections": [
-            {
-              "id": "design-decision",
-              "title": "明确意图",
-              "hideTitle": true,
-              "layout": "text-image",
-              "paragraphs": [
-                [
-                  {
-                    "text": "辅助表达：",
-                    "bold": true
-                  },
-                  {
-                    "text": "「/」菜单提供生成、纠错、改写和格式化，指令以标签回显，可切换或清除；具体需求仍用自然语言补充。"
-                  }
-                ],
-                [
-                  {
-                    "text": "设计取舍：",
-                    "bold": true
-                  },
-                  {
-                    "text": "任务选择增加了一步操作。正文输入时收起菜单，避免打断；将「优化」改为「改写」，避免暗示性能提升。"
-                  }
-                ]
-              ],
-              "images": [
+                },
                 {
                   "src": "/images/text2sql-interaction-design.png",
                   "caption": "早期稿局部：四类任务作为输入辅助；选中后以标签回显，仍由用户补充具体需求。",
@@ -311,29 +268,20 @@ const details: Record<string, {zh: ProjectDetailBlock }> = {
                   "hideCaption": true
                 }
               ]
-            }
-          ]
-        },
-        {
-          "id": "generation-feedback",
-          "title": "生成控制",
-          "paragraphs": [],
-          "images": [],
-          "subsections": [
+            },
             {
-              "id": "design-decision",
-              "title": "生成控制",
-              "hideTitle": true,
+              "id": "during",
+              "title": "问答中：让生成过程可控",
               "layout": "text-image",
-              "paragraphs": [
-                "生成时显示状态，发送按钮切换为终止。结束后回到输入状态，便于调整请求。",
+              "paragraphs": [],
+              "listItems": [
                 [
                   {
-                    "text": "控制边界：",
+                    "text": "生成控制：",
                     "bold": true
                   },
                   {
-                    "text": "终止操作让等待可控，内容正确性仍需通过结果审阅判断。"
+                    "text": "生成时显示处理状态，将发送按钮切换为终止，终止后回到输入状态。复用位置保持操作集中，同时更新按钮与状态提示，避免同一位置的动作变化造成混淆。"
                   }
                 ]
               ],
@@ -352,36 +300,20 @@ const details: Record<string, {zh: ProjectDetailBlock }> = {
                   "hideCaption": true
                 }
               ]
-            }
-          ]
-        },
-        {
-          "id": "result-review",
-          "title": "结果审阅",
-          "paragraphs": [
-            "以下为早期稿中标注「待定」的方案探索。"
-          ],
-          "subsections": [
+            },
             {
-              "id": "diff-and-decision",
-              "title": "确认修改",
-              "paragraphs": [
+              "id": "after",
+              "title": "问答后：检查改动再采用",
+              "layout": "text-image",
+              "paragraphs": [],
+              "listItems": [
                 [
                   {
-                    "text": "先看变化：",
+                    "text": "结果审阅：",
                     "bold": true
                   },
                   {
-                    "text": "用颜色区分删除、新增与未变代码，由用户选择接受或忽略。"
-                  }
-                ],
-                [
-                  {
-                    "text": "设计取舍：",
-                    "bold": true
-                  },
-                  {
-                    "text": "增加一次确认，留出检查改动的机会。仍需验证差异是否易懂，并用符号与文字补充颜色区分。"
+                    "text": "通过差异视图区分新增、删除与未变代码，由用户接受或忽略。多一步确认换来改动生效前的检查机会，优先保留修改控制；差异是否易于理解仍需验证。"
                   }
                 ]
               ],
@@ -399,30 +331,13 @@ const details: Record<string, {zh: ProjectDetailBlock }> = {
                   },
                   "hideCaption": true
                 }
-              ],
-              "layout": "text-image",
-              "hideTitle": true
-            },
-            {
-              "id": "failure-feedback",
-              "title": "区分失败原因",
-              "paragraphs": [
-                "方案用代码注释解释无法生成的原因，在输入区反馈请求异常。注释可能与可执行内容混淆，呈现位置与重试方式仍需验证。"
               ]
             }
           ],
           "images": []
-        },
-        {
-          "id": "delivery-and-reflection",
-          "title": "交付与回顾",
-          "paragraphs": [
-            "项目已上线。本案例基于早期设计稿回顾，结果审阅与异常反馈保留探索边界，尚未收录上线反馈与效果指标。",
-            "后续重点验证入口发现、指令理解与改动审阅，判断这些取舍是否有效。"
-          ],
-          "images": []
         }
-      ]
+      ],
+      "hideOverviewMedia": true
     }
   },
   'workflow-editor': {

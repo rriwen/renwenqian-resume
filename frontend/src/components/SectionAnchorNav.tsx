@@ -10,6 +10,8 @@ type Props<Id extends string> = {
 
 /** Shared tick navigation for About and case-study sections. */
 export function SectionAnchorNav<Id extends string>({ sections, activeId, label, onNavigate, className = '' }: Props<Id>) {
+  if (sections.length <= 3) return null
+
   return <nav className={`about-timeline-nav ${className}`.trim()} aria-label={label}>
     <ul className="about-timeline-list">
       {sections.map(({ id, title }) => <li key={id} className="about-timeline-item about-timeline-item-section">

@@ -1,11 +1,11 @@
-import { useEffect, useId, useRef, useState } from 'react'
+import { useEffect, useId, useRef, useState, type ReactNode } from 'react'
 import { ProjectGallery } from './ProjectGallery'
 import type { Locale } from '../../i18n/translations'
 
 const DURATION = 5000
 
 /** Screenshot slots remain explicit placeholders until project images are supplied. */
-export function ScreenshotCarousel({ titles, descriptions, images, locale: _locale }: { titles: string[]; descriptions?: string[]; images?: (string | null)[]; locale: Locale }) {
+export function ScreenshotCarousel({ titles, descriptions, images, renderSlide, locale: _locale }: { titles: string[]; descriptions?: string[]; images?: (string | null)[]; locale: Locale; renderSlide?: (index: number) => ReactNode }) {
   const id = useId()
   const root = useRef<HTMLDivElement>(null)
   const elapsed = useRef(0)
@@ -51,8 +51,8 @@ export function ScreenshotCarousel({ titles, descriptions, images, locale: _loca
   }
   return <div ref={root} className="screenshot-carousel"
     onFocusCapture={event => setFocused(event.target.matches(':focus-visible'))} onBlurCapture={event => { if (!event.currentTarget.contains(event.relatedTarget)) setFocused(false) }}>
-    <div id={`${id}-slide`} className={images?.[slide] ? "qa-screenshot-image" : "qa-screenshot-placeholder"} onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)} aria-live={running ? 'off' : 'polite'}>
-      {images?.[slide] ? <ProjectGallery items={[{ src: images[slide]!, caption: titles[slide], hideCaption: true }]} layout="stacked" /> : <>
+    <div id={`${id}-slide`} className={renderSlide ? "case-study-carousel-slide" : images?.[slide] ? "qa-screenshot-image" : "qa-screenshot-placeholder"} onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)} aria-live={running ? 'off' : 'polite'}>
+      {renderSlide ? renderSlide(slide) : images?.[slide] ? <ProjectGallery items={[{ src: images[slide]!, caption: titles[slide], hideCaption: true }]} layout="stacked" /> : <>
       <strong>{'截图轮播占位'}</strong>
       <p>{`第 ${slide + 1} / ${titles.length} 张`}</p>
       <p className="qa-placeholder-topics">{titles[slide]}</p>
