@@ -1,0 +1,127 @@
+/* Editorial layouts reuse the case-study typography, dividers and media frames. */
+.case-study-page[data-project-slug="aidesignsystem"] .project-detail-section-copy > p {
+  max-width: 76ch;
+}
+.case-study-page[data-project-slug="aidesignsystem"] .project-detail-subsection-body {
+  align-items: start;
+}
+.case-study-page[data-project-slug="aidesignsystem"] .project-detail-subsection-text p {
+  margin-bottom: 20px;
+}
+.case-study-page[data-project-slug="aidesignsystem"] .project-detail-subsection-text p:last-child { margin-bottom: 0; }
+.case-study-page[data-project-slug="aidesignsystem"] .case-study-placeholder {
+  aspect-ratio: 4 / 3;
+  font-size: var(--text-sm);
+  line-height: var(--leading-body);
+}
+.case-study-page[data-project-slug="aidesignsystem"] :is([data-subsection="design-tokens"], [data-subsection="agent-tools"]) .project-detail-subsection-body {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+  gap: 36px;
+}
+.case-study-page[data-project-slug="aidesignsystem"] :is([data-subsection="design-tokens"], [data-subsection="agent-tools"]) .case-study-media {
+  position: sticky;
+  top: 100px;
+}
+/* Knowledge starts with a full-width overview, then two concise rule columns. */
+.case-study-page[data-project-slug="aidesignsystem"] :is(#guidance, #delivery, #code-mapping) > .project-detail-section-copy {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 36px;
+}
+.case-study-page[data-project-slug="aidesignsystem"] :is(#guidance, #delivery, #code-mapping) > .project-detail-section-copy > :is(h2, p, .project-detail-anchor-alias) { grid-column: 1 / -1; }
+.case-study-page[data-project-slug="aidesignsystem"] #guidance [data-subsection] { grid-column: 1 / -1; }
+.case-study-page[data-project-slug="aidesignsystem"] #guidance :is([data-subsection="component-documentation"], [data-subsection="component-rules"]) {
+  grid-column: auto;
+  margin-top: 36px;
+  padding-top: 24px;
+  border-top: 1px solid var(--rule);
+}
+.case-study-page[data-project-slug="aidesignsystem"] [data-subsection="project-design-rules"] { margin-top: 12px; }
+.case-study-page[data-project-slug="aidesignsystem"] [data-subsection="project-design-rules"] .project-detail-subsection-body {
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: 36px;
+}
+.case-study-page[data-project-slug="aidesignsystem"] [data-subsection="project-design-rules"] .case-study-placeholder { aspect-ratio: 4 / 3; }
+/* The toolbar is the worked example: one large image followed by its rule matrix. */
+.case-study-page[data-project-slug="aidesignsystem"] [data-subsection="composition-patterns"] {
+  padding-top: 32px;
+  border-top: 1px solid var(--rule);
+}
+.case-study-page[data-project-slug="aidesignsystem"] [data-subsection="composition-patterns"] .project-detail-subsection-body { display: flex; flex-direction: column; }
+.case-study-page[data-project-slug="aidesignsystem"] [data-subsection="composition-patterns"] .project-detail-subsection-text { display: contents; }
+.case-study-page[data-project-slug="aidesignsystem"] [data-subsection="composition-patterns"] .project-detail-subsection-body > * { width: 100%; box-sizing: border-box; }
+.case-study-page[data-project-slug="aidesignsystem"] [data-subsection="composition-patterns"] .case-study-media { order: 1; }
+.case-study-page[data-project-slug="aidesignsystem"] [data-subsection="composition-patterns"] .project-detail-table-scroll { order: 2; }
+.case-study-page[data-project-slug="aidesignsystem"] [data-subsection="composition-patterns"] .case-study-placeholder { aspect-ratio: 2.6; }
+.case-study-page[data-project-slug="aidesignsystem"] [data-subsection="composition-patterns"] p { margin: 0; }
+.case-study-page[data-project-slug="aidesignsystem"] [data-subsection="composition-patterns"] p + p { font-size: var(--text-sm); color: var(--muted); }
+.case-study-page[data-project-slug="aidesignsystem"] [data-subsection="component-skill"] {
+  display: grid;
+  grid-template-columns: minmax(0, .65fr) minmax(0, 1.35fr);
+  gap: 24px;
+  padding-block: 28px;
+  border-top: 1px solid var(--rule);
+}
+/* Two applications are peers, so compare their contexts side by side. */
+.case-study-page[data-project-slug="aidesignsystem"] :is(#delivery, #code-mapping) [data-subsection] {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid var(--rule);
+}
+.case-study-page[data-project-slug="aidesignsystem"] :is(#delivery, #code-mapping) .project-detail-subsection-body { height: calc(100% - 48px); grid-template-rows: 1fr auto; }
+.case-study-page[data-project-slug="aidesignsystem"] :is(#delivery, #code-mapping) .case-study-media { align-self: end; }
+@container site-main (max-width: 800px) {
+  .case-study-page[data-project-slug="aidesignsystem"] :is([data-subsection="design-tokens"], [data-subsection="agent-tools"], [data-subsection="project-design-rules"]) .project-detail-subsection-body,
+  .case-study-page[data-project-slug="aidesignsystem"] :is(#guidance, #delivery, #code-mapping) > .project-detail-section-copy,
+  .case-study-page[data-project-slug="aidesignsystem"] [data-subsection="component-skill"] { grid-template-columns: minmax(0, 1fr); }
+  .case-study-page[data-project-slug="aidesignsystem"] .project-detail-subsection-body .case-study-media { position: relative; top: auto; }
+  .case-study-page[data-project-slug="aidesignsystem"] :is(#delivery, #code-mapping) .project-detail-subsection-body { height: auto; }
+  .case-study-page[data-project-slug="aidesignsystem"] [data-subsection="composition-patterns"] .case-study-placeholder { aspect-ratio: 4 / 3; }
+}
+
+.case-study-page[data-project-slug="aidesignsystem"] .project-detail-section:not(#context) .project-detail-section-copy > h2 + p { color: var(--muted); font-size: var(--text-sm); margin-top: -12px; }
+
+.case-study-page[data-project-slug="aidesignsystem"] [data-subsection="skill-package"] .project-detail-subsection-body { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 36px; }
+@container site-main (max-width: 800px) {
+  .case-study-page[data-project-slug="aidesignsystem"] [data-subsection="skill-package"] .project-detail-subsection-body { grid-template-columns: minmax(0, 1fr); }
+}
+
+.case-study-page[data-project-slug="aidesignsystem"] #code-mapping .project-detail-subsection-body { grid-template-columns: minmax(0, 1fr); }
+
+/* Token overview spans the page; its applications sit beside the media. */
+.case-study-page[data-project-slug="aidesignsystem"] .project-detail-section:is(#foundations, #guidance, #skill-design, #agent-access, #delivery, #code-mapping) .project-detail-section-copy > h2 + p {
+  max-width: none;
+  margin-top: 28px;
+  color: var(--text);
+  font-size: var(--text-prose);
+}
+.case-study-page[data-project-slug="aidesignsystem"] [data-subsection="design-tokens"] .project-detail-subsection-body {
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+}
+.case-study-page[data-project-slug="aidesignsystem"] [data-subsection="design-tokens"] .case-study-media { grid-column: 1; grid-row: 1; }
+.case-study-page[data-project-slug="aidesignsystem"] [data-subsection="design-tokens"] .project-detail-subsection-text { grid-column: 2; grid-row: 1; }
+@container site-main (max-width: 800px) {
+  .case-study-page[data-project-slug="aidesignsystem"] [data-subsection="design-tokens"] .project-detail-subsection-body { grid-template-columns: minmax(0, 1fr); }
+  .case-study-page[data-project-slug="aidesignsystem"] [data-subsection="design-tokens"] .project-detail-subsection-text { grid-column: 1; grid-row: 2; }
+}
+
+/* Avoid adding paragraph and heading margins in the guidance grid. */
+.case-study-page[data-project-slug="aidesignsystem"] :is(#guidance, #skill-design, #agent-access, #delivery, #code-mapping) .project-detail-section-copy > h2 { margin-bottom: 20px; }
+.case-study-page[data-project-slug="aidesignsystem"] .project-detail-section:is(#guidance, #skill-design, #agent-access, #delivery, #code-mapping) .project-detail-section-copy > h2 + p { margin-top: 0; }
+
+/* Subtle cool-tone variations distinguish the chapter illustrations. */
+.case-study-page[data-project-slug="aidesignsystem"] [data-subsection="project-design-rules"] .case-study-media,
+.case-study-page[data-project-slug="aidesignsystem"] [data-subsection="code-connect"] .case-study-media {
+  background: linear-gradient(130deg, #d9ddfa, #b5bff0 50%, #dceafb);
+}
+.case-study-page[data-project-slug="aidesignsystem"] [data-subsection="component-api"] .case-study-media,
+.case-study-page[data-project-slug="aidesignsystem"] [data-subsection="agent-tools"] .case-study-media {
+  background: linear-gradient(130deg, #d1eef0, #9fd7e1 50%, #d9eaf9);
+}
+.case-study-page[data-project-slug="aidesignsystem"] [data-subsection="skill-package"] .case-study-media,
+.case-study-page[data-project-slug="aidesignsystem"] [data-subsection="datapilot-design-collaboration"] .case-study-media {
+  background: linear-gradient(130deg, #d7e5fb, #adc8f2 50%, #e1dcf5);
+}
+.case-study-page[data-project-slug="aidesignsystem"] [data-subsection="code-delivery"] .case-study-media {
+  background: linear-gradient(130deg, #d4ece9, #afdce0 50%, #dbeafa);
+}

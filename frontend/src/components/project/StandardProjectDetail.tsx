@@ -118,7 +118,7 @@ export function StandardProjectDetail({ project, detail, presentation, tabs, pan
         ))}
         {project.slug === 'agentops' && section.id === 'project-origin' && overviewFacts}
         {section.table && (project.slug === 'aidesignsystem' && section.id === 'context'
-          ? <dl className="datapilot-background-facts datapilot-background-facts--two-columns">
+          ? <dl className="datapilot-background-facts">
               {section.table.columns.map((column, index) => <div key={column}>
                 <dt>{column}</dt>
                 <dd>{String(section.table!.rows[0].cells[index])}</dd>
@@ -128,7 +128,7 @@ export function StandardProjectDetail({ project, detail, presentation, tabs, pan
         {section.architecture && section.architecture !== heroArchitecture && <ProjectArchitecture architecture={section.architecture} />}
         {section.workflow && <ProjectWorkflow workflow={section.workflow} />}
         {section.subsections?.map((subsection) => (
-          <div key={subsection.id} className="project-detail-subsection">
+          <div key={subsection.id} data-subsection={subsection.id} className="project-detail-subsection">
             <h3 id={`${section.id}-${subsection.id}-title`} hidden={subsection.hideTitle}>{subsection.title}</h3>
             <div className={`project-detail-subsection-body${subsection.layout === 'text-image' ? ' project-detail-subsection-body--text-image' : ''}`}>
               {subsection.mediaFirst && <>
@@ -164,6 +164,7 @@ export function StandardProjectDetail({ project, detail, presentation, tabs, pan
                   </details>
                 )}
               </div>
+              {subsection.screenshotPlaceholder && <CaseStudyPlaceholder title={subsection.screenshotPlaceholder} />}
               {subsection.comparison && <DesignComparison comparison={subsection.comparison} />}
               {subsection.comparisonPlaceholder && (
                 <div className="project-detail-comparison" role="group" aria-label={'方案前后对比，配图待补'}>

@@ -4,7 +4,7 @@ figure.project-architecture {
   isolation: isolate;
   min-width: 0;
   margin: 0;
-  padding: clamp(16px, 2vw, 28px);
+  padding: clamp(24px, 3.6vw, 48px);
   border-radius: var(--radius-lg);
   overflow: hidden;
   color: #121820;
@@ -54,7 +54,7 @@ figure.project-architecture {
   gap: 10px;
   min-width: 0;
   margin: 0 14px;
-  padding: 14px;
+  padding: 10px 14px;
   border-inline: 1px dashed rgb(255 255 255 / 90%);
   list-style: none;
 }
@@ -69,10 +69,10 @@ figure.project-architecture {
   justify-content: center;
   gap: 6px;
   min-width: 0;
-  min-height: 56px;
+  min-height: 44px;
   box-sizing: border-box;
   margin: 0;
-  padding: 12px 8px;
+  padding: 8px;
   border: 1px solid rgb(255 255 255 / 85%);
   border-radius: 5px;
   background: rgb(255 255 255 / 36%);
@@ -85,21 +85,21 @@ figure.project-architecture {
 @container (max-width: 720px) {
   .project-architecture .project-architecture-layer { grid-template-columns: 96px minmax(0, 1fr); }
   .project-architecture .project-architecture-nodes { grid-auto-flow: row; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; padding: 10px; margin-inline: 10px; }
-  .project-architecture .project-architecture-node { min-height: 64px; }
+  .project-architecture .project-architecture-node { min-height: 48px; }
   .project-architecture .project-architecture-node:last-child:nth-child(odd) { grid-column: 1 / -1; }
 }
 @container (max-width: 420px) {
   .project-architecture .project-architecture-layer { grid-template-columns: 76px minmax(0, 1fr); }
   .project-architecture-layer-label { padding: 10px 6px; }
   .project-architecture .project-architecture-nodes { grid-template-columns: minmax(0, 1fr); margin-inline: 8px; padding: 8px; }
-  .project-architecture .project-architecture-node { min-height: 58px; }
+  .project-architecture .project-architecture-node { min-height: 44px; }
 }
 
 .project-architecture-layer--knowledge .project-architecture-nodes {
   grid-auto-flow: row;
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
-.project-architecture .project-architecture-node--full { grid-column: 1 / -1; min-height: 36px; padding-block: 8px; }
+.project-architecture .project-architecture-node--full { grid-column: 1 / -1; min-height: 30px; padding-block: 5px; }
 .project-architecture-layer--access .project-architecture-nodes { grid-auto-flow: row; grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .project-architecture-layer--mapping .project-architecture-nodes { gap: 28px; }
 .project-architecture-layer--mapping .project-architecture-node:first-child { position: relative; }

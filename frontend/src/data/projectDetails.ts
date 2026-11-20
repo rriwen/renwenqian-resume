@@ -111,6 +111,8 @@ export type ProjectDetailSection = {
     closingParagraphs?: ProjectDetailParagraph[]
     /** 待补证据清单，仅供页面展示，不进入聊天事实与媒体清单。 */
     evidenceRequests?: string[]
+    /** 截图占位说明，仅供页面展示，不进入聊天事实与媒体清单。 */
+    screenshotPlaceholder?: string
     afterImagesParagraphs?: ProjectDetailParagraph[]
     mediaFirst?: boolean
     prototypeEmbed?: { url: string; title: string }

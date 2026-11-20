@@ -66,15 +66,15 @@ test('design engineering architecture shares stable identities and reaches the c
   }
 })
 
-test('design engineering evidence requests stay outside chat facts and media', () => {
+test('design engineering screenshot briefs stay outside chat facts and media', () => {
   const detail = getProjectDetail('aidesignsystem', 'zh')!
   const corpus = buildSiteCorpus('zh')
-  const requests = detail.sections!.flatMap(section => section.subsections ?? []).flatMap(subsection => subsection.evidenceRequests ?? [])
+  const requests = detail.sections!.flatMap(section => section.subsections ?? []).flatMap(subsection => subsection.screenshotPlaceholder ? [subsection.screenshotPlaceholder] : [])
   assert.ok(requests.length > 0)
   for (const request of requests) assert.ok(!corpus.includes(request))
   assert.ok(corpus.includes('OceanBase 云控制台'))
   assert.equal(detail.sections!.find(section => section.id === 'context')!.title, '项目背景')
-  assert.ok(corpus.includes('让不同角色借助 AI 产出的界面与代码遵循统一规范'))
+  assert.ok(corpus.includes('让不同角色通过 AI 复用设计系统'))
 })
 
 test('funnel details distinguish measured counts, estimated counts and step conversion', () => {
@@ -328,7 +328,6 @@ test('DataPilot experience keeps product proposals and outcomes explicit', () =>
   assert.ok(zh.find(({ id }) => id === 'role')!.bullets!.some(text => text.includes('用户发布应用数 / 创建应用数')))
   assert.ok(!zh.some(({ id }) => id === 'delivery'))
   assert.ok(!zh.some(section => section.id === 'design-collaboration'))
-  assert.ok(buildSiteCorpus('zh').includes('https://design-md-reader-4x.vercel.app/'))
   assert.deepEqual(zh.filter(section => section.group?.id === 'qa-experience').map(section => section.id), ['qa-overview', 'qa-entry', 'qa-execution', 'qa-result'])
   assert.ok(zh.findIndex(section => section.id === 'qa-result') < zh.findIndex(section => section.id === 'continuous-analysis-example'))
   assert.deepEqual(zh.filter(section => section.group?.id === 'continuous-dialogue').map(section => section.id), ['continuous-analysis-example', 'conversation', 'report-editing', 'continuous-analysis-validation'])

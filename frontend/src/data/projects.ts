@@ -68,7 +68,7 @@ export const projects: Project[] = [
     tags: { zh: ['任务编排', '复杂交互'],},
   },
   {
-    id: 4, slug: 'aidesignsystem', title: '设计工程化',
+    id: 4, slug: 'aidesignsystem', title: '设计工程',
     category: 'design-systems',
     image: '/images/aidesignsystem-hero.jpg',
     tags: { zh: ['AI 设计工作流', '组件化设计', '设计与代码协同'],},
