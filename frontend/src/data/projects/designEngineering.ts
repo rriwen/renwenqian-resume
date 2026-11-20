@@ -212,21 +212,8 @@ export function getDesignEngineeringContent(_locale: Locale): ProjectDetailBlock
             ],
             images: [],
           },
-          {
-            id: 'implementation-review', title: '界面和代码检查',
-            paragraphs: [
-              '已有实践：检查 Token 引用、代码结构、页面层级、交互状态与窄屏表现。',
-              '待建设：将典型状态整理为可运行示例，接入交互、无障碍与视觉检查，向 Agent 返回错误位置、原因与修正依据。',
-            ],
-            evidenceRequests: ['待补现有检查记录；自动检查如已开展，请补充脚本、覆盖范围与结果。'],
-            images: [],
-          },
-          {
-            id: 'agent-usage-evaluation', title: 'Agent 使用评估',
-            paragraphs: ['待建设：通过真实任务评估 Agent 能否找到组件、选对属性并遵循规则，记录脱离组件库自行实现的情况，再将误用与能力缺口反馈到资产和知识维护中。'],
-            evidenceRequests: ['待补评估任务、Agent 调用过程与结果记录。'],
-            images: [],
-          },
+
+
         ],
         images: [],
       },
