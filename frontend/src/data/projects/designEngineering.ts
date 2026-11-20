@@ -21,7 +21,7 @@ export function getDesignEngineeringContent(_locale: Locale): ProjectDetailBlock
           columns: ['建设目标', '核心职责'],
           rows: [{ id: 'goals-and-role', cells: [
             '让不同角色借助 AI 产出的界面与代码遵循统一规范，复用已有设计能力。',
-            '负责 Design Token、设计知识、DESIGN.md 与 Skill 建设，协同前端统一组件 API 和设计代码映射。',
+            'Agent Ready 设计系统负责人，负责 Design Token、设计知识、DESIGN.md 与 Skill 建设，协同前端统一组件 API 和设计代码映射。',
           ] }],
         },
         architecture: {
@@ -184,9 +184,21 @@ export function getDesignEngineeringContent(_locale: Locale): ProjectDetailBlock
         legacyIds: ['implementation', 'implementation-implementation-review-title', 'implementation-agent-usage-evaluation-title'],
         title: '项目应用',
         paragraphs: [
-          '以下通过 Data Agent 与 OceanBase 云控制台，展示设计工程方法在项目中的应用。',
+          '以下通过 OceanBase 云控制台与 Data Agent，展示设计工程方法在项目中的应用。',
         ],
         subsections: [
+          {
+            id: 'code-delivery',
+            title: 'OceanBase 云控制台',
+            paragraphs: [
+              '具体实践、个人职责与交付范围待补。',
+            ],
+            evidenceRequests: [
+              '请提供 OceanBase 云控制台的实际应用场景、个人职责与交付范围。',
+              '请补充对应界面、规则或代码示例，以及检查记录与发布状态。',
+            ],
+            images: [],
+          },
           {
             id: 'datapilot-design-collaboration',
             title: 'Data Agent：把界面偏差转化为共同规则',
@@ -200,18 +212,7 @@ export function getDesignEngineeringContent(_locale: Locale): ProjectDetailBlock
             ],
             images: [],
           },
-          {
-            id: 'code-delivery',
-            title: 'OceanBase 云控制台',
-            paragraphs: [
-              '具体实践、个人职责与交付范围待补。',
-            ],
-            evidenceRequests: [
-              '请提供 OceanBase 云控制台的实际应用场景、个人职责与交付范围。',
-              '请补充对应界面、规则或代码示例，以及检查记录与发布状态。',
-            ],
-            images: [],
-          },
+
 
 
         ],
