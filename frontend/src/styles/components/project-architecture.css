@@ -1,10 +1,15 @@
 figure.project-architecture {
   --architecture-label-width: 112px;
   --architecture-column-gap: var(--space-5);
-  --architecture-muted: color-mix(in srgb, var(--muted) 60%, var(--text));
+  --architecture-muted: #46516a;
+  position: relative;
+  padding: clamp(20px, 3vw, 40px);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  isolation: isolate;
   min-width: 0;
   margin: 0;
-  color: var(--text);
+  color: #202633;
   container-type: inline-size;
 }
 
@@ -25,23 +30,8 @@ figure.project-architecture {
   margin: 0;
   padding: var(--space-5);
   border-radius: var(--radius-md);
-  background: color-mix(in srgb, var(--architecture-layer-color, var(--accent)) 10%, var(--surface));
-}
-
-.project-architecture-layer--assets {
-  --architecture-layer-color: var(--architecture-assets);
-}
-
-.project-architecture-layer--guidance {
-  --architecture-layer-color: var(--architecture-guidance);
-}
-
-.project-architecture-layer--delivery {
-  --architecture-layer-color: var(--architecture-delivery);
-}
-
-.project-architecture-layer--applications {
-  --architecture-layer-color: var(--architecture-applications);
+  border: 1px solid rgb(255 255 255 / 85%);
+  background: rgb(255 255 255 / 12%);
 }
 
 .project-architecture-layer-label {
@@ -85,7 +75,8 @@ figure.project-architecture {
   margin: 0;
   padding: var(--space-3);
   border-radius: var(--radius-sm);
-  background: color-mix(in srgb, var(--architecture-layer-color, var(--accent)) 28%, var(--surface));
+  border: 1px solid rgb(255 255 255 / 85%);
+  background: rgb(255 255 255 / 58%);
   text-align: center;
   overflow-wrap: anywhere;
 }
@@ -135,4 +126,14 @@ figure.project-architecture {
     gap: var(--space-1);
     text-align: left;
   }
+}
+
+.project-architecture-layer--delivery .project-architecture-node {
+  background: #202124;
+  border-color: #202124;
+  color: #fff;
+}
+
+.project-architecture-layer--delivery .project-architecture-node-description {
+  color: #d7d9df;
 }

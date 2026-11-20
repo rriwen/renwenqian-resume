@@ -81,6 +81,12 @@ export type ProjectDetailComparison = {
   }[]
 }
 
+export type ProjectWorkflowData = {
+  limitation?: { title: string; body: string }
+  title: string
+  steps: { title: string; body: string; branch?: { title: string; body: string } }[]
+}
+
 export type ProjectDetailSection = {
   /** 将摘要内容渲染在顶部概览，仍保留章节锚点。 */
   placement?: 'overview'
@@ -92,6 +98,7 @@ export type ProjectDetailSection = {
   paragraphs: ProjectDetailParagraph[]
   table?: ProjectDetailTable
   architecture?: ProjectArchitectureData
+  workflow?: ProjectWorkflowData
   /** 章节内的小标题、正文与配图保持绑定，页面和聊天共用。 */
   subsections?: {
     id: string
@@ -100,6 +107,8 @@ export type ProjectDetailSection = {
     paragraphs: ProjectDetailParagraph[]
     listItems?: ProjectDetailParagraph[]
     closingParagraphs?: ProjectDetailParagraph[]
+    /** 待补证据清单，仅供页面展示，不进入聊天事实与媒体清单。 */
+    evidenceRequests?: string[]
     afterImagesParagraphs?: ProjectDetailParagraph[]
     mediaFirst?: boolean
     prototypeEmbed?: { url: string; title: string }
@@ -198,20 +207,41 @@ const details: Record<string, {zh: ProjectDetailBlock }> = {
           "title": "项目背景",
           "paragraphs": [
             "Text2SQL 面向在编辑器中编写和修改 SQL 的数据库开发者，通过自然语言辅助生成、纠错、改写与格式化，目标是降低将查询需求转成代码、再反复调整的成本。",
-            "我主导产品设计。考虑到用户正在处理具体代码，方案将 AI 融入原有编辑流程，以光标和选区明确操作对象，串联需求表达、生成控制与结果审阅。"
+            "我主导产品设计，并通过 Dify 搭建工作流，完成技术实现探索。设计将 AI 融入原有编辑流程，以光标和选区明确操作对象，串联需求表达、生成控制与结果审阅。"
           ],
           "images": []
         },
         {
+          id: 'workflow-exploration',
+          title: '工作流探索',
+          paragraphs: [
+            '尝试用 Dify 搭建 Text2SQL Agent 工作流，探索从自然语言需求到 SQL 生成的实现路径。',
+          ],
+          workflow: {
+            title: '单次请求的 SQL 生成流程',
+            limitation: { title: '主要局限：', body: '缺少多轮澄清与连续修改。信息不足时，用户需要补全需求后重新输入；对结果不满意时，也无法沿着当前回答继续调整，只能重新发起请求。' },
+            steps: [
+              { title: '输入需求', body: '输入自然语言，发起一次 SQL 生成请求。' },
+              { title: '信息抽取', body: '提取目标字段、条件字段、表名与问句骨架。',
+                branch: { title: '需要澄清 → 重新输入', body: '本版本不支持多轮澄清。信息不足时，用户需补全需求并重新提交。' } },
+              { title: '表与样例召回', body: '用字段和表名检索相关表 DDL，用问句骨架检索相似 SQL 样例。' },
+              { title: '组装 Prompt', body: '将召回的表 DDL、样例及 SQL 方言要求填入提示词模板。' },
+              { title: '生成并返回 SQL', body: '将原始需求与组装后的提示词交给模型，返回生成的 SQL。' },
+              { title: '接受或不接受', body: '用户决定是否采用结果，无法继续追问修改本次回答。' },
+            ],
+          },
+          images: [],
+        },
+        {
           "id": "contextual-entry",
-          "title": "设计策略",
+          "title": "交互设计策略",
           "legacyIds": [
             "task-commands",
             "generation-feedback",
             "result-review"
           ],
           "paragraphs": [
-            "围绕一次自然语言辅助编辑，将设计串成问答前明确需求、问答中控制过程、问答后检查结果三个环节。"
+            "围绕一次自然语言辅助编辑，将设计串成三个环节：问答前就近编辑、明确意图，问答中控制生成过程，问答后审阅改动。"
           ],
           "subsections": [
             {

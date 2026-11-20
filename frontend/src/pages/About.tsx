@@ -42,6 +42,9 @@ export function About() {
       <main className="page-shell about-page">
         <div id="about-2026" style={{ ...anchorTarget, position: 'relative', marginBottom: 'var(--space-6)' }}>
           <h1 ref={titleRef} className="page-title">{title}</h1>
+          <ul className="about-tags" aria-label="专业领域">
+            {m.about.tags.map(tag => <li key={tag} className="project-case-tag">{tag}</li>)}
+          </ul>
         </div>
 
         <div style={proseColumn}>

@@ -118,7 +118,27 @@
 .chatbot-markdown li > :is(ul, ol) { margin-top: var(--space-2); margin-bottom: 0; }
 .chatbot-markdown li > p { margin-bottom: var(--space-2); }
 .chatbot-markdown a { color: var(--accent); text-underline-offset: 3px; }
+.chatbot-markdown .chatbot-link-button {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 16px;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-pill);
+  color: var(--text);
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  text-decoration: none;
+  vertical-align: middle;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+.chatbot-markdown .chatbot-link-button:hover {
+  background: var(--hover-bg);
+  color: var(--text);
+  text-decoration: none;
+}
 .chatbot-markdown a:focus-visible,
+.chatbot-project-image-link:focus-visible,
 .chatbot-table-scroll:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 .chatbot-markdown pre { white-space: pre; word-break: normal; }
 .chatbot-markdown .contains-task-list { list-style: none; padding-left: 0; }
@@ -162,7 +182,7 @@
   max-width: 100%;
   margin: var(--space-4) 0;
 }
-.chatbot-project-image-link { display: block; width: fit-content; max-width: 100%; border-radius: var(--radius-sm); }
+.chatbot-project-image-link { display: block; width: fit-content; max-width: 100%; border-radius: var(--radius-sm); padding: 0; border: 0; background: transparent; cursor: zoom-in; }
 .chatbot-markdown .chatbot-project-image img {
   display: block;
   width: auto;

@@ -3,7 +3,7 @@ import { Link, useLocation, useMatch } from 'react-router-dom'
 import { getProjectBySlug, getProjectNavigationTitle, type ProjectCategory } from '../data/projects'
 import { getProjectNavigationGroups, getProjectViewBySlug } from '../data/projectViews'
 import { useLanguage } from '../i18n/LanguageContext'
-import { IconCamera, IconClose, IconFileText, IconNewChat, IconPalette, IconSidebarToggle, IconSparkle, IconTerminal } from './Icons'
+import { IconClose, IconFileText, IconNewChat, IconPalette, IconSidebarToggle, IconSparkle, IconTerminal } from './Icons'
 import { SidebarRail } from './SidebarRail'
 import { BookOpenIcon } from '@phosphor-icons/react'
 
@@ -107,7 +107,6 @@ export function SiteSidebar({ onNewChat, open, onClose, triggerRef, launcherRef,
             </div>
             )
           })}
-          <Link to="/photography" className="sidebar-link sidebar-photography" aria-current={selectedPathname === '/photography' ? 'page' : undefined}><IconCamera /><span>{'摄影记录'}</span></Link>
 
           <a hidden className="sidebar-link sidebar-blog" href="https://app.notion.com/p/rriwen/Hi-I-m-4x-204195a9bba880f787b4dc0eec18a101?source=copy_link" target="_blank" rel="noopener noreferrer"><BookOpenIcon size={18} aria-hidden="true" /><span>{'博客'}</span><span className="external-link-icon" aria-hidden="true">↗</span></a>
         </nav>

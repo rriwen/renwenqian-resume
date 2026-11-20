@@ -3,6 +3,7 @@ import { getProjectDetail, type ProjectDetailBlock, type ProjectDetailParagraph,
 import { getDataPilotContent } from '../data/projects/dataPilot'
 import { getAboutContent, stripMarkdownInline } from '../content/about'
 import { translations, type Locale } from '../i18n/translations'
+import { getCaseStudyIntroduction, getCaseStudyMethods } from '../data/projects/caseStudyPresentation'
 import { getChatProjectImages } from './chat/projectImages'
 
 function paragraphToText(p: ProjectDetailParagraph): string {
@@ -62,6 +63,14 @@ function serializeProjectBlock(block: ProjectDetailBlock): string {
     parts.push(`#### ${section.title}`)
     parts.push(...section.paragraphs.map(paragraphToText))
     if (section.table) parts.push(...serializeTable(section.table))
+    if (section.workflow) {
+      parts.push(section.workflow.title)
+      section.workflow.steps.forEach((step, index) => {
+        parts.push(`${index + 1}. ${step.title}：${step.body}`)
+        if (step.branch) parts.push(`分支：${step.branch.title}。 ${step.branch.body}`)
+      })
+      if (section.workflow.limitation) parts.push(section.workflow.limitation.title + section.workflow.limitation.body)
+    }
     if (section.architecture) {
       const architecture = section.architecture
       parts.push(architecture.title)
@@ -253,7 +262,10 @@ export function buildSiteCorpus(locale: Locale): string {
     if (p.slug === 'dataagent') {
       lines.push(serializeDataPilot(locale))
     } else if (detail) {
-      lines.push(serializeProjectBlock(detail))
+      const introduction = getCaseStudyIntroduction(p.slug, locale)
+      if (introduction) lines.push(introduction)
+      const methods = getCaseStudyMethods(p.slug, locale)
+      lines.push(serializeProjectBlock({ ...detail, tags: methods.length ? methods : detail.tags }))
     } else {
       lines.push('（无详情文案）')
     }

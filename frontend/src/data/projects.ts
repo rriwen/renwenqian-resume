@@ -3,7 +3,7 @@ import type { Locale } from '../i18n/translations'
 export const projectCategories = [
   { id: 'ai-products', label: { zh: 'AI 产品',} },
   { id: 'data-tools', label: { zh: '平台工具',} },
-  { id: 'design-systems', label: { zh: '设计工程化',} },
+  { id: 'design-systems', label: { zh: '设计工程',} },
 ] as const
 
 export type ProjectCategory = (typeof projectCategories)[number]['id']

@@ -66,6 +66,16 @@ test('design engineering architecture shares stable identities and reaches the c
   }
 })
 
+test('design engineering evidence requests stay outside chat facts and media', () => {
+  const detail = getProjectDetail('aidesignsystem', 'zh')!
+  const corpus = buildSiteCorpus('zh')
+  const requests = detail.sections!.flatMap(section => section.subsections ?? []).flatMap(subsection => subsection.evidenceRequests ?? [])
+  assert.ok(requests.length > 0)
+  for (const request of requests) assert.ok(!corpus.includes(request))
+  assert.ok(corpus.includes('独立完成产品官网与记忆管理后台的视觉设计、内容规划和前端代码'))
+  assert.ok(corpus.includes('稳定性与效率收益仍待验证'))
+})
+
 test('funnel details distinguish measured counts, estimated counts and step conversion', () => {
   const { stages } = getDatabaseOpsFunnel('zh')
   assert.deepEqual(stages.map(({ conversionRate }) => conversionRate), [undefined, 35.34, 65.97, 72.08])
@@ -362,5 +372,41 @@ test('DataPilot experience keeps product proposals and outcomes explicit', () =>
   for (const sections of [zh]) {
     const results = sections.find(({ id }) => id === 'role')!
     assert.ok(results.body.includes('15%') && results.body.includes('60%'))
+  }
+})
+
+test('chat uses current case headers and the edited project narrative', () => {
+  const corpus = buildSiteCorpus('zh')
+  const projectText = (slug: string) => corpus.split('(slug: ' + slug + ')')[1].split('\n### ')[0]
+  const databaseops = projectText('databaseops')
+  assert.ok(databaseops.includes('Tags: 复杂系统, 用户旅程, 埋点分析, 原型验证'))
+  const text2sql = projectText('text2sql')
+  assert.ok(text2sql.includes('用自然语言辅助 SQL 编写与修改'))
+  assert.ok(text2sql.includes('Tags: 产品设计, AI 交互, 复杂流程设计'))
+  assert.ok(text2sql.includes('我主导产品设计'))
+  assert.ok(text2sql.includes('- 就近编辑：'))
+  assert.ok(!text2sql.includes('交付与回顾'))
+  const engineering = projectText('aidesignsystem')
+  assert.ok(!engineering.includes('#### 全局架构'))
+  assert.ok(!engineering.includes('体系从上到下分为'))
+  assert.ok(engineering.includes('以设计基建支撑 AI 辅助研发'))
+})
+
+test('Text2SQL workflow exploration and its branches remain in the shared corpus', () => {
+  const detail = getProjectDetail('text2sql', 'zh')!
+  const section = detail.sections!.find(section => section.id === 'workflow-exploration')!
+  assert.ok(getProjectAnchors(detail, 'zh').some(anchor => anchor.id === section.id))
+  const workflow = section.workflow!
+  const corpus = buildSiteCorpus('zh')
+  assert.equal(workflow.steps.length, 6)
+  assert.ok(!workflow.steps.some(step => step.title === '检查候选结果'))
+  assert.ok(corpus.includes('缺少多轮澄清与连续修改'))
+  assert.ok(corpus.includes('本版本不支持多轮澄清'))
+  assert.ok(corpus.includes(workflow.limitation!.body))
+  assert.deepEqual(workflow.steps.map(step => step.title), ['输入需求', '信息抽取', '表与样例召回', '组装 Prompt', '生成并返回 SQL', '接受或不接受'])
+  assert.ok(!corpus.includes('不接受 → 结束本次'))
+  for (const step of workflow.steps) {
+    assert.ok(corpus.includes(step.body))
+    if (step.branch) assert.ok(corpus.includes(step.branch.body))
   }
 })

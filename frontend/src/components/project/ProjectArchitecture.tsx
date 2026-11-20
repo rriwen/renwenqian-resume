@@ -1,3 +1,4 @@
+import { MeshGradientBackground } from './MeshGradientBackground'
 import type { ProjectArchitectureData } from '../../data/projectDetails'
 
 type ProjectArchitectureProps = {
@@ -7,9 +8,10 @@ type ProjectArchitectureProps = {
 export function ProjectArchitecture({ architecture }: ProjectArchitectureProps) {
   return (
     <figure
-      className="project-architecture"
+      className="project-architecture project-hero-gradient"
       aria-label={architecture.title}
     >
+      <MeshGradientBackground speed={0.4} />
       <ol className="project-architecture-layers" role="list">
         {architecture.layers.map(layer => (
           <li

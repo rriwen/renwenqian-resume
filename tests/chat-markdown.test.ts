@@ -67,11 +67,11 @@ test('approved project images use catalogue context and cannot become external t
   const html = render(`[![模型编造的图注](${image.src})](https://tracker.example/click)`)
   assert.match(html, /<img\s/)
   assert.ok(html.includes(`src="${image.src}"`))
-  assert.ok(html.includes(`href="${image.src}"`))
+  assert.match(html, /<button[^>]*class="chatbot-project-image-link"/)
   assert.ok(html.includes(`alt="${image.caption}"`))
   assert.ok(html.includes(image.caption))
   assert.doesNotMatch(html, /模型编造的图注|tracker\.example/)
-  assert.equal((html.match(/<a\s/g) ?? []).length, 1, 'An image must not create nested links')
+  assert.equal((html.match(/<a\s/g) ?? []).length, 0, 'Images must open an in-page preview rather than a new page')
 })
 
 test('unknown local, external, protocol-relative, and data images never render image requests', () => {

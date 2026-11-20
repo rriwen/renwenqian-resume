@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { getProjectNavigationTitle, type ProjectCategory } from '../data/projects'
 import { getProjectNavigationGroups } from '../data/projectViews'
 import { useLanguage } from '../i18n/LanguageContext'
-import { IconCamera, IconFileText, IconNewChat, IconPalette, IconSparkle, IconTerminal } from './Icons'
+import { IconFileText, IconNewChat, IconPalette, IconSparkle, IconTerminal } from './Icons'
 
 export function SidebarRail({ onNewChat }: { onNewChat: () => void }) {
   const { pathname, hash, key } = useLocation()
@@ -14,7 +14,6 @@ export function SidebarRail({ onNewChat }: { onNewChat: () => void }) {
   const [openGroup, setOpenGroup] = useState<ProjectCategory | null>(null)
   const groupRefs = useRef<Partial<Record<ProjectCategory, HTMLDivElement | null>>>({})
   const triggerRefs = useRef<Partial<Record<ProjectCategory, HTMLButtonElement | null>>>({})
-  const photographyLabel = '摄影记录'
 
   useEffect(() => { setOpenGroup(null) }, [key])
 
@@ -82,11 +81,8 @@ export function SidebarRail({ onNewChat }: { onNewChat: () => void }) {
           </div>
         </div>
       ))}
-      <Link to="/project/aidesignsystem" className="sidebar-rail-link sidebar-tooltip-host" aria-label={'设计工程化'} aria-current={isDesignEngineering ? 'page' : undefined}>
-        <IconPalette /><span className="sidebar-tooltip" aria-hidden="true">{'设计工程化'}</span>
-      </Link>
-      <Link to="/photography" className="sidebar-rail-link sidebar-tooltip-host" aria-label={photographyLabel} aria-current={selectedPathname === '/photography' ? 'page' : undefined}>
-        <IconCamera /><span className="sidebar-tooltip" aria-hidden="true">{photographyLabel}</span>
+      <Link to="/project/aidesignsystem" className="sidebar-rail-link sidebar-tooltip-host" aria-label={'设计工程'} aria-current={isDesignEngineering ? 'page' : undefined}>
+        <IconPalette /><span className="sidebar-tooltip" aria-hidden="true">{'设计工程'}</span>
       </Link>
     </nav>
   )

@@ -6,7 +6,7 @@
 .case-study-page .datapilot-case-hero h1 { margin: 0; font-size: var(--text-title); font-weight: var(--weight-semibold); }
 .case-study-page .case-study-lead { margin: 20px 0 18px; font-size: var(--text-prose); line-height: var(--leading-body); color: var(--text); }
 .case-study-page .project-case-tags { margin: 0; flex-wrap: wrap; }
-.case-study-page .project-case-tag { font-size: var(--text-xs); line-height: var(--leading-ui); }
+.case-study-page .project-case-tag, .about-tags .project-case-tag { font-size: var(--text-xs); line-height: var(--leading-ui); }
 .case-study-page .case-study-demo { display: inline-flex; margin-top: 24px; text-decoration: none; width: fit-content; }
 .case-study-page .project-case-cover { margin-top: 36px; }
 .case-study-introduction { margin-top: 48px; }

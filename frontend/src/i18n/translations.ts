@@ -28,6 +28,7 @@ export type Messages = {
     placeholder: string
   }
   about: {
+    tags: string[]
     title: string
     contactCta: {
       title: string
@@ -134,6 +135,7 @@ export const translations: Record<Locale, Messages> = {
     },
     about: {
       title: '关于我 | 泗澄',
+      tags: ['AI 产品', '企业级工具', '设计工程'],
       contactCta: {
         title: '欢迎随时联系我',
         wechatPhoneLabel: '微信/电话',

@@ -6,7 +6,7 @@ const introductions: Record<string, Record<Locale, string>> = {
   text2sql: { zh: '用自然语言辅助 SQL 编写与修改',},
   datadevelop: { zh: '围绕数据库开发任务，持续打磨 SQL 编辑与数据操作体验',},
   'workflow-editor': { zh: '通过可视化编排，组织数据任务的执行顺序与依赖关系',},
-  aidesignsystem: { zh: '串联设计资产、规则映射与代码交付，探索设计师参与 AI 研发的方式',},
+  aidesignsystem: { zh: '以设计资产、规则映射与代码交付，构建设计参与 AI 研发的通用方法',},
   Memory: { zh: '让 Agent 的经验可积累、可检索、可复用',},
   skills: { zh: '将组件用法与工程约束整理为可复用的 AI 协作规则',},
 }
@@ -15,7 +15,7 @@ export const getCaseStudyIntroduction = (slug: string, locale: Locale) => introd
 /** Methods shown in the case header, independent of project categories. */
 const methods: Record<string, string[]> = {
   dataagent: ['AI Native', '产品规划', '人机交互', '场景验证'],
-  databaseops: ['用户旅程', '埋点分析', '原型验证'],
+  databaseops: ['复杂系统', '用户旅程', '埋点分析', '原型验证'],
   agentops: ['场景分析', '交互设计', '原型设计'],
   text2sql: ['产品设计', 'AI 交互', '复杂流程设计'],
   datadevelop: ['用户访谈', '可用性测试', '设计规范'],

@@ -1,8 +1,10 @@
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import ReactMarkdown, { type Components } from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import type { Locale } from '../../i18n/translations'
 import { getChatProjectImages, type ChatProjectImage } from '../../lib/chat/projectImages'
+
+import { ProjectLightbox } from '../project/ProjectLightbox'
 
 type ChatMessageContentProps = {
   content: string
@@ -22,6 +24,9 @@ function safeLink(href: string | undefined): string | undefined {
 
 function ProjectImage({ image, locale: _locale }: { image: ChatProjectImage; locale: Locale }) {
   const [failed, setFailed] = useState(false)
+  const [expanded, setExpanded] = useState(false)
+  const triggerRef = useRef<HTMLButtonElement>(null)
+  const closePreview = useCallback(() => setExpanded(false), [])
   const caption = image.caption || image.projectTitle
 
   return (
@@ -31,12 +36,13 @@ function ProjectImage({ image, locale: _locale }: { image: ChatProjectImage; loc
           {'图片暂时无法加载。'}
         </span>
       ) : (
-        <a href={image.src} target="_blank" rel="noopener noreferrer" className="chatbot-project-image-link"
-          aria-label={`查看原图：${caption}（新窗口）`}>
+        <button type="button" ref={triggerRef} onClick={() => setExpanded(true)} className="chatbot-project-image-link"
+          aria-label={`放大查看：${caption}`}>
           <img src={image.src} alt={caption} loading="lazy" decoding="async" onError={() => setFailed(true)} />
-        </a>
+        </button>
       )}
       <span className="chatbot-project-image-caption">{caption}</span>
+      {expanded && <ProjectLightbox items={[{ src: image.src, caption }]} index={0} onChange={() => {}} onClose={closePreview} returnFocusTo={triggerRef.current} />}
     </span>
   )
 }
@@ -47,11 +53,11 @@ export function ChatMessageContent({ content, locale }: ChatMessageContentProps)
     const images = new Map(getChatProjectImages(locale).map(image => [image.src, image]))
     return {
       a: ({ href, children, node }) => {
-        // A linked Markdown image already receives its own trusted original-image link.
+        // A linked Markdown image already receives its own trusted preview button.
         const link = safeLink(href)
         if (!link || (node && containsImage(node))) return <>{children}</>
         const external = /^https?:\/\//i.test(link)
-        return <a href={link} target={external ? '_blank' : undefined} rel={external ? 'noopener noreferrer' : undefined}>{children}</a>
+        return <a className="chatbot-link-button" href={link} target={external ? '_blank' : undefined} rel={external ? 'noopener noreferrer' : undefined}>{children}</a>
       },
       img: ({ src }) => {
         const image = src ? images.get(src) : undefined

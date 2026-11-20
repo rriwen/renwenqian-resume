@@ -5,6 +5,7 @@ import { useLanguage } from '../../i18n/LanguageContext'
 import { DetailTable } from './DetailTable'
 import { CaseStudyHeroPalette, CaseStudyGallery, CaseStudyMediaFrame, CaseStudyPlaceholder } from './CaseStudyMedia'
 import { ProjectFunnel } from './ProjectFunnel'
+import { ProjectWorkflow } from './ProjectWorkflow'
 import { ProjectArchitecture } from './ProjectArchitecture'
 import { ScreenshotCarousel } from './ScreenshotCarousel'
 import { PrototypePreview } from './PrototypePreview'
@@ -97,7 +98,7 @@ export function StandardProjectDetail({ project, detail, presentation, tabs, pan
   const title = presentation?.title ?? getProjectTitle(project, locale)
   const introduction = getCaseStudyIntroduction(project.slug, locale)
   const bodyParagraphs = introduction ? detail.paragraphs : detail.paragraphs.slice(1)
-  const heroArchitecture = project.slug === 'aidesignsystem'
+  const heroArchitecture = project.slug === 'aidesignsystem' && !detail.hideOverviewMedia
     ? detail.sections?.find(section => section.architecture)?.architecture
     : undefined
   const anchors = getProjectAnchors(detail, locale)
@@ -118,6 +119,7 @@ export function StandardProjectDetail({ project, detail, presentation, tabs, pan
         {project.slug === 'agentops' && section.id === 'project-origin' && overviewFacts}
         {section.table && <DetailTable table={section.table} titleId={`${section.id}-title`} />}
         {section.architecture && section.architecture !== heroArchitecture && <ProjectArchitecture architecture={section.architecture} />}
+        {section.workflow && <ProjectWorkflow workflow={section.workflow} />}
         {section.subsections?.map((subsection) => (
           <div key={subsection.id} className="project-detail-subsection">
             <h3 id={`${section.id}-${subsection.id}-title`} hidden={subsection.hideTitle}>{subsection.title}</h3>
@@ -144,6 +146,16 @@ export function StandardProjectDetail({ project, detail, presentation, tabs, pan
                 {subsection.closingParagraphs?.map((para, idx) => (
                   <p key={`closing-${idx}`}>{renderParagraphContent(para)}</p>
                 ))}
+                {!!subsection.evidenceRequests?.length && (
+                  <details className="project-detail-design-comparison project-detail-evidence">
+                    <summary><span>待补证据 · 需要你提供的材料（{subsection.evidenceRequests.length} 项）</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg></summary>
+                    <div className="project-detail-comparison-content">
+                      <ul className="project-detail-subsection-list">
+                        {subsection.evidenceRequests.map((request) => <li key={request}>{request}</li>)}
+                      </ul>
+                    </div>
+                  </details>
+                )}
               </div>
               {subsection.comparison && <DesignComparison comparison={subsection.comparison} />}
               {subsection.comparisonPlaceholder && (
