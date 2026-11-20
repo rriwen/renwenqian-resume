@@ -1,7 +1,7 @@
 .project-workflow { margin-top: 32px; }
 .project-workflow.datapilot-journey--paths { padding-top: 48px; padding-bottom: 32px; }
 .project-workflow-ring { position: relative; padding-left: 28px; }
-.project-workflow .project-workflow-nodes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)) !important; grid-template-rows: auto auto; align-items: stretch; gap: 112px 36px; padding: 0; }
+.project-workflow .project-workflow-nodes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)) !important; grid-template-rows: auto auto; align-items: stretch; gap: 144px 36px; padding: 0; }
 .project-workflow .project-workflow-node { display: block; text-align: left; padding: 14px 16px 12px; border-radius: 10px; background: rgb(255 255 255 / .32); color: #15263f; border: 1px solid #fff; min-height: 112px; }
 .project-workflow-node[data-step='1'] { grid-area: 1 / 1; }
 .project-workflow-node[data-step='2'] { grid-area: 1 / 2; }
@@ -18,7 +18,7 @@
 .case-study-page .project-workflow .project-workflow-branch p { font-size: var(--text-xs); margin-top: 6px; }
 .project-workflow-arrow { position: absolute; height: 1px; width: 30px; right: -34px; top: 50%; background: #fff; }
 .project-workflow-arrow::after { content: ''; position: absolute; right: 0; top: -3px; width: 6px; height: 6px; border-top: 1px solid #fff; border-right: 1px solid #fff; transform: rotate(45deg); }
-.project-workflow-node[data-step='3'] .project-workflow-arrow { width: 1px; height: 100px; right: 50%; top: calc(100% + 6px); }
+.project-workflow-node[data-step='3'] .project-workflow-arrow { width: 1px; height: 132px; right: 50%; top: calc(100% + 6px); }
 .project-workflow-node[data-step='3'] .project-workflow-arrow::after { top: auto; bottom: 0; right: -3px; transform: rotate(135deg); }
 .project-workflow-node:is([data-step='4'], [data-step='5']) .project-workflow-arrow { right: auto; left: -34px; transform: rotate(180deg); }
 .project-workflow-return { position: absolute; left: 0; top: 56px; bottom: 56px; width: 20px; border: 1px dashed #fff; border-right: 0; border-radius: 12px 0 0 12px; }
