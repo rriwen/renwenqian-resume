@@ -24,9 +24,8 @@ export function ProjectArchitecture({ architecture }: ProjectArchitectureProps) 
             </div>
             <ul className="project-architecture-nodes" role="list">
               {layer.nodes.map(node => (
-                <li key={node.id} className="project-architecture-node">
+                <li key={node.id} className={`project-architecture-node project-architecture-node--${node.status ?? 'existing'}${node.span === 'full' ? ' project-architecture-node--full' : ''}`}  aria-label={`${node.title}：${node.description ?? (node.status === 'planned' ? '待建设' : '已有实践')}`} title={node.description}>
                   <strong className="project-architecture-node-title">{node.title}</strong>
-                  {node.description && <span className="project-architecture-node-description">{node.description}</span>}
                 </li>
               ))}
             </ul>

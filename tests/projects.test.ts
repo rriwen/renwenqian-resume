@@ -57,7 +57,7 @@ test('design engineering architecture shares stable identities and reaches the c
     assert.equal(new Set(ids).size, ids.length)
     assert.ok(['design-highlights', 'project-gallery', 'connections'].every(id => ids.includes(id)))
     const architecture = sections.find(({ architecture }) => architecture)!.architecture!
-    assert.equal(architecture.layers.length, 4)
+    assert.deepEqual(architecture.layers.map(layer => layer.title), ['设计资产', '设计知识', '代码映射', 'Agent 可见', '质量评估'])
     assert.ok(corpus.includes(architecture.title))
     for (const layer of architecture.layers) {
       assert.ok(corpus.includes(layer.description ? `${layer.title}: ${layer.description}` : layer.title))
@@ -72,8 +72,9 @@ test('design engineering evidence requests stay outside chat facts and media', (
   const requests = detail.sections!.flatMap(section => section.subsections ?? []).flatMap(subsection => subsection.evidenceRequests ?? [])
   assert.ok(requests.length > 0)
   for (const request of requests) assert.ok(!corpus.includes(request))
-  assert.ok(corpus.includes('独立完成产品官网与记忆管理后台的视觉设计、内容规划和前端代码'))
-  assert.ok(corpus.includes('稳定性与效率收益仍待验证'))
+  assert.ok(corpus.includes('OceanBase 云控制台'))
+  assert.equal(detail.sections!.find(section => section.id === 'context')!.title, '项目背景')
+  assert.ok(corpus.includes('让不同角色借助 AI 产出的界面与代码遵循统一规范'))
 })
 
 test('funnel details distinguish measured counts, estimated counts and step conversion', () => {
@@ -389,7 +390,7 @@ test('chat uses current case headers and the edited project narrative', () => {
   const engineering = projectText('aidesignsystem')
   assert.ok(!engineering.includes('#### 全局架构'))
   assert.ok(!engineering.includes('体系从上到下分为'))
-  assert.ok(engineering.includes('以设计基建支撑 AI 辅助研发'))
+  assert.ok(engineering.includes('Agent Ready 设计系统'))
 })
 
 test('Text2SQL workflow exploration and its branches remain in the shared corpus', () => {

@@ -58,11 +58,13 @@ export type ProjectDetailTable = {
 /** 从上到下展示设计基建、交付与应用。 */
 export type ProjectArchitectureData = {
   title: string
+  sharedPractices?: string
+  feedback?: string
   layers: {
     id: string
     title: string
     description?: string
-    nodes: { id: string; title: string; description?: string }[]
+    nodes: { id: string; title: string; description?: string; status?: 'existing' | 'planned'; span?: 'full' }[]
   }[]
 }
 

@@ -117,7 +117,14 @@ export function StandardProjectDetail({ project, detail, presentation, tabs, pan
           <p key={idx}>{renderParagraphContent(para)}</p>
         ))}
         {project.slug === 'agentops' && section.id === 'project-origin' && overviewFacts}
-        {section.table && <DetailTable table={section.table} titleId={`${section.id}-title`} />}
+        {section.table && (project.slug === 'aidesignsystem' && section.id === 'context'
+          ? <dl className="datapilot-background-facts datapilot-background-facts--two-columns">
+              {section.table.columns.map((column, index) => <div key={column}>
+                <dt>{column}</dt>
+                <dd>{String(section.table!.rows[0].cells[index])}</dd>
+              </div>)}
+            </dl>
+          : <DetailTable table={section.table} titleId={`${section.id}-title`} />)}
         {section.architecture && section.architecture !== heroArchitecture && <ProjectArchitecture architecture={section.architecture} />}
         {section.workflow && <ProjectWorkflow workflow={section.workflow} />}
         {section.subsections?.map((subsection) => (

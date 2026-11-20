@@ -74,6 +74,8 @@ function serializeProjectBlock(block: ProjectDetailBlock): string {
     if (section.architecture) {
       const architecture = section.architecture
       parts.push(architecture.title)
+      if (architecture.sharedPractices) parts.push(architecture.sharedPractices)
+      if (architecture.feedback) parts.push(architecture.feedback)
       for (const layer of architecture.layers) {
         parts.push(layer.description ? `${layer.title}: ${layer.description}` : layer.title)
         parts.push(...layer.nodes.map((node) => node.description ? `${node.title}: ${node.description}` : node.title))
