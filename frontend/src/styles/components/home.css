@@ -198,15 +198,15 @@
 }
 
 @container site-main (max-width: 700px) {
-  .home-projects { gap: var(--space-4); margin-top: var(--space-10); }
+  .home-projects { gap: var(--space-4); margin-top: var(--space-10); align-self: end; }
   .home-project-track { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: calc((100% - var(--space-4)) / 1.5); gap: var(--space-4); overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; padding-block: 4px 12px; }
   .home-project-card { scroll-snap-align: start; }
-  .home-redesign { padding-top: calc(144px + env(safe-area-inset-top, 0px)); }
+  .home-redesign { min-height: 100svh; min-height: 100dvh; padding-top: calc(144px + env(safe-area-inset-top, 0px)); padding-bottom: max(var(--space-4), env(safe-area-inset-bottom, 0px)); }
   .home-hero h1 { font-size: clamp(1.5rem, 5cqi, 2rem); }
   .home-chat-entry { margin-top: var(--space-6); }
   .home-intro { font-size: var(--text-sm); }
   .home-intro:lang(zh) { font-size: clamp(.75rem, 3.6cqi, .875rem); white-space: nowrap; }
-  .home-suggestions { display: flex; flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto; overscroll-behavior-x: contain; margin-inline: -6px; padding: 6px; scrollbar-width: none; }
+  .home-suggestions { display: flex; flex-wrap: nowrap; justify-content: safe center; overflow-x: auto; overscroll-behavior-x: contain; margin-inline: -6px; padding: 6px; scrollbar-width: none; }
   .home-suggestions::-webkit-scrollbar { display: none; }
   .home-suggestions li { flex: 0 0 auto; }
 }

@@ -10,7 +10,7 @@ type Props = { onAsk: (text: string) => void; dark: boolean; onToggleTheme: () =
 const MeshGradientBackground = lazy(() => import("../components/project/MeshGradientBackground").then(module => ({ default: module.MeshGradientBackground })));
 
 const featuredProjects = [
-  "dataagent", "databaseops", "datadevelop", "aidesignsystem",
+  "dataagent", "aidesignsystem", "databaseops", "datadevelop",
 ].map((slug) => projects.find((project) => project.slug === slug)!);
 
 

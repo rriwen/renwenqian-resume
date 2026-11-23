@@ -55,3 +55,13 @@
 @container site-main (max-width: 700px) {
   .about-page, .case-study-page, .dbv-page { --reading-gutter: 20px; }
 }
+
+/* Phone reading and navigation use the full available column. */
+@media (max-width: 700px) {
+  .site-sidebar { width: 100%; max-width: none; }
+  :is(.about-page, .case-study-page, .dbv-page) :is(p, li) {
+    text-align: justify;
+    text-align-last: start;
+    overflow-wrap: anywhere;
+  }
+}

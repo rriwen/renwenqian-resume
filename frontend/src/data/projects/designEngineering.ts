@@ -53,7 +53,7 @@ export function getDesignEngineeringContent(_locale: Locale): ProjectDetailBlock
               id: 'mapping', title: '代码映射',
               nodes: [
                 { id: 'component-api', title: '组件 API 契约', status: 'existing', description: '已确认 · 与前端统一组件 API' },
-                { id: 'code-connect', title: 'Code Connect 映射', status: 'existing', description: '映射方案已形成 · 尚未全面接入' },
+                { id: 'code-connect', title: 'Code Connect 映射', status: 'existing', description: '映射方案已形成' },
               ],
             },
             {
