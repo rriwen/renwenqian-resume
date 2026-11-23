@@ -7,11 +7,26 @@ import { renderToStaticMarkup } from 'react-dom/server'
 import { parseAboutContent } from '../frontend/src/content/about/parseAboutContent'
 import { WorkEntry } from '../frontend/src/components/about/WorkEntry'
 import { ProjectCards } from '../frontend/src/components/about/ProjectCards'
+import { buildSiteCorpus } from '../frontend/src/lib/siteCorpus'
+import { stripMarkdownInline } from '../frontend/src/content/about'
 
 const sources = Object.fromEntries(['zh'].map((locale) => [
   locale,
   readFileSync(resolve(process.cwd(), `frontend/src/content/about/${locale}.md`), 'utf8'),
 ]))
+
+test('chat corpus includes About project responsibilities and achievements from the shared source', () => {
+  const content = parseAboutContent(sources.zh)
+  const corpus = buildSiteCorpus('zh')
+  for (const project of content.projects) {
+    assert.ok(corpus.includes(stripMarkdownInline(project.content)), project.id)
+    for (const item of [...project.responsibilities, ...project.achievements]) {
+      assert.ok(corpus.includes(stripMarkdownInline(item)), project.id)
+    }
+  }
+  assert.ok(corpus.includes('在兼容已有实现的基础上形成 Code Connect 映射方案'))
+  assert.ok(!corpus.includes('团队基础交付效率提升约 200%'))
+})
 
 test('Chinese About content keeps complete content and stable work IDs', () => {
   for (const source of Object.values(sources)) {

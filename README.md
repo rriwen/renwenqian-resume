@@ -244,3 +244,7 @@ Text2SQL 工作流按 OBCloud 技术文章（https://open.oceanbase.com/blog/177
 设计工程 CLI 章节通过 `frontend/src/components/project/DesignCliDemo.tsx` 展示 OBDesign 本地交互模拟，`obdesign/help` 列出命令，采用 macOS 终端样式，初始为空，输入后回车返回六项指令（search、component、docs、theme、build、upgrade）；支持连续输出、上下键历史、Tab 补全、clear / Ctrl+L / Cmd+K 清屏与 Ctrl+C 取消输入，窗口按钮提供关闭重开、最小化恢复和高度切换。命令数据来自 `designEngineering.ts` 的 `designCliCommands`，不进入聊天事实；样式复用 `design-engineering.css` 与全站主题变量，不执行真实命令。
 
 发布前先核对并同步 `frontend/src/lib/siteCorpus.ts` 的当前页面语料，再测试、构建、提交与部署；共享内容动态生成，不维护独立语料副本。任务流案例以文本表格和右侧原稿局部示意呈现，表格的采用／不采用标记同步进入语料，裁剪原稿不进入聊天媒体清单。
+
+仅最新完整聊天回复下方展示两个灰色推荐问题，前置朝右的折返回车符号，推荐区域左侧无竖线；发送下一条问题后立即隐藏上一组推荐。`lib/chat/followUpQuestions.ts` 根据当前问答在本地匹配并避开已提问的原文，不额外请求模型。点击推荐问题立即通过现有发送流程提问；生成中、停止或异常中断的末条回复不展示推荐，推荐文本不写入消息正文。
+
+关于页展开的项目经历由 `siteCorpus.ts` 读取同一 Markdown 解析结果，完整保留项目背景、职责、成果、角色与时间，供聊天使用。

@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { ArrowUpIcon } from '@phosphor-icons/react'
 import { useLanguage } from '../../i18n/LanguageContext'
 import type { ChatCommand } from '../../lib/chat/thread'
+import { followUpQuestions } from '../../lib/chat/followUpQuestions'
 import { useChatThread } from './useChatThread'
 import { ContextMeter } from './ContextMeter'
 import { ChatMessageContent } from './ChatMessageContent'
@@ -138,6 +139,9 @@ export function ChatPanel({ open, commands, onCommandsConsumed }: ChatPanelProps
               const isLast = idx === messages.length - 1
               const streamThinking =
                 loading && line.role === 'assistant' && isLast && line.content === ''
+              const suggestions = line.role === 'assistant' && line.content.trim() && !line.stopped
+                && isLast && current.status === 'idle'
+                ? followUpQuestions(messages.slice(0, idx + 1)) : []
               return (
                 <Fragment key={line.id}>
                   <div
@@ -155,7 +159,23 @@ export function ChatPanel({ open, commands, onCommandsConsumed }: ChatPanelProps
                           {streamThinking ? (
                             <span className="chatbot-thinking"> {m.chatbot.thinking}</span>
                           ) : null}
+
                         </div>
+                      </div>
+                    )}
+                    {suggestions.length > 0 && (
+                      <div className="chatbot-follow-ups" role="group" aria-label="推荐问题">
+                        {suggestions.map((question) => (
+                          <button
+                            key={question}
+                            type="button"
+                            disabled={loading || contextUsage.exceedsLimit}
+                            onClick={() => send(question)}
+                          >
+                            <span className="chatbot-follow-up-icon" aria-hidden="true">↵</span>
+                            <span>{question}</span>
+                          </button>
+                        ))}
                       </div>
                     )}
                   </div>

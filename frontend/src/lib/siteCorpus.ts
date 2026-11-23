@@ -215,6 +215,20 @@ function serializeAbout(locale: Locale): string {
   }
   lines.push('')
 
+  lines.push('#### 项目经历')
+  for (const project of about.projects) {
+    lines.push(`### ${project.title}`)
+    lines.push(stripMarkdownInline(project.role))
+    lines.push(`> ${stripMarkdownInline(project.period)}`)
+    lines.push(stripMarkdownInline(project.content))
+    if (project.goal) lines.push(`项目目标：${stripMarkdownInline(project.goal)}`)
+    lines.push('我的职责：')
+    lines.push(...project.responsibilities.map((item) => `- ${stripMarkdownInline(item)}`))
+    lines.push('业绩成果：')
+    lines.push(...project.achievements.map((item) => `- ${stripMarkdownInline(item)}`))
+    lines.push('')
+  }
+
   lines.push(`#### ${'教育'}`)
   lines.push(`### ${about.education.title}`)
   lines.push(`> ${stripMarkdownInline(about.education.period)}`)
