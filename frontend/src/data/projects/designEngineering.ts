@@ -102,17 +102,13 @@ export function getDesignEngineeringContent(_locale: Locale): ProjectDetailBlock
         subsections: [
           {
             id: 'project-design-rules', title: '统一设计规则', hideTitle: true,
-            paragraphs: [
-              [{ text: '组件选择条件和用法：', bold: true }, { text: '说明组件适用的任务、属性与状态，明确使用条件和边界，为选择已有组件提供依据。' }],
-              [{ text: '正反例与状态约束：', bold: true }, { text: '通过正反例说明使用限制，统一悬停、聚焦、选中、禁用、加载与错误状态的表现，保持尺寸与布局稳定。' }],
-              [{ text: '组合模式：', bold: true }, { text: '以搜索、筛选、排序和操作按钮为例，按查找目标、条件复杂度与操作对象提供以下组合模式。统一操作关系，具体字段与按钮随业务调整。' }],
-            ],
+            paragraphs: [],
             listItems: [
-              [{ text: '明确目标查找：', bold: true }, { text: '以搜索为主，搭配必要的筛选与排序；创建等页面级操作独立分组，避免与查找条件混淆。' }],
-              [{ text: '多条件定位：', bold: true }, { text: '以筛选为主，搜索补充关键词定位，排序调整结果顺序；高频条件直接展示，低频条件按需展开。' }],
-              [{ text: '批量处理：', bold: true }, { text: '先通过搜索、筛选和排序定位对象，再对选中项提供批量操作，明确选中数量与影响范围，区分页面级操作与选中项操作。' }],
+              [{ text: '组件选择和用法：', bold: true }, { text: '说明组件适用的任务、属性与状态，提供选择依据；' }],
+              [{ text: '正反例与约束：', bold: true }, { text: '通过正反例说明使用限制，统一交互状态的表现，保持布局稳定；' }],
+              [{ text: '组件组合模式：', bold: true }, { text: '以搜索、筛选、排序和操作按钮为例，按查找目标、条件复杂度与操作对象提供组合模式。统一操作关系，具体字段与按钮随业务调整。' }],
             ],
-            screenshotPlaceholder: '搜索、筛选、排序与操作按钮在三类业务需求下的组合模式及对应规则', images: [],
+            screenshotPlaceholder: '组件选择、状态约束与组合模式的规则及对应界面', images: [],
           },
         ], images: [],
       },
@@ -123,13 +119,13 @@ export function getDesignEngineeringContent(_locale: Locale): ProjectDetailBlock
         subsections: [
           {
             id: 'component-api', title: '统一 API',
-            paragraphs: ['我与前端已确认组件 API，对齐属性命名、取值和状态约束，使设计配置直接对应前端调用，为工程师与 Agent 提供共同的组件语义，减少实现时的二次判断。'],
+            paragraphs: ['与前端确认组件 API，对齐属性命名、取值和状态约束，使设计配置直接对应前端调用，为工程师与 Agent 提供共同的组件语义，减少实现时的二次判断。'],
             screenshotPlaceholder: '设计组件属性与前端 API 对照', images: [],
           },
           {
             id: 'code-connect', title: '设计与代码映射',
             paragraphs: [
-              '基于已确认的 API，形成 Code Connect 映射方案，将 Figma 组件及其属性对应到代码组件与使用示例。目前处于映射方案阶段，尚未全面接入。',
+              '基于已确认的 API，形成 Code Connect 映射方案，将 Figma 组件及其属性对应到代码组件与使用示例。',
             ],
             screenshotPlaceholder: 'Code Connect 映射方案与组件使用示例', images: [],
           },

@@ -1,6 +1,6 @@
 /* Editorial layouts reuse the case-study typography, dividers and media frames. */
 .case-study-page[data-project-slug="aidesignsystem"] .project-detail-section-copy > p {
-  max-width: 76ch;
+  max-width: none;
 }
 .case-study-page[data-project-slug="aidesignsystem"] .project-detail-subsection-body {
   align-items: start;
