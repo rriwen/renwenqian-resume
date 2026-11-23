@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600" fill="none">
+  <title>DESIGN.md 文档结构示意</title>
+  <desc>黑色 Markdown 编辑界面，包含设计语法、全局样式、组件约束、布局模式四个小标题</desc>
+  <rect width="800" height="600" rx="14" fill="#171717"/>
+  <path d="M14 0H786Q800 0 800 14V48H0V14Q0 0 14 0" fill="#202020"/>
+  <circle cx="24" cy="24" r="5" fill="#666"/>
+  <circle cx="42" cy="24" r="5" fill="#505050"/>
+  <circle cx="60" cy="24" r="5" fill="#404040"/>
+  <text x="400" y="30" text-anchor="middle" fill="#999" font-size="15" font-family="ui-monospace, SFMono-Regular, Consolas, monospace">DESIGN.md</text>
+  <g font-family="ui-monospace, SFMono-Regular, 'PingFang SC', 'Microsoft YaHei', monospace">
+    <text x="52" y="112" fill="#777" font-size="30">#</text>
+    <text x="88" y="112" fill="#F5F5F5" font-size="32" font-weight="600">DESIGN.md</text>
+    <g fill="#DDD" font-size="23" font-weight="600">
+      <text x="100" y="189">Design Syntax</text>
+      <text x="100" y="289">Global Styles</text>
+      <text x="100" y="389">Component Constraints</text>
+      <text x="100" y="489">Layout Patterns</text>
+    </g>
+    <g fill="#686868" font-size="23">
+      <text x="52" y="189">##</text>
+      <text x="52" y="289">##</text>
+      <text x="52" y="389">##</text>
+      <text x="52" y="489">##</text>
+    </g>
+  </g>
+  <g fill="#333">
+    <rect x="100" y="211" width="544" height="7" rx="3.5"/><rect x="100" y="230" width="364" height="7" rx="3.5"/>
+    <rect x="100" y="311" width="472" height="7" rx="3.5"/><rect x="100" y="330" width="580" height="7" rx="3.5"/>
+    <rect x="100" y="411" width="564" height="7" rx="3.5"/><rect x="100" y="430" width="412" height="7" rx="3.5"/>
+    <rect x="100" y="511" width="496" height="7" rx="3.5"/><rect x="100" y="530" width="332" height="7" rx="3.5"/>
+  </g>
+</svg>

@@ -109,7 +109,7 @@ export function getDesignEngineeringContent(_locale: Locale): ProjectDetailBlock
               [{ text: '正反例与约束：', bold: true }, { text: '通过正反例说明使用限制，统一交互状态的表现，保持布局稳定；' }],
               [{ text: '组件组合模式：', bold: true }, { text: '以搜索、筛选、排序和操作按钮为例，按查找目标、条件复杂度与操作对象提供组合模式。统一操作关系，具体字段与按钮随业务调整。' }],
             ],
-            screenshotPlaceholder: '组件选择、状态约束与组合模式的规则及对应界面', images: [],
+            images: [{ src: '/images/design-engineering-design-md.svg', caption: 'DESIGN.md 文档结构示意（模拟界面）：设计语法、全局样式、组件约束、布局模式', hideCaption: true }],
           },
         ], images: [],
       },

@@ -8,6 +8,8 @@ import { DATA_PILOT_DEMO_URL, getDataPilotContent } from '../frontend/src/data/p
 import { getDatabaseOpsFunnel, getFunnelStageMetrics } from '../frontend/src/data/projects/databaseOps'
 import { translations } from '../frontend/src/i18n/translations'
 import { interviewSystemPrompts } from '../frontend/src/lib/chat/interviewPrompt'
+import { getChatProjectImages } from '../frontend/src/lib/chat/projectImages'
+import { projectDescriptions } from '../frontend/src/data/homeProjects'
 import { buildSiteCorpus } from '../frontend/src/lib/siteCorpus'
 
 const locales = ['zh'] as const
@@ -70,7 +72,10 @@ test('design engineering screenshot briefs stay outside chat facts and media', (
   const detail = getProjectDetail('aidesignsystem', 'zh')!
   const corpus = buildSiteCorpus('zh')
   const requests = detail.sections!.flatMap(section => section.subsections ?? []).flatMap(subsection => subsection.screenshotPlaceholder ? [subsection.screenshotPlaceholder] : [])
-  assert.ok(requests.length > 0)
+  assert.ok(!corpus.includes('组件选择、状态约束与组合模式的规则及对应界面'))
+  assert.ok(corpus.includes('DESIGN.md 文档结构示意（模拟界面）'))
+  assert.ok(!getChatProjectImages('zh').some(image => image.src.endsWith('design-engineering-design-md.svg')))
+  for (const description of Object.values(projectDescriptions)) assert.ok(corpus.includes(description))
   for (const request of requests) assert.ok(!corpus.includes(request))
   assert.ok(corpus.includes('OceanBase 云控制台'))
   assert.equal(detail.sections!.find(section => section.id === 'context')!.title, '项目背景')

@@ -99,7 +99,7 @@ npm run dev
 
 项目详情统一参考数据库运维平台的呈现方式：标题、简介、标签、主图，以及宽幅正文、渐变展板、折叠过程材料和胶囊原型按钮。共用媒体组件为 `components/project/CaseStudyMedia.tsx`，首屏短简介来自 `data/projects/caseStudyPresentation.ts`，通用与 DataPilot 展示样式为 `styles/components/case-study.css`；保留各项目原有章节与共用 `ProjectAnchorNav`，不展示返回或相邻项目导航。数据库运维平台使用 `/project/databaseops`，旧视觉版路径重定向至该地址。通用项目锚点由 `data/projectAnchors.ts` 根据已有内容生成，保留已有章节 ID；支持带 Hash 的直达链接、刷新、前进后退和当前章节高亮。960px 以上复用关于页的 `SectionAnchorNav` 右侧刻度、位置和间距；取消竖向分割线、缩小刻度间距并上移，悬停或键盘聚焦放大刻度，960px 以下隐藏锚点导航。
 
-首页展示个人介绍、提问输入框与推荐问题，按可用高度布局，短屏自然滚动，不展示或加载 3D 工牌；项目入口集中在侧栏，首页不展示项目列表。推荐问题使用带边框的胶囊按钮，不展示悬停箭头；移动端以 12px 字号横向单行排列，超出后可横向滚动，中文简介以较小字号保持单行，菜单按钮右侧显示 DESIGN.4x 首页链接。首页直接加载；About（关于我）、项目详情、摄影和一些尝试按路由懒加载。样式始终按 tokens → foundation → components → prose → responsive 顺序加载，拆分组件样式时保留 `components.css` 的导入顺序。
+首页展示个人介绍、提问输入框与推荐问题，按可用高度布局，短屏自然滚动，不展示或加载 3D 工牌；项目入口位于侧栏与首页精选卡片，首页展示四张精选项目卡片。推荐问题使用带边框的胶囊按钮，不展示悬停箭头；移动端以 12px 字号横向单行排列，超出后可横向滚动，中文简介以较小字号保持单行，菜单按钮右侧显示 DESIGN.4x 首页链接。首页直接加载；About（关于我）、项目详情、摄影和一些尝试按路由懒加载。样式始终按 tokens → foundation → components → prose → responsive 顺序加载，拆分组件样式时保留 `components.css` 的导入顺序。
 
 ## 快速搜索
 
@@ -248,3 +248,7 @@ Text2SQL 工作流按 OBCloud 技术文章（https://open.oceanbase.com/blog/177
 仅最新完整聊天回复下方展示两个灰色推荐问题，前置朝右的折返回车符号，推荐区域左侧无竖线；发送下一条问题后立即隐藏上一组推荐。`lib/chat/followUpQuestions.ts` 根据当前问答在本地匹配并避开已提问的原文，不额外请求模型。点击推荐问题立即通过现有发送流程提问；生成中、停止或异常中断的末条回复不展示推荐，推荐文本不写入消息正文。
 
 关于页展开的项目经历由 `siteCorpus.ts` 读取同一 Markdown 解析结果，完整保留项目背景、职责、成果、角色与时间，供聊天使用。
+
+首页下方通过 `Home.tsx` 的精选项目卡片依次展示 Data Agent、数据库运维平台、开发编辑器、AI 设计工程，按稳定 slug 读取 `projects.ts` 名称并链接正式详情路由；样式在 `home.css`，卡片上图下标题，图片顶部及两侧留白 12px、比例 2.4:1、底部直角 并按项目使用不同配色的 `MeshGradientBackground` 动画（按需加载，保留减少动效、离屏暂停及静态回退），整组最大宽度 960px；桌面四列、内容区 700px 及以下单行横向滚动，默认露出约 1.5 张卡片。
+
+首页精选项目描述来自 `frontend/src/data/homeProjects.ts`，由首页与聊天语料共享。DESIGN.md 黑色文档结构图为模拟界面，保留示意图语境并排除聊天真实媒体清单。

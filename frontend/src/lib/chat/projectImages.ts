@@ -23,7 +23,7 @@ export function getChatProjectImages(locale: Locale): ChatProjectImage[] {
     const add = (image: ProjectGalleryItem & { alt?: string }, context: string, anchor = '') => {
       // Cropped source sheets need their own renderer; do not mislabel the whole sheet as a detail.
       if (image.sourceRegion || !/^\/images\/[\w./-]+\.(?:png|jpe?g|webp|gif|svg)$/i.test(image.src)
-        || /(?:占位|待补|准备中|概念|placeholder|concept)/i.test(image.caption)
+        || /(?:占位|待补|准备中|概念|模拟界面|placeholder|concept)/i.test(image.caption)
         || seen.has(image.src)) return
       seen.add(image.src)
       images.push({

@@ -1,8 +1,19 @@
-import { useEffect, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { ArrowUpIcon } from "@phosphor-icons/react";
+import { Link } from "react-router-dom";
+import { projectDescriptions } from "../data/homeProjects";
+import { projects } from "../data/projects";
 import { useLanguage } from "../i18n/LanguageContext";
 
 type Props = { onAsk: (text: string) => void; dark: boolean; onToggleTheme: () => void };
+
+const MeshGradientBackground = lazy(() => import("../components/project/MeshGradientBackground").then(module => ({ default: module.MeshGradientBackground })));
+
+const featuredProjects = [
+  "dataagent", "databaseops", "datadevelop", "aidesignsystem",
+].map((slug) => projects.find((project) => project.slug === slug)!);
+
+
 
 export function Home({ onAsk, dark, onToggleTheme }: Props) {
   const { m } = useLanguage();
@@ -89,6 +100,23 @@ export function Home({ onAsk, dark, onToggleTheme }: Props) {
           </div>
         </div>
       </section>
+      <nav className="home-projects" aria-labelledby="home-projects-heading">
+        <h2 id="home-projects-heading" className="home-projects-heading">最近项目</h2>
+        <div className="home-project-track">
+        {featuredProjects.map((project) => (
+          <Link key={project.slug} to={`/project/${project.slug}`} className="home-project-card">
+            <div className={`home-project-media home-project-media--${project.slug}`}>
+              <Suspense fallback={null}><MeshGradientBackground speed={0.6} /></Suspense>
+              <img className="home-project-image" src={project.slug === "dataagent" ? "/images/datapilot-application-dialogue.png" : project.image} alt="" loading="lazy" decoding="async" />
+            </div>
+            <span className="home-project-title">
+              <span>{project.navigationTitle?.zh ?? project.title}</span>
+            </span>
+            <span className="home-project-description" title={projectDescriptions[project.slug]}>{projectDescriptions[project.slug]}</span>
+          </Link>
+        ))}
+        </div>
+      </nav>
     </main>
   );
 }
