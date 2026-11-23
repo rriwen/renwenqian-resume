@@ -18,6 +18,8 @@ export function DevelopmentEditorsCaseStudy() {
   const buttons = useRef<(HTMLButtonElement | null)[]>([])
   const active = new URLSearchParams(location.search).get('editor') === 'workflow' ? 1 : 0
   const editor = editors[active]
+  const sharedDetail = getProjectDetail('datadevelop', locale)!
+  const detail = getProjectDetail(editor.slug, locale)!
   const select = (index: number) => {
     if (index === active) return
     const search = new URLSearchParams(location.search)
@@ -26,7 +28,8 @@ export function DevelopmentEditorsCaseStudy() {
   }
   return <StandardProjectDetail
     project={getProjectBySlug(editor.slug)!}
-    detail={getProjectDetail(editor.slug, locale)!}
+    detail={active === 0 ? { ...detail, paragraphs: detail.paragraphs.slice(1) } : detail}
+    beforeTabsParagraphs={sharedDetail.paragraphs.slice(0, 1)}
     presentation={{
       project: getProjectBySlug('datadevelop')!,
       title: '开发编辑器',

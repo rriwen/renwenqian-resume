@@ -426,3 +426,20 @@ test('chat follows current engineering sections and result labels without hidden
     assert.ok(corpus.includes(section.bullets![0]))
   }
 })
+
+
+test('editor corpus includes current table decisions and Text2SQL link without retired material', () => {
+  const corpus = buildSiteCorpus('zh')
+  const workflow = getProjectDetail('workflow-editor', 'zh')!
+  const layout = workflow.sections!.find(section => section.id === 'design-improvements')!
+    .subsections!.find(section => section.id === 'layout')!.table!
+  assert.deepEqual(layout.rows.map(row => row.id), ['free', 'automatic', 'grid', 'fixed'])
+  for (const row of layout.rows) {
+    const choice = row.decision === 'selected' ? '采用' : '不采用'
+    assert.ok(corpus.includes([...row.cells, choice].join(' | ')))
+  }
+  assert.ok(corpus.includes('查看 Text2SQL 项目 (/project/text2sql)'))
+  assert.ok(!corpus.includes('版本管理、批量操作与智能辅助保留为后续方向'))
+  assert.ok(!corpus.includes('原始文章：从零到一，任务流编辑器设计分析'))
+  assert.ok(!corpus.includes('/images/workflow-editor-design-article.png'))
+})

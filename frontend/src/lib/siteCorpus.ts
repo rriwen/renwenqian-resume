@@ -26,13 +26,15 @@ function serializeResponsibilities(r: NonNullable<ProjectDetailBlock['responsibi
 }
 
 function serializeTable(table: ProjectDetailTable): string[] {
-  const lines = [table.columns.join(' | ')]
+  const hasDecisions = table.rows.some(row => row.decision)
+  const lines = [[...table.columns, ...(hasDecisions ? ['设计取舍'] : [])].join(' | ')]
   const columnText: string[] = Array(table.columns.length).fill('')
   for (const row of table.rows) {
     row.cells.forEach((cell, index) => {
       if (cell !== null) columnText[index] = typeof cell === 'string' ? cell : cell.text
     })
-    lines.push(columnText.join(' | '))
+    const decision = row.decision === 'selected' ? '采用' : row.decision === 'excluded' ? '不采用' : '未标注'
+    lines.push([...columnText, ...(hasDecisions ? [decision] : [])].join(' | '))
   }
   return lines
 }

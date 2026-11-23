@@ -50,9 +50,10 @@ export type ProjectDetailParagraphRun = { text: string; bold?: boolean; tone?: '
 export type ProjectDetailParagraph = string | ProjectDetailParagraphRun[]
 
 export type ProjectDetailTable = {
+  mergeDescriptions?: boolean
   columns: string[]
   /** null 表示被前一行的 rowSpan 覆盖。 */
-  rows: { id: string; cells: (string | { text: string; rowSpan: number; groups?: { title: string; items: string[] }[] } | null)[] }[]
+  rows: { id: string; decision?: 'selected' | 'excluded'; illustration?: ProjectGalleryItem; cells: (string | { text: string; rowSpan: number; groups?: { title: string; items: string[] }[] } | null)[] }[]
 }
 
 /** 从上到下展示设计基建、交付与应用。 */
@@ -382,302 +383,423 @@ const details: Record<string, {zh: ProjectDetailBlock }> = {
       "任务编排",
       "复杂交互"
     ],
-    "paragraphs": [
-      "面向数据开发与分析场景，将分散的数据处理任务组织为可视化任务流，通过节点与连线表达执行顺序和依赖关系，支持任务的编排与周期调度。",
-      "设计围绕画布操作、节点排版、节点状态与连线反馈展开，在自由编排、操作习惯与首版实现成本之间建立取舍，形成任务流编辑器的基础交互规范。"
-    ],
+    "paragraphs": [],
     "gallery": [],
     "sections": [
       {
         "id": "context",
-        "title": "从分散执行到可视化编排",
+        "legacyIds": [
+          "users-and-scope",
+          "design-principles"
+        ],
+        "title": "项目背景",
         "paragraphs": [
-          "多样化的数据来源、持续增长的数据规模与复杂业务流程，使单次 SQL 执行和手动处理难以覆盖完整的数据工作。数据集成、清洗、聚合与分析需要按照依赖关系协同执行。",
-          "任务流以有向无环图（DAG）组织节点与依赖关系。编辑器的核心设计问题，是让用户既能理解完整流程，也能顺畅地创建、连接和配置单个任务。"
-        ],
-        "images": [
-          {
-            "src": "/images/workflow-editor-design-article.png",
-            "caption": "任务流示例：用节点与连线表达任务依赖",
-            "sourceRegion": {
-              "x": 198,
-              "y": 296,
-              "width": 442,
-              "height": 148,
-              "sourceWidth": 892,
-              "sourceHeight": 6000
-            }
-          }
-        ]
-      },
-      {
-        "id": "users-and-scope",
-        "title": "目标用户与首版范围",
-        "paragraphs": [
-          "原方案基于二手资料提出两类目标用户假设：数据开发者与数据分析师。两者对编程和工具的熟悉程度不同，但都需要将多步数据处理组织为可重复执行的流程。"
-        ],
-        "images": [],
-        "table": {
-          "columns": [
-            "用户",
-            "典型任务",
-            "设计关注点"
-          ],
-          "rows": [
-            {
-              "id": "row-0",
-              "cells": [
-                "数据开发者",
-                "连接数据源，组合数据转换与 SQL 节点，配置周期调度",
-                "灵活编排任务关系，快速完成节点配置"
-              ]
-            },
-            {
-              "id": "row-1",
-              "cells": [
-                "数据分析师",
-                "查询和分析数据，生成报表，并周期性获取业务结果",
-                "清晰理解流程结构，沿用熟悉的编辑操作"
-              ]
-            }
-          ]
-        }
-      },
-      {
-        "id": "design-principles",
-        "title": "设计目标：自由编排，降低学习成本",
-        "paragraphs": [
-          "首版以完成核心编排操作为范围，优先建立可扩展的画布、节点与连线规则。节点类型扩展、版本管理、批量操作及智能辅助作为后续方向。"
-        ],
-        "images": [],
-        "table": {
-          "columns": [
-            "目标",
-            "对应设计"
-          ],
-          "rows": [
-            {
-              "id": "row-0",
-              "cells": [
-                "自由灵活",
-                "允许自由放置节点，并通过自动布局整理结构"
-              ]
-            },
-            {
-              "id": "row-1",
-              "cells": [
-                "符合习惯",
-                "结合常见编辑器操作，支持鼠标、触控板与快捷键"
-              ]
-            },
-            {
-              "id": "row-2",
-              "cells": [
-                "最小可用",
-                "优先覆盖创建、连接、配置的基础交互，保留后续扩展空间"
-              ]
-            }
-          ]
-        }
-      },
-      {
-        "id": "canvas",
-        "title": "设计一：让画布操作符合使用习惯",
-        "paragraphs": [
-          "画布需要同时支持浏览完整流程与编辑局部节点。方案比较了滚动条、抓手模式、空格拖拽、滚轮或触控板滑动，以及空白区域拖拽等方式。",
-          "结合常见任务流编辑器的操作模式，选择空白区域拖拽作为画布移动方式；缩放保留按钮、滚轮、触控板及快捷键入口，适配不同输入习惯。"
-        ],
-        "images": [
-          {
-            "src": "/images/workflow-editor-design-article.png",
-            "caption": "画布移动：多种输入方式与操作习惯比较",
-            "sourceRegion": {
-              "x": 29,
-              "y": 1755,
-              "width": 784,
-              "height": 635,
-              "sourceWidth": 892,
-              "sourceHeight": 6000
-            }
-          },
-          {
-            "src": "/images/workflow-editor-design-article.png",
-            "caption": "画布缩放：按钮、滚轮、触控板与快捷键",
-            "sourceRegion": {
-              "x": 198,
-              "y": 2490,
-              "width": 443,
-              "height": 315,
-              "sourceWidth": 892,
-              "sourceHeight": 6000
-            }
-          }
-        ],
-        "table": {
-          "columns": [
-            "关键约束",
-            "设计处理",
-            "取舍原因"
-          ],
-          "rows": [
-            {
-              "id": "row-0",
-              "cells": [
-                "缩放后仍需看清节点",
-                "将缩放范围限定为 50%–200%",
-                "兼顾流程概览与节点文字的可读性"
-              ]
-            },
-            {
-              "id": "row-1",
-              "cells": [
-                "避免与浏览器快捷键冲突",
-                "缩放快捷键增加 Shift 修饰键",
-                "保留快捷操作，同时区分页面与画布缩放"
-              ]
-            }
-          ]
-        }
-      },
-      {
-        "id": "layout",
-        "title": "设计二：自由布局与自动整理结合",
-        "paragraphs": [
-          "DAG 没有固定的流程结构，固定布局难以覆盖不同任务的依赖关系，因此不作为首版方案。",
-          "在自由布局与网格布局之间，首版选择实现成本相对较低的自由布局，允许用户按任务关系放置节点。同时提供自动布局，将分散节点重新整理为便于阅读的结构，平衡编排自由度与流程可读性。"
-        ],
-        "images": [
-          {
-            "src": "/images/workflow-editor-design-article.png",
-            "caption": "节点排版：自由排版、网格布局与固定布局",
-            "sourceRegion": {
-              "x": 198,
-              "y": 3000,
-              "width": 443,
-              "height": 238,
-              "sourceWidth": 892,
-              "sourceHeight": 6000
-            }
-          },
-          {
-            "src": "/images/workflow-editor-design-article.png",
-            "caption": "自动布局：整理分散节点",
-            "sourceRegion": {
-              "x": 271,
-              "y": 3330,
-              "width": 330,
-              "height": 120,
-              "sourceWidth": 892,
-              "sourceHeight": 6000
-            }
-          }
-        ]
-      },
-      {
-        "id": "nodes-and-connections",
-        "title": "设计三：用状态反馈建立编排规则",
-        "paragraphs": [
-          "节点不仅承载任务信息，也提供创建下游节点、配置属性和建立依赖关系的操作入口。通过对比 DMS 与 DolphinScheduler，明确节点默认、悬停、选中及配置入口等交互状态。",
-          "结合编辑器整体布局，连线采用上进下出的方向表达依赖关系，并分别定义连接点与连接线在拖拽、吸附、选中和重新连接时的反馈。"
-        ],
-        "images": [
-          {
-            "src": "/images/workflow-editor-design-article.png",
-            "caption": "节点状态：与 DMS、DolphinScheduler 的交互比较",
-            "sourceRegion": {
-              "x": 29,
-              "y": 3610,
-              "width": 784,
-              "height": 650,
-              "sourceWidth": 892,
-              "sourceHeight": 6000
-            }
-          },
-          {
-            "src": "/images/workflow-editor-design-article.png",
-            "caption": "连线方向：上进下出的依赖关系",
-            "sourceRegion": {
-              "x": 198,
-              "y": 4350,
-              "width": 442,
-              "height": 245,
-              "sourceWidth": 892,
-              "sourceHeight": 6000
-            }
-          },
-          {
-            "src": "/images/workflow-editor-design-article.png",
-            "caption": "连接点与连线：拖拽、吸附、选中和重新连接",
-            "sourceRegion": {
-              "x": 198,
-              "y": 4670,
-              "width": 443,
-              "height": 710,
-              "sourceWidth": 892,
-              "sourceHeight": 6000
-            }
-          }
-        ],
-        "table": {
-          "columns": [
-            "操作环节",
-            "设计处理",
-            "预期作用"
-          ],
-          "rows": [
-            {
-              "id": "row-0",
-              "cells": [
-                "识别与选择节点",
-                "区分默认、悬停、选中状态，并提供节点属性配置入口",
-                "让当前操作对象和配置上下文保持清晰"
-              ]
-            },
-            {
-              "id": "row-1",
-              "cells": [
-                "建立依赖关系",
-                "连接点提供拖拽与吸附反馈",
-                "明确可连接目标与连接过程"
-              ]
-            },
-            {
-              "id": "row-2",
-              "cells": [
-                "调整已有关系",
-                "区分连接线的选中、取消选中与重新连接状态",
-                "让流程修改过程可见、可理解"
-              ]
-            }
-          ]
-        }
-      },
-      {
-        "id": "delivery-and-next",
-        "title": "阶段产出与后续方向",
-        "paragraphs": [
-          "项目形成了任务流编辑器的初版交互方案，覆盖画布移动与缩放、节点排版、节点状态及连线操作。原文记录该版本仍处于初始阶段，并非完整数据开发闭环。",
-          "后续方向包括扩展节点类型、版本管理与批量操作，以及配置检查、节点推荐和自然语言生成任务流等智能辅助能力。这些内容属于规划方向，不作为已交付成果。",
-          "后续验证可围绕首次创建任务流的完成情况、节点配置与连线错误，以及复杂流程的整理效率展开，检验自由布局与自动整理是否能兼顾易用性和灵活性。"
+          "数据开发与分析往往包含多个处理步骤，需要按照依赖关系协同执行。任务流编辑器通过节点与连线组织任务，让用户直观地创建、连接和配置流程。",
+          "设计围绕画布操作、节点布局与连线反馈展开，在自由编排、操作习惯和首版实现成本之间做取舍，形成基础交互方案。"
         ],
         "images": []
       },
       {
-        "id": "design-notes",
-        "title": "设计过程记录",
-        "paragraphs": [
-          "原始文章保留了输入方式比较、布局方案取舍，以及节点与连线的状态细节，可展开查阅。"
+        "id": "design-improvements",
+        "legacyIds": [
+          "canvas",
+          "layout",
+          "nodes-and-connections"
         ],
-        "images": [
+        "title": "设计方案",
+        "paragraphs": [],
+        "images": [],
+        "subsections": [
           {
-            "src": "/images/workflow-editor-design-article.png",
-            "caption": "原始文章：从零到一，任务流编辑器设计分析"
+            "id": "canvas",
+            "title": "画布操作",
+            "paragraphs": [
+              "采用空白区域拖拽移动画布，提供按钮、滚轮、触控板与快捷键缩放入口，兼顾完整流程浏览与局部节点编辑。缩放范围设为 50%–200%，平衡流程概览与文字可读性。"
+            ],
+            "images": [],
+            "table": {
+              "columns": [
+                "操作方式",
+                "说明"
+              ],
+              "rows": [
+                {
+                  "id": "buttons",
+                  "cells": [
+                    "放大缩小按钮",
+                    "点击按钮，按固定比例缩放画布。"
+                  ],
+                  "illustration": {
+                    "src": "/images/workflow-editor-design-article.png",
+                    "caption": "放大缩小按钮示意",
+                    "hideCaption": true,
+                    "sourceRegion": {
+                      "x": 452,
+                      "y": 2496,
+                      "width": 175,
+                      "height": 65,
+                      "sourceWidth": 892,
+                      "sourceHeight": 6000
+                    }
+                  }
+                },
+                {
+                  "id": "wheel",
+                  "cells": [
+                    "滚轮滑动",
+                    "通过鼠标滚轮缩放，需避免与画布移动操作冲突。"
+                  ],
+                  "illustration": {
+                    "src": "/images/workflow-editor-design-article.png",
+                    "caption": "滚轮滑动示意",
+                    "hideCaption": true,
+                    "sourceRegion": {
+                      "x": 452,
+                      "y": 2575,
+                      "width": 175,
+                      "height": 65,
+                      "sourceWidth": 892,
+                      "sourceHeight": 6000
+                    }
+                  }
+                },
+                {
+                  "id": "trackpad",
+                  "cells": [
+                    "触控板双指",
+                    "沿用 Mac 软件常见的双指缩放手势。"
+                  ],
+                  "illustration": {
+                    "src": "/images/workflow-editor-design-article.png",
+                    "caption": "触控板双指示意",
+                    "hideCaption": true,
+                    "sourceRegion": {
+                      "x": 452,
+                      "y": 2654,
+                      "width": 175,
+                      "height": 65,
+                      "sourceWidth": 892,
+                      "sourceHeight": 6000
+                    }
+                  }
+                },
+                {
+                  "id": "shortcuts",
+                  "cells": [
+                    "快捷键",
+                    "符合开发者的键盘操作习惯；方案增加 Shift 修饰键，与浏览器缩放快捷键区分。"
+                  ],
+                  "illustration": {
+                    "src": "/images/workflow-editor-design-article.png",
+                    "caption": "快捷键示意",
+                    "hideCaption": true,
+                    "sourceRegion": {
+                      "x": 452,
+                      "y": 2733,
+                      "width": 175,
+                      "height": 65,
+                      "sourceWidth": 892,
+                      "sourceHeight": 6000
+                    }
+                  }
+                }
+              ],
+              "mergeDescriptions": true
+            }
+          },
+          {
+            "id": "layout",
+            "title": "节点布局",
+            "paragraphs": [
+              "采用自由布局，让用户按任务关系放置节点；同时提供自动布局，整理分散的流程结构，在编排自由度与阅读清晰度之间取得平衡。"
+            ],
+            "images": [],
+            "table": {
+              "columns": [
+                "布局方式",
+                "说明与取舍"
+              ],
+              "rows": [
+                {
+                  "id": "free",
+                  "cells": [
+                    "自由布局",
+                    "节点可自由放置，限制少、实现成本较低，作为首版方案。"
+                  ],
+                  "illustration": {
+                    "src": "/images/workflow-editor-design-article.png",
+                    "caption": "自由布局示意",
+                    "hideCaption": true,
+                    "sourceRegion": {
+                      "x": 454,
+                      "y": 3006,
+                      "width": 132,
+                      "height": 65,
+                      "sourceWidth": 892,
+                      "sourceHeight": 6000
+                    }
+                  },
+                  "decision": "selected"
+                },
+                {
+                  "id": "automatic",
+                  "cells": [
+                    "自动布局",
+                    "将分散节点按任务依赖关系自动整理，让流程结构更清晰，作为自由布局的补充。"
+                  ],
+                  "illustration": {
+                    "src": "/images/workflow-editor-design-article.png",
+                    "caption": "自动布局：整理分散节点",
+                    "sourceRegion": {
+                      "x": 271,
+                      "y": 3330,
+                      "width": 330,
+                      "height": 120,
+                      "sourceWidth": 892,
+                      "sourceHeight": 6000
+                    },
+                    "hideCaption": true
+                  },
+                  "decision": "selected"
+                },
+                {
+                  "id": "grid",
+                  "cells": [
+                    "网格布局",
+                    "按网格比例排布，移动时对齐网格，视觉更整齐，但会限制布局灵活度。"
+                  ],
+                  "illustration": {
+                    "src": "/images/workflow-editor-design-article.png",
+                    "caption": "网格布局示意",
+                    "hideCaption": true,
+                    "sourceRegion": {
+                      "x": 454,
+                      "y": 3084,
+                      "width": 132,
+                      "height": 65,
+                      "sourceWidth": 892,
+                      "sourceHeight": 6000
+                    }
+                  },
+                  "decision": "excluded"
+                },
+                {
+                  "id": "fixed",
+                  "cells": [
+                    "固定布局",
+                    "适用于流程结构固定的场景，难以覆盖任务流多样的依赖关系，首版不采用。"
+                  ],
+                  "illustration": {
+                    "src": "/images/workflow-editor-design-article.png",
+                    "caption": "固定布局示意",
+                    "hideCaption": true,
+                    "sourceRegion": {
+                      "x": 454,
+                      "y": 3162,
+                      "width": 132,
+                      "height": 65,
+                      "sourceWidth": 892,
+                      "sourceHeight": 6000
+                    }
+                  },
+                  "decision": "excluded"
+                }
+              ],
+              "mergeDescriptions": true
+            }
+          },
+          {
+            "id": "nodes-and-connections",
+            "title": "节点与连线反馈",
+            "paragraphs": [
+              "区分节点的默认、悬停与选中状态，明确配置入口。连线以上进下出表达依赖关系，并定义拖拽、吸附、选中与重新连接的反馈，让当前操作对象和连接过程保持清晰。"
+            ],
+            "images": [],
+            "table": {
+              "columns": [
+                "交互状态",
+                "反馈规则"
+              ],
+              "rows": [
+                {
+                  "id": "port-default",
+                  "cells": [
+                    "连接桩默认态",
+                    "节点上下显示连接桩，下方提供快速添加下游节点的按钮。"
+                  ],
+                  "illustration": {
+                    "src": "/images/workflow-editor-design-article.png",
+                    "caption": "连接桩默认态示意",
+                    "hideCaption": true,
+                    "sourceRegion": {
+                      "x": 322,
+                      "y": 4675,
+                      "width": 279,
+                      "height": 32,
+                      "sourceWidth": 892,
+                      "sourceHeight": 6000
+                    }
+                  }
+                },
+                {
+                  "id": "port-hover",
+                  "cells": [
+                    "连接桩悬停态",
+                    "连接桩高亮，提示可发起连线。"
+                  ],
+                  "illustration": {
+                    "src": "/images/workflow-editor-design-article.png",
+                    "caption": "连接桩悬停态示意",
+                    "hideCaption": true,
+                    "sourceRegion": {
+                      "x": 322,
+                      "y": 4732,
+                      "width": 279,
+                      "height": 32,
+                      "sourceWidth": 892,
+                      "sourceHeight": 6000
+                    }
+                  }
+                },
+                {
+                  "id": "port-selected",
+                  "cells": [
+                    "连接桩选中态",
+                    "按住连接桩，开始建立连接。"
+                  ],
+                  "illustration": {
+                    "src": "/images/workflow-editor-design-article.png",
+                    "caption": "连接桩选中态示意",
+                    "hideCaption": true,
+                    "sourceRegion": {
+                      "x": 343,
+                      "y": 4789,
+                      "width": 236,
+                      "height": 32,
+                      "sourceWidth": 892,
+                      "sourceHeight": 6000
+                    }
+                  }
+                },
+                {
+                  "id": "drag",
+                  "cells": [
+                    "拖拽",
+                    "拖拽过程中显示连接虚线，反馈当前连接方向。"
+                  ],
+                  "illustration": {
+                    "src": "/images/workflow-editor-design-article.png",
+                    "caption": "拖拽示意",
+                    "hideCaption": true,
+                    "sourceRegion": {
+                      "x": 343,
+                      "y": 4846,
+                      "width": 236,
+                      "height": 71,
+                      "sourceWidth": 892,
+                      "sourceHeight": 6000
+                    }
+                  }
+                },
+                {
+                  "id": "snap",
+                  "cells": [
+                    "吸附",
+                    "靠近上游或下游的连接桩时吸附，提示可连接目标。"
+                  ],
+                  "illustration": {
+                    "src": "/images/workflow-editor-design-article.png",
+                    "caption": "吸附示意",
+                    "hideCaption": true,
+                    "sourceRegion": {
+                      "x": 343,
+                      "y": 4942,
+                      "width": 236,
+                      "height": 94,
+                      "sourceWidth": 892,
+                      "sourceHeight": 6000
+                    }
+                  }
+                },
+                {
+                  "id": "line-selected",
+                  "cells": [
+                    "连接线选中态",
+                    "连接线突出显示，明确当前操作对象。"
+                  ],
+                  "illustration": {
+                    "src": "/images/workflow-editor-design-article.png",
+                    "caption": "连接线选中态示意",
+                    "hideCaption": true,
+                    "sourceRegion": {
+                      "x": 343,
+                      "y": 5061,
+                      "width": 236,
+                      "height": 82,
+                      "sourceWidth": 892,
+                      "sourceHeight": 6000
+                    }
+                  }
+                },
+                {
+                  "id": "line-default",
+                  "cells": [
+                    "连接线默认态",
+                    "使用弱化样式展示已有依赖关系。"
+                  ],
+                  "illustration": {
+                    "src": "/images/workflow-editor-design-article.png",
+                    "caption": "连接线默认态示意",
+                    "hideCaption": true,
+                    "sourceRegion": {
+                      "x": 343,
+                      "y": 5169,
+                      "width": 236,
+                      "height": 82,
+                      "sourceWidth": 892,
+                      "sourceHeight": 6000
+                    }
+                  }
+                },
+                {
+                  "id": "reconnect",
+                  "cells": [
+                    "重新连接",
+                    "拖拽连接桩调整已有关系，过程中连接线变为虚线。"
+                  ],
+                  "illustration": {
+                    "src": "/images/workflow-editor-design-article.png",
+                    "caption": "重新连接示意",
+                    "hideCaption": true,
+                    "sourceRegion": {
+                      "x": 343,
+                      "y": 5257,
+                      "width": 236,
+                      "height": 82,
+                      "sourceWidth": 892,
+                      "sourceHeight": 6000
+                    }
+                  }
+                }
+              ],
+              "mergeDescriptions": true
+            }
           }
+        ]
+      },
+      {
+        "id": "delivery-and-next",
+        "legacyIds": [
+          "design-notes"
         ],
-        "imagesDisclosure": "查看原始设计分析"
+        "title": "项目小结",
+        "paragraphs": [
+          "项目形成了任务流编辑器的初版交互方案，覆盖画布移动与缩放、节点布局及连线操作。"
+        ],
+        "images": []
       }
     ]
-  },
+  }
 },
   'design-token': {
     zh: { showCover: false, tags: ['设计系统'], paragraphs: ['内容准备中。'], gallery: [] },
@@ -915,39 +1037,62 @@ const details: Record<string, {zh: ProjectDetailBlock }> = {
   },
   datadevelop: {
     zh: {
-      tags: ['开发者工具', '设计体系', 'B 端体验'],
-      paragraphs: [
-        '数据开发工具涵盖 SQL 编辑器、任务流编辑器和仪表盘编辑器，帮助用户完成数据查询、任务编排与可视化分析。随着功能增加，不同编辑器的操作体验不一致、复杂任务学习成本高等问题逐渐突显。 希望通过编辑器核心交互持续的优化和智能辅助，提升操作效率和满意度。',
+      tags: ['开发者工具', '交互设计', '体验优化'],
+      paragraphs: [],
+      sections: [
+        {
+          id: 'context',
+          legacyIds: ['responsibilities'],
+          title: '项目背景',
+          paragraphs: [
+            '随着功能持续增加，SQL 编辑器的布局与操作方式需要进一步梳理。结合开发者访谈和可用性测试，聚焦高频操作中的体验问题，持续优化 SQL 编写、查询与结果查看体验。',
+            '我负责体验问题梳理、交互与界面设计、规范整理，并配合研发推进方案落地。',
+          ],
+          images: [],
+        },
+        {
+          id: 'design-improvements',
+          legacyIds: ['project-gallery'],
+          title: '设计优化',
+          paragraphs: [],
+          subsections: [
+            {
+              id: 'editor-layout',
+              title: '编辑器布局',
+              paragraphs: ['梳理功能入口与内容区域，明确 SQL 编辑、执行操作和查询结果之间的信息层级，让日常开发任务有清晰的操作路径。'],
+              images: [{ src: '/images/datadevelop-sql-editor.jpg', caption: 'SQL 编辑器布局' }],
+            },
+            {
+              id: 'data-table',
+              title: '数据表格交互',
+              paragraphs: ['围绕查询结果的查看与数据操作，整理表格的交互规则，统一操作方式、状态与反馈，减少不同场景下的理解成本。'],
+              images: [{ src: '/images/datadevelop-table-spec.jpg', caption: '数据表格重构交互细节' }],
+            },
+            {
+              id: 'dark-mode',
+              title: '暗黑模式',
+              paragraphs: ['统一编辑器与数据表格的深色视觉规则，梳理背景、文字与状态色的层级，关注代码、数据和操作反馈的可读性。'],
+              images: [{ src: '/images/datadevelop-darkmode.jpg', caption: '暗黑模式' }],
+            },
+            {
+              id: 'intelligent-assistance',
+              title: '智能辅助',
+              paragraphs: [
+                '将 AI 辅助融入 SQL 编辑场景，通过自然语言表达需求，辅助 SQL 编写与修改。设计围绕就近发起、任务指令和生成结果的处理展开，具体方案在独立案例中介绍。',
+                [{ text: '查看 Text2SQL 项目', href: '/project/text2sql' }],
+              ],
+            },
+          ],
+          images: [],
+        },
+        {
+          id: 'project-summary',
+          title: '项目小结',
+          paragraphs: ['围绕编辑器布局、数据表格与暗黑模式形成设计方案与交互规范，并结合用户反馈持续迭代；智能辅助作为 SQL 开发体验的延伸，在 Text2SQL 项目中进一步展开。'],
+          images: [],
+        },
       ],
-      responsibilities: {
-        intro: '我作为体验设计师主要负责：',
-        items: [
-          {
-            title: '体验诊断与策略制定',
-            body:
-              '通过多轮开发者可用性测试与深度访谈，精准识别数据表格操作、暗黑模式适配、任务流编排等核心体验短板，制定以「提升开发效率与平台粘性」为目标的重构路线图。',
-          },
-          {
-            title: '设计标准化与方案实施',
-            body:
-              '主导编辑器体验的标准化重构，统一全局布局与交互模式，深度优化数据表、任务流、仪表盘等核心模块的交互设计，并完成专业级暗黑模式的体系化搭建。',
-          },
-          {
-            title: '数据验证与持续迭代',
-            body:
-              '结合用户反馈、可用性测试、埋点数据及 AI 洞察分析，形成设计验证闭环，确保持续提升工具的专业性与易用性。',
-          },
-        ],
-      },
-      afterResponsibilities: [
-        '产品矩阵的用户满意度从 4.7 分提升至 6.2 分（满分 7 分），产品用户规模翻倍。',
-      ],
-      gallery: [
-        { src: '/images/datadevelop-sql-editor.jpg', caption: 'SQL 编辑器布局' },
-        { src: '/images/datadevelop-table-spec.jpg', caption: '数据表格重构交互细节' },
-        { src: '/images/datadevelop-workflow.jpg', caption: '任务流编辑器画布细节' },
-        { src: '/images/datadevelop-darkmode.jpg', caption: '暗黑模式' },
-      ],
+      gallery: [],
     },
   },
   agentops: {

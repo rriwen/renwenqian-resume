@@ -200,3 +200,5 @@ Text2SQL 工作流按 OBCloud 技术文章（https://open.oceanbase.com/blog/177
 设计工程在代码映射后新增独立「Skill 设计」（`skill-design`）章节，说明组件用法与约束、前端组件库和工程实现标准的封装；旧 Skill 小节锚点迁移至该节，正文与聊天共用，配图保留占位。
 
 设计工程 CLI 章节通过 `frontend/src/components/project/DesignCliDemo.tsx` 展示 OBDesign 本地交互模拟，`obdesign/help` 列出命令，采用 macOS 终端样式，初始为空，输入后回车返回六项指令（search、component、docs、theme、build、upgrade）；支持连续输出、上下键历史、Tab 补全、clear / Ctrl+L / Cmd+K 清屏与 Ctrl+C 取消输入，窗口按钮提供关闭重开、最小化恢复和高度切换。命令数据来自 `designEngineering.ts` 的 `designCliCommands`，不进入聊天事实；样式复用 `design-engineering.css` 与全站主题变量，不执行真实命令。
+
+部署前先同步并验证对话语料：以当前中文内容源为准，检查 `lib/siteCorpus.ts` 对正文、表格、设计取舍和链接的映射，再执行测试、构建与发布。任务流表格的 `decision` 同步序列化为采用／不采用；`illustration` 仅展示原稿裁剪，保持排除于聊天媒体清单。

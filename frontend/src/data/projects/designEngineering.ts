@@ -133,6 +133,8 @@ export function getDesignEngineeringContent(_locale: Locale): ProjectDetailBlock
             id: 'code-connect', title: '设计与代码映射',
             paragraphs: [
               '基于已确认的 API，形成 Code Connect 映射方案，将 Figma 组件及其属性对应到代码组件与使用示例。',
+            ],
+            listItems: [
               [{ text: '难点：', bold: true }, { text: '涉及多套组件库，逐一搭建与对齐的工作量大。' }],
               [{ text: '解决：', bold: true }, { text: '利用 Codex 连接 MCP，按约定的组件分类与 API 生成基础组件库，再由人工校验和调整，确保符合统一规范。' }],
             ],

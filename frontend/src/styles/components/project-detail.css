@@ -371,3 +371,18 @@
 #interaction .project-detail-subsection-text .project-detail-table th:last-child { width: 44%; }
 
 .project-case-overview > .project-detail-section + .project-overview-facts { margin-top: var(--space-6); }
+
+/* Text descriptions and original diagram crops share each table row. */
+.project-detail-table--illustrated { table-layout: fixed; }
+.project-detail-table--illustrated td { vertical-align: middle; }
+.project-detail-table--illustrated .project-detail-gallery { margin: 0; }
+.project-detail-table--illustrated .project-detail-gallery-grid { display: block; }
+
+.project-detail-table--illustrated th:first-child { width: 50%; vertical-align: middle; }
+.project-detail-table--illustrated th:last-child { width: 50%; }
+.project-detail-table--illustrated .project-detail-table-description { margin: var(--space-2) 0 0; color: var(--muted); font-size: var(--text-xs); font-weight: 400; line-height: var(--leading-body); }
+.project-detail-table--illustrated .project-detail-gallery button { border: 0 !important; }
+
+.project-detail-table-decision { margin-right: var(--space-2); font-weight: 600; }
+.project-detail-table-decision.is-selected { color: var(--success); }
+.project-detail-table-decision.is-excluded { color: var(--danger); }

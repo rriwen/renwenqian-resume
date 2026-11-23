@@ -88,12 +88,13 @@ type Props = {
   project: Project
   detail: ProjectDetailBlock
   presentation?: { project: Project; title: string; introduction: string }
+  beforeTabsParagraphs?: ProjectDetailParagraph[]
   tabs?: ReactNode
   panelId?: string
   labelledBy?: string
 }
 
-export function StandardProjectDetail({ project, detail, presentation, tabs, panelId, labelledBy }: Props) {
+export function StandardProjectDetail({ project, detail, presentation, beforeTabsParagraphs, tabs, panelId, labelledBy }: Props) {
   const { locale, m } = useLanguage()
   const titleRef = useRef<HTMLHeadingElement>(null)
   const heroProject = presentation?.project ?? project
@@ -221,6 +222,7 @@ export function StandardProjectDetail({ project, detail, presentation, tabs, pan
           </CaseStudyHeroPalette></div>}
           {(detail.demoUrl || detail.externalUrl) && <a className="ui-button case-study-demo" href={detail.demoUrl || detail.externalUrl} target="_blank" rel="noopener noreferrer">{detail.demoUrl ? ('体验交互原型') : m.workDetail.viewSite} ↗</a>}
         </header>
+        {beforeTabsParagraphs && <div className="case-study-introduction">{beforeTabsParagraphs.map((para, idx) => <p key={idx}>{renderParagraphContent(para)}</p>)}</div>}
         {tabs}
         <article id={panelId} role={tabs ? "tabpanel" : undefined} aria-labelledby={labelledBy} tabIndex={tabs ? 0 : undefined} className="datapilot-case-content project-case-content">
           {bodyParagraphs.length > 0 && <div className="case-study-introduction">{bodyParagraphs.map((para, idx) => <p key={idx}>{renderParagraphContent(para)}</p>)}</div>}
