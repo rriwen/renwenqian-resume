@@ -81,9 +81,10 @@ export function getDesignEngineeringContent(_locale: Locale): ProjectDetailBlock
         paragraphs: ['原有 Token 沿用 Ant Design，设计师难以理解其语义与使用场景，仍习惯使用固定值；前端缺少统一的引用标准，Agent 开发页面时也难以判断该使用哪个 Token。我按「基础值—语义层—组件层」梳理 Token，明确样式用途、适用场景与组件映射，为设计师、前端和 Agent 建立共同的选择依据。'],
         subsections: [{
           id: 'design-tokens', title: 'Design Token', hideTitle: true,
-          paragraphs: [
-            [{ text: '主题复用：', bold: true }, { text: '设计系统升级或切换主题时，集中调整语义映射，减少逐个修改组件样式的工作。这套机制用于编辑器深色模式和 Data Agent 多主题设计。' }],
-            [{ text: '颜色与空间：', bold: true }, { text: '使用 OKLCH 组织色阶，以有限的 px 阶梯统一尺寸与间距，并按需保留固定尺寸。各主题分别检查对比度、视觉层级与状态辨识度。' }],
+          paragraphs: [],
+          listItems: [
+            [{ text: '颜色与空间：', bold: true }, { text: '使用 OKLCH 组织色阶，以有限的 px 阶梯统一尺寸与间距，并按需保留固定尺寸，各主题分别检查对比度、视觉层级与状态辨识度；' }],
+            [{ text: '主题复用：', bold: true }, { text: '设计系统升级或切换主题时，集中调整语义映射，减少逐个修改组件样式的工作，这套机制用于编辑器深色模式和 Data Agent 多主题设计。' }],
             [{ text: '面向 AI：', bold: true }, { text: '通过背景、文字、边框等语义名称说明样式用途，让 Agent 根据使用位置与状态选择 Token，而非仅凭固定值判断。' }],
           ],
           mediaFirst: true,
@@ -98,7 +99,7 @@ export function getDesignEngineeringContent(_locale: Locale): ProjectDetailBlock
         id: 'guidance',
         legacyIds: ['connections', 'foundations-composition-patterns-title', 'guidance-component-documentation-title', 'guidance-component-rules-title', 'guidance-composition-patterns-title'],
         title: 'DESIGN.md',
-        paragraphs: ['在样式语义之外，页面还需要明确组件的选择与组合方式。我以 DESIGN.md 为载体，按「设计意图—表现规则—实现方式—检查要求」整理设计判断，让 Agent 能够根据业务任务组织界面。'],
+        paragraphs: ['在样式语义之外，页面还需要明确组件的选择与组合方式。我以 DESIGN.md 为载体，按「设计意图—表现规则—检查要求」整理设计判断，让 Agent 能够根据业务任务组织界面。'],
         subsections: [
           {
             id: 'project-design-rules', title: '统一设计规则', hideTitle: true,
@@ -120,14 +121,14 @@ export function getDesignEngineeringContent(_locale: Locale): ProjectDetailBlock
           {
             id: 'component-api', title: '统一 API',
             paragraphs: ['与前端确认组件 API，对齐属性命名、取值和状态约束，使设计配置直接对应前端调用，为工程师与 Agent 提供共同的组件语义，减少实现时的二次判断。'],
-            screenshotPlaceholder: '设计组件属性与前端 API 对照', images: [],
+            images: [],
           },
           {
             id: 'code-connect', title: '设计与代码映射',
             paragraphs: [
               '基于已确认的 API，形成 Code Connect 映射方案，将 Figma 组件及其属性对应到代码组件与使用示例。',
             ],
-            screenshotPlaceholder: 'Code Connect 映射方案与组件使用示例', images: [],
+            images: [],
           },
         ], images: [],
       },
@@ -138,13 +139,17 @@ export function getDesignEngineeringContent(_locale: Locale): ProjectDetailBlock
         paragraphs: ['有了设计规则与代码依据，还需要明确在开发的哪个阶段使用。我负责设计规范 Skill 的内容与使用指引，将 DESIGN.md、前端组件库和工程标准组织为实现前、实现中、完成后三个阶段，并将检查中发现的共性问题补充为规则与例外。'],
         subsections: [{
           id: 'skill-package', title: '从设计规范到开发指引', hideTitle: true,
-          paragraphs: [
-            [{ text: '实现前：', bold: true }, { text: '读取全局样式、组件选择条件与组合模式，先明确任务适用的设计规则和边界，再组织界面。' }],
-            [{ text: '实现中：', bold: true }, { text: '关联已有组件实现与调用示例，使用与前端确认的 API 和语义 Token，将设计规则落实到代码。' }],
+          paragraphs: [],
+          listItems: [
+            [{ text: '实现前：', bold: true }, { text: '读取全局样式、组件选择条件与组合模式，先明确任务适用的设计规则和边界，再组织界面；' }],
+            [{ text: '实现中：', bold: true }, { text: '关联已有组件实现与调用示例，使用与前端确认的 API 和语义 Token，将设计规则落实到代码；' }],
             [{ text: '完成后：', bold: true }, { text: '按工程标准与界面要求检查结果，区分规则缺失、表达不清和实现偏差，分别补充规则或修正代码。' }],
           ],
-          screenshotPlaceholder: '设计规范 Skill 目录、组件使用指引与工程标准片段',
-          images: [],
+          images: [{
+            src: '/images/design-engineering-skill-structure.svg',
+            caption: 'Skill 文件结构：skill 下包含 skill.md 与 reference 文件夹；reference 下包含 Setup、General、Token、Component、Layout、Engineer 文件夹。',
+            hideCaption: true,
+          }],
         }], images: [],
       },
       {
@@ -155,9 +160,10 @@ export function getDesignEngineeringContent(_locale: Locale): ProjectDetailBlock
         subsections: [
           {
             id: 'agent-tools', title: '面向任务组织查询内容', hideTitle: true,
-            paragraphs: [
-              [{ text: '组件查找：', bold: true }, { text: '围绕任务组织查询入口，通过组件索引定位可复用的已有资产。' }],
-              [{ text: '规则获取：', bold: true }, { text: '查询范围参考 ' }, { text: 'Astryx CLI', href: 'https://astryx.atmeta.com/docs/cli' }, { text: '，涵盖组件属性与用法、Token、主题、布局规范和组合模板，作为查询内容的组织依据，不代表当前工具已全部实现。' }],
+            paragraphs: [],
+            listItems: [
+              [{ text: '组件查找：', bold: true }, { text: '围绕任务组织查询入口，通过组件索引定位可复用的已有资产；' }],
+              [{ text: '规则获取：', bold: true }, { text: '查询范围优先参考了 ' }, { text: 'Astryx CLI', href: 'https://astryx.atmeta.com/docs/cli' }, { text: '，涵盖组件属性与用法、Token、主题、布局规范和组合模板；' }],
               [{ text: '实现衔接：', bold: true }, { text: '将查询结果中的设计规则与组件 API、调用示例对应，作为后续实现的依据。' }],
             ],
             screenshotPlaceholder: 'CLI 实际查询：输入、返回的组件规则与使用示例', images: [],
@@ -175,15 +181,15 @@ export function getDesignEngineeringContent(_locale: Locale): ProjectDetailBlock
               'OceanBase 云控制台工程化程度较高，设计系统复用基础完善。通过设计规范 Skill，设计师可以借助 AI 使用已有组件完成前端需求，直接提交 PR，参与需求交付。',
               '这一实践将设计师的工作从方案交付延伸到前端实现，依托已有工程体系和共同规范推进协作。',
             ],
-            screenshotPlaceholder: 'OceanBase 云控制台需求界面与对应前端 PR', images: [],
+            images: [{ src: '/images/design-engineering-oceanbase-console.png', caption: 'OceanBase 云控制台实例工作台：容量资源与重点指标监控', hideCaption: true }],
           },
           {
             id: 'datapilot-design-collaboration', title: 'Data Agent',
             paragraphs: [
               'Data Agent 是从零到一建设的 AI Native 产品。我先通过全局 DESIGN.md 建立视觉方向、样式和交互状态的共同约束，再随产品开发逐步沉淀组件规则与组合模式。',
-              '在数据、应用和对话模块中，我负责设计方向、组件反馈与界面检查，并与研发确定复用方式。具体实现偏差通过代码调整解决，共性问题则沉淀为规则，为后续功能开发提供依据。',
+              '具体实现偏差通过代码调整解决，共性问题则沉淀为规则，为后续功能开发提供依据。',
             ],
-            screenshotPlaceholder: 'Data Agent 实际界面与沉淀的设计规范、组合模式', images: [],
+            images: [{ src: '/images/design-engineering-data-agent.png', caption: 'Data Agent 工作台：数据资产、分析仪表盘与 Agent 对话并列展示', hideCaption: true }],
           },
         ], images: [],
       },

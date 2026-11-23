@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="460" viewBox="0 0 480 460">
+<title>Skill 文件目录结构</title>
+<rect width="480" height="460" rx="12" fill="#fff"/>
+<g fill="none" stroke="#d9dfe8" stroke-width="1.5"><path d="M59 66V140H77M59 94H77M95 158V416H113"/>
+<path d="M95 186H113"/>
+<path d="M95 232H113"/>
+<path d="M95 278H113"/>
+<path d="M95 324H113"/>
+<path d="M95 370H113"/>
+</g>
+<path d="M48 40h8l3 3h11v15H48z" fill="#edf3fc" stroke="#6e8bb7" stroke-width="1.5" stroke-linejoin="round"/>
+<text x="84" y="54" font-family="SFMono-Regular,Consolas,monospace" font-size="19" font-weight="600" fill="#263247">skill</text>
+<path d="M87 83h11l6 6v17H87z M98 83v6h6" fill="#f8fafc" stroke="#8994a5" stroke-width="1.5" stroke-linejoin="round"/>
+<text x="120" y="100" font-family="SFMono-Regular,Consolas,monospace" font-size="19" font-weight="400" fill="#263247">skill.md</text>
+<path d="M84 132h8l3 3h11v15H84z" fill="#edf3fc" stroke="#6e8bb7" stroke-width="1.5" stroke-linejoin="round"/>
+<text x="120" y="146" font-family="SFMono-Regular,Consolas,monospace" font-size="19" font-weight="400" fill="#263247">reference</text>
+<path d="M120 178h8l3 3h11v15H120z" fill="#edf3fc" stroke="#6e8bb7" stroke-width="1.5" stroke-linejoin="round"/>
+<text x="156" y="192" font-family="SFMono-Regular,Consolas,monospace" font-size="19" font-weight="400" fill="#263247">Setup</text>
+<path d="M120 224h8l3 3h11v15H120z" fill="#edf3fc" stroke="#6e8bb7" stroke-width="1.5" stroke-linejoin="round"/>
+<text x="156" y="238" font-family="SFMono-Regular,Consolas,monospace" font-size="19" font-weight="400" fill="#263247">General</text>
+<path d="M120 270h8l3 3h11v15H120z" fill="#edf3fc" stroke="#6e8bb7" stroke-width="1.5" stroke-linejoin="round"/>
+<text x="156" y="284" font-family="SFMono-Regular,Consolas,monospace" font-size="19" font-weight="400" fill="#263247">Token</text>
+<path d="M120 316h8l3 3h11v15H120z" fill="#edf3fc" stroke="#6e8bb7" stroke-width="1.5" stroke-linejoin="round"/>
+<text x="156" y="330" font-family="SFMono-Regular,Consolas,monospace" font-size="19" font-weight="400" fill="#263247">Component</text>
+<path d="M120 362h8l3 3h11v15H120z" fill="#edf3fc" stroke="#6e8bb7" stroke-width="1.5" stroke-linejoin="round"/>
+<text x="156" y="376" font-family="SFMono-Regular,Consolas,monospace" font-size="19" font-weight="400" fill="#263247">Layout</text>
+<path d="M120 408h8l3 3h11v15H120z" fill="#edf3fc" stroke="#6e8bb7" stroke-width="1.5" stroke-linejoin="round"/>
+<text x="156" y="422" font-family="SFMono-Regular,Consolas,monospace" font-size="19" font-weight="400" fill="#263247">Engineer</text>
+</svg>
