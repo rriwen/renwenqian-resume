@@ -21,7 +21,7 @@ test('project topics retain the project identity and requested focus', () => {
   assert.equal(conversationTitle('你在数据库运维平台中负责什么？'), '数据库运维平台 · 职责与贡献')
   assert.equal(conversationTitle('介绍一下 Agent 记忆插件'), 'Agent 记忆插件 · 项目概览')
   for (const name of ['AI 设计系统', 'Design Token、Design Skill']) {
-    assert.equal(conversationTitle(`介绍一下 ${name}`), '设计工程 · 项目概览')
+    assert.equal(conversationTitle(`介绍一下 ${name}`), 'AI 设计工程 · 项目概览')
   }
 })
 

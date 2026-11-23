@@ -6,7 +6,7 @@ const introductions: Record<string, Record<Locale, string>> = {
   text2sql: { zh: '用自然语言辅助 SQL 编写与修改',},
   datadevelop: { zh: '围绕数据库开发任务，持续打磨 SQL 编辑与数据操作体验',},
   'workflow-editor': { zh: '通过可视化编排，组织数据任务的执行顺序与依赖关系',},
-  aidesignsystem: { zh: '构建 Agent Ready 设计系统，让设计资产可理解、可调用、可检查，约束 AI 按统一标准完成开发',},
+  aidesignsystem: { zh: '构建 Agent Ready 设计系统，将样式语义、组件规则与代码实现连接起来，为团队与 Agent 提供共同的开发依据',},
   Memory: { zh: '让 Agent 的经验可积累、可检索、可复用',},
   skills: { zh: '将组件用法与工程约束整理为可复用的 AI 协作规则',},
 }

@@ -6,7 +6,7 @@ export function DataPilotWorkflow({ workflow }: { workflow: NonNullable<DataPilo
   const [open, setOpen] = useState(false)
   const linkRef = useRef<HTMLButtonElement>(null)
   return <>
-    <p>{workflow.summary}{' '}<button ref={linkRef} type="button" className="datapilot-workflow-link" onClick={() => setOpen(true)}>Agent 工作流</button></p>
+    <p>{workflow.summary}（<button ref={linkRef} type="button" className="datapilot-workflow-link" onClick={() => setOpen(true)}>Agent 工作流</button>）</p>
     {open && <ProjectLightbox items={[workflow.image]} index={0} onChange={() => {}} onClose={() => setOpen(false)} returnFocusTo={linkRef.current} />}
   </>
 }

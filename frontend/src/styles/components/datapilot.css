@@ -990,7 +990,9 @@
 .datapilot-case-page .datapilot-strategies { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; list-style: none; margin: 40px 0 0; padding: 0; }
 .datapilot-case-page .datapilot-strategies > li { display: flex; flex-direction: column; align-items: stretch; gap: 20px; min-width: 0; margin: 0; padding: 24px 0 0; border-top: 1px solid var(--rule); }
 .datapilot-case-page .datapilot-strategy-heading h3 { margin: 0; color: var(--text); font-size: var(--text-base); font-weight: var(--weight-semibold); line-height: 1.5; }
-.datapilot-case-page .datapilot-strategy-description { margin: 0; color: var(--muted); font-size: var(--text-sm); line-height: var(--leading-body); }
+.datapilot-case-page .datapilot-strategy-description { margin: 0; padding-left: 1.2em; list-style: disc; color: var(--muted); font-size: var(--text-sm); line-height: var(--leading-body); }
+.datapilot-case-page .datapilot-strategy-description > li { margin: 0; padding: 0; }
+.datapilot-case-page .datapilot-strategy-description > li + li { margin-top: 10px; }
 @container site-main (max-width: 700px) {
   .datapilot-case-page .datapilot-strategies { grid-template-columns: minmax(0, 1fr); gap: 0; }
   .datapilot-case-page .datapilot-strategies > li { gap: 12px; padding: 24px 0; }

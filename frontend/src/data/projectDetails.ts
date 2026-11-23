@@ -44,7 +44,7 @@ export type ProjectDetailResponsibilities = {
 }
 
 /** 正文片段，支持加粗、主题适配的警示色与外部参考链接。 */
-export type ProjectDetailParagraphRun = { text: string; bold?: boolean; tone?: 'danger'; href?: string }
+export type ProjectDetailParagraphRun = { text: string; bold?: boolean; tone?: 'danger'; href?: string; definition?: string; definitionTitle?: string }
 
 /** 普通字符串整段，或由片段拼接（用于段内局部强调） */
 export type ProjectDetailParagraph = string | ProjectDetailParagraphRun[]

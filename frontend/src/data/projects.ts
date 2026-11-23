@@ -3,7 +3,7 @@ import type { Locale } from '../i18n/translations'
 export const projectCategories = [
   { id: 'ai-products', label: { zh: 'AI 产品',} },
   { id: 'data-tools', label: { zh: '平台工具',} },
-  { id: 'design-systems', label: { zh: '设计工程',} },
+  { id: 'design-systems', label: { zh: 'AI 设计工程',} },
 ] as const
 
 export type ProjectCategory = (typeof projectCategories)[number]['id']
@@ -68,7 +68,7 @@ export const projects: Project[] = [
     tags: { zh: ['任务编排', '复杂交互'],},
   },
   {
-    id: 4, slug: 'aidesignsystem', title: '设计工程',
+    id: 4, slug: 'aidesignsystem', title: 'AI 设计工程',
     category: 'design-systems',
     image: '/images/aidesignsystem-hero.jpg',
     tags: { zh: ['AI 设计工作流', '组件化设计', '设计与代码协同'],},

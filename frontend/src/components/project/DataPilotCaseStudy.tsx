@@ -109,9 +109,9 @@ export function DataPilotCaseStudy({ locale }: Props) {
                   const titleEnd = heading.indexOf('，')
                   return <li key={bullet}>
                     <div className="datapilot-strategy-heading">
-                      <h3>{heading.slice(0, titleEnd)}</h3>
+                      <h3>{titleEnd < 0 ? heading : heading.slice(0, titleEnd)}</h3>
                     </div>
-                    <p className="datapilot-strategy-description">{bullet.slice(separator + 1)}</p>
+                    <ul className="datapilot-strategy-description">{bullet.slice(separator + 1).split('；').map(point => <li key={point}>{point}</li>)}</ul>
                   </li>
                 })}</ol> : null}
                 {section.bullets && !['overview', 'design-strategy'].includes(section.id) && !section.evolutionMedia && !section.adoptionResult ? <ul className="project-detail-subsection-list">{section.bullets.map((bullet) => {

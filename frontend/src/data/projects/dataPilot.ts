@@ -276,9 +276,9 @@ function createDataPilotContent(locale: Locale) {
     "index": "",
     "title": "设计策略",
     "intro": "",
-    "body": "流程中需要用户确认或主动触发的节点包括：补充需求与计算口径、审核分析结果、发起应用生成或修改，以及验证草稿并决定是否发布。执行出现异常时，还需要帮助用户判断原因与处理方式。因此形成以下三条 Agent 设计策略。",
+    "body": "整个流程中，需要用户确认或主动触发的节点包括：补充需求与计算口径、审核分析结果、发起应用生成或修改、及验证草稿并决定是否发布。Agent 执行出现异常时，还需要帮助用户判断原因与处理方式。\n\n因此形成以下三条 Agent 设计策略。",
     "workflow": {
-      "summary": "Data Agent 的执行流程大致为：理解意图，按需多轮澄清，调用工具并反馈结果；当用户需要生成或修改应用时，再进入应用生成、草稿保存、验证与发布。",
+      "summary": "Data Agent 设想的执行流程为：理解意图 → 按需多轮澄清、调用工具 → 反馈问数结果 → 应用生成 → 草稿保存 → 验证与发布。",
       "caption": "Agent 执行逻辑 · 依据工作流整理，展示交互介入点",
       "image": { "src": "/images/datapilot-agent-workflow.jpg", "caption": "Agent 工作流", "sourceRegion": { "x": 0, "y": 110, "width": 1280, "height": 2343, "sourceWidth": 1280, "sourceHeight": 2453 } },
       "stages": [
@@ -289,9 +289,9 @@ function createDataPilotContent(locale: Locale) {
       ]
     },
     "bullets": [
-      "关键节点对齐，分析依据随结果呈现：只在影响结果的分歧处确认需求与计算口径，并将来源、口径与结果关联，支持用户核查。",
-      "区分探索与变更，以应用沉淀持续成果：追问保留原结果，选定内容后再修改应用；区分内容版本与数据更新，让修改可控、成果可复用。",
-      "异常可回溯，修正通过复测验证：将异常定位到对应执行环节，说明影响与处理路径，重新执行并核对修正结果。"
+      "对齐关键分歧：减少理解偏差，控制澄清成本；有歧义时确认，保持分析连贯；优先提供结论，按需深入核查",
+      "让应用变更可控：保留探索空间，谨慎改变成果；优先保存草稿，验证后再发布；让分析成果成为可直接使用的应用",
+      "支持异常排查：按执行阶段回看，关联分析依据；独立承载工程排查，衔接对话报错；分视图查看耗时，缩小排查范围"
     ],
     "images": []
   },
@@ -489,7 +489,7 @@ function createDataPilotContent(locale: Locale) {
   {
     "id": "qa-result",
     "index": "",
-    "title": "优先读懂结论，按需深入核查",
+    "title": "优先提供结论，按需深入核查",
     "intro": "",
     "body": "用户需要审核结果是否符合当前问题。先呈现结论与图表，计算依据和数据范围按需查看，在阅读效率与可核查性之间取得平衡。",
     "images": [],
@@ -673,7 +673,7 @@ function createDataPilotContent(locale: Locale) {
   {
     "id": "report-editing",
     "index": "",
-    "title": "修改先存草稿，验证后再发布",
+    "title": "优先保存草稿，验证后再发布",
     "tabLabel": "修改应用",
     "intro": "",
     "body": "一句修改指令可能影响多处内容。先明确修改范围，将变化保留在草稿中，供用户核对真实数据与交互后决定是否发布；用必要的检查换取线上成果的稳定性。",
@@ -740,11 +740,10 @@ function createDataPilotContent(locale: Locale) {
     "group": { "id": "continuous-dialogue", "title": "多轮对话与持续使用" },
     "dialogue": {
       "hideMedia": true,
-      "status": "WIP",
       "decisions": [
-        { "title": "以应用承载成果，减少对历史对话的依赖", "body": "" },
-        { "title": "常规操作直接完成，减少重复自然语言指令", "body": "" },
-        { "title": "使用入口优先，分析与修改按需进入", "body": "" }
+        { "title": "直接使用应用，无需翻找对话", "body": "" },
+        { "title": "常规操作无需重复提问", "body": "" },
+        { "title": "分析或修改时再进入对话", "body": "" }
       ],
       "visual": {
         "kind": "workspace",
@@ -761,7 +760,7 @@ function createDataPilotContent(locale: Locale) {
     "index": "",
     "title": "从异常回答到问题定位",
     "intro": "",
-    "body": "Agent 可能出现结果偏差、执行失败或长耗时。结果偏差可由用户先核对需求与计算口径，其余多数问题需要工程师协助排查。\n\n为此，先面向工程师孵化智能体回放功能，关联执行过程与分析依据；再进一步孵化通用可观测产品 AgentOps，通过拓扑图、Trace 图、火焰图与日志支持系统排查。",
+    "body": "Agent 可能出现结果偏差、执行失败或长耗时。结果偏差可由用户先核对需求与计算口径，其余多数问题需要工程师协助排查。\n\n为此，先孵化智能体回放功能，关联执行过程与分析依据；再进一步孵化通用可观测产品 AgentOps，通过拓扑图、Trace 图、火焰图与日志支持系统排查。",
     "bodyLink": { "label": "AgentOps", "href": "https://aiops-phi.vercel.app/#/app-datapilot/all/overview" },
     "images": [],
     "group": {
@@ -907,7 +906,6 @@ function createDataPilotContent(locale: Locale) {
     "intro": "",
     "body": "总耗时难以说明慢在哪一步。AgentOps Demo 通过耗时排序帮助工程师筛选调用，再用 Trace 图核对执行时序、火焰图查看耗时分布；选中节点后查看详情，继续核查原因。实际效果待验证。",
     "images": [
-      { "src": "/images/datapilot-latency-trace.png?v=bbf2f0d1d11e", "caption": "AgentOps Demo · Trace 图：结合调用层级、执行时序与节点详情排查长耗时调用" },
       { "src": "/images/datapilot-latency-flame.png?v=6468ba982247", "caption": "AgentOps Demo · 火焰图：从耗时分布定位目标节点，再查看属性与关联记录" }
     ],
     "group": { "id": "agent-troubleshooting", "title": "问题排查" },
@@ -921,7 +919,7 @@ function createDataPilotContent(locale: Locale) {
       "visual": {
         "kind": "sequence",
         "caption": "产品孵化：AgentOps Demo",
-        "note": "配图为 AgentOps Demo 的 Trace 图与火焰图，展示由智能体回放延伸的跨应用排查方案。异常与长耗时节点用于缩小排查范围，不等于已确认根因，实际排查效果仍待验证。",
+        "note": "配图为 AgentOps Demo 的火焰图，展示由智能体回放延伸的跨应用排查方案。异常与长耗时节点用于缩小排查范围，不等于已确认根因，实际排查效果仍待验证。",
         "frames": []
       }
     }

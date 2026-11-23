@@ -172,6 +172,10 @@ function serializeDataPilot(locale: Locale): string {
         lines.push(`${content.labels.solution}: ${application.solution}`)
       }
       if (section.related) lines.push(`${content.labels.relatedIntro} ${content.labels.relatedProject} (/project/agentops)`)
+      if (section.adoptionResult) {
+        const result = section.adoptionResult
+        lines.push(`${result.label}：${result.beforeLabel} ${result.before}% → ${result.afterLabel} ${result.after}%；${result.changeLabel}`)
+      }
       lines.push(...(section.stats ?? []))
       if (section.evolutionMedia?.some(item => item.description)) {
         for (const item of section.evolutionMedia) {
@@ -240,10 +244,6 @@ export function buildSiteCorpus(locale: Locale): string {
   lines.push(`${m.header.name} — ${m.header.role}`)
   lines.push(m.home.title)
   lines.push(m.home.greeting, m.home.description)
-  lines.push('')
-
-  lines.push(`## ${'页脚'}`)
-  lines.push(m.footer.bioLines.join('\n'))
   lines.push('')
 
   lines.push(`## ${'联系'}`)

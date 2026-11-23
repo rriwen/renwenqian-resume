@@ -2,6 +2,7 @@ import { createElement, useRef, type ReactNode, type CSSProperties } from 'react
 import { type ProjectDetailBlock, type ProjectDetailComparison, type ProjectDetailParagraph, type ProjectDetailSection, type ProjectGalleryItem } from '../../data/projectDetails'
 import { getProjectTitle, type Project } from '../../data/projects'
 import { useLanguage } from '../../i18n/LanguageContext'
+import { TermTooltip } from './TermTooltip'
 import { DetailTable } from './DetailTable'
 import { CaseStudyHeroPalette, CaseStudyGallery, CaseStudyMediaFrame, CaseStudyPlaceholder } from './CaseStudyMedia'
 import { ProjectFunnel } from './ProjectFunnel'
@@ -24,7 +25,7 @@ const body: CSSProperties = {
 function renderParagraphContent(para: ProjectDetailParagraph) {
   if (typeof para === 'string') return para
   return para.map((run, j) =>
-    createElement(
+    run.definition ? <TermTooltip key={j} text={run.text} definition={run.definition} title={run.definitionTitle} /> : createElement(
       run.href ? 'a' : run.bold ? 'strong' : 'span',
       {
         key: j,

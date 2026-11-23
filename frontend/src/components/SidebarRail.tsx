@@ -81,8 +81,8 @@ export function SidebarRail({ onNewChat }: { onNewChat: () => void }) {
           </div>
         </div>
       ))}
-      <Link to="/project/aidesignsystem" className="sidebar-rail-link sidebar-tooltip-host" aria-label={'设计工程'} aria-current={isDesignEngineering ? 'page' : undefined}>
-        <IconPalette /><span className="sidebar-tooltip" aria-hidden="true">{'设计工程'}</span>
+      <Link to="/project/aidesignsystem" className="sidebar-rail-link sidebar-tooltip-host" aria-label={'AI 设计工程'} aria-current={isDesignEngineering ? 'page' : undefined}>
+        <IconPalette /><span className="sidebar-tooltip" aria-hidden="true">{'AI 设计工程'}</span>
       </Link>
     </nav>
   )

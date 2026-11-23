@@ -410,3 +410,19 @@ test('Text2SQL workflow exploration and its branches remain in the shared corpus
     if (step.branch) assert.ok(corpus.includes(step.branch.body))
   }
 })
+
+
+test('chat follows current engineering sections and result labels without hidden footer copy', () => {
+  const corpus = buildSiteCorpus('zh')
+  assert.ok(!corpus.includes('## 页脚'))
+  for (const line of translations.zh.footer.bioLines) assert.ok(!corpus.includes(line))
+  const detail = getProjectDetail('aidesignsystem', 'zh')!
+  const skill = detail.sections!.find(section => section.id === 'skill-design')!
+  assert.ok(corpus.includes(`#### ${skill.title}`))
+  for (const section of getDataPilotContent('zh').parts.experience.sections) {
+    if (!section.adoptionResult) continue
+    const result = section.adoptionResult
+    assert.ok(corpus.includes(`${result.label}：${result.beforeLabel} ${result.before}% → ${result.afterLabel} ${result.after}%；${result.changeLabel}`))
+    assert.ok(corpus.includes(section.bullets![0]))
+  }
+})
