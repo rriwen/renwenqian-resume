@@ -125,3 +125,54 @@
 .case-study-page[data-project-slug="aidesignsystem"] [data-subsection="code-delivery"] .case-study-media {
   background: linear-gradient(130deg, #d4ece9, #afdce0 50%, #dbeafa);
 }
+
+/* A macOS-style terminal simulation inside the existing gradient exhibit. */
+.design-cli-stage { position: relative; z-index: 1; width: 100%; min-height: 370px; display: flex; align-items: center; }
+.design-cli { width: 100%; min-width: 0; overflow: hidden; border: 1px solid #555; border-radius: 10px; background: #202020; color: #f2f2f2; box-shadow: 0 16px 36px rgb(20 30 50 / .24); font: 12px/1.6 var(--font-mono); color-scheme: dark; }
+.design-cli-header { position: relative; display: flex; align-items: center; justify-content: center; min-height: 34px; padding: 0 72px; background: linear-gradient(#414141, #353535); border-bottom: 1px solid #161616; user-select: none; }
+.design-cli-header strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: 500 12px var(--font-sans); color: #ddd; }
+.design-cli-controls { position: absolute; left: 12px; top: 11px; display: flex; gap: 8px; }
+.design-cli-controls button { width: 12px; height: 12px; display: grid; place-items: center; padding: 0; border: 0; border-radius: 50%; cursor: pointer; font: 12px/12px var(--font-sans); color: #402a20; }
+.design-cli-controls button span { opacity: 0; }
+.design-cli-controls:hover span, .design-cli-controls button:focus-visible span { opacity: 1; }
+.design-cli-close { background: #ff5f57; }
+.design-cli-minimize { background: #febc2e; }
+.design-cli-zoom { background: #28c840; }
+.design-cli-demo { position: absolute; right: 12px; font-size: 10px; color: #bbb; }
+.design-cli-output { height: 330px; overflow: auto; overscroll-behavior: contain; padding: 12px; cursor: text; scrollbar-color: #666 #202020; }
+.design-cli-stage--expanded .design-cli-output { height: 470px; }
+.design-cli-session { color: #aaa; margin-bottom: 12px; }
+.design-cli-echo { overflow-wrap: anywhere; white-space: pre-wrap; }
+.design-cli-entry pre { white-space: pre-wrap; overflow-wrap: anywhere; font: inherit; color: inherit; margin: 6px 0 12px; }
+.design-cli-form { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 8px; }
+.design-cli-form label { white-space: nowrap; }
+.design-cli-form input { flex: 1 1 130px; min-width: 0; width: 100%; padding: 0; border: 0; border-radius: 0; background: transparent; color: #f2f2f2; caret-color: #f2f2f2; font: inherit; outline: none; box-shadow: none; }
+.design-cli:focus-within { border-color: #888; }
+.design-cli-controls button:focus-visible, .design-cli-reopen:focus-visible { outline: 2px solid white; outline-offset: 3px; }
+.design-cli-reopen { margin: auto; padding: 10px 16px; border: 1px solid #555; border-radius: 8px; background: #303030; color: #fff; font: 12px var(--font-mono); cursor: pointer; }
+.case-study-page[data-project-slug="aidesignsystem"] [data-subsection="agent-tools"] .case-study-media { align-self: start; }
+@media (max-width: 480px) { .design-cli { font-size: 11px; } .design-cli-output { padding: 10px; } }
+
+/* Match the two application exhibits while preserving each complete screenshot. */
+.case-study-page[data-project-slug="aidesignsystem"] #delivery .case-study-media > button {
+  aspect-ratio: 8 / 5;
+  background: transparent !important;
+}
+.case-study-page[data-project-slug="aidesignsystem"] #delivery .case-study-media img {
+  position: absolute;
+  inset: 0;
+  height: 100% !important;
+  object-fit: contain !important;
+}
+.case-study-page[data-project-slug="aidesignsystem"] #delivery .project-detail-gallery,
+.case-study-page[data-project-slug="aidesignsystem"] #delivery .case-study-media {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+/* Give the Skill structure illustration more breathing room in its exhibit. */
+.case-study-page[data-project-slug="aidesignsystem"] [data-subsection="skill-package"] .case-study-media > button {
+  width: 85% !important;
+  margin-inline: auto !important;
+}

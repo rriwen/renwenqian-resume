@@ -99,7 +99,7 @@ export function getDesignEngineeringContent(_locale: Locale): ProjectDetailBlock
         id: 'guidance',
         legacyIds: ['connections', 'foundations-composition-patterns-title', 'guidance-component-documentation-title', 'guidance-component-rules-title', 'guidance-composition-patterns-title'],
         title: 'DESIGN.md',
-        paragraphs: ['在样式语义之外，页面还需要明确组件的选择与组合方式。我以 DESIGN.md 为载体，按「设计意图—表现规则—检查要求」整理设计判断，让 Agent 能够根据业务任务组织界面。'],
+        paragraphs: ['通过 DESIGN.md 统一设计样式的复用规则：基础 Token 和图片资产通过文件引用，Markdown 文档重点说明组件用法与组合模式，让 Agent 按照统一规范组织界面。这套方式应用于官网、大会 Demo 等场景，帮助不同页面复用已有设计，保持样式与交互一致。'],
         subsections: [
           {
             id: 'project-design-rules', title: '统一设计规则', hideTitle: true,
@@ -116,17 +116,25 @@ export function getDesignEngineeringContent(_locale: Locale): ProjectDetailBlock
       {
         id: 'code-mapping', legacyIds: ['guidance-code-connect-title', 'foundations-agent-ready-components-title', 'code-mapping-agent-ready-components-title'],
         title: '代码映射',
-        paragraphs: ['设计规则需要进一步对应到代码。设计组件库与前端组件库的 API 不一致时，工程师必须先判断设计属性对应哪个代码属性，形成额外的语义转换，也增加了 Agent 理解组件调用方式的难度。'],
+        paragraphs: ['设计组件库与前端组件库的分类、属性、取值不一致时，工程师往往需要先判断设计属性对应哪个代码属性，形成额外的语义转换，也增加了 Agent 理解组件调用方式的难度。因此，需要进一步建立设计组件与代码的映射。'],
         subsections: [
           {
             id: 'component-api', title: '统一 API',
-            paragraphs: ['与前端确认组件 API，对齐属性命名、取值和状态约束，使设计配置直接对应前端调用，为工程师与 Agent 提供共同的组件语义，减少实现时的二次判断。'],
+            paragraphs: [
+              '统一设计与代码的组件 API，让 Figma 中的属性与状态直接对应前端调用。',
+            ],
+            listItems: [
+              [{ text: '难点：', bold: true }, { text: '前端基于 Ant Design 定制了部分 API，需兼容已有接口，尽量避免影响线上业务。' }],
+              [{ text: '解决：', bold: true }, { text: '梳理全部组件分类和 API，在保留已有接口的前提下补齐定义，并与设计师、工程师共同确认，确保两端的属性、取值与状态一致。' }],
+            ],
             images: [],
           },
           {
             id: 'code-connect', title: '设计与代码映射',
             paragraphs: [
               '基于已确认的 API，形成 Code Connect 映射方案，将 Figma 组件及其属性对应到代码组件与使用示例。',
+              [{ text: '难点：', bold: true }, { text: '涉及多套组件库，逐一搭建与对齐的工作量大。' }],
+              [{ text: '解决：', bold: true }, { text: '利用 Codex 连接 MCP，按约定的组件分类与 API 生成基础组件库，再由人工校验和调整，确保符合统一规范。' }],
             ],
             images: [],
           },
@@ -163,10 +171,10 @@ export function getDesignEngineeringContent(_locale: Locale): ProjectDetailBlock
             paragraphs: [],
             listItems: [
               [{ text: '组件查找：', bold: true }, { text: '围绕任务组织查询入口，通过组件索引定位可复用的已有资产；' }],
-              [{ text: '规则获取：', bold: true }, { text: '查询范围优先参考了 ' }, { text: 'Astryx CLI', href: 'https://astryx.atmeta.com/docs/cli' }, { text: '，涵盖组件属性与用法、Token、主题、布局规范和组合模板；' }],
+              [{ text: '规则获取：', bold: true }, { text: '查询范围优先参考了 ' }, { text: 'Astryx CLI', href: 'https://astryx.atmeta.com/docs/cli' }, { text: '，涵盖组件搜索、设计规范阅读、主题管理等；' }],
               [{ text: '实现衔接：', bold: true }, { text: '将查询结果中的设计规则与组件 API、调用示例对应，作为后续实现的依据。' }],
             ],
-            screenshotPlaceholder: 'CLI 实际查询：输入、返回的组件规则与使用示例', images: [],
+            images: [],
           },
         ], images: [],
       },
@@ -197,3 +205,13 @@ export function getDesignEngineeringContent(_locale: Locale): ProjectDetailBlock
     gallery: [],
   }
 }
+
+/** CLI 交互演示数据，不进入项目事实与聊天语料。 */
+export const designCliCommands = [
+  ['search', '搜索组件、Hook、文档、模板与主题', 'search button'],
+  ['component', '查询组件用法、属性与示例', 'component Button'],
+  ['docs', '阅读 Token、布局和设计规范', 'docs tokens'],
+  ['theme', '添加、切换与构建主题', 'theme --help'],
+  ['build', '获取起始模板与页面搭建流程', 'build'],
+  ['upgrade', '迁移代码与更新复制的组件', 'upgrade --help'],
+] as const

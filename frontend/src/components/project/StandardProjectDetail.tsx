@@ -6,6 +6,7 @@ import { TermTooltip } from './TermTooltip'
 import { DetailTable } from './DetailTable'
 import { CaseStudyHeroPalette, CaseStudyGallery, CaseStudyMediaFrame, CaseStudyPlaceholder } from './CaseStudyMedia'
 import { ProjectFunnel } from './ProjectFunnel'
+import { DesignCliDemo } from './DesignCliDemo'
 import { ProjectWorkflow } from './ProjectWorkflow'
 import { ProjectArchitecture } from './ProjectArchitecture'
 import { ScreenshotCarousel } from './ScreenshotCarousel'
@@ -165,7 +166,9 @@ export function StandardProjectDetail({ project, detail, presentation, tabs, pan
                   </details>
                 )}
               </div>
-              {subsection.screenshotPlaceholder && <CaseStudyPlaceholder title={subsection.screenshotPlaceholder} />}
+              {project.slug === 'aidesignsystem' && subsection.id === 'agent-tools'
+                ? <DesignCliDemo />
+                : subsection.screenshotPlaceholder && <CaseStudyPlaceholder title={subsection.screenshotPlaceholder} />}
               {subsection.comparison && <DesignComparison comparison={subsection.comparison} />}
               {subsection.comparisonPlaceholder && (
                 <div className="project-detail-comparison" role="group" aria-label={'方案前后对比，配图待补'}>
