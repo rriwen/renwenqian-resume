@@ -276,9 +276,9 @@ function createDataPilotContent(locale: Locale) {
     "index": "",
     "title": "设计策略",
     "intro": "",
-    "body": "整个流程中，需要用户确认或主动触发的节点包括：补充需求与计算口径、审核分析结果、发起应用生成或修改、及验证草稿并决定是否发布。Agent 执行出现异常时，还需要帮助用户判断原因与处理方式。\n\n因此形成以下三条 Agent 设计策略。",
+    "body": "整个流程中，需要用户确认或主动触发的节点包括：补充需求与计算口径、审核分析结果、发起应用生成或修改并决定是否发布。Agent 执行出现异常时，还需要帮助用户判断原因与处理方式。\n\n因此形成以下三条 Agent 设计策略。",
     "workflow": {
-      "summary": "Data Agent 设想的执行流程为：理解意图 → 按需多轮澄清、调用工具 → 反馈问数结果 → 应用生成 → 草稿保存 → 验证与发布。",
+      "summary": "Data Agent 设想的执行流程为：理解意图 → 按需多轮澄清、调用工具 → 反馈问数结果 → 应用生成 → 持续使用。",
       "caption": "Agent 执行逻辑 · 依据工作流整理，展示交互介入点",
       "image": { "src": "/images/datapilot-agent-workflow.jpg", "caption": "Agent 工作流", "sourceRegion": { "x": 0, "y": 110, "width": 1280, "height": 2343, "sourceWidth": 1280, "sourceHeight": 2453 } },
       "stages": [

@@ -44,6 +44,27 @@
   border-radius: var(--radius-lg);
 }
 
+.about-project-card-header {
+  position: relative;
+}
+
+.about-project-card-header.has-detail-link .about-project-card-heading {
+  padding-right: 52px;
+}
+
+.about-project-detail-link {
+  border-radius: var(--radius-pill);
+  position: absolute;
+  right: 48px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: var(--control-height);
+  height: var(--control-height);
+  padding: 0;
+  font-size: var(--text-sm);
+  white-space: nowrap;
+}
+
 .about-project-card-toggle {
   display: flex;
   align-items: center;

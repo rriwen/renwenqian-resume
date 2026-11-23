@@ -90,6 +90,10 @@ test('project cards expose one stable control target per project independent of 
   const html = renderToStaticMarkup(createElement(ProjectCards, { projects, locale: 'zh' }))
   const targets = [...html.matchAll(/aria-controls="([^"]+)"/g)].map((match) => match[1])
   assert.equal(new Set(targets).size, projects.length)
+  for (const path of ['dataagent', 'aidesignsystem', 'databaseops', 'datadevelop']) {
+    assert.ok(html.includes(`href="/project/${path}"`))
+  }
+  assert.doesNotMatch(html, /<button[^>]*>(?:(?!<\/button>)[\s\S])*<a\s/)
   for (const project of projects) {
     const target = `about-project-${project.id}-content`
     assert.ok(targets.includes(target))

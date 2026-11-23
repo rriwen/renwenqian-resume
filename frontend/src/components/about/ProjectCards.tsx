@@ -5,6 +5,13 @@ import type { Locale } from '../../i18n/translations'
 import { renderMarkdownInline } from './renderMarkdownInline'
 import { bodyText, workArticleList, proseColumn } from './styles'
 
+const projectPaths: Record<string, string> = {
+  analytics: '/project/dataagent',
+  'design-engineering': '/project/aidesignsystem',
+  'database-operations': '/project/databaseops',
+  'data-development': '/project/datadevelop',
+}
+
 function ProjectBackground({ content, label }: { content: string; label: string }) {
   const text = content.replace(/^(?:\*\*)?(?:项目背景|背景|内容|Project background|Content)[:：]?(?:\*\*)?\s*/i, '')
   return (
@@ -30,6 +37,7 @@ export function ProjectCards({ projects, locale: _locale }: { projects: AboutCon
         const AchievementsList = project.achievementsOrdered ? 'ol' : 'ul'
         return (
           <article key={project.id} id={`about-project-${project.id}`} className="about-project-card">
+            <div className={`about-project-card-header${projectPaths[project.id] ? ' has-detail-link' : ''}`}>
             <button
               type="button"
               className="about-project-card-toggle"
@@ -54,6 +62,14 @@ export function ProjectCards({ projects, locale: _locale }: { projects: AboutCon
               </span>
               <span className={`about-section-toggle-icon${expanded ? ' is-expanded' : ''}`} aria-hidden="true" />
             </button>
+            {projectPaths[project.id] && (
+              <a className="ui-button about-project-detail-link" href={projectPaths[project.id]} aria-label={`查看${project.title}详情`} title="查看详情">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M7 17 17 7M7 7h10v10" />
+                </svg>
+              </a>
+            )}
+            </div>
             <div id={`about-project-${project.id}-content`} hidden={!expanded} className="about-project-card-content" style={proseColumn}>
               {expanded && <>
                 <ProjectBackground label={(project.id === 'design-engineering' ? '项目背景' : (['analytics', 'database-operations', 'data-development'].includes(project.id) ? '背景目标' : '背景与目标'))} content={[project.content.trim(), project.goal.trim()].filter(Boolean).join(' ')} />
