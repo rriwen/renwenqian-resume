@@ -53,6 +53,7 @@
 }
 
 .about-project-detail-link {
+  border: 0;
   border-radius: var(--radius-pill);
   position: absolute;
   right: 48px;

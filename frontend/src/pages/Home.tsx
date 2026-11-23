@@ -1,5 +1,5 @@
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
-import { ArrowUpIcon } from "@phosphor-icons/react";
+import { ArrowUpIcon, ArrowUpRightIcon } from "@phosphor-icons/react";
 import { Link } from "react-router-dom";
 import { projectDescriptions } from "../data/homeProjects";
 import { projects } from "../data/projects";
@@ -111,6 +111,7 @@ export function Home({ onAsk, dark, onToggleTheme }: Props) {
             </div>
             <span className="home-project-title">
               <span>{project.navigationTitle?.zh ?? project.title}</span>
+              <ArrowUpRightIcon className="home-project-open-icon" size={16} aria-hidden="true" />
             </span>
             <span className="home-project-description" title={projectDescriptions[project.slug]}>{projectDescriptions[project.slug]}</span>
           </Link>
