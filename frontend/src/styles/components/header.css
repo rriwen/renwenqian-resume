@@ -289,3 +289,8 @@ button.sidebar-link { border: none; background: none; font-family: inherit; curs
 .resume-download-actions .ui-button { border-radius: var(--radius-pill); min-width: 80px; }
 
 .page-toolbar-contact { margin-left: var(--space-2); min-height: 36px; padding: 0 var(--space-4); border-radius: 999px; gap: var(--space-2); }
+
+/* External writing entry is separated from the project navigation. */
+.sidebar-navigation > .sidebar-writing, .sidebar-rail > .sidebar-writing { margin-top: 24px; }
+.sidebar-writing-external { margin-left: auto; opacity: 0; transition: opacity 150ms ease; }
+.sidebar-writing:is(:hover, :focus-visible) .sidebar-writing-external { opacity: 1; }

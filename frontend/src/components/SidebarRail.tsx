@@ -1,3 +1,4 @@
+import { WritingLink } from './WritingLink'
 import { useEffect, useRef, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { getProjectNavigationTitle, type ProjectCategory } from '../data/projects'
@@ -84,6 +85,7 @@ export function SidebarRail({ onNewChat }: { onNewChat: () => void }) {
       <Link to="/project/aidesignsystem" className="sidebar-rail-link sidebar-tooltip-host" aria-label={'AI 设计工程'} aria-current={isDesignEngineering ? 'page' : undefined}>
         <IconPalette /><span className="sidebar-tooltip" aria-hidden="true">{'AI 设计工程'}</span>
       </Link>
+      <WritingLink compact />
     </nav>
   )
 }

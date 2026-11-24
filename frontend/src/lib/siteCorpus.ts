@@ -1,3 +1,4 @@
+import { WRITING_URL } from '../data/siteLinks'
 import { projectDescriptions } from '../data/homeProjects'
 import { getProjectTitle, projects } from '../data/projects'
 import { getProjectDetail, type ProjectDetailBlock, type ProjectDetailParagraph, type ProjectDetailTable } from '../data/projectDetails'
@@ -262,6 +263,7 @@ export function buildSiteCorpus(locale: Locale): string {
   lines.push(`${m.header.name} — ${m.header.role}`)
   lines.push(m.home.title)
   lines.push(m.home.greeting, m.home.description)
+  lines.push(`随便写写：外部 Notion 页面（新页签打开）。${WRITING_URL}`)
   for (const [slug, description] of Object.entries(projectDescriptions)) {
     const project = projects.find(project => project.slug === slug)!
     lines.push(`${getProjectTitle(project, locale)}：${description} (/project/${slug})`)

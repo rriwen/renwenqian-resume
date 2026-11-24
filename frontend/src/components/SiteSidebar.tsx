@@ -5,7 +5,7 @@ import { getProjectNavigationGroups, getProjectViewBySlug } from '../data/projec
 import { useLanguage } from '../i18n/LanguageContext'
 import { IconClose, IconFileText, IconNewChat, IconPalette, IconSidebarToggle, IconSparkle, IconTerminal } from './Icons'
 import { SidebarRail } from './SidebarRail'
-import { BookOpenIcon } from '@phosphor-icons/react'
+import { WritingLink } from './WritingLink'
 
 type Props = {
   onNewChat: () => void
@@ -108,7 +108,7 @@ export function SiteSidebar({ onNewChat, open, onClose, triggerRef, launcherRef,
             )
           })}
 
-          <a hidden className="sidebar-link sidebar-blog" href="https://app.notion.com/p/rriwen/Hi-I-m-4x-204195a9bba880f787b4dc0eec18a101?source=copy_link" target="_blank" rel="noopener noreferrer"><BookOpenIcon size={18} aria-hidden="true" /><span>{'博客'}</span><span className="external-link-icon" aria-hidden="true">↗</span></a>
+          <WritingLink />
         </nav>
         {desktopCollapsed && <SidebarRail onNewChat={onNewChat} />}
       </aside>

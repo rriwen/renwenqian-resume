@@ -1,6 +1,6 @@
 # DESIGN.4X
 
-个人设计师作品集，包含项目案例、个人经历、摄影和 AI 对话；外部 Notion 博客入口暂时隐藏。技术栈：React 18、TypeScript、Vite、React Router、Three.js；聊天 API 部署在 Vercel，无数据库依赖。
+个人设计师作品集，包含项目案例、个人经历、摄影和 AI 对话；侧栏「随便写写」在新页签打开 Notion。技术栈：React 18、TypeScript、Vite、React Router、Three.js；聊天 API 部署在 Vercel，无数据库依赖。
 
 全站仅维护中文内容，英文翻译数据已移除。界面文案与聊天提示词位于 `frontend/src/i18n/translations.ts` 和 `frontend/src/lib/chat/interviewPrompt.ts`，关于页唯一正文来源为 `frontend/src/content/about/zh.md`；后续文案修改无需同步英文。
 
@@ -53,7 +53,7 @@ npm run dev
 | 关于页与项目页锚点组件 | [`SectionAnchorNav.tsx`](frontend/src/components/SectionAnchorNav.tsx) 统一刻度、提示与焦点状态；项目的 Hash 和章节高亮由 `ProjectAnchorNav` 管理 |
 | 关于页文案与解析 | [`content/about/zh.md`](frontend/src/content/about/)、[`parseAboutContent.ts`](frontend/src/content/about/parseAboutContent.ts)；[`content/about.ts`](frontend/src/content/about.ts) 负责加载与缓存 |
 | 关于页布局与时间线 | [`About.tsx`](frontend/src/pages/About.tsx) 组合 [`components/about/`](frontend/src/components/about/) 中的经历、项目卡片与时间线 |
-| 外部 Notion 博客入口 | [`SiteSidebar.tsx`](frontend/src/components/SiteSidebar.tsx) 保留链接，入口暂时隐藏 |
+| 外部 Notion 博客入口 | [`WritingLink.tsx`](frontend/src/components/WritingLink.tsx) 展示「随便写写」链接与 Notion 图标；地址由 `data/siteLinks.ts` 与聊天语料共用，供展开侧栏、收起栏和移动抽屉复用 |
 | 一些尝试占位页 | [`frontend/src/pages/Experiments.tsx`](frontend/src/pages/Experiments.tsx)，路由 `/experiments` 可直达；展开侧栏、收起图标栏与移动端抽屉均不展示入口 |
 | 摄影内容 | [`frontend/src/pages/Photography.tsx`](frontend/src/pages/Photography.tsx)、[`frontend/public/data/instagram.json`](frontend/public/data/instagram.json) |
 | 分组侧栏与移动端抽屉 | [`SiteSidebar.tsx`](frontend/src/components/SiteSidebar.tsx)；[`SidebarRail.tsx`](frontend/src/components/SidebarRail.tsx) 提供收起后的图标导航与项目分类浮层；[`Header.tsx`](frontend/src/components/Header.tsx) 管理导航开关与焦点；「摄影记录」下方提供带文字的「联系我」菜单，与前一项额外间隔 16px；收起侧栏时使用对应图标入口，移动端抽屉保持相同顺序；[`PageToolbar.tsx`](frontend/src/components/PageToolbar.tsx) 在所有页面右上角提供主题按钮，仅在首页对话入口及聊天界面且存在非空历史对话时展示历史按钮，使用无边框图标 |
@@ -91,7 +91,7 @@ npm run dev
   ```
 
   章节 ID 为 `work`、`projects`、`education`、`contact`；条目 ID 在同一文件中唯一，同义条目长期稳定保持一致，改标题或顺序时保留 ID。新增工作条目会自动展示，项目卡片跟随 `oceanbase` 条目；教育经历在工作经历与联系方式之间展示学校、专业、学历和时间，完整教育数据继续供聊天使用。重复或缺失 ID 会报错。
-- 博客由外部 Notion 承载，侧栏保留链接但暂时隐藏入口；顶部导航不展示博客入口，项目不再提供站内博客页面。
+- 「随便写写」由外部 Notion 承载，位于 AI 设计工程下方，间距 24px；悬停或键盘聚焦显示右侧外链图标，新页签打开。展开侧栏、收起栏和移动抽屉共用 WritingLink；无站内博客页面。
 - 聊天语料由本地项目、About 与翻译资源汇总，见 `buildSiteCorpus`。首次打开聊天时加载 `ChatPanel` 并生成当前语言语料；通过侧栏或站点标志离开聊天后保留会话和进行中的流式响应。首页提问、新建和历史选择操作由 `App` 按有序命令转交并消费一次；问题绑定所属会话，已有回复进行中时排队等待。不同会话可以并行生成，停止按钮只影响当前会话并保留已显示文本。聊天界面不展示返回按钮，历史入口仅在首页对话入口与聊天界面且存在非空历史对话时于右上角展示，列表支持查看、续聊和单条删除，删除前通过锚定移除按钮的 `Popconfirm` 气泡确认；删除当前聊天后返回首页，删除其他记录保留当前页面和对话，删除生成中的记录会取消其请求及队列。删除失败保留原记录供重试，同源标签页通过存储事件同步删除。历史按会话保存在版本化 `localStorage` 中，流式内容每 500ms 最多保存一次，结束、停止或离开页面立即保存；首次发送才进入历史。标题通过本地规则将首条提问归纳为主题，已有记录读取时同样归纳，不额外请求模型、不修改消息内容或历史排序。旧 `sessionStorage` 单会话成功迁移后移除旧副本，刷新恢复内容但不自动重发中断请求；存储失败时保留内存聊天并提示未保存。
 - 联系弹窗由 `App` 的页面内状态控制，打开和关闭均不修改 URL 或浏览器历史，保留原页面的锚点、聊天状态和滚动位置；支持确认按钮、遮罩与 Escape 关闭，实际切换路由后自动关闭。
 - 摄影读取本地 JSON 快照和图片；维护流程见 [`docs/instagram-sync.md`](docs/instagram-sync.md)。
