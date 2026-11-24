@@ -1162,7 +1162,8 @@
 .datapilot-delivery-path { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; list-style: none; padding: 0; margin: 0; }
 .datapilot-delivery-path li { padding: 0; margin: 0; }
 .case-study-page .datapilot-delivery-path h3 { margin: 0 0 12px; font-size: var(--text-base); line-height: 1.6; font-weight: var(--weight-semibold); }
-.case-study-page .datapilot-delivery-path p { margin: 0; color: var(--muted); font-size: var(--text-sm); line-height: 1.8; }
+.case-study-page .datapilot-delivery-points { margin: 0; padding-left: 1.2em; list-style: disc; color: var(--muted); font-size: var(--text-sm); line-height: 1.8; }
+.case-study-page .datapilot-delivery-points li + li { margin-top: 6px; }
 @container site-main (max-width: 700px) {
   .datapilot-delivery-path { grid-template-columns: 1fr; gap: 24px; }
 }

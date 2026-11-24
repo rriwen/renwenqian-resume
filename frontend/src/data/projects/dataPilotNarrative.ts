@@ -107,13 +107,13 @@ export function createDataPilotNarrative(source: DataPilotSection[]): DataPilotS
     section('delivery', '协作与交付',
       '从快速探索到规则沉淀，让前端体验逐步成型。围绕 Agent 的任务执行，与研发共同调整执行流程与判断条件，明确各阶段的界面状态、异常报错和后续操作反馈。设计侧负责交互规则与前端呈现，研发侧负责底层上下文组装、权限校验和工具调用。', {
         steps: [
-          { title: 'Figma Make', detail: '前期通过 Figma Make 快速搭建产品前端交互原型，与项目组共同探索产品形态和交互方案。' },
-          { title: 'DESIGN.md', detail: '针对全局样式难以统一的问题，梳理 Design Token 与基础设计规则，整理为 DESIGN.md，作为前端实现的全局约束。' },
-          { title: 'AI 对话组件库', detail: '随着 AI 对话功能开发，Agent 生成的界面不稳定、布局模式混乱，多位开发同学也开始并行参与。因此沉淀 AI 对话组件库，并通过 DESIGN.md 明确组件用法与布局规则。' },
+          { title: 'Figma Make', detail: '快速搭建交互原型\n共同探索产品形态\n讨论交互方案' },
+          { title: 'DESIGN.md', detail: '梳理 Design Token\n沉淀基础设计规则\n统一前端样式约束' },
+          { title: 'AI 对话组件库', detail: '沉淀可复用对话组件\n明确组件用法与布局规则\n支持多人并行开发' },
         ],
       }),
     section('results', '当前成果',
-      '随着产品整体迭代，应用生成采纳率从 15% 逐步提升到 60%。这是多项产品与体验优化共同作用下的结果，不能直接归因于某一个页面或交互决策。', {
+      '随着产品整体迭代，应用生成采纳率逐步提升。', {
         adoptionResult: results.adoptionResult,
         bullets: results.bullets,
       }),
