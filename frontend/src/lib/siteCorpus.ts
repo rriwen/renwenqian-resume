@@ -1,7 +1,7 @@
 import { projectDescriptions } from '../data/homeProjects'
 import { getProjectTitle, projects } from '../data/projects'
 import { getProjectDetail, type ProjectDetailBlock, type ProjectDetailParagraph, type ProjectDetailTable } from '../data/projectDetails'
-import { getDataPilotContent } from '../data/projects/dataPilot'
+import { DATA_PILOT_VISIBLE_PARTS, getDataPilotContent } from '../data/projects/dataPilot'
 import { getAboutContent, stripMarkdownInline } from '../content/about'
 import { translations, type Locale } from '../i18n/translations'
 import { getCaseStudyIntroduction, getCaseStudyMethods } from '../data/projects/caseStudyPresentation'
@@ -120,11 +120,12 @@ function serializeProjectBlock(block: ProjectDetailBlock): string {
   return parts.join('\n\n')
 }
 
-/** Serialize the same content that the three case-study tabs render. */
+/** Serialize the same content that the case-study tabs render. */
 function serializeDataPilot(locale: Locale): string {
   const content = getDataPilotContent(locale)
   const lines = [content.lead, `Link: ${content.demoUrl}`]
-  for (const part of Object.values(content.parts)) {
+  for (const key of DATA_PILOT_VISIBLE_PARTS) {
+    const part = content.parts[key]
     lines.push(`#### ${part.title}`)
     let previousGroup: string | undefined
     for (const section of part.sections) {

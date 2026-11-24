@@ -212,3 +212,7 @@ Text2SQL 工作流按 OBCloud 技术文章（https://open.oceanbase.com/blog/177
 首页精选项目描述来自 `frontend/src/data/homeProjects.ts`，由首页与聊天语料共享。DESIGN.md 黑色文档结构图为模拟界面，保留示意图语境并排除聊天真实媒体清单。
 
 手机端（700px 及以下）导航抽屉占满屏宽，阅读页正文段落和列表两端对齐、末行左对齐。首页推荐问题在可容纳时居中，最近项目按页面可用高度靠底排列，短屏自然滚动，不使用固定定位覆盖正文。
+
+Data Agent 默认展示「对话体验设计」Tab（`narrative`），正文由 `data/projects/dataPilotNarrative.ts` 组织并复用原版素材与结果指标；产品体验设计与 POC 仅保留旧深链接，不进入导航与当前聊天语料。新增章节采用 `narrative-*` 稳定 ID；`editorialNotes` 仅作可折叠的待补材料说明，不进入聊天事实或媒体清单。
+
+Data Agent「协作与交付」通过 `DataPilotDelivery.tsx` 展示 Figma Make、DESIGN.md 与 AI 对话组件库三个阶段，协作分工放在正文。内容来自 `dataPilotNarrative.ts` 的 `body` 与 `steps`；页面与聊天共用，渐变展板样式位于 `datapilot.css`，窄屏纵向排列。当前 Tab 与聊天语料共用 `DATA_PILOT_VISIBLE_PARTS`；聊天媒体使用 narrative 真实配图并链接到对应章节。

@@ -4,21 +4,22 @@ import type { DataPilotPart } from '../../data/projects/dataPilot'
 
 type Props = {
   label: string
+  currentLabel?: string
   value: DataPilotPart
   options: { value: DataPilotPart; label: string }[]
   onSelect: (value: DataPilotPart) => void
 }
 
-export function DataPilotPartMenu({ label, value, options, onSelect }: Props) {
+export function DataPilotPartMenu({ label, currentLabel, value, options, onSelect }: Props) {
   const [open, setOpen] = useState(false)
   const [focusedIndex, setFocusedIndex] = useState(0)
   const rootRef = useRef<HTMLDivElement>(null)
   const triggerRef = useRef<HTMLButtonElement>(null)
   const itemRefs = useRef<(HTMLButtonElement | null)[]>([])
   const menuId = useId()
-  const selected = options.find((option) => option.value === value)!
+  const selected = options.find((option) => option.value === value) ?? { label: currentLabel ?? label }
   const openMenu = () => {
-    setFocusedIndex(options.findIndex((option) => option.value === value))
+    setFocusedIndex(Math.max(0, options.findIndex((option) => option.value === value)))
     setOpen(true)
   }
   const closeAndFocus = () => {

@@ -34,9 +34,9 @@ export function getChatProjectImages(locale: Locale): ChatProjectImage[] {
       })
     }
     if (project.slug === 'dataagent') {
-      // Growth exploration reuses experience screenshots as placeholders, including unmarked EN captions.
-      for (const section of getDataPilotContent(locale).parts.experience.sections) {
-        for (const image of section.images) add(image, section.title, section.id)
+      // Only current narrative evidence is used; growth images include placeholders.
+      for (const section of getDataPilotContent(locale).parts.narrative.sections) {
+        for (const image of section.images) add({ ...image, src: image.src.split(/[?#]/)[0] }, section.title, section.id)
         for (const image of section.evolutionMedia ?? []) {
           if (image.src) add({ src: image.src, caption: image.caption }, section.title, section.id)
         }

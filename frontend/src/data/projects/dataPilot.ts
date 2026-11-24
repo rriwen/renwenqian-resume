@@ -3,9 +3,14 @@ import type { ProjectDetailTable } from '../projectDetails'
 import type { Locale } from '../../i18n/translations'
 import { getProjectBySlug, getProjectTitle } from '../projects'
 
-export type DataPilotPart = 'experience' | 'poc' | 'growth'
+import { createDataPilotNarrative } from './dataPilotNarrative'
+
+export type DataPilotPart = 'experience' | 'narrative' | 'poc' | 'growth'
+export const DATA_PILOT_VISIBLE_PARTS = ['narrative', 'growth'] as const
 export type DataPilotSection = {
   id: string
+  /** Editorial requests, excluded from chat facts and media. */
+  editorialNotes?: string[]
   legacyIds?: string[]
   group?: { id: string; title: string }
   groupIntro?: boolean
@@ -226,45 +231,40 @@ function createDataPilotContent(locale: Locale) {
   {
     "id": "product-evolution",
     "title": "产品形态演进",
-    evolutionRationale: [
-      '因此，产品逐步收敛到数据、应用与对话并列的多栏工作台，减少组织节点和翻找结果的操作，让用户围绕已有成果继续分析与调整。',
-    ],
-    evolutionRationaleEmphasis: "多栏工作台",
     "intro": "",
-    "body": "随着需求从临时查数延伸到生成并持续使用智能应用，产品先后探索了基础对话、无限画布与多栏工作台。结合内部用户测试和访谈，重点比较三种形态能否帮助用户组织分析结果、继续探索，并减少额外操作。",
+    "body": "随着需求从临时查数延伸到生成并持续使用智能应用，产品先后探索了基础对话、无限画布与多栏工作台。结合内部用户测试和访谈，重点比较三种形态能否帮助用户组织分析结果、继续探索，并减少额外操作。\n\n基础对话降低了入口门槛，但分析结果容易散落在消息中；无限画布把分析过程展开成节点，用户可以从一张图继续追问，也可以把多个结果组合成应用；多栏工作台将数据、应用与对话并列，围绕已有应用继续分析，保留可阅读的成果。",
     "designPlaceholder": "无限画布探索稿｜展示创建对话节点后生成多种图表、选择所需图表并结合对话节点继续生成应用的过程，标明选中对象及其与后续对话的关系。",
     "evolutionMedia": [
       {
-        "src": "/images/datapilot-ai-serial-execution.png",
-        "caption": "问数：在对话中查看结果与继续追问",
-        title: '早期 · 基础对话',
-        description: '以对话作为统一入口，将查询结果直接返回到消息中，优先降低临时取数的使用门槛。',
+        "src": "/images/datapilot-multicolumn-workbench.png",
+        "caption": "持续对话：应用与 AI 对话并列展示",
+        title: '当前 · 多栏工作台',
+        description: '数据、应用和对话各有固定位置，让分析过程与可交付成果同时保留。',
         tradeoffs: [
-          { kind: 'advantage', text: '直接提问，无需学习查询语法' },
-          { kind: 'problem', text: '结果分散在消息中，不便对照' },
-          { kind: 'problem', text: '成果依附对话，难以更新复用' },
+          { kind: 'advantage', text: '同屏核对数据和图表' },
+          { kind: 'advantage', text: '围绕看板追问，保留原版' },
+          { kind: 'advantage', text: '报告和看板可单独交付' },
         ],
       },
       {
         "src": "/images/datapilot-infinite-canvas.png",
         "caption": "无限画布：选择图表继续对话，并汇总生成应用",
         title: '探索 · 无限画布',
-        description: '为解决结果分散的问题，将图表呈现为可选择、组合的节点，支持分支追问与应用生成。',
+        description: '把问题和分析结果放到画布上，用节点呈现不同的探索路径。',
         tradeoffs: [
-          { kind: 'advantage', text: '选择图表追问，自由组合成果' },
-          { kind: 'problem', text: '需理解并组织节点，操作成本高' },
-          { kind: 'problem', text: '生成的应用缺少持续对话入口' },
+          { kind: 'advantage', text: '选一张图继续追问' },
+          { kind: 'advantage', text: '组合多个结果生成应用' },
         ],
       },
       {
-        "src": "/images/datapilot-multicolumn-workbench.png",
-        "caption": "持续对话：应用与 AI 对话并列展示",
-        title: '当前 · 多栏工作台',
-        description: '为降低理解学习成本，并承接应用生成后的工作，将数据、应用与对话分栏呈现，让用户围绕已有应用继续分析与调整。',
+        "src": "/images/datapilot-ai-serial-execution.png",
+        "caption": "问数：在对话中查看结果与继续追问",
+        title: '早期 · 基础对话',
+        description: '以对话作为统一入口，将查询结果直接返回到消息中，支持侧栏展开查看执行过程。',
         tradeoffs: [
-          { kind: 'advantage', text: '数据与应用同屏，边分析边核对' },
-          { kind: 'advantage', text: '围绕当前应用追问，无需翻找对话' },
-          { kind: 'advantage', text: '自由对话探索，已有应用持续可用' },
+          { kind: 'advantage', text: '直接提问，无需学习查询语法' },
+          { kind: 'problem', text: '结果分散在消息中，不便对照' },
+          { kind: 'problem', text: '成果依附对话，难以更新复用' },
         ],
       }
     ],
@@ -1320,6 +1320,7 @@ function createDataPilotContent(locale: Locale) {
     lead: '让用户用自然语言分析数据，将结果生成可查看、修改和分享的报告与仪表盘',
     parts: {
       experience: { title: '产品体验设计', sections },
+      narrative: { title: '对话体验设计', sections: createDataPilotNarrative(sections) },
       poc: { title: 'POC 场景验证', sections: pocSections },
       growth: { title: '海外 SaaS 探索', sections: growthSections },
     },

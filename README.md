@@ -41,6 +41,7 @@ npm run dev
 | 同一项目的独立展示入口 | [`frontend/src/data/projectViews.ts`](frontend/src/data/projectViews.ts) 维护导航视图与来源项目映射；`getProjectNavigationGroups` 使用项目正式地址且不再增加别名入口，桌面侧栏、收起栏和移动抽屉共用；视图不加入 `projects` 清单，不重复生成聊天语料 |
 | 通用项目详情文案、图文章节和画廊 | [`frontend/src/data/projectDetails.ts`](frontend/src/data/projectDetails.ts)；`sections` 将章节标题、正文、可选表格与配图绑定，`subsections` 保存章节内的小标题、正文、圆点列表、可选表格与配图，页面和聊天共用 |
 | DataPilot 文案、链接、配图 | [`frontend/src/data/projects/dataPilot.ts`](frontend/src/data/projects/dataPilot.ts)，页面与聊天共用；POC 以制造业为主线，依据演示准备材料组织业务理解、场景筛选、指标映射、演示数据、连续任务、评价要求和阶段产出；保留六个原章节深链接，新增 `poc-demo-data`，区分意向演示、正式验证与模拟数据；`DataPilotPocSection.tsx` 复用产品体验的单标题正文、加粗标签列表与 `DetailTable.tsx`，任务示例说明和验证边界同步进入聊天语料 |
+| Data Agent 对话体验设计 Tab | [`data/projects/dataPilotNarrative.ts`](frontend/src/data/projects/dataPilotNarrative.ts) 提供独立叙事，复用原版演进素材与结果指标；默认展示 narrative，仅展示对话体验设计与海外 SaaS 探索；旧正文深链接保留，`editorialNotes` 仅展示待补材料，不进入聊天事实 |
 | 设计工程案例与分层架构图 | [`frontend/src/data/projects/designEngineering.ts`](frontend/src/data/projects/designEngineering.ts) 保存中文文案与架构数据，正文按设计资产、规则映射、项目应用组织，页面和聊天共用；[`ProjectArchitecture.tsx`](frontend/src/components/project/ProjectArchitecture.tsx) 与 [`project-architecture.css`](frontend/src/styles/components/project-architecture.css) 绘制四层架构，保留旧 `design-highlights` / `project-gallery` / `connections` 深链接 |
 | 开发编辑器合集 | [`DevelopmentEditorsCaseStudy.tsx`](frontend/src/components/project/DevelopmentEditorsCaseStudy.tsx) 在 `/project/datadevelop` 以 SQL 编辑器、任务流编辑器两个 Tab 复用原案例；`?editor=workflow` 保存所选内容，旧 `/project/workflow-editor` 保留查询与 Hash 重定向到对应 Tab；导航仅展示「开发编辑器」 |
 | 项目详情布局 | [`ProjectDetail.tsx`](frontend/src/pages/ProjectDetail.tsx) 分派；[`components/project/`](frontend/src/components/project/) 包含通用详情、DataPilot、画廊、图片查看器和共用锚点导航；DataPilot 正文 tab 切换保持滚动位置，顶部下拉菜单和深链接仍定位章节 |
@@ -254,3 +255,5 @@ Text2SQL 工作流按 OBCloud 技术文章（https://open.oceanbase.com/blog/177
 首页精选项目描述来自 `frontend/src/data/homeProjects.ts`，由首页与聊天语料共享。DESIGN.md 黑色文档结构图为模拟界面，保留示意图语境并排除聊天真实媒体清单。
 
 手机端（700px 及以下）导航抽屉占满屏宽，阅读页正文段落和列表两端对齐、末行左对齐。首页推荐问题在可容纳时居中，最近项目按页面可用高度靠底排列，短屏自然滚动，不使用固定定位覆盖正文。
+
+Data Agent「协作与交付」通过 `DataPilotDelivery.tsx` 展示 Figma Make、DESIGN.md 与 AI 对话组件库三个阶段，协作分工放在正文。内容来自 `dataPilotNarrative.ts` 的 `body` 与 `steps`；页面与聊天共用，渐变展板样式位于 `datapilot.css`，窄屏纵向排列。当前 Tab 与聊天语料共用 `DATA_PILOT_VISIBLE_PARTS`；聊天媒体使用 narrative 真实配图并链接到对应章节。

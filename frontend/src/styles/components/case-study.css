@@ -127,6 +127,44 @@
   display: flex;
   align-items: center;
 }
+:is(#narrative-clarification, #narrative-exploration, #narrative-publishing, #narrative-diagnosis) .case-study-carousel-slide .case-study-media {
+  aspect-ratio: auto;
+  display: block;
+  padding-bottom: 48px;
+}
+:is(#narrative-exploration, #narrative-publishing) .screenshot-carousel:not(:has(.qa-carousel-controls)) .case-study-media {
+  padding-bottom: clamp(16px, 2.2vw, 32px);
+}
+:is(#narrative-clarification, #narrative-exploration, #narrative-publishing, #narrative-diagnosis) .screenshot-carousel {
+  position: relative;
+}
+:is(#narrative-clarification, #narrative-exploration, #narrative-publishing, #narrative-diagnosis) .qa-carousel-controls {
+  position: absolute;
+  right: 0;
+  bottom: 10px;
+  left: 0;
+}
+:is(#narrative-clarification, #narrative-exploration, #narrative-publishing, #narrative-diagnosis) .case-study-media > button {
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 12px !important;
+}
+:is(#narrative-clarification, #narrative-exploration, #narrative-publishing, #narrative-diagnosis) .case-study-media img {
+  height: auto !important;
+  object-fit: contain;
+  border-radius: 12px;
+}
+:is(#narrative-clarification, #narrative-exploration, #narrative-publishing, #narrative-diagnosis) .datapilot-evidence {
+  align-self: start;
+  margin-top: 0;
+}
+:is(#narrative-clarification, #narrative-exploration, #narrative-publishing, #narrative-diagnosis) .datapilot-decision-layout > .project-detail-subsection-list {
+  margin-top: 24px;
+}
+:is(#narrative-clarification, #narrative-exploration, #narrative-publishing, #narrative-diagnosis) .project-detail-gallery {
+  margin: 0;
+}
 .case-study-page[data-project-slug="text2sql"] .qa-carousel-controls button span { background: var(--rule); }
 .case-study-page[data-project-slug="text2sql"] .qa-carousel-controls button[aria-pressed='true'] span { background: var(--muted); }
 .case-study-page[data-project-slug="text2sql"] .qa-carousel-dots i { background: var(--text); }

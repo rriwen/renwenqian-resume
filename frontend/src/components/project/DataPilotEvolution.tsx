@@ -7,7 +7,7 @@ import { CaseStudyGallery, CaseStudyPlaceholder } from './CaseStudyMedia'
 export function DataPilotEvolution({ section }: { section: DataPilotSection }) {
   const media = section.evolutionMedia ?? []
   const lightboxItems = media.filter(item => item.src).map(item => ({ src: item.src!, caption: item.caption }))
-  const [selected, setSelected] = useState(() => Math.max(0, media.length - 1))
+  const [selected, setSelected] = useState(0)
   const buttons = useRef<(HTMLButtonElement | null)[]>([])
   return <div className="datapilot-evolution">
     <div role="tablist" aria-label={section.title} aria-orientation="vertical">
@@ -41,7 +41,7 @@ export function DataPilotEvolution({ section }: { section: DataPilotSection }) {
         </button>
       })}
     </div>
-    <div id="evolution-panel" data-stage={selected} role="tabpanel" aria-labelledby={`evolution-tab-${selected}`} tabIndex={0}>
+    <div id="evolution-panel" data-stage={media[selected]?.title?.startsWith('当前') ? 2 : media[selected]?.title?.startsWith('探索') ? 1 : 0} role="tabpanel" aria-labelledby={`evolution-tab-${selected}`} tabIndex={0}>
       {media[selected]?.src
         ? <CaseStudyGallery lightboxItems={lightboxItems} items={[{ src: media[selected].src!, caption: media[selected].caption, hideCaption: true }]} />
         : <CaseStudyPlaceholder title={section.designPlaceholder ?? media[selected]?.caption} />}

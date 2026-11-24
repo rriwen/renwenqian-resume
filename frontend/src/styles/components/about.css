@@ -126,6 +126,7 @@
 
 .about-project-card-content .about-project-achievements strong {
   color: var(--text);
+  font-size: inherit;
   font-weight: 600;
 }
 

@@ -4,7 +4,7 @@ import { test } from 'node:test'
 import { getAdjacentProjects, getProjectBySlug, getProjectGroups, getProjectTitle, projectCategories, projects } from '../frontend/src/data/projects'
 import { DATABASE_OPS_PROTOTYPE_URL, getProjectDetail } from '../frontend/src/data/projectDetails'
 import { getProjectAnchors } from '../frontend/src/data/projectAnchors'
-import { DATA_PILOT_DEMO_URL, getDataPilotContent } from '../frontend/src/data/projects/dataPilot'
+import { DATA_PILOT_DEMO_URL, DATA_PILOT_VISIBLE_PARTS, getDataPilotContent } from '../frontend/src/data/projects/dataPilot'
 import { getDatabaseOpsFunnel, getFunnelStageMetrics } from '../frontend/src/data/projects/databaseOps'
 import { translations } from '../frontend/src/i18n/translations'
 import { interviewSystemPrompts } from '../frontend/src/lib/chat/interviewPrompt'
@@ -14,7 +14,7 @@ import { buildSiteCorpus } from '../frontend/src/lib/siteCorpus'
 
 const locales = ['zh'] as const
 
-test('POC retains deep links and shares task examples with their evidence boundaries in chat', () => {
+test('hidden POC retains deep links without entering current chat facts', () => {
   const sections = getDataPilotContent('zh').parts.poc.sections
   assert.deepEqual(new Set(sections.map(section => section.id)), new Set([
     'poc-validation', 'poc-haier-scope', 'poc-haier-metrics', 'poc-haier-task',
@@ -23,16 +23,8 @@ test('POC retains deep links and shares task examples with their evidence bounda
   const corpus = buildSiteCorpus('zh')
   const task = sections.find(section => section.id === 'poc-haier-task')!
   assert.ok(task.beforeTable?.includes('不代表客户原话或已验证效果'))
-  for (const section of sections) {
-    for (const text of [section.title, section.intro, section.body, section.beforeTable, section.afterTable, ...(section.bullets ?? []), ...(section.steps ?? []).flatMap(step => [step.title, step.detail])]) {
-      if (text) assert.ok(corpus.includes(text), `Missing POC content: ${text}`)
-    }
-    for (const row of section.table?.rows ?? []) {
-      for (const cell of row.cells) if (typeof cell === 'string') assert.ok(corpus.includes(cell))
-    }
-  }
-  assert.ok(corpus.includes('模拟记录只用于演示，正式效果需用授权数据验证'))
-  assert.ok(corpus.includes('以下为验证与交付要求，不代表已经达到的效果'))
+  assert.ok(!corpus.includes('#### POC 场景验证'))
+  for (const section of sections) assert.ok(!corpus.includes(section.body), 'Hidden POC prose must not enter current chat facts')
 })
 
 test('site content exposes only Chinese translations and retains complete case sections', () => {
@@ -182,7 +174,7 @@ test('database ops sections keep image associations and complete chat content', 
       assert.ok(corpus.includes(typeof text === 'string' ? text : text.map((run) => run.text).join('')), 'Nested comparisons must remain in the chat corpus')
     }
     for (const image of stepper.options.flatMap(({ images }) => images)) {
-      assert.ok(existsSync(`frontend/public${image.src}`), `Missing nested comparison image: ${image.src}`)
+      assert.ok(existsSync(`frontend/public${image.src.split(/[?#]/)[0]}`), `Missing nested comparison image: ${image.src}`)
     }
     const diagnosis = getProjectDetail('databaseops', locale)!.sections!.find(({ id }) => id === 'diagnosis')!
     const migrationAnalysis = getProjectDetail('databaseops', locale)!.sections!.find(({ id }) => id === 'migration-analysis')!
@@ -281,7 +273,7 @@ for (const locale of locales) {
     assert.ok(!corpus.includes('datapilot-rho-gilt.vercel.app'))
     assert.ok(corpus.includes(content.lead))
     for (const paragraph of content.paragraphs) assert.ok(!corpus.includes(paragraph), 'Hidden legacy introductions must not override current page content')
-    for (const part of Object.values(content.parts)) {
+    for (const part of DATA_PILOT_VISIBLE_PARTS.map(key => content.parts[key])) {
       for (const section of part.sections) {
         if (section.group) assert.ok(corpus.includes(section.group.title))
         for (const image of section.images) {
@@ -289,7 +281,7 @@ for (const locale of locales) {
         }
       }
     }
-    for (const part of Object.values(content.parts)) {
+    for (const part of DATA_PILOT_VISIBLE_PARTS.map(key => content.parts[key])) {
       assert.ok(part.title.trim())
       assert.ok(part.sections.length)
       assert.equal(new Set(part.sections.map((section) => section.id)).size, part.sections.length)
@@ -343,36 +335,11 @@ test('DataPilot experience keeps product proposals and outcomes explicit', () =>
   assert.deepEqual(zh.filter(section => section.group?.id === 'continuous-dialogue' && !section.groupIntro).map(section => section.tabLabel), ['连续追问', '修改应用', '使用应用'])
   assert.ok(!zh.filter(section => section.group?.id === 'continuous-dialogue').some(section => section.body.includes('指代')))
   assert.deepEqual(zh.filter(section => section.group?.id === 'agent-troubleshooting').map(section => section.id), ['agent-troubleshooting-overview', 'agent-replay', 'agent-evidence', 'agent-latency'])
-  for (const locale of ['zh'] as const) {
-    const sections = getDataPilotContent(locale).parts.experience.sections
-    const corpus = buildSiteCorpus(locale)
-    assert.ok(sections.some((section) => section.designPlaceholder), 'Keep coverage for editorial image briefs')
-    for (const section of sections) {
-      if (section.designPlaceholder) assert.ok(!corpus.includes(section.designPlaceholder), 'Editorial image briefs must not become chat facts')
-      if (section.qaExperience) {
-        assert.ok(corpus.includes(section.body), 'QA prose must reach chat in full')
-        if (section.qaExperience.materialBrief) assert.ok(!corpus.includes(section.qaExperience.materialBrief), 'Preparation notes must not become chat facts')
-        for (const decision of section.qaExperience.decisions) { assert.ok(corpus.includes(decision.title)); assert.ok(corpus.includes(decision.body)) }
-        if (section.qaExperience.bridge) assert.ok(corpus.includes(section.qaExperience.bridge))
-        const mockup = section.qaExperience.mockup
-        assert.ok(!corpus.includes(mockup.label), 'Mock interface labels must not enter personal facts')
-        if (mockup.kind === 'result') assert.ok(!corpus.includes(mockup.prompt), 'Simulated chart findings must not enter personal facts')
-      }
-      if (section.dialogue) {
-        assert.ok(corpus.includes(section.body), 'Dialogue scenarios must reach chat')
-        if (section.dialogue.tradeoff) assert.ok(corpus.includes(section.dialogue.tradeoff), 'Design challenges must reach chat')
-        assert.ok(corpus.includes(section.dialogue.visual.note), 'Interaction proposal boundaries must reach the shared corpus')
-        for (const decision of section.dialogue.decisions) { assert.ok(corpus.includes(decision.title)); assert.ok(corpus.includes(decision.body)) }
-        for (const frame of section.dialogue.visual.frames) {
-          assert.ok(corpus.includes(frame.prompt))
-          assert.ok(corpus.includes(frame.response))
-          for (const field of frame.fields) assert.ok(corpus.includes(field.value))
-        }
-      }
-      for (const lane of section.diagram?.lanes ?? []) {
-        for (const step of lane.steps) assert.ok(corpus.includes(step.response ?? step.title), 'Diagram content must reach the shared corpus')
-      }
-    }
+  const corpus = buildSiteCorpus('zh')
+  assert.ok(!corpus.includes('#### 产品体验设计'))
+  for (const section of zh) {
+    if (section.designPlaceholder) assert.ok(!corpus.includes(section.designPlaceholder))
+    if (section.qaExperience?.materialBrief) assert.ok(!corpus.includes(section.qaExperience.materialBrief))
   }
   for (const sections of [zh]) {
     const results = sections.find(({ id }) => id === 'role')!
@@ -447,4 +414,24 @@ test('editor corpus includes current table decisions and Text2SQL link without r
   assert.ok(!corpus.includes('版本管理、批量操作与智能辅助保留为后续方向'))
   assert.ok(!corpus.includes('原始文章：从零到一，任务流编辑器设计分析'))
   assert.ok(!corpus.includes('/images/workflow-editor-design-article.png'))
+})
+
+test('Data Agent narrative preserves original evidence and excludes editorial requests from chat', () => {
+  const { parts } = getDataPilotContent('zh')
+  assert.deepEqual(DATA_PILOT_VISIBLE_PARTS, ['narrative', 'growth'])
+  const media = getChatProjectImages('zh').filter(image => image.projectPath.startsWith('/project/dataagent#'))
+  assert.ok(media.length > 0)
+  assert.ok(media.every(image => image.projectPath.includes('#narrative-')))
+  assert.ok(media.every(image => existsSync(`frontend/public${image.src}`)))
+  assert.ok(media.some(image => image.src.endsWith('datapilot-latency-flame.png')))
+  const originalIds = new Set(Object.values(parts).filter(part => part !== parts.narrative).flatMap(part => part.sections.map(section => section.id)))
+  const corpus = buildSiteCorpus('zh')
+  for (const section of parts.narrative.sections) {
+    assert.ok(!originalIds.has(section.id))
+    assert.ok(corpus.includes(section.title))
+    for (const note of section.editorialNotes ?? []) assert.ok(!corpus.includes(note))
+    for (const image of section.images) assert.ok(existsSync(`frontend/public${image.src.split(/[?#]/)[0]}`))
+  }
+  assert.strictEqual(parts.narrative.sections.find(section => section.id === 'narrative-results')!.adoptionResult, parts.experience.sections.find(section => section.id === 'role')!.adoptionResult)
+  assert.strictEqual(parts.narrative.sections.find(section => section.id === 'narrative-workspace')!.evolutionMedia, parts.experience.sections.find(section => section.id === 'product-evolution')!.evolutionMedia)
 })

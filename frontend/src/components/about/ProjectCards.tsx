@@ -34,7 +34,6 @@ export function ProjectCards({ projects, locale: _locale }: { projects: AboutCon
       {projects.map((project) => {
         const expanded = expandedProjects.has(project.id)
         const ResponsibilitiesList = project.responsibilitiesOrdered ? 'ol' : 'ul'
-        const AchievementsList = project.achievementsOrdered ? 'ol' : 'ul'
         return (
           <article key={project.id} id={`about-project-${project.id}`} className="about-project-card">
             <div className={`about-project-card-header${projectPaths[project.id] ? ' has-detail-link' : ''}`}>
@@ -79,11 +78,13 @@ export function ProjectCards({ projects, locale: _locale }: { projects: AboutCon
                     {project.responsibilities.map((item, itemIndex) => <li key={itemIndex} style={{ marginBottom: itemIndex < project.responsibilities.length - 1 ? 'var(--space-2)' : 0 }}>{renderMarkdownInline(item)}</li>)}
                   </ResponsibilitiesList>
                 ) : null}
-                <p style={{ ...bodyText, margin: 'var(--space-6) 0 var(--space-2)' }}><strong>{(['analytics', 'database-operations', 'data-development', 'design-engineering'].includes(project.id) ? '业绩成果' : '业绩')}</strong></p>
                 {project.achievements.length > 0 ? (
-                  <AchievementsList className="about-project-achievements" style={{ ...workArticleList, marginTop: 0, marginBottom: 0 }}>
-                    {project.achievements.map((item, itemIndex) => <li key={itemIndex} style={{ marginBottom: itemIndex < project.achievements.length - 1 ? 'var(--space-2)' : 0 }}>{renderMarkdownInline(item)}</li>)}
-                  </AchievementsList>
+                  <>
+                    <p style={{ ...bodyText, margin: 'var(--space-6) 0 var(--space-2)' }}><strong>业绩</strong></p>
+                    <div className="about-project-achievements">
+                      {project.achievements.map((item, itemIndex) => <p key={itemIndex} style={{ ...bodyText, margin: itemIndex > 0 ? 'var(--space-2) 0 0' : 0 }}>{renderMarkdownInline(item)}</p>)}
+                    </div>
+                  </>
                 ) : null}
               </>}
             </div>
