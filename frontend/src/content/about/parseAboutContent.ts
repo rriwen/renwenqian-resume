@@ -13,6 +13,7 @@ export type AboutWorkEntry = {
 }
 
 export type AboutEducationEntry = {
+  summary?: string
   id: string
   title: string
   period: string
@@ -321,6 +322,7 @@ export function parseAboutContent(source: string): AboutContent {
       title: educationArticle.title,
       period: parsedEducation.period,
       items: parsedEducation.bullets,
+      summary: parsedEducation.summary,
     },
     contact: parseContactSection(contactSection.lines),
   }

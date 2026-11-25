@@ -235,6 +235,7 @@ function serializeAbout(locale: Locale): string {
   lines.push(`#### ${'教育'}`)
   lines.push(`### ${about.education.title}`)
   lines.push(`> ${stripMarkdownInline(about.education.period)}`)
+  if (about.education.summary) lines.push(stripMarkdownInline(about.education.summary))
   for (const item of about.education.items) {
     lines.push(`- ${stripMarkdownInline(item)}`)
   }

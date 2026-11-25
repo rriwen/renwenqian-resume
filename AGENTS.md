@@ -216,3 +216,5 @@ Text2SQL 工作流按 OBCloud 技术文章（https://open.oceanbase.com/blog/177
 Data Agent 默认展示「对话体验设计」Tab（`narrative`），正文由 `data/projects/dataPilotNarrative.ts` 组织并复用原版素材与结果指标；产品体验设计与 POC 仅保留旧深链接，不进入导航与当前聊天语料。新增章节采用 `narrative-*` 稳定 ID；`editorialNotes` 仅作可折叠的待补材料说明，不进入聊天事实或媒体清单。
 
 Data Agent「协作与交付」通过 `DataPilotDelivery.tsx` 展示 Figma Make、DESIGN.md 与 AI 对话组件库三个阶段，协作分工放在正文。内容来自 `dataPilotNarrative.ts` 的 `body` 与 `steps`；页面与聊天共用，渐变展板样式位于 `datapilot.css`，窄屏纵向排列。当前 Tab 与聊天语料共用 `DATA_PILOT_VISIBLE_PARTS`；聊天媒体使用 narrative 真实配图并链接到对应章节。
+
+关于页保留个人简介，工作与教育合并为连续时间轴，不显示分区标题；条目按公司／学校、角色与时间、简短工作描述排列，描述末尾不加句号，教育不展示描述。首节点为实心圆，其余为细描边圆；保留 experience、education 锚点。简介与时间轴最大宽度 680px。蚂蚁集团下的四个项目入口仅显示名称和角色，双列间距 12px、窄屏单列，悬停或键盘聚焦显示右上箭头。名称读取 projects.ts，角色与简短描述复用关于页 Markdown；完整履历和项目时间仍保留供聊天读取。页面不展示底部联系方式及其目录项，联系入口使用右上角按钮。呈现由 WorkEntry.tsx 与 styles/components/about.css 维护。

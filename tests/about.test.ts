@@ -74,7 +74,8 @@ test('reordered and newly added work entries retain IDs, content and renderable 
   }
   const html = content.work.map((entry) => renderToStaticMarkup(createElement(WorkEntry, { entry }))).join('')
   assert.match(html, /id="work-new-role"/)
-  assert.match(html, /新职责/)
+  assert.match(html, /新公司/)
+  assert.doesNotMatch(html, /新职责/)
   assert.equal((html.match(/<article /g) ?? []).length, 5)
 })
 
@@ -110,8 +111,22 @@ test('project cards expose one stable control target per project independent of 
     assert.ok(!entry.meta.includes(entry.summary))
     assert.equal(entry.bullets.length, 4)
     const html = renderToStaticMarkup(createElement(WorkEntry, { entry }))
-    assert.ok(html.indexOf(entry.summary) > html.indexOf('</header>'))
-    assert.ok(html.indexOf(entry.summary) < html.indexOf('<ul'))
-    assert.equal(content.work.find(work => work.id === 'ecidi')!.summary, undefined)
+    assert.ok(html.includes(entry.summary))
+    assert.doesNotMatch(html, /AI 产品需求与场景/)
+    assert.ok(content.work.find(work => work.id === 'ecidi')!.summary)
   }
+})
+
+
+test('About timeline summaries and current introduction remain available in chat', () => {
+  const content = parseAboutContent(sources.zh)
+  const corpus = buildSiteCorpus('zh')
+  for (const paragraph of content.introParagraphs) assert.ok(corpus.includes(stripMarkdownInline(paragraph)))
+  for (const entry of content.work) {
+    assert.ok(entry.summary)
+    assert.ok(corpus.includes(entry.summary))
+    const html = renderToStaticMarkup(createElement(WorkEntry, { entry, projects: content.projects }))
+    assert.ok(html.includes(entry.summary))
+  }
+  assert.ok(!content.education.summary)
 })

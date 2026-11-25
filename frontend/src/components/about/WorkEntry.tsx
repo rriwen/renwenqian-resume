@@ -1,43 +1,43 @@
-import type { AboutWorkEntry } from '../../content/about/parseAboutContent'
+import { ArrowUpRight } from '@phosphor-icons/react'
+import type { AboutWorkEntry, AboutProjectEntry } from '../../content/about/parseAboutContent'
 import { renderMarkdownInline } from './renderMarkdownInline'
-import { bodyText, anchorTarget, workArticleHeader, workArticleList, workArticleMeta, proseColumn, workArticleTitle } from './styles'
+import { getProjectBySlug } from '../../data/projects'
 
-// Presentation belongs to stable content IDs, never to array order or translated titles.
-export const PROJECTS_WORK_ID = 'oceanbase'
-const PARAGRAPH_WORK_IDS = new Set(['leishu', 'puhuai'])
+const projectSlugs: Record<string, string> = {
+  analytics: 'dataagent',
+  'design-engineering': 'aidesignsystem',
+  'database-operations': 'databaseops',
+  'data-development': 'datadevelop',
+}
 
-export function WorkEntry({ entry }: { entry: AboutWorkEntry }) {
-  const hasProjects = entry.id === PROJECTS_WORK_ID
+export function WorkEntry({ entry, projects = [] }: { entry: AboutWorkEntry; projects?: AboutProjectEntry[] }) {
   return (
-    <article
-      id={`work-${entry.id}`}
-      style={{
-        ...anchorTarget,
-        marginTop: hasProjects ? 'var(--space-8)' : 'var(--space-10)',
-        ...(hasProjects ? {} : { paddingTop: 'var(--space-8)' }),
-      }}
-    >
-      <div style={proseColumn}>
-        <header style={workArticleHeader}>
-          <h3 style={workArticleTitle}>{renderMarkdownInline(entry.title)}</h3>
-          <p style={workArticleMeta}>
-            {renderMarkdownInline(entry.meta)}
-            <span aria-hidden="true"> {'|'} </span>
-            {renderMarkdownInline(entry.period)}
-          </p>
-        </header>
-        {entry.summary && <p style={{ ...bodyText, margin: 'var(--space-4) 0 0' }}>{renderMarkdownInline(entry.summary)}</p>}
-        <ul style={{
-          ...workArticleList,
-          ...(hasProjects ? { marginBottom: 'var(--space-4)' } : {}),
-          ...(PARAGRAPH_WORK_IDS.has(entry.id) ? { listStyle: 'none', paddingLeft: 0 } : {}),
-        }}>
-          {entry.bullets.map((item, index) => (
-            <li key={item} style={{ marginBottom: index < entry.bullets.length - 1 ? 'var(--space-3)' : 0 }}>
-              {renderMarkdownInline(item)}
-            </li>
-          ))}
-        </ul>
+    <article id={`work-${entry.id}`} className="about-career-entry">
+      <div className="about-career-content">
+        <h3>{renderMarkdownInline(entry.meta)}</h3>
+        <p className="about-career-role">
+          {renderMarkdownInline(entry.title)}
+          <span className="about-career-separator"> | </span>
+          <span>{renderMarkdownInline(entry.period)}</span>
+        </p>
+        {entry.summary && <p className="about-career-summary">{renderMarkdownInline(entry.summary)}</p>}
+        {entry.id === 'oceanbase' && projects.length > 0 && (
+          <ul className="about-career-projects" aria-label="蚂蚁集团项目经历">
+            {projects.filter(project => projectSlugs[project.id]).map(project => (
+              <li key={project.id}>
+                <a href={`/project/${projectSlugs[project.id]}`}>
+                  <span className="about-career-project-info">
+                    <span className="about-career-project-title">{getProjectBySlug(projectSlugs[project.id])?.title ?? project.title}</span>
+                    <span className="about-career-project-meta">
+                      {project.role}
+                    </span>
+                  </span>
+                  <ArrowUpRight className="about-career-project-arrow" size={18} aria-hidden="true" />
+                </a>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </article>
   )
