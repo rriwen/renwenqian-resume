@@ -146,3 +146,7 @@ export function IconContrast({ size = 15 }: { size?: number }) {
     </svg>
   )
 }
+
+export function IconPlayground() {
+  return <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M8 3h8M10 3v6l-6 10a1.3 1.3 0 0 0 1.1 2h13.8a1.3 1.3 0 0 0 1.1-2L14 9V3M7.5 15h9" /></svg>
+}

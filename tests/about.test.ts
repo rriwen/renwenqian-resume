@@ -15,6 +15,27 @@ const sources = Object.fromEntries(['zh'].map((locale) => [
   readFileSync(resolve(process.cwd(), `frontend/src/content/about/${locale}.md`), 'utf8'),
 ]))
 
+test('PDF resume facts remain in chat even when the timeline hides detailed experience', () => {
+  const corpus = buildSiteCorpus('zh')
+  const content = parseAboutContent(sources.zh)
+  assert.ok(corpus.includes('来源：任文倩_产品设计师简历.pdf（主版）'))
+  assert.ok(corpus.includes('所在地：浙江杭州'))
+  for (const entry of content.work) {
+    for (const value of [entry.title, entry.meta, entry.period, ...entry.bullets]) {
+      assert.ok(corpus.includes(stripMarkdownInline(value)), entry.id)
+    }
+  }
+  for (const value of [content.education.title, content.education.period, ...content.education.items]) {
+    assert.ok(corpus.includes(stripMarkdownInline(value)))
+  }
+  for (const project of content.projects) {
+    assert.ok(corpus.includes(stripMarkdownInline(project.role)))
+    assert.ok(corpus.includes(stripMarkdownInline(project.period)))
+  }
+  assert.ok(corpus.includes('不能视为同一群体的直接提升'))
+  assert.ok(corpus.includes('是产品整体迭代结果'))
+})
+
 test('chat corpus includes About project responsibilities and achievements from the shared source', () => {
   const content = parseAboutContent(sources.zh)
   const corpus = buildSiteCorpus('zh')

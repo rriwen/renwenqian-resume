@@ -130,8 +130,8 @@ export const translations: Record<Locale, Messages> = {
       description: 'AI 产品设计师，专注 AI 产品、效率工具和复杂系统',
     },
     experiments: {
-      title: '一些尝试',
-      placeholder: '内容准备中。',
+      title: 'PlayGround',
+      placeholder: '🚧 正在施工中',
     },
     about: {
       title: '关于我 | 泗澄',

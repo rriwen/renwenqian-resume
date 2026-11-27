@@ -63,6 +63,7 @@ function AppFrame({ dark, onToggleTheme }: { dark: boolean; onToggleTheme: () =>
         <Routes>
           <Route path="/" element={<Home key={homeVersion} onAsk={askQuestion} dark={dark} onToggleTheme={onToggleTheme} />} />
           <Route path="/photography" element={<Photography />} />
+          <Route path="/playground" element={<Experiments />} />
           <Route path="/experiments" element={<Experiments />} />
           <Route path="/project/:slug" element={<ProjectDetail />} />
           <Route path="/about" element={<About />} />

@@ -6,3 +6,7 @@
 node_modules/
 /.vercel/
 /tmp/
+
+# 页面验收截图，不包含 output/pdf/ 中的简历发布源
+/output/design-engineering/
+/output/text2sql/

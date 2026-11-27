@@ -46,7 +46,7 @@ export function About() {
           ))}
         </div>
 
-        <section id="experience" aria-label="工作与教育经历" style={{ ...anchorTarget, marginTop: 'var(--space-12)' }}>
+        <section id="experience" aria-label="工作与教育经历" style={{ ...anchorTarget, marginTop: 'var(--space-16)' }}>
           <div className="about-career-timeline">
             {about.work.map(entry => <WorkEntry key={entry.id} entry={entry} projects={about.projects} />)}
             <article id="education" className="about-career-entry about-career-education">

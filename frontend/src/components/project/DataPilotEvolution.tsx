@@ -1,10 +1,11 @@
-import { useRef, useState } from 'react'
+import { useId, useRef, useState } from 'react'
 import { CaretDown } from '@phosphor-icons/react'
 import type { DataPilotSection } from '../../data/projects/dataPilot'
 import { CaseStudyGallery, CaseStudyPlaceholder } from './CaseStudyMedia'
 
-/** Deliberately manual: readers keep control of the stage and screenshot. */
+/** Readers manually choose the explanation and corresponding image. */
 export function DataPilotEvolution({ section }: { section: DataPilotSection }) {
+  const instanceId = useId()
   const media = section.evolutionMedia ?? []
   const lightboxItems = media.filter(item => item.src).map(item => ({ src: item.src!, caption: item.caption }))
   const [selected, setSelected] = useState(0)
@@ -17,7 +18,7 @@ export function DataPilotEvolution({ section }: { section: DataPilotSection }) {
         const title = item.title ?? (separator >= 0 ? description.slice(0, separator) : description)
         const stageTitle = title.match(/^(早期|探索|当前)\s*·\s*(.+)$/)
         return <button key={item.caption} type="button" role="tab"
-          id={`evolution-tab-${index}`} aria-controls="evolution-panel" aria-selected={selected === index}
+          id={`${instanceId}-tab-${index}`} aria-controls={`${instanceId}-panel`} aria-selected={selected === index}
           tabIndex={selected === index ? 0 : -1} ref={node => { buttons.current[index] = node }}
           onClick={() => setSelected(index)} onKeyDown={event => {
             const next = event.key === 'ArrowDown' ? (index + 1) % media.length
@@ -41,7 +42,7 @@ export function DataPilotEvolution({ section }: { section: DataPilotSection }) {
         </button>
       })}
     </div>
-    <div id="evolution-panel" data-stage={media[selected]?.title?.startsWith('当前') ? 2 : media[selected]?.title?.startsWith('探索') ? 1 : 0} role="tabpanel" aria-labelledby={`evolution-tab-${selected}`} tabIndex={0}>
+    <div id={`${instanceId}-panel`} data-stage={media[selected]?.title?.startsWith('当前') ? 2 : media[selected]?.title?.startsWith('探索') ? 1 : 0} role="tabpanel" aria-labelledby={`${instanceId}-tab-${selected}`} tabIndex={0}>
       {media[selected]?.src
         ? <CaseStudyGallery lightboxItems={lightboxItems} items={[{ src: media[selected].src!, caption: media[selected].caption, hideCaption: true }]} />
         : <CaseStudyPlaceholder title={section.designPlaceholder ?? media[selected]?.caption} />}

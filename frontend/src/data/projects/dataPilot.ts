@@ -1,3 +1,4 @@
+import type { DataPilotScenario } from './dataPilotScenario'
 import type { ProjectGalleryItem } from '../projectDetails'
 import type { ProjectDetailTable } from '../projectDetails'
 import type { Locale } from '../../i18n/translations'
@@ -6,7 +7,7 @@ import { getProjectBySlug, getProjectTitle } from '../projects'
 import { createDataPilotNarrative } from './dataPilotNarrative'
 
 export type DataPilotPart = 'experience' | 'narrative' | 'poc' | 'growth'
-export const DATA_PILOT_VISIBLE_PARTS = ['narrative', 'growth'] as const
+export const DATA_PILOT_VISIBLE_PARTS = ['narrative'] as const
 export type DataPilotSection = {
   id: string
   /** Editorial requests, excluded from chat facts and media. */
@@ -19,10 +20,13 @@ export type DataPilotSection = {
   continuationOf?: string
   index: string
   title: string
+  anchorTitle?: string
   intro: string
   body: string
+  /** Illustrative scenario, excluded from chat facts and screenshot media. */
+  scenario?: DataPilotScenario
   bodyLink?: { label: string; href: string }
-  bodyEmphasis?: string
+  bodyEmphasis?: string | string[]
   afterDiagram?: string[]
   evolutionRationale?: string[]
   evolutionRationaleEmphasis?: string
@@ -241,9 +245,9 @@ function createDataPilotContent(locale: Locale) {
         title: '当前 · 多栏工作台',
         description: '数据、应用和对话各有固定位置，让分析过程与可交付成果同时保留。',
         tradeoffs: [
-          { kind: 'advantage', text: '同屏核对数据和图表' },
-          { kind: 'advantage', text: '围绕看板追问，保留原版' },
-          { kind: 'advantage', text: '报告和看板可单独交付' },
+          { kind: 'advantage', text: '满足稳定和灵活' },
+          { kind: 'advantage', text: '方便同屏对话/核查/阅读/追问' },
+          { kind: 'problem', text: '页面信息量大' },
         ],
       },
       {
@@ -252,19 +256,20 @@ function createDataPilotContent(locale: Locale) {
         title: '探索 · 无限画布',
         description: '把问题和分析结果放到画布上，用节点呈现不同的探索路径。',
         tradeoffs: [
-          { kind: 'advantage', text: '选一张图继续追问' },
-          { kind: 'advantage', text: '组合多个结果生成应用' },
+          { kind: 'advantage', text: '灵活组合，支持持续追问' },
+          { kind: 'problem', text: '节点画布学习成本高' },
+          { kind: 'problem', text: '执行异常时，排查问题难' },
         ],
       },
       {
         "src": "/images/datapilot-ai-serial-execution.png",
         "caption": "问数：在对话中查看结果与继续追问",
-        title: '早期 · 基础对话',
+        title: '早期 · 简单对话',
         description: '以对话作为统一入口，将查询结果直接返回到消息中，支持侧栏展开查看执行过程。',
         tradeoffs: [
-          { kind: 'advantage', text: '直接提问，无需学习查询语法' },
-          { kind: 'problem', text: '结果分散在消息中，不便对照' },
-          { kind: 'problem', text: '成果依附对话，难以更新复用' },
+          { kind: 'advantage', text: '上手简单' },
+          { kind: 'problem', text: '数据对照麻烦' },
+          { kind: 'problem', text: '分析结果分散' },
         ],
       }
     ],

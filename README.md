@@ -1,6 +1,6 @@
 # DESIGN.4X
 
-个人设计师作品集，包含项目案例、个人经历、摄影和 AI 对话；侧栏「随便写写」在新页签打开 Notion。技术栈：React 18、TypeScript、Vite、React Router、Three.js；聊天 API 部署在 Vercel，无数据库依赖。
+个人设计师作品集，包含项目案例、个人经历、摄影和 AI 对话。技术栈：React 18、TypeScript、Vite、React Router、Three.js；聊天 API 部署在 Vercel，无数据库依赖。
 
 全站仅维护中文内容，英文翻译数据已移除。界面文案与聊天提示词位于 `frontend/src/i18n/translations.ts` 和 `frontend/src/lib/chat/interviewPrompt.ts`，关于页唯一正文来源为 `frontend/src/content/about/zh.md`；后续文案修改无需同步英文。
 
@@ -29,6 +29,23 @@ npm run dev
 
 ## 按任务定位代码
 
+### 目录分工
+
+| 目录 | 用途 |
+| --- | --- |
+| `frontend/src/` | 网站源码，按页面、功能组件、数据、内容、样式与公共逻辑分层 |
+| `frontend/public/` | 网站公开资源、数据快照与许可证；不存放个人 PDF 简历 |
+| `api/` | 聊天服务端入口 |
+| `tests/`、`scripts/` | 回归测试与正式维护的测试运行器 |
+| `docs/` | 专题维护文档；设计规范见根目录 `DESIGN.md` |
+| `output/pdf/` | 个人简历归档；`任文倩_产品设计师简历.pdf` 为禁止修改的初始版本，后续调整另存新文件 |
+| `tmp/resume/` | 简历生成脚本、HTML 和提取材料，仅本地保留；当前初始版本排版源为 `initial-qoder-layout.html`，修改须用户明确授权 |
+| `tmp/checks/` | 历次页面检查脚本与记录，仅作过程归档 |
+| `tmp/screenshots/` | 临时页面截图与渲染图 |
+| `dist/`、`node_modules/` | 自动生成的构建产物与依赖，不手动维护 |
+
+临时目录由 Git 和部署忽略，`output/` 不参与部署。历史脚本包含旧文案、旧页面选择器和本机依赖路径，不属于受支持的项目命令；尤其不要直接运行简历生成与同步脚本覆盖当前文件，已移除的下载功能也不再使用旧下载检查脚本验证。后续页面截图统一写入 `tmp/screenshots/`，避免与简历材料混放。
+
 设计工程正文在项目背景之后按 Design Token、Design.md、代码映射、CLI工具、项目应用组织；设计知识与 Skill 归入 Design.md，组件实现归入代码映射，项目应用仅保留实际案例。原章节与已移动小节的深链接保留。
 
 | 要修改的内容 | 入口 |
@@ -42,6 +59,7 @@ npm run dev
 | 通用项目详情文案、图文章节和画廊 | [`frontend/src/data/projectDetails.ts`](frontend/src/data/projectDetails.ts)；`sections` 将章节标题、正文、可选表格与配图绑定，`subsections` 保存章节内的小标题、正文、圆点列表、可选表格与配图，页面和聊天共用 |
 | DataPilot 文案、链接、配图 | [`frontend/src/data/projects/dataPilot.ts`](frontend/src/data/projects/dataPilot.ts)，页面与聊天共用；POC 以制造业为主线，依据演示准备材料组织业务理解、场景筛选、指标映射、演示数据、连续任务、评价要求和阶段产出；保留六个原章节深链接，新增 `poc-demo-data`，区分意向演示、正式验证与模拟数据；`DataPilotPocSection.tsx` 复用产品体验的单标题正文、加粗标签列表与 `DetailTable.tsx`，任务示例说明和验证边界同步进入聊天语料 |
 | Data Agent 对话体验设计 Tab | [`data/projects/dataPilotNarrative.ts`](frontend/src/data/projects/dataPilotNarrative.ts) 提供独立叙事，复用原版演进素材与结果指标；默认展示 narrative，仅展示对话体验设计与海外 SaaS 探索；旧正文深链接保留，`editorialNotes` 仅展示待补材料，不进入聊天事实 |
+| Data Agent 生产晨会场景 | `data/projects/dataPilotScenario.ts` 保存五步示例与截图要求；`DataPilotScenario.tsx` 手动切换提出问题、持续追问、分析原因、生成应用、修改应用。步骤以编号、连接线与当前态展示，可直接跳转；示例数据与截图占位不进入聊天事实或媒体清单。 |
 | 设计工程案例与分层架构图 | [`frontend/src/data/projects/designEngineering.ts`](frontend/src/data/projects/designEngineering.ts) 保存中文文案与架构数据，正文按设计资产、规则映射、项目应用组织，页面和聊天共用；[`ProjectArchitecture.tsx`](frontend/src/components/project/ProjectArchitecture.tsx) 与 [`project-architecture.css`](frontend/src/styles/components/project-architecture.css) 绘制四层架构，保留旧 `design-highlights` / `project-gallery` / `connections` 深链接 |
 | 开发编辑器合集 | [`DevelopmentEditorsCaseStudy.tsx`](frontend/src/components/project/DevelopmentEditorsCaseStudy.tsx) 在 `/project/datadevelop` 以 SQL 编辑器、任务流编辑器两个 Tab 复用原案例；`?editor=workflow` 保存所选内容，旧 `/project/workflow-editor` 保留查询与 Hash 重定向到对应 Tab；导航仅展示「开发编辑器」 |
 | 项目详情布局 | [`ProjectDetail.tsx`](frontend/src/pages/ProjectDetail.tsx) 分派；[`components/project/`](frontend/src/components/project/) 包含通用详情、DataPilot、画廊、图片查看器和共用锚点导航；DataPilot 正文 tab 切换保持滚动位置，顶部下拉菜单和深链接仍定位章节 |
@@ -53,8 +71,9 @@ npm run dev
 | 关于页与项目页锚点组件 | [`SectionAnchorNav.tsx`](frontend/src/components/SectionAnchorNav.tsx) 统一刻度、提示与焦点状态；项目的 Hash 和章节高亮由 `ProjectAnchorNav` 管理 |
 | 关于页文案与解析 | [`content/about/zh.md`](frontend/src/content/about/)、[`parseAboutContent.ts`](frontend/src/content/about/parseAboutContent.ts)；[`content/about.ts`](frontend/src/content/about.ts) 负责加载与缓存 |
 | 关于页布局与时间线 | [`About.tsx`](frontend/src/pages/About.tsx) 组合 [`components/about/`](frontend/src/components/about/) 中的经历、项目卡片与时间线 |
-| 外部 Notion 博客入口 | [`WritingLink.tsx`](frontend/src/components/WritingLink.tsx) 展示「随便写写」链接与 Notion 图标；地址由 `data/siteLinks.ts` 与聊天语料共用，供展开侧栏、收起栏和移动抽屉复用 |
-| 一些尝试占位页 | [`frontend/src/pages/Experiments.tsx`](frontend/src/pages/Experiments.tsx)，路由 `/experiments` 可直达；展开侧栏、收起图标栏与移动端抽屉均不展示入口 |
+| 外部 Notion 博客入口 | [`WritingLink.tsx`](frontend/src/components/WritingLink.tsx) 展示「随便写写」链接与 Notion 图标；地址由 `data/siteLinks.ts` 与聊天语料共用，当前不在导航中展示 |
+| PlayGround 占位页 | [`frontend/src/pages/Experiments.tsx`](frontend/src/pages/Experiments.tsx)，导航入口 `/playground`，兼容旧路由 `/experiments`；显示「🚧 正在施工中」 |
+| 个人 PDF 简历归档 | `output/pdf/`：主版本、历史版本与 Qoder 副本集中保存，内容完全相同的原网站附件已去重；网站不再提供 PDF 下载 |
 | 摄影内容 | [`frontend/src/pages/Photography.tsx`](frontend/src/pages/Photography.tsx)、[`frontend/public/data/instagram.json`](frontend/public/data/instagram.json) |
 | 分组侧栏与移动端抽屉 | [`SiteSidebar.tsx`](frontend/src/components/SiteSidebar.tsx)；[`SidebarRail.tsx`](frontend/src/components/SidebarRail.tsx) 提供收起后的图标导航与项目分类浮层；[`Header.tsx`](frontend/src/components/Header.tsx) 管理导航开关与焦点；「摄影记录」下方提供带文字的「联系我」菜单，与前一项额外间隔 16px；收起侧栏时使用对应图标入口，移动端抽屉保持相同顺序；[`PageToolbar.tsx`](frontend/src/components/PageToolbar.tsx) 在所有页面右上角提供主题按钮，仅在首页对话入口及聊天界面且存在非空历史对话时展示历史按钮，使用无边框图标 |
 | 导航、联系浮层、图标 | [`frontend/src/components/`](frontend/src/components/) |
@@ -91,18 +110,20 @@ npm run dev
   ```
 
   章节 ID 为 `work`、`projects`、`education`、`contact`；条目 ID 在同一文件中唯一，同义条目长期稳定保持一致，改标题或顺序时保留 ID。新增工作条目会自动展示，项目卡片跟随 `oceanbase` 条目；教育经历在工作经历与联系方式之间展示学校、专业、学历和时间，完整教育数据继续供聊天使用。重复或缺失 ID 会报错。
-- 「随便写写」由外部 Notion 承载，位于 AI 设计工程下方，间距 24px；悬停或键盘聚焦显示右侧外链图标，新页签打开。展开侧栏、收起栏和移动抽屉共用 WritingLink；无站内博客页面。
+- 「随便写写」导航入口已移除；外部 Notion 地址与原组件保留。
 - 聊天语料由本地项目、About 与翻译资源汇总，见 `buildSiteCorpus`。首次打开聊天时加载 `ChatPanel` 并生成当前语言语料；通过侧栏或站点标志离开聊天后保留会话和进行中的流式响应。首页提问、新建和历史选择操作由 `App` 按有序命令转交并消费一次；问题绑定所属会话，已有回复进行中时排队等待。不同会话可以并行生成，停止按钮只影响当前会话并保留已显示文本。聊天界面不展示返回按钮，历史入口仅在首页对话入口与聊天界面且存在非空历史对话时于右上角展示，列表支持查看、续聊和单条删除，删除前通过锚定移除按钮的 `Popconfirm` 气泡确认；删除当前聊天后返回首页，删除其他记录保留当前页面和对话，删除生成中的记录会取消其请求及队列。删除失败保留原记录供重试，同源标签页通过存储事件同步删除。历史按会话保存在版本化 `localStorage` 中，流式内容每 500ms 最多保存一次，结束、停止或离开页面立即保存；首次发送才进入历史。标题通过本地规则将首条提问归纳为主题，已有记录读取时同样归纳，不额外请求模型、不修改消息内容或历史排序。旧 `sessionStorage` 单会话成功迁移后移除旧副本，刷新恢复内容但不自动重发中断请求；存储失败时保留内存聊天并提示未保存。
 - 联系弹窗由 `App` 的页面内状态控制，打开和关闭均不修改 URL 或浏览器历史，保留原页面的锚点、聊天状态和滚动位置；支持确认按钮、遮罩与 Escape 关闭，实际切换路由后自动关闭。
-- 摄影读取本地 JSON 快照和图片；维护流程见 [`docs/instagram-sync.md`](docs/instagram-sync.md)。
+- 摄影读取本地 JSON 快照；Instagram 本地图片已清理，快照为空，保留 `/photography` 空状态及主页链接；维护流程见 [`docs/instagram-sync.md`](docs/instagram-sync.md)。
 
 网站固定使用中文，不再提供中英文切换，忽略旧语言偏好；首次访问默认亮色，手动选择的主题在本地保存，刷新后沿用。主题在首屏绘制前初始化。桌面端（>900px）使用 256px 可收起的固定分组侧栏，收起后保留 72px 图标栏，顶部默认显示 4x，悬停或键盘聚焦切换展开图标，可重新展开；项目合并为单个图标，悬停或点击展示分类与项目名称，其他图标显示菜单名；900px 及以下使用带焦点管理的导航抽屉。右侧正文使用页面滚动，布局按可用内容宽度适配；侧栏列出全部六个项目，全站不再展示页脚。关于我 / Resume 入口继续使用 `/about`，保留原有内容及章节 ID。侧栏「新对话 / New chat」创建空白会话并返回首页 `/`，不终止其他会话；DESIGN.4x 返回首页 `/`。一级导航使用 圆角线性图标，分类内项目不重复添加图标。
 
-项目详情统一参考数据库运维平台的呈现方式：标题、简介、标签、主图，以及宽幅正文、渐变展板、折叠过程材料和胶囊原型按钮。共用媒体组件为 `components/project/CaseStudyMedia.tsx`，首屏短简介来自 `data/projects/caseStudyPresentation.ts`，通用与 DataPilot 展示样式为 `styles/components/case-study.css`；保留各项目原有章节与共用 `ProjectAnchorNav`，不展示返回或相邻项目导航。数据库运维平台使用 `/project/databaseops`，旧视觉版路径重定向至该地址。通用项目锚点由 `data/projectAnchors.ts` 根据已有内容生成，保留已有章节 ID；支持带 Hash 的直达链接、刷新、前进后退和当前章节高亮。960px 以上复用关于页的 `SectionAnchorNav` 右侧刻度、位置和间距；取消竖向分割线、缩小刻度间距并上移，悬停或键盘聚焦放大刻度，960px 以下隐藏锚点导航。
+项目详情统一参考数据库运维平台的呈现方式：标题、简介、标签、主图，以及宽幅正文、渐变展板、折叠过程材料和胶囊原型按钮。共用媒体组件为 `components/project/CaseStudyMedia.tsx`，首屏短简介来自 `data/projects/caseStudyPresentation.ts`，通用与 DataPilot 展示样式为 `styles/components/case-study.css`；保留各项目原有章节与共用 `ProjectAnchorNav`，不展示返回或相邻项目导航。数据库运维平台使用 `/project/databaseops`，旧视觉版路径重定向至该地址。通用项目锚点由 `data/projectAnchors.ts` 根据已有内容生成，保留已有章节 ID；支持带 Hash 的直达链接、刷新、前进后退和当前章节高亮。960px 以上复用关于页的 `SectionAnchorNav` 内容区左侧刻度（顶部距视口 248px，与 Data Agent 菜单项顶部对齐）、位置和间距；取消竖向分割线、缩小刻度间距并上移，悬停或键盘聚焦放大刻度，960px 以下隐藏锚点导航。
 
 首页展示个人介绍、提问输入框与推荐问题，按可用高度布局，短屏自然滚动，不展示或加载 3D 工牌；项目入口位于侧栏与首页精选卡片，首页展示四张精选项目卡片。推荐问题使用带边框的胶囊按钮，不展示悬停箭头；移动端以 12px 字号横向单行排列，超出后可横向滚动，中文简介以较小字号保持单行，菜单按钮右侧显示 DESIGN.4x 首页链接。首页直接加载；About（关于我）、项目详情、摄影和一些尝试按路由懒加载。样式始终按 tokens → foundation → components → prose → responsive 顺序加载，拆分组件样式时保留 `components.css` 的导入顺序。
 
 ## 快速搜索
+
+资源清理：`tmp/` 中的临时渲染图、`output/design-engineering/` 与 `output/text2sql/` 中的页面验收截图不作为站点资源维护，后两者已加入忽略规则。简历发布源及生成材料保留；`frontend/public/` 的历史素材和许可证不能仅因没有文本引用而删除，需同时核对动态路径与外部链接用途。
 
 先按上表缩小范围，再搜索符号或 class，避免一次性读取大型页面、样式文件或图片目录：
 
@@ -258,4 +279,20 @@ Text2SQL 工作流按 OBCloud 技术文章（https://open.oceanbase.com/blog/177
 
 Data Agent「协作与交付」通过 `DataPilotDelivery.tsx` 展示 Figma Make、DESIGN.md 与 AI 对话组件库三个阶段，协作分工放在正文。内容来自 `dataPilotNarrative.ts` 的 `body` 与 `steps`；页面与聊天共用，渐变展板样式位于 `datapilot.css`，窄屏纵向排列。当前 Tab 与聊天语料共用 `DATA_PILOT_VISIBLE_PARTS`；聊天媒体使用 narrative 真实配图并链接到对应章节。
 
-关于页保留个人简介，工作与教育合并为连续时间轴，不显示分区标题；条目按公司／学校、角色与时间、简短工作描述排列，描述末尾不加句号，教育不展示描述。首节点为实心圆，其余为细描边圆；保留 experience、education 锚点。简介与时间轴最大宽度 680px。蚂蚁集团下的四个项目入口仅显示名称和角色，双列间距 12px、窄屏单列，悬停或键盘聚焦显示右上箭头。名称读取 projects.ts，角色与简短描述复用关于页 Markdown；完整履历和项目时间仍保留供聊天读取。页面不展示底部联系方式及其目录项，联系入口使用右上角按钮。呈现由 WorkEntry.tsx 与 styles/components/about.css 维护。
+关于页采用精简时间轴：保留个人简介，工作经历仅显示时间、公司与职位，教育仅显示学校、专业、学历与时间；页面不渲染职责列表和项目简历展开卡片；蚂蚁集团条目下保留 Data Agent、AI 设计工程、数据库运维平台和 SQL 编辑器四个紧凑项目入口，双列浅底列表展示名称、角色与时间，窄屏单列；名称读取 projects.ts，角色与时间复用关于页 Markdown。`content/about/zh.md` 仍保留完整履历供聊天读取，PDF 简历统一归档在 `output/pdf/`，网站不再提供下载。`WorkEntry.tsx` 与 `styles/components/about.css` 负责时间轴呈现，保留工作条目和章节锚点。
+
+关于页工作与教育合并为连续时间轴，不显示工作／教育分区标题，节点使用空心描边圆点；保留 experience、education 锚点与目录定位。
+
+关于页不展示底部联系方式区块及其目录项；联系入口统一使用页面右上角「联系我」，原始联系方式数据继续保留。
+
+关于页时间轴内部按标题、角色与时间、简短描述排列；简介复用项目详情正文宽度 `--detail-prose-width`，时间轴最大宽度 680px，项目入口仅显示名称和角色，双列间距 12px，窄屏单列。保留完整项目时间数据供聊天使用。
+
+PDF 简历对话语料：`frontend/src/content/resume.md` 保存主版 PDF 的来源与补充信息，完整履历复用 `content/about/zh.md`，由 `siteCorpus.ts` 合并；不重复复制整份简历、不在运行时读取 PDF。已核对主版 SHA-256 为 `d089d3109f4638c23067f348c312543707ac1c6dcb87212c5660c6e68cf9bd70`。初始版本 PDF 禁止修改；后续如需更新简历，另存新版本并重新比对共享履历与补充内容；最新页面简介及项目详情的状态和统计口径优先。
+
+Data Agent「分析可信」复用 `DataPilotEvolution.tsx` 的手动展开式 Tab，五项策略由 `dataPilotNarrative.ts` 的 bullets 与 evolutionMedia 对应，切换时展开描述并更新右侧配图；缺失素材保留明确占位，多个实例使用独立无障碍 ID。
+
+Data Agent 当前仅展示对话体验设计，隐藏海外 SaaS 探索及正文分组切换栏、顶部切换菜单；海外原始内容保留，可见分组与聊天语料继续共用 `DATA_PILOT_VISIBLE_PARTS`。
+
+Data Agent「成果可用」沿用「分析可信」的展开式 Tab 与圆角外框，复用已有正文和真实配图，缺少对应截图的条目保留占位；章节 ID `narrative-exploration` 保持不变。
+
+- PlayGround 菜单位于 AI 设计工程下方，桌面、收起栏与移动菜单均展示；`/playground` 复用 `pages/Experiments.tsx`，显示「🚧 正在施工中」，保留 `/experiments` 旧路由。

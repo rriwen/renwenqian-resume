@@ -243,3 +243,28 @@
   text-align: left;
   box-shadow: 0 6px 24px rgb(0 0 0 / 12%);
 }
+
+#narrative-clarification .case-study-carousel-slide figure { position: relative; }
+#narrative-clarification .screenshot-carousel { container: clarification-gallery / inline-size; }
+#narrative-clarification .case-study-carousel-slide .case-study-media { padding-bottom: 52px; }
+#narrative-clarification .case-study-carousel-slide figcaption {
+  position: absolute;
+  right: clamp(16px, 2.2vw, 32px);
+  bottom: 20px;
+  left: calc(clamp(16px, 2.2vw, 32px) + 176px);
+  margin: 0;
+  min-height: 20px;
+  line-height: 20px !important;
+  text-align: right;
+}
+#narrative-clarification .qa-carousel-controls {
+  right: auto;
+  bottom: 16px;
+  left: clamp(16px, 2.2vw, 32px);
+  justify-content: flex-start;
+}
+@container clarification-gallery (max-width: 380px) {
+  #narrative-clarification .case-study-carousel-slide figcaption { left: calc(clamp(16px, 2.2vw, 32px) + 128px); }
+  #narrative-clarification .qa-carousel-dots button,
+  #narrative-clarification .qa-carousel-dots button span { width: 32px; }
+}

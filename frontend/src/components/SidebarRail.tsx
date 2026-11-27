@@ -1,10 +1,9 @@
-import { WritingLink } from './WritingLink'
 import { useEffect, useRef, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { getProjectNavigationTitle, type ProjectCategory } from '../data/projects'
 import { getProjectNavigationGroups } from '../data/projectViews'
 import { useLanguage } from '../i18n/LanguageContext'
-import { IconFileText, IconNewChat, IconPalette, IconSparkle, IconTerminal } from './Icons'
+import { IconPlayground, IconFileText, IconNewChat, IconPalette, IconSparkle, IconTerminal } from './Icons'
 
 export function SidebarRail({ onNewChat }: { onNewChat: () => void }) {
   const { pathname, hash, key } = useLocation()
@@ -85,7 +84,7 @@ export function SidebarRail({ onNewChat }: { onNewChat: () => void }) {
       <Link to="/project/aidesignsystem" className="sidebar-rail-link sidebar-tooltip-host" aria-label={'AI 设计工程'} aria-current={isDesignEngineering ? 'page' : undefined}>
         <IconPalette /><span className="sidebar-tooltip" aria-hidden="true">{'AI 设计工程'}</span>
       </Link>
-      <WritingLink compact />
+      <Link to="/playground" className="sidebar-rail-link sidebar-tooltip-host" aria-label="PlayGround" aria-current={selectedPathname === '/playground' || selectedPathname === '/experiments' ? 'page' : undefined}><IconPlayground /><span className="sidebar-tooltip" aria-hidden="true">PlayGround</span></Link>
     </nav>
   )
 }

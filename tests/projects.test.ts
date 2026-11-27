@@ -418,7 +418,7 @@ test('editor corpus includes current table decisions and Text2SQL link without r
 
 test('Data Agent narrative preserves original evidence and excludes editorial requests from chat', () => {
   const { parts } = getDataPilotContent('zh')
-  assert.deepEqual(DATA_PILOT_VISIBLE_PARTS, ['narrative', 'growth'])
+  assert.deepEqual(DATA_PILOT_VISIBLE_PARTS, ['narrative'])
   const media = getChatProjectImages('zh').filter(image => image.projectPath.startsWith('/project/dataagent#'))
   assert.ok(media.length > 0)
   assert.ok(media.every(image => image.projectPath.includes('#narrative-')))
@@ -434,4 +434,22 @@ test('Data Agent narrative preserves original evidence and excludes editorial re
   }
   assert.strictEqual(parts.narrative.sections.find(section => section.id === 'narrative-results')!.adoptionResult, parts.experience.sections.find(section => section.id === 'role')!.adoptionResult)
   assert.strictEqual(parts.narrative.sections.find(section => section.id === 'narrative-workspace')!.evolutionMedia, parts.experience.sections.find(section => section.id === 'product-evolution')!.evolutionMedia)
+})
+
+
+test('illustrative morning scenario stays separate from personal facts and media', () => {
+  const scenario = getDataPilotContent('zh').parts.narrative.sections.find(section => section.id === 'narrative-focus')!.scenario!
+  assert.equal(scenario.steps.length, 5)
+  assert.equal(new Set(scenario.steps.map(step => step.id)).size, 5)
+  const corpus = buildSiteCorpus('zh')
+  assert.ok(!corpus.includes('9,420'))
+  assert.ok(!corpus.includes('48 分钟'))
+  for (const step of scenario.steps) {
+    assert.ok(step.screenshot.src || step.screenshot.requirements.length > 0)
+    assert.ok(!corpus.includes(step.screenshot.title))
+  }
+  const clarification = scenario.steps[0].metrics
+  assert.equal(clarification[0].value, `${(9420 / 10000 * 100).toFixed(1)}%`)
+  assert.equal(clarification[1].value, `${10000 * .98 - 9420} 台`)
+  assert.equal(clarification[2].value, `${10000 - 9420} 台`)
 })

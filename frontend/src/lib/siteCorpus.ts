@@ -7,6 +7,7 @@ import { getAboutContent, stripMarkdownInline } from '../content/about'
 import { translations, type Locale } from '../i18n/translations'
 import { getCaseStudyIntroduction, getCaseStudyMethods } from '../data/projects/caseStudyPresentation'
 import { getChatProjectImages } from './chat/projectImages'
+import resumeSupplement from '../content/resume.md?raw'
 
 function paragraphToText(p: ProjectDetailParagraph): string {
   if (typeof p === 'string') return p
@@ -278,7 +279,8 @@ export function buildSiteCorpus(locale: Locale): string {
   lines.push(`${m.about.contactCta.emailLabel}: ${m.about.contactCta.email}`)
   lines.push('')
 
-  lines.push(`## ${'关于页'}`)
+  lines.push('## 关于页与 PDF 简历完整履历')
+  lines.push(resumeSupplement.trim())
   lines.push(serializeAbout(locale))
   lines.push('')
 

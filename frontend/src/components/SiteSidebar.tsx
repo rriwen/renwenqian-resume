@@ -3,9 +3,8 @@ import { Link, useLocation, useMatch } from 'react-router-dom'
 import { getProjectBySlug, getProjectNavigationTitle, type ProjectCategory } from '../data/projects'
 import { getProjectNavigationGroups, getProjectViewBySlug } from '../data/projectViews'
 import { useLanguage } from '../i18n/LanguageContext'
-import { IconClose, IconFileText, IconNewChat, IconPalette, IconSidebarToggle, IconSparkle, IconTerminal } from './Icons'
+import { IconClose, IconPlayground, IconFileText, IconNewChat, IconPalette, IconSidebarToggle, IconSparkle, IconTerminal } from './Icons'
 import { SidebarRail } from './SidebarRail'
-import { WritingLink } from './WritingLink'
 
 type Props = {
   onNewChat: () => void
@@ -108,7 +107,7 @@ export function SiteSidebar({ onNewChat, open, onClose, triggerRef, launcherRef,
             )
           })}
 
-          <WritingLink />
+          <Link to="/playground" className="sidebar-link" aria-current={selectedPathname === '/playground' || selectedPathname === '/experiments' ? 'page' : undefined}><IconPlayground /><span>PlayGround</span></Link>
         </nav>
         {desktopCollapsed && <SidebarRail onNewChat={onNewChat} />}
       </aside>

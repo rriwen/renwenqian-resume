@@ -1134,11 +1134,21 @@
 .datapilot-decision-layout > .datapilot-editorial-notes { grid-column: 1 / -1; }
 .datapilot-decision-layout > .project-detail-subsection-list { grid-column: 1; margin: 0; }
 .datapilot-decision-layout > .datapilot-evidence { grid-column: 2; margin-top: 0; min-width: 0; }
+:is(#narrative-clarification, #narrative-exploration, #narrative-publishing) .datapilot-decision-layout { grid-template-rows: auto min-content 1fr; }
+:is(#narrative-clarification, #narrative-exploration, #narrative-publishing) .datapilot-decision-layout > p { grid-column: 1; grid-row: 2; margin-bottom: 0; }
+:is(#narrative-clarification, #narrative-exploration, #narrative-publishing) .datapilot-decision-layout > .project-detail-subsection-list { grid-row: 3; }
+:is(#narrative-clarification, #narrative-exploration, #narrative-publishing) .datapilot-decision-layout > .datapilot-evidence { grid-row: 2 / 4; }
+:is(#narrative-clarification, #narrative-exploration, #narrative-publishing) .datapilot-decision-layout > p { grid-column: 1 / -1; grid-row: 2; margin: 0 0 24px; color: var(--text); font-size: var(--text-base); }
+:is(#narrative-clarification, #narrative-exploration, #narrative-publishing) .datapilot-decision-layout > h2 { margin-bottom: 28px; }
+#narrative-clarification .datapilot-decision-layout > .datapilot-evidence { grid-row: 3; }
 @container site-main (max-width: 700px) {
+  :is(#narrative-clarification, #narrative-exploration, #narrative-publishing) .datapilot-decision-layout > .datapilot-evidence { grid-row: 4; }
   .datapilot-decision-layout { grid-template-columns: minmax(0, 1fr); row-gap: 24px; }
   .datapilot-decision-layout > .datapilot-evidence { grid-column: 1; }
   .datapilot-decision-layout > h2,
   .datapilot-decision-layout > p { margin-bottom: 0; }
+  :is(#narrative-clarification, #narrative-exploration, #narrative-publishing) .datapilot-decision-layout { row-gap: 0; }
+  #narrative-clarification .datapilot-decision-layout > .datapilot-evidence { margin-top: 24px; }
 }
 
 #narrative-focus .project-detail-subsection-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px; padding: 24px 0 0; border-top: 1px solid var(--rule); list-style: none; }
@@ -1166,4 +1176,176 @@
 .case-study-page .datapilot-delivery-points li + li { margin-top: 6px; }
 @container site-main (max-width: 700px) {
   .datapilot-delivery-path { grid-template-columns: 1fr; gap: 24px; }
+}
+
+/* Keep the discovery diagram secondary to the case narrative. */
+#narrative-problem .datapilot-journey--paths { padding: 48px 32px; }
+#narrative-problem .datapilot-journey-lanes { gap: 24px; }
+#narrative-problem .datapilot-journey-lane h3 { margin-bottom: 16px; }
+#narrative-problem .datapilot-journey--paths ol { padding: 8px 0; }
+#narrative-problem .datapilot-journey--paths li { min-height: 56px; padding: 8px 4px; }
+#narrative-problem .datapilot-journey--paths li > strong,
+#narrative-problem .datapilot-journey--paths li > p { font-size: calc(var(--text-xs) - 1px); }
+#narrative-problem .datapilot-journey-lane li:first-child,
+#narrative-problem .datapilot-journey-lane li:last-child { min-height: 56px; border-radius: 6px; }
+#narrative-problem .datapilot-journey-lane .datapilot-path-note { margin: 4px 0 0; }
+#narrative-problem .datapilot-path-legend { margin-top: 20px; }
+
+/* Keep strategy evidence in the right-hand column. */
+.datapilot-decision-layout > .datapilot-decision-evidence {
+  grid-column: 2;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 24px;
+}
+@container site-main (max-width: 700px) {
+  .datapilot-decision-layout > .datapilot-decision-evidence { grid-column: 1; }
+}
+
+/* A manual five-step scenario; all numbers are illustrative, not project outcomes. */
+.datapilot-scenario { margin-top: 32px; min-width: 0; }
+.case-study-page .datapilot-scenario h3 { margin: 0 0 12px; font-size: var(--text-lg); }
+.case-study-page .datapilot-scenario p { margin: 0; font-size: var(--text-sm); line-height: 1.8; }
+.scenario-stepper { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); margin: 0 -28px 24px; padding: 0 28px; border-bottom: 1px solid var(--rule); }
+.scenario-stepper button { position: relative; min-width: 0; padding: 14px 12px; border: 0; background: transparent; color: var(--muted); font: inherit; font-size: 16px; font-weight: 400; cursor: pointer; text-align: center; }
+.scenario-step-label { white-space: nowrap; }
+.scenario-stepper button[aria-selected='true'] { color: var(--text); font-weight: 600; }
+.scenario-stepper button[aria-selected='true']::before { content: ''; position: absolute; height: 2px; bottom: -1px; left: 16px; right: 16px; background: var(--text); }
+.scenario-stepper button:hover { color: var(--text); }
+.scenario-stepper button:focus-visible, .scenario-panel:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 4px; }
+.scenario-card { padding: 12px 28px 28px; border: 1px solid var(--rule); border-radius: 12px; }
+.scenario-columns { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 40px; align-items: start; }
+.scenario-story { min-width: 0; padding-top: 24px; }
+.scenario-analysis { margin: 0; display: grid; gap: 24px; }
+.scenario-analysis dt { margin-bottom: 8px; font-size: var(--text-xs); color: var(--muted); }
+.scenario-analysis dd { margin: 0; font-size: var(--text-sm); line-height: 1.8; }
+.case-study-page .scenario-analysis dd p { margin: 0; font-size: inherit; line-height: inherit; }
+.scenario-analysis strong { font-weight: 600; }
+.scenario-design-focus { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; margin: 48px 0; padding-top: 0; }
+.scenario-design-focus > div { min-width: 0; padding: 24px; border-radius: var(--radius-md); background: var(--subtle); }
+.scenario-design-focus dt { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; font-size: var(--text-base); font-weight: 600; white-space: nowrap; }
+.scenario-design-focus dd { margin: 8px 0 0; color: var(--muted); font-size: var(--text-sm); line-height: 1.8; }
+.scenario-screenshot { margin: 0; min-width: 0; }
+.scenario-screenshot-image { display: block; width: 100%; height: auto; border-radius: 8px; }
+.scenario-screenshot-trigger { display: block; width: 100%; padding: 0; border: 0; border-radius: 8px; background: transparent; cursor: zoom-in; }
+.scenario-screenshot-slot { aspect-ratio: 4 / 3; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 24px; gap: 12px; text-align: center; border: 1px dashed var(--control-border); border-radius: 8px; background: linear-gradient(145deg, color-mix(in srgb, var(--showcase-ice) 16%, var(--page-bg)), color-mix(in srgb, var(--showcase-lavender) 20%, var(--page-bg))); }
+.scenario-screenshot-slot > span:first-child, .scenario-screenshot-slot small { color: var(--muted); font-size: var(--text-xs); }
+.scenario-screenshot-slot strong { font-size: var(--text-sm); font-weight: 500; }
+.scenario-placeholder-cross { font-size: 30px; color: var(--muted); font-weight: 300; }
+.scenario-screenshot-hints { margin-top: 12px; color: var(--muted); font-size: var(--text-xs); text-align: left; }
+.scenario-screenshot-hints ul { margin: 8px 0 0; padding-left: 1.3em; line-height: 1.8; }
+@container site-main (max-width: 760px) {
+  .scenario-columns, .scenario-design-focus { grid-template-columns: minmax(0, 1fr); }
+  .scenario-story { grid-row: 1; }
+  .scenario-screenshot { grid-row: 2; }
+  .scenario-card { padding: 12px 20px 20px; }
+
+}
+
+.scenario-screenshot-board { position: relative; isolation: isolate; overflow: hidden; padding: 28px; border-radius: 12px; background: linear-gradient(135deg, #c5e9fa, #9caef5 50%, #edc5ee); }
+.scenario-screenshot-board > .dbv-mesh-gradient { position: absolute; inset: 0; z-index: -1; pointer-events: none; }
+.scenario-screenshot-board .scenario-screenshot-slot { border: 0; background: color-mix(in srgb, var(--page-bg) 92%, transparent); border-radius: 8px; padding: 24px; }
+@container site-main (max-width: 760px) {
+  .scenario-screenshot-board { padding: 20px; }
+}
+
+
+@container site-main (max-width: 760px) {
+  .scenario-stepper { margin-inline: -20px; padding-inline: 12px; }
+  .scenario-stepper button { padding: 14px 2px; font-size: 12px; }
+  .scenario-stepper button[aria-selected="true"]::before { left: 6px; right: 6px; }
+}
+
+.scenario-tab-chevron { position: absolute; right: -7px; top: 50%; transform: translateY(-50%); color: var(--muted); opacity: .45; pointer-events: none; }
+
+.scenario-stepper button { display: flex; align-items: center; justify-content: center; gap: 8px; }
+.scenario-step-number { display: grid; place-items: center; width: 24px; height: 24px; flex: none; border: 1px solid var(--control-border); border-radius: 50%; font-size: 12px; font-weight: 400; }
+.scenario-stepper button[aria-selected='true'] .scenario-step-number { background: var(--text); border-color: var(--text); color: var(--page-bg); }
+@container site-main (max-width: 760px) {
+  .scenario-stepper button { flex-direction: column; gap: 6px; }
+}
+
+#narrative-workspace .datapilot-evolution { border: 1px solid var(--rule); border-radius: 12px; padding: 0; overflow: hidden; }
+#narrative-workspace .datapilot-evolution [role="tablist"] { padding: 0 0 0 20px; }
+#narrative-workspace .datapilot-evolution [role="tab"]:last-child { border-bottom: 0; }
+
+.scenario-risks { margin: 0; padding-left: 1.2em; display: grid; gap: 12px; }
+
+#narrative-clarification .datapilot-decision-layout > .project-detail-subsection-list { grid-row: 2 / 4; }
+
+:is(#narrative-clarification, #narrative-exploration, #narrative-publishing) .datapilot-decision-layout > .datapilot-evolution { grid-column: 1 / -1; grid-row: 3; margin-top: 0; padding: 0; overflow: hidden; border: 1px solid var(--rule); border-radius: 12px; }
+:is(#narrative-clarification, #narrative-exploration, #narrative-publishing) .datapilot-evolution [role="tab"][aria-selected="true"] { flex: 1; padding-bottom: 24px; }
+:is(#narrative-clarification, #narrative-exploration, #narrative-publishing) .datapilot-evolution-tradeoffs:empty { display: none; }
+:is(#narrative-clarification, #narrative-exploration, #narrative-publishing) .datapilot-evolution [role="tablist"] { height: 480px; min-height: 0; }
+:is(#narrative-clarification, #narrative-exploration, #narrative-publishing) .datapilot-evolution [role="tabpanel"] { height: 100%; min-height: 480px; }
+:is(#narrative-clarification, #narrative-exploration, #narrative-publishing) .datapilot-evolution-description { flex: 1; }
+
+:is(#narrative-clarification, #narrative-exploration, #narrative-publishing) .datapilot-evolution-summary { color: var(--muted); font-size: var(--text-sm); }
+
+:is(#narrative-clarification, #narrative-exploration, #narrative-publishing) .datapilot-evolution [role="tablist"] { padding-left: 20px; }
+:is(#narrative-clarification, #narrative-exploration, #narrative-publishing) .datapilot-evolution [role="tab"]:last-child { border-bottom: 0; }
+@container site-main (max-width: 700px) {
+  :is(#narrative-clarification, #narrative-exploration, #narrative-publishing) .datapilot-evolution [role="tablist"] { padding-inline: 20px; }
+  :is(#narrative-clarification, #narrative-exploration, #narrative-publishing) .datapilot-evolution [role="tablist"] { height: auto; }
+  :is(#narrative-clarification, #narrative-exploration, #narrative-publishing) .datapilot-evolution-description { flex: none; }
+}
+
+:is(#narrative-clarification, #narrative-exploration, #narrative-publishing) .datapilot-evolution .case-study-media > button {
+  position: absolute !important;
+  inset: 24px;
+  width: calc(100% - 48px) !important;
+  height: calc(100% - 48px) !important;
+  padding: 0 !important;
+  border: 0 !important;
+  box-shadow: none;
+  background: transparent !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+:is(#narrative-clarification, #narrative-exploration, #narrative-publishing) .datapilot-evolution .case-study-media img {
+  width: 100%;
+  height: 100% !important;
+  max-height: 100%;
+  object-fit: contain;
+}
+@container site-main (max-width: 700px) {
+  :is(#narrative-clarification, #narrative-exploration, #narrative-publishing) .datapilot-evolution .case-study-media { min-height: 360px; }
+}
+
+
+
+:is(#narrative-clarification, #narrative-exploration, #narrative-publishing) .datapilot-evolution [role="tablist"] { padding-top: 12px; padding-bottom: 12px; box-sizing: border-box; }
+
+#narrative-delivery .project-detail-subsection-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  padding: 0;
+  list-style: none;
+}
+#narrative-delivery .project-detail-subsection-list > li {
+  min-width: 0;
+  margin: 0;
+  padding: 24px;
+  border-radius: var(--radius-md);
+  background: var(--subtle);
+}
+#narrative-delivery .project-detail-subsection-list strong {
+  display: block;
+  margin-bottom: 12px;
+  color: var(--text);
+  font-weight: var(--weight-semibold);
+}
+#narrative-delivery .project-detail-subsection-list span {
+  display: block;
+  color: var(--muted);
+  font-size: var(--text-sm);
+  line-height: 1.8;
+}
+@media (max-width: 700px) {
+  #narrative-delivery .project-detail-subsection-list {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
 }

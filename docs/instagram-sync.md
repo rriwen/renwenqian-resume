@@ -1,5 +1,9 @@
 # Instagram photo import
 
+## 当前状态（2026-11-25）
+
+按用户要求，已删除全部 11 张本地 Instagram 图片，清空快照的 `items`，并将 `syncedAt` 重置为 `null`。`/photography` 路由及 Instagram 主页链接保留，页面显示「暂时没有照片。」。下方同步记录为历史记录；未来恢复照片时，需重新创建图片目录并同步快照。
+
 The `/photography` page reads the local snapshot at `frontend/public/data/instagram.json` and the downloaded images under `frontend/public/images/instagram`. The snapshot is imported from the public [@design.4x profile](https://www.instagram.com/design.4x/); each entry contains the post permalink, visible caption, publication timestamp, and a local copy of its cover image.
 
 There is no scheduled sync or token required. To refresh the page, inspect the public profile and individual posts, download new cover images into `frontend/public/images/instagram`, and merge entries into `frontend/public/data/instagram.json` by post ID. Preserve existing photographs unless their removal is confirmed. Read publication timestamps from the post's `time[datetime]` element, rather than inferring them from image alt text or a relative time label. Set `syncedAt` only after checking the source and saving the images.

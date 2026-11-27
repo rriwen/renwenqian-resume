@@ -22,21 +22,24 @@
 - `data/projectViews.ts` 维护同一项目的独立展示入口。数据库运维视觉版 `/project/databaseops-visual` 为旧地址别名，重定向到正式地址 `/project/databaseops`，读取同一项目详情内容。`getProjectNavigationGroups` 使用项目正式地址且不再增加别名入口，展开侧栏、收起栏和移动抽屉共用；独立视图不加入 `projects` 清单，不重复进入聊天语料。`components/project/DatabaseOpsVisualCaseStudy.tsx` 按需加载并导入作用域内的 `styles/components/databaseops-visual.css`；`data/projects/databaseOpsVisual.ts` 仅保存中文展示文案、图注和素材入口，正文、表格与证据继续读取原详情。`public/images/databaseops-visual-source-setup.jpg` 为现有原型的真实截图。视觉版采用展板大图、图文并排与交互细节拆解，保留原型、步骤条 GIF 和图片全屏预览，支持深浅主题与移动端；验证指标继续区分 16.8% 与 75% 的不同用户群和时间窗口。
 - `content/about/zh.md`：关于页中文内容；`content/about/parseAboutContent.ts`：纯解析；`content/about.ts`：加载与缓存。每个 `##` / `###` 标题须有 `<!-- id: stable-id -->`，同文件 ID 唯一、同义条目稳定一致；改标题或顺序保留 ID。章节 ID 固定为 `work`、`projects`、`education`、`contact`。
 - DataPilot 的 POC 以海尔生产场景为主案例，围绕场景范围、指标口径、连续演示任务、业务评价与阶段交付展开，统一维护在 `data/projects/dataPilot.ts`。保留首节 `poc-validation`，新增章节使用稳定一致的 `poc-haier-*` ID；以原生表格和四步流程图展示，表格复用 `components/project/DetailTable.tsx`，专用布局在 `DataPilotPocSection.tsx`；`table` 与 `steps` 同步进入聊天语料，不嵌入 PPT 截图。区分演示应用、验证要求与实际效果，不将页面业务指标写为设计成果。
-- 关于页与项目详情的刻度导航共用 `components/SectionAnchorNav.tsx`，仅 960px 及以上展示右侧刻度，窄屏隐藏；项目的 Hash 与章节高亮由 `components/project/ProjectAnchorNav.tsx` 管理；通用目录由 `data/projectAnchors.ts` 按实际内容生成，保留中文稳定 ID。详情不展示返回和相邻项目入口；Hash 跳转、刷新和浏览器历史需保持可用，DataPilot 深链接可切换到对应内容分组；正文 tab 原地切换并更新首节 Hash，不触发滚动，刷新与浏览器前进后退仍恢复锚点定位；`ReadingPageHeader` 顶部标题出现时同步展示 `DataPilotPartMenu` 下拉菜单，支持当前项标记、键盘与点击外部关闭，切换使用目标分组首节 Hash，保留刷新及前进后退。
+- 关于页与项目详情的刻度导航共用 `components/SectionAnchorNav.tsx`，仅 960px 及以上展示内容区右侧刻度（距视口右边缘 16px、顶部距视口 248px，提示向左展开），窄屏隐藏；项目的 Hash 与章节高亮由 `components/project/ProjectAnchorNav.tsx` 管理；通用目录由 `data/projectAnchors.ts` 按实际内容生成，保留中文稳定 ID。详情不展示返回和相邻项目入口；Hash 跳转、刷新和浏览器历史需保持可用，DataPilot 深链接可切换到对应内容分组；正文 tab 原地切换并更新首节 Hash，不触发滚动，刷新与浏览器前进后退仍恢复锚点定位；`ReadingPageHeader` 顶部标题出现时同步展示 `DataPilotPartMenu` 下拉菜单，支持当前项标记、键盘与点击外部关闭，切换使用目标分组首节 Hash，保留刷新及前进后退。
 - `components/about/WorkEntry.tsx` 按 ID 保留特殊布局，项目卡片跟随 `oceanbase`，经历用循环展示。教育经历在工作经历与联系方式之间展示学校、专业、学历和时间，复用 Markdown 数据并加入目录；完整教育文案仍供聊天使用。
 - `components/Lanyard/` 由联系弹窗打开时懒加载，展示可拖拽工牌动画，关闭时释放场景，首页不引用；加载期间由 `ContactOverlay` 显示轻量静态工牌占位，纹理就绪并完成首帧绘制后通过 `onReady` 切换至 3D，WebGL 不可用时保留静态预览；`renderContainerRef` 指定整个弹窗为画布，本地布局框仅确定初始位置与大小，不限制拖拽范围。`Lanyard.tsx` 是 React 入口，`scene.ts` 管创建与清理，`simulation.ts` 管物理；纹理、几何、材质和配置分别维护。
-- 「随便写写」由外部 Notion 承载，`components/WritingLink.tsx` 复用 `data/siteLinks.ts` 链接并展示 Notion 图标，供展开侧栏、收起栏和移动抽屉复用；位于 AI 设计工程下方，间距 24px，悬停或键盘聚焦显示右侧外链图标，新页签打开；无站内博客或数据库内容接口。
-- 「一些尝试」使用 `/experiments` 路由，`pages/Experiments.tsx` 按需加载，暂时仅展示标题和「内容准备中。」；原路由可直达，展开侧栏、收起图标栏与移动端抽屉均不展示入口。
+- 「随便写写」入口已从展开侧栏、收起栏和移动抽屉移除；保留 `components/WritingLink.tsx` 与 `data/siteLinks.ts` 的外部 Notion 链接，不恢复导航入口。
 - `ChatbotView.tsx` 首次打开时懒加载 `components/chat/ChatPanel.tsx`；`ChatStoreProvider.tsx` 在应用层持有唯一的会话状态及生命周期，供历史入口与聊天界面共享；`useChatThread.ts` 连接该状态与按需生成的语料，`lib/chat/chatStore.ts` 管按会话隔离的并行请求、草稿和问题队列，`conversationStorage.ts` 管版本化 localStorage 保存及旧 sessionStorage 迁移；`conversationTitle.ts` 本地归纳首条提问的主题标题，新旧记录共用，保留项目名称、消息内容和历史排序。切换会话或页面不终止生成；停止只影响当前回复并保留已显示文本；停止标记作为消息元数据持久保存，在对话流对应位置显示「已终止」，不作为消息正文发送给模型。聊天界面不展示返回按钮，仅在首页对话入口和聊天界面右上角展示 `ChatHistory.tsx`，提供查看、续聊和单条删除，删除前通过 `components/Popconfirm.tsx` 气泡二次确认，浮层使用原生顶层避免被滚动列表裁切；支持取消、Escape、点击外部关闭与焦点恢复；删除当前聊天返回首页，其他记录删除不改变当前页面，生成中的记录删除时取消请求和队列；存储删除失败保留记录，同源标签页同步删除；首次发送才进入历史，刷新不自动重发中断请求；空白对话统一返回首页，不再渲染单独欢迎页。首页输入、新建和历史选择经 `App` 以唯一 ID 的有序命令转交 `ChatPanel`；首页输入保留当前路由，消费时绑定会话且等待该会话已有回复结束，不能因懒加载、StrictMode 或重开对话重复发送。`hooks/useHashOverlay.ts` 管页内聊天 Hash 与路由同步。联系弹窗由 `App` 的页面内状态控制，开关不修改 URL、锚点或浏览器历史，保留原页面与滚动位置；由 `ContactOverlay` 管 Escape、焦点和滚动锁定。
 - `lib/siteCorpus.ts` 汇总本地语料；`lib/deepseekChat.ts` → `api/chat.ts` 发送流式请求；`lib/chat/` 分离 SSE 解析、文字渐显、历史校验与消息裁剪。
 - `lib/chat/interviewPrompt.ts` 是中文系统提示词的唯一来源，由 `translations.chatbot.systemPrompt` 引用。面向产品经理或设计师面试，回复以「嗯！」开头、轻快简洁；自我介绍约 30 秒，保持短段落，主体只讲蚂蚁集团·OceanBase，之前工作一句话。B 端通用方法储备与 `siteCorpus` 个人事实分开，不能把知识当作实际经历。
 - `components/chat/ChatMessageContent.tsx` 渲染 assistant Markdown，用户原文与历史保存内容保持不变。`interviewPrompt.ts` 约束回复按需加粗关键词、使用 2–4 项有序列表，仅在对比需要时使用小型表格；窄屏表格可横向滚动，自我介绍继续用约 30 秒的短段落。相关项目配图仅使用 `lib/chat/projectImages.ts` 的现有媒体清单，与 `siteCorpus` 共享；过滤占位图与 `sourceRegion` 裁剪原稿，DataPilot 仅取 `experience`，保留图注语境，不编造图片路径；原始 HTML 和外部图片不渲染。
 - 首页姓名标题与简介统一来自 `i18n/translations.ts` 的 `home`，同步供聊天语料使用；输入框下的四个推荐问题为关于我、擅长领域、工作经历、项目经历，复用 `chatbot` 中的标签与提示词；点击仅回填并聚焦首页输入框，用户按 Enter 或点击发送后才经现有 `onAsk` 流程发送。
-- `public/data/instagram.json` 与 `public/images/instagram/`：摄影快照；维护说明在 `docs/instagram-sync.md`。
+- `public/data/instagram.json`：摄影快照；按用户要求已删除全部本地 Instagram 图片并清空快照，保留 `/photography` 空状态及主页链接。维护说明在 `docs/instagram-sync.md`，恢复照片时重新创建 `public/images/instagram/` 并同步快照。
 - `index.css` 按 tokens、foundation、components、prose、responsive 顺序加载；`styles/components.css` 仅按原级联顺序导入 `styles/components/*.css`，修改时保留导入顺序。组件专属规则在对应文件，跨组件断点在 `responsive.css`。
 - 聊天服务端入口保留在根目录 `api/chat.ts`，供 Vercel 部署和本地开发中间件使用。
 
 ## 修改与验证
+
+- 文件分类：个人 PDF 统一在 `output/pdf/`；历史简历生成材料在 `tmp/resume/`，旧页面检查脚本与记录在 `tmp/checks/`，临时截图在 `tmp/screenshots/`。`tmp/` 仅作本地过程归档，不提交、不部署；旧脚本不属于正式维护命令，不直接执行以覆盖当前简历或站点文案。网站源码仍按现有功能域组织，完整目录索引见 `README.md`。
+
+- 页面验收截图放在 `tmp/` 或已忽略的 `output/design-engineering/`、`output/text2sql/`，不提交到仓库；清理时保留简历发布源、生成脚本及其输入材料。公共资源需核实动态路径与历史链接，不能仅凭没有文本引用删除。
 
 - 设计工程 `/project/aidesignsystem` 的中文文案、配图和架构数据统一来自 `data/projects/designEngineering.ts`，由 `projectDetails.ts` 分派。背景与架构之后，正文按设计资产（`foundations`）、规则映射（`guidance`）、项目应用（`delivery`）组织；Code Connect、Skill、DESIGN.md 同属规则映射，代码交付与后续验证归入项目应用。`ProjectArchitecture.tsx` 从上到下按设计资产、规则映射、代码交付、项目应用四层呈现能力关系，使用无描边的四色色块，不展示箭头，样式在 `styles/components/project-architecture.css`；章节的 `architecture` 同时序列化进入聊天语料。`legacyIds` 保留旧 `design-highlights` / `project-gallery` / `connections` 深链接，不增加目录刻度。案例以探索设计师介入 AI 研发、稳定生成页面为主线，区分已交付内容、行业参照和后续验证，不把目标写为已量化成果。
 
@@ -73,12 +76,19 @@
 
 - 用户发送 `/deploy` 时，读取 `/Users/rriwen/.codex/skills/deploy/SKILL.md` 并执行：验证当前修改、提交并推送 GitHub、部署 Vercel 生产环境、确认 Ready 后报告链接。该指令即本次发布请求。
 
-## PDF 简历与网站下载同步
+## PDF 简历归档
 
-- `output/pdf/任文倩_产品设计师简历.pdf` 是 PDF 简历的唯一发布源。每次修改或重新生成此文件，必须在同一任务中同步覆盖 `frontend/public/任文倩_产品设计师简历.pdf` 和兼容旧链接的 `frontend/public/任文倩的简历_AI产品设计师.pdf`，不允许网站附件与源文件版本分离。
-- 同步更新 `frontend/src/components/about/ResumeDownload.tsx` 下载链接的 `v` 参数为源 PDF 的 SHA-256 前 12 位，避免沿用旧缓存；下载文件名保持不变。
-- 交付前核对三个 PDF 的 SHA-256 完全一致，并检查源 PDF 的分页与渲染。部署后从网站下载入口获取附件，与源文件逐字节比对。
-- 本规则要求同步本地网站附件，不自动授权每次修改后发布生产环境；未部署时明确说明网站源附件已同步、线上待部署。用户要求部署时按部署技能执行。
+- 2026-11-25 用户确认重新锁定当前初始版本，包含已确认的个人优势文案、Qoder 布局与第一页 14pt 正文行高。文件已设为只读；禁止修改、覆盖、重命名或删除，后续调整另存新版本。此前的修改授权已结束。锁定 SHA-256：`d089d3109f4638c23067f348c312543707ac1c6dcb87212c5660c6e68cf9bd70`。
+
+- 当前初始版本排版源为 `tmp/resume/initial-qoder-layout.html`，渲染脚本为 `tmp/resume/render_initial_layout.cjs`（输出候选 PDF 至 `tmp/pdfs/`）；旧 `resume.html` 不代表当前版本。后续修改仍须用户明确授权。
+
+- 2026-11-25 经用户明确授权，调整初始版本的个人优势描述，并按 Qoder 版统一字号、头像尺寸与布局间距，保留原始正文和项目顺序；随后按用户要求将第一页正文行高从 13pt 调至 14pt，第二页不变；本次修改完成后继续执行禁止修改规则，以下校验值以本次更新为准。
+
+- `output/pdf/任文倩_产品设计师简历.pdf` 为永久保留的初始版本，禁止修改、覆盖、重命名或删除；后续简历调整须另存为不同文件名的新版本。初始版本 SHA-256：`d089d3109f4638c23067f348c312543707ac1c6dcb87212c5660c6e68cf9bd70`。
+
+- 所有个人 PDF 简历统一保存在 `output/pdf/`，当前主版本为 `任文倩_产品设计师简历.pdf`；历史版本与 Qoder 副本保留在同一目录；原网站附件与主版本内容完全相同，已去重。后续按 SHA-256 及逐字节比对去重，保留内容不同的版本。
+- 网站不再提供 PDF 下载入口，也不在 `frontend/public/` 保存简历附件。后续更新简历仅维护归档目录，不恢复下载组件、缓存参数或附件同步。
+- 移动文件须核对 SHA-256，保留原始内容；仅当修改 PDF 内容时检查分页与渲染。发布仍需用户明确要求。
 
 
 DataPilot 产品体验正文以多轮对话、人机交互和智能体回放孵化为主线，正文以客户或用户问题举例，不展示客户名称，交互方案与验证结果保持区分；保留原章节 ID 与 POC、海外探索分组。`data/projects/dataPilot.ts` 的 `designPlaceholder` 保存七组待补设计稿说明，仅在页面展示，不进入聊天事实或媒体清单；首屏简介同样由该文件维护。产品体验正文仅显示 `title` 章节标题，不展示 `intro` 副标题。
@@ -217,4 +227,16 @@ Data Agent 默认展示「对话体验设计」Tab（`narrative`），正文由 
 
 Data Agent「协作与交付」通过 `DataPilotDelivery.tsx` 展示 Figma Make、DESIGN.md 与 AI 对话组件库三个阶段，协作分工放在正文。内容来自 `dataPilotNarrative.ts` 的 `body` 与 `steps`；页面与聊天共用，渐变展板样式位于 `datapilot.css`，窄屏纵向排列。当前 Tab 与聊天语料共用 `DATA_PILOT_VISIBLE_PARTS`；聊天媒体使用 narrative 真实配图并链接到对应章节。
 
-关于页保留个人简介，工作与教育合并为连续时间轴，不显示分区标题；条目按公司／学校、角色与时间、简短工作描述排列，描述末尾不加句号，教育不展示描述。首节点为实心圆，其余为细描边圆；保留 experience、education 锚点。简介与时间轴最大宽度 680px。蚂蚁集团下的四个项目入口仅显示名称和角色，双列间距 12px、窄屏单列，悬停或键盘聚焦显示右上箭头。名称读取 projects.ts，角色与简短描述复用关于页 Markdown；完整履历和项目时间仍保留供聊天读取。页面不展示底部联系方式及其目录项，联系入口使用右上角按钮。呈现由 WorkEntry.tsx 与 styles/components/about.css 维护。
+关于页采用精简时间轴：保留个人简介，工作经历仅显示时间、公司与职位，教育仅显示学校、专业、学历与时间；页面不渲染职责列表和项目简历展开卡片；蚂蚁集团条目下保留 Data Agent、AI 设计工程、数据库运维平台和 SQL 编辑器四个紧凑项目入口，双列浅底列表展示名称、角色与时间，窄屏单列；名称读取 projects.ts，角色与时间复用关于页 Markdown。`content/about/zh.md` 仍保留完整履历供聊天读取，PDF 简历统一归档在 `output/pdf/`，网站不再提供下载。`WorkEntry.tsx` 与 `styles/components/about.css` 负责时间轴呈现，保留工作条目和章节锚点。
+
+关于页工作与教育合并为连续时间轴，不显示工作／教育分区标题，节点使用空心描边圆点；保留 experience、education 锚点与目录定位。
+
+关于页不展示底部联系方式区块及其目录项；联系入口统一使用页面右上角「联系我」，原始联系方式数据继续保留。
+
+关于页时间轴内部按标题、角色与时间、简短描述排列；简介复用项目详情正文宽度 `--detail-prose-width`，时间轴最大宽度 680px，项目入口仅显示名称和角色，双列间距 12px，窄屏单列。保留完整项目时间数据供聊天使用。
+
+PDF 简历对话语料：`frontend/src/content/resume.md` 保存主版 PDF 的来源与补充信息，完整履历复用 `content/about/zh.md`，由 `siteCorpus.ts` 合并；不重复复制整份简历、不在运行时读取 PDF。已核对主版 SHA-256 为 `d089d3109f4638c23067f348c312543707ac1c6dcb87212c5660c6e68cf9bd70`。初始版本 PDF 禁止修改；后续如需更新简历，另存新版本并重新比对共享履历与补充内容；最新页面简介及项目详情的状态和统计口径优先。
+
+Data Agent 用户使用场景由 `data/projects/dataPilotScenario.ts` 维护，`DataPilotScenario.tsx` 展示五步手动切换与各步截图占位。页面不展示上线前准备与额外说明；保留超时不等于无数据、相关性不等于因果、草稿与发布隔离的边界。`DataPilotSection.scenario` 不进入聊天事实或项目媒体，支持方向键、Home / End 和窄屏布局。
+
+- PlayGround 菜单位于 AI 设计工程下方，桌面、收起栏与移动菜单均展示；`/playground` 复用 `pages/Experiments.tsx`，显示「🚧 正在施工中」，保留 `/experiments` 旧路由。
