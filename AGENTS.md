@@ -239,4 +239,4 @@ PDF 简历对话语料：`frontend/src/content/resume.md` 保存主版 PDF 的�
 
 Data Agent 用户使用场景由 `data/projects/dataPilotScenario.ts` 维护，`DataPilotScenario.tsx` 展示五步手动切换与各步截图占位。页面不展示上线前准备与额外说明；保留超时不等于无数据、相关性不等于因果、草稿与发布隔离的边界。`DataPilotSection.scenario` 不进入聊天事实或项目媒体，支持方向键、Home / End 和窄屏布局。
 
-- PlayGround 菜单位于 AI 设计工程下方，桌面、收起栏与移动菜单均展示；`/playground` 复用 `pages/Experiments.tsx`，显示「🚧 正在施工中」，保留 `/experiments` 旧路由。
+- PlayGround 菜单位于 AI 设计工程下方，桌面、收起栏与移动菜单均展示；`/playground` 复用 `pages/Experiments.tsx`，展示上图下文的作品卡片，默认两列、手机窄屏单列；首张为 TokenHub，截图区域为 16:9，样式位于 `styles/components/playground.css`，保留 `/experiments` 旧路由。

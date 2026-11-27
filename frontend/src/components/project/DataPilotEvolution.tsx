@@ -17,7 +17,7 @@ export function DataPilotEvolution({ section }: { section: DataPilotSection }) {
         const separator = description.search(/[：:]/)
         const title = item.title ?? (separator >= 0 ? description.slice(0, separator) : description)
         const stageTitle = title.match(/^(早期|探索|当前)\s*·\s*(.+)$/)
-        return <button key={item.caption} type="button" role="tab"
+        return <button key={item.caption} type="button" role="tab" style={{ order: index * 2 }}
           id={`${instanceId}-tab-${index}`} aria-controls={`${instanceId}-panel`} aria-selected={selected === index}
           tabIndex={selected === index ? 0 : -1} ref={node => { buttons.current[index] = node }}
           onClick={() => setSelected(index)} onKeyDown={event => {
@@ -42,7 +42,7 @@ export function DataPilotEvolution({ section }: { section: DataPilotSection }) {
         </button>
       })}
     </div>
-    <div id={`${instanceId}-panel`} data-stage={media[selected]?.title?.startsWith('当前') ? 2 : media[selected]?.title?.startsWith('探索') ? 1 : 0} role="tabpanel" aria-labelledby={`${instanceId}-tab-${selected}`} tabIndex={0}>
+    <div id={`${instanceId}-panel`} style={{ order: selected * 2 + 1 }} data-stage={media[selected]?.title?.startsWith('当前') ? 2 : media[selected]?.title?.startsWith('探索') ? 1 : 0} role="tabpanel" aria-labelledby={`${instanceId}-tab-${selected}`} tabIndex={0}>
       {media[selected]?.src
         ? <CaseStudyGallery lightboxItems={lightboxItems} items={[{ src: media[selected].src!, caption: media[selected].caption, hideCaption: true }]} />
         : <CaseStudyPlaceholder title={section.designPlaceholder ?? media[selected]?.caption} />}

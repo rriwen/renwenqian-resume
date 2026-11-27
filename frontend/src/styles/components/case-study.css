@@ -70,6 +70,7 @@
   .datapilot-background-facts { grid-template-columns: minmax(0, 1fr); gap: 24px; margin-top: 24px; }
 }
 .case-study-page .datapilot-case-layout { padding-top: 0; }
+.case-study-page .datapilot-case-hero + .datapilot-case-layout { padding-top: var(--space-10); }
 .case-study-page .datapilot-case-content > .project-detail-section:first-child { margin-top: 80px; }
 .case-study-page .datapilot-evidence.is-single figure { max-width: 100%; }
 

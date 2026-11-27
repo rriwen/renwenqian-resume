@@ -1,0 +1,53 @@
+.playground-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-6);
+  margin-top: var(--space-10);
+}
+
+.playground-card {
+  min-width: 0;
+  padding: 0 0 var(--space-4);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.playground-card-image {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000;
+}
+.playground-card-image img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: contain;
+}
+.playground-card h2 {
+  margin: var(--space-4) var(--space-4) var(--space-2);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-medium);
+  letter-spacing: .04em;
+}
+.playground-card p {
+  margin: 0 var(--space-4);
+  color: var(--muted);
+  font-size: var(--text-sm);
+  line-height: var(--leading-body);
+}
+.playground-card--placeholder {
+  display: grid;
+  place-items: center;
+  min-height: 220px;
+  padding: var(--space-4);
+  border-style: dashed;
+  border-color: var(--control-border);
+  text-align: center;
+}
+.playground-card--placeholder p { margin: 0; }
+
+@container site-main (max-width: 500px) {
+  .playground-grid { grid-template-columns: minmax(0, 1fr); }
+}

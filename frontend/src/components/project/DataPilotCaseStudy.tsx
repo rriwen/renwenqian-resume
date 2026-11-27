@@ -133,7 +133,7 @@ export function DataPilotCaseStudy({ locale }: Props) {
                 {section.bullets && !['overview', 'design-strategy'].includes(section.id) && !section.evolutionMedia && !section.adoptionResult ? <ul className="project-detail-subsection-list">{section.bullets.map((bullet) => {
                   if (section.id === 'narrative-delivery') {
                     const split = bullet.indexOf('：')
-                    return <li key={bullet}><strong>{bullet.slice(0, split)}</strong><span>{bullet.slice(split + 1)}</span></li>
+                    return <li key={bullet}><strong>{bullet.slice(0, split)}</strong><ul className="datapilot-delivery-points">{bullet.slice(split + 1).split('；').map(point => <li key={point}>{point}</li>)}</ul></li>
                   }
                   if (section.id === 'narrative-focus') {
                     const split = bullet.indexOf('：')

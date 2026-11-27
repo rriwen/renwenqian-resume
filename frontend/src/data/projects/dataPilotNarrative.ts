@@ -18,7 +18,7 @@ export function createDataPilotNarrative(source: DataPilotSection[]): DataPilotS
         table: {
           columns: ['项目', '说明'],
           rows: [
-            { id: 'responsibilities', cells: ['我的职责', '对话问答体验，应用生成交互\n客户场景验证'] },
+            { id: 'responsibilities', cells: ['我的职责', '负责整体产品设计和客户场景验证\n重点包括对话问答体验和应用生成交互'] },
             { id: 'stage', cells: ['产品当前阶段', '已在多家企业完成私有化部署\n海外 SaaS 市场和云端版本推进中'] },
             { id: 'results', cells: ['成果', `应用生成采纳率\n${results.adoptionResult!.before}% → ${results.adoptionResult!.after}%`] },
           ],
@@ -65,28 +65,30 @@ export function createDataPilotNarrative(source: DataPilotSection[]): DataPilotS
         bodyEmphasis: ['简单对话', '无限画布', '多栏工作台'],
         evolutionMedia: find('product-evolution').evolutionMedia,
       }),
-    section('focus', '核心体验问题', '在参与客户 POC 过程中，我主要负责梳理业务的候选场景并拆解任务问题。以某制造业生产分析为例，已有相关数据基础，需要利用 Data Agent 做生产进度分析的演示，我通过对比预期目的和 Agent 输出结果，观察问数、追问、结果交付等阶段的体验问题。', { scenario: productionMorningScenario, bodyEmphasis: ['预期目的', 'Agent 输出结果'] }),
+    section('focus', '核心体验问题', '在参与客户 POC 过程中，我主要负责梳理业务场景、拆解任务问题，并对照问题意图检查输出结果。下面以制造业生产分析为例，串起提问、追问、原因分析、生成应用和修改应用五个环节，说明各环节需要关注的体验问题。', { scenario: productionMorningScenario, bodyEmphasis: ['问题意图', '输出结果'] }),
     section('clarification', '分析可信',
       '不能只靠回答旁边放个「查看 SQL」按钮，用户更需要核查的是：问的是什么、实际算的是什么、结论支持到什么程度。', {
         anchorTitle: '分析可信',
         bullets: [
-          '澄清关键歧义：对存在冲突且影响数据结论的条件提供选项；已明确的条件不重复问；有默认值的条件直接展示并允许改。',
-          '上下文继承可见：每轮结果附简短条件摘要，并说明本轮变更，区分继承、替换和新增条件。',
+          '澄清关键歧义：影响结论的歧义先确认，已有明确条件不重复询问，采用默认条件时直接展示并允许修改。',
           '数据结论可核查：数字或图表旁展示统计范围、更新时间；可逐层展开计算公式、数据源、SQL 等。',
+          '上下文继承可见：每轮结果附简短条件摘要，并说明本轮变更，区分继承、替换和新增条件。',
+          '区分失败与结果：明确说明执行过程异常的情况，包括无数据、权限不足、查询失败或异常等，保留已完成的部分任务。',
           '区分事实、推测与原因：原因分析按“已观察到的事实—可能解释—待验证事项”组织；每个解释关联证据和缺失信息。同时变化只能支持相关性；证据不足时不能直接标成“根因”。',
-          '区分失败与结果：明确显示「无数据、权限不足、查询失败、部分数据返回」，保留已完成部分。',
         ],
         evolutionMedia: [
-          { src: '/images/dataagent-clarification-plan-v3.jpg', caption: '交互式澄清', title: '澄清关键歧义' },
-          { src: '/images/dataagent-clarification-followup.jpg', caption: '只改用户指定部分', title: '上下文继承可见' },
-          { src: '/images/dataagent-clarification-result.jpg', caption: '说清结果的计算过程', title: '数据结论可核查' },
-          { caption: '待补截图：事实、可能解释与待验证事项，以及对应证据和缺失信息', title: '区分事实、推测与原因' },
-          { caption: '待补截图：无数据、权限不足、查询失败与部分数据返回的状态反馈', title: '区分失败与结果' },
+          { src: '/images/dataagent-clarification-plan-v4.jpg', caption: '交互式澄清', title: '澄清关键歧义' },
+          { src: '/images/dataagent-clarification-result-v2.jpg', caption: '说清结果的计算过程', title: '数据结论可核查' },
+          { src: '/images/dataagent-clarification-followup-v3.jpg', caption: '只改用户指定部分', title: '上下文继承可见' },
+          { src: '/images/dataagent-clarification-failure.jpg', caption: '保留已完成结果，补查失败步骤', title: '区分失败与结果' },
+          { src: '/images/dataagent-clarification-evidence-v2.jpg', caption: '区分已确认事实、可能解释与待核对事项', title: '区分事实、推测与原因' },
         ],
         images: [
-          { src: '/images/dataagent-clarification-plan-v3.jpg', caption: '交互式澄清', display: 'image' },
-          { src: '/images/dataagent-clarification-followup.jpg', caption: '只改用户指定部分', display: 'image' },
-          { src: '/images/dataagent-clarification-result.jpg', caption: '说清结果的计算过程', display: 'image' },
+          { src: '/images/dataagent-clarification-plan-v4.jpg', caption: '交互式澄清', display: 'image' },
+          { src: '/images/dataagent-clarification-result-v2.jpg', caption: '说清结果的计算过程', display: 'image' },
+          { src: '/images/dataagent-clarification-followup-v3.jpg', caption: '只改用户指定部分', display: 'image' },
+          { src: '/images/dataagent-clarification-failure.jpg', caption: '保留已完成结果，补查失败步骤', display: 'image' },
+          { src: '/images/dataagent-clarification-evidence-v2.jpg', caption: '区分已确认事实、可能解释与待核对事项', display: 'image' },
         ],
       }),
     section('exploration', '成果可用',
@@ -110,10 +112,10 @@ export function createDataPilotNarrative(source: DataPilotSection[]): DataPilotS
       '修改比生成更容易破坏已有成果。用户已经形成预期，也可能已有其他人在使用应用，因此需要清楚知道修改的对象、影响和状态。', {
         anchorTitle: '修改可控',
         bullets: [
-          '区分追问与修改：「看看上周」默认返回分析；「把这张图改成上周」进入修改；意图不清时即时询问用户意图。',
+          '区分追问与修改：“看看上周”返回新的分析，“把这张图改成上周”进入应用修改；无法确定时先确认操作意图，避免一次试探性追问改变已有应用。',
           '明确修改对象：支持选中图表后发起修改，展示状态「正在修改」；对象不明确时先定位，不依赖这个、那个的文本指代。',
           '展示影响范围：说明修改会影响哪些图表、计算口径和筛选条件，提示关联内容及其他使用者是否受影响。',
-          '提供变更预览：应用修改前对比变更前后内容，突出新增、删除和调整的部分，允许用户确认或取消。',
+          '提供变更预览：修改先在预览中呈现，突出新增、删除和调整的内容。涉及计算口径、关联图表或已发布内容时，说明影响范围，再由用户确认是否生效。',
           '支持版本回滚：保留版本记录与变更摘要，支持预览历史版本；恢复前说明影响范围，确认后反馈恢复结果。',
         ],
         evolutionMedia: [
@@ -126,20 +128,20 @@ export function createDataPilotNarrative(source: DataPilotSection[]): DataPilotS
         images: find('report-editing').images.map(image => ({ ...image, display: 'image' as const })),
       }),
     section('diagnosis', '异常问题排查',
-      '在核查或修改应用时，用户可能发现结果不对、执行失败，或迟迟没有返回。除了提示异常，还需要让用户知道问题出在哪一步。因此，先从执行回放入手，帮助用户核对分析过程；再将工程师需要的调用记录、耗时和日志整理到 AgentOps 中，继续排查原因。', {
+      '在核查或修改应用时，用户可能发现结果不对、执行失败，或迟迟没有返回。除了提示异常，还需要让用户知道问题出在哪一步。因此，先从执行回放入手，帮助用户核对分析过程；再提供工程师需要的调用记录、耗时和日志等，帮助继续排查。', {
         images: ['agent-replay', 'agent-evidence', 'agent-latency'].flatMap(id => find(id).images.map(image => ({ ...image, display: 'image' as const }))),
         bullets: [
-          '回看分析过程：按执行步骤查看需求、数据源和计算口径，选中有疑问的结果，核对查询与返回数据；仍找不到原因时，再交由工程师排查。',
+          '分析过程回放：按执行步骤查看需求、数据源和计算口径，选中有疑问的结果，核对查询与返回数据；仍找不到原因时，再交由工程师排查。',
           '找到失败步骤：工程师通过报错中的 Trace ID 找到对应调用，在拓扑图中查看前后步骤，选中失败节点后展开错误信息、堆栈和日志。',
           '查看耗时去向：先按耗时找出较慢的调用，再用 Trace 图查看执行顺序、火焰图查看各步骤耗时，点开具体节点继续核查。',
         ],
       }),
-    section('delivery', '具体设计交付', '', {
+    section('delivery', '具体设计交付', '我负责 Data Agent 的需求分析，并利用 AI 工具完成产品设计和部分前端实现。', {
         bullets: [
-          '任务与状态流程：覆盖澄清、执行、部分成功、失败、核查、保存、发布与恢复。',
-          '关键交互组件：条件摘要、依据展开、成果选择、修改对象标签、变更预览与版本记录。',
-          '行为规则：什么情况下直接执行、什么时候澄清、什么修改需要确认、失败后保留什么。',
-          '验收场景：测试用户能否发现口径错误、理解继承条件、独立使用生成应用，以及判断修改范围并恢复结果。',
+          '对话流程定义：问数、连续追问、应用生成与修改的流程图；待确认、执行中、完成与失败的状态流转说明',
+          'Agent 行为规则：澄清与工具调用时机、追问条件继承规则；应用修改的对象范围、确认与恢复规则',
+          '关键交互组件：用户操作：超级输入框、澄清卡中的条件选择与确认；Agent 反馈：加载状态、思考过程与工具调用展示，以及文本、表格、图片和数据图表的流式呈现',
+          '验收场景：根据业务场景编排多轮对话，模拟用户提问、追问和修改应用的过程；逐轮检查回答是否符合问题意图、操作是否顺畅，以及遇到异常后能否继续',
         ],
       }),
     section('results', '当前成果',

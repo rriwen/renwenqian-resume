@@ -72,7 +72,7 @@ npm run dev
 | 关于页文案与解析 | [`content/about/zh.md`](frontend/src/content/about/)、[`parseAboutContent.ts`](frontend/src/content/about/parseAboutContent.ts)；[`content/about.ts`](frontend/src/content/about.ts) 负责加载与缓存 |
 | 关于页布局与时间线 | [`About.tsx`](frontend/src/pages/About.tsx) 组合 [`components/about/`](frontend/src/components/about/) 中的经历、项目卡片与时间线 |
 | 外部 Notion 博客入口 | [`WritingLink.tsx`](frontend/src/components/WritingLink.tsx) 展示「随便写写」链接与 Notion 图标；地址由 `data/siteLinks.ts` 与聊天语料共用，当前不在导航中展示 |
-| PlayGround 占位页 | [`frontend/src/pages/Experiments.tsx`](frontend/src/pages/Experiments.tsx)，导航入口 `/playground`，兼容旧路由 `/experiments`；显示「🚧 正在施工中」 |
+| PlayGround 作品卡片 | [`frontend/src/pages/Experiments.tsx`](frontend/src/pages/Experiments.tsx)，导航入口 `/playground`，兼容旧路由 `/experiments`；展示上图下文的作品卡片，默认两列、手机窄屏单列；首张为 TokenHub，截图区域为 16:9，样式位于 `styles/components/playground.css` |
 | 个人 PDF 简历归档 | `output/pdf/`：主版本、历史版本与 Qoder 副本集中保存，内容完全相同的原网站附件已去重；网站不再提供 PDF 下载 |
 | 摄影内容 | [`frontend/src/pages/Photography.tsx`](frontend/src/pages/Photography.tsx)、[`frontend/public/data/instagram.json`](frontend/public/data/instagram.json) |
 | 分组侧栏与移动端抽屉 | [`SiteSidebar.tsx`](frontend/src/components/SiteSidebar.tsx)；[`SidebarRail.tsx`](frontend/src/components/SidebarRail.tsx) 提供收起后的图标导航与项目分类浮层；[`Header.tsx`](frontend/src/components/Header.tsx) 管理导航开关与焦点；「摄影记录」下方提供带文字的「联系我」菜单，与前一项额外间隔 16px；收起侧栏时使用对应图标入口，移动端抽屉保持相同顺序；[`PageToolbar.tsx`](frontend/src/components/PageToolbar.tsx) 在所有页面右上角提供主题按钮，仅在首页对话入口及聊天界面且存在非空历史对话时展示历史按钮，使用无边框图标 |
@@ -295,4 +295,4 @@ Data Agent 当前仅展示对话体验设计，隐藏海外 SaaS 探索及正文
 
 Data Agent「成果可用」沿用「分析可信」的展开式 Tab 与圆角外框，复用已有正文和真实配图，缺少对应截图的条目保留占位；章节 ID `narrative-exploration` 保持不变。
 
-- PlayGround 菜单位于 AI 设计工程下方，桌面、收起栏与移动菜单均展示；`/playground` 复用 `pages/Experiments.tsx`，显示「🚧 正在施工中」，保留 `/experiments` 旧路由。
+- PlayGround 菜单位于 AI 设计工程下方，桌面、收起栏与移动菜单均展示；`/playground` 复用 `pages/Experiments.tsx`，展示上图下文的作品卡片，默认两列、手机窄屏单列；首张为 TokenHub，截图区域为 16:9，样式位于 `styles/components/playground.css`，保留 `/experiments` 旧路由。

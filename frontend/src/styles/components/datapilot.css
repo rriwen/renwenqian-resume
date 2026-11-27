@@ -1337,15 +1337,29 @@
   color: var(--text);
   font-weight: var(--weight-semibold);
 }
-#narrative-delivery .project-detail-subsection-list span {
-  display: block;
+#narrative-delivery .datapilot-delivery-points {
+  margin: 0;
+  padding-left: 1.2em;
+  list-style: disc;
   color: var(--muted);
   font-size: var(--text-sm);
   line-height: 1.8;
 }
+#narrative-delivery .datapilot-delivery-points li + li { margin-top: 8px; }
 @media (max-width: 700px) {
   #narrative-delivery .project-detail-subsection-list {
     grid-template-columns: minmax(0, 1fr);
     gap: 16px;
   }
+}
+
+/* Keep the selected image directly after its explanation on narrow screens. */
+@container site-main (max-width: 700px) {
+  .datapilot-evolution { gap: 0; }
+  .datapilot-evolution [role="tablist"] { display: contents; }
+  .datapilot-evolution [role="tab"] { width: auto; margin-inline: 20px; }
+  .datapilot-evolution [role="tabpanel"] { margin-bottom: 16px; }
+}
+@container site-main (max-width: 700px) {
+  :is(#narrative-clarification, #narrative-exploration, #narrative-publishing) .datapilot-evolution [role="tabpanel"] { min-height: 0; }
 }
