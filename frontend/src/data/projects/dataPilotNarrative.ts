@@ -101,12 +101,16 @@ export function createDataPilotNarrative(source: DataPilotSection[]): DataPilotS
           '生成后先核查再发布：预览应用时，可对照原分析结果查看指标、图表与计算口径；提示缺失数据、未完成内容和核查事项。明确标示草稿、待核查、已发布等应用状态，说明是否已可供他人使用。',
       ],
         evolutionMedia: [
-          { title: '明确采用哪些分析成果', caption: '待补截图：生成应用前选择结论、图表与计算口径的确认界面' },
-          { title: '区分固定条件与可变参数', caption: '待补截图：固定口径与可变参数的配置，以及默认值和作用范围' },
-          { title: '支持数据周期更新', caption: '待补截图：快照与动态数据选择、更新周期及最近更新状态' },
-          { title: '生成后先核查再发布', caption: '待补截图：应用草稿预览、数据核查与发布确认' },
+          { src: '/images/dataagent-application-content-v2.jpg', title: '明确采用哪些分析成果', caption: '说明应用采用的分析成果与计算口径' },
+          { src: '/images/dataagent-application-parameters.jpg', title: '区分固定条件与可变参数', caption: '说明固定计算规则与可切换的日期、产线条件' },
+          { src: '/images/dataagent-application-refresh.jpg', title: '支持数据周期更新', caption: '手动刷新、定时刷新入口与最近更新时间' },
+          { src: '/images/dataagent-application-refresh.jpg', title: '生成后先核查再发布', caption: '应用预览、未保存状态与发布入口' },
         ],
-        images: find('conversation').images.slice(0, 1).map(image => ({ ...image, display: 'image' as const })),
+        images: [
+          { src: '/images/dataagent-application-content-v2.jpg', caption: '说明应用采用的分析成果与计算口径', display: 'image' },
+          { src: '/images/dataagent-application-parameters.jpg', caption: '说明固定计算规则与可切换的日期、产线条件', display: 'image' },
+          { src: '/images/dataagent-application-refresh.jpg', caption: '手动刷新、定时刷新入口与最近更新时间，以及应用未保存状态与发布入口', display: 'image' },
+        ],
       }),
     section('publishing', '修改可控',
       '修改比生成更容易破坏已有成果。用户已经形成预期，也可能已有其他人在使用应用，因此需要清楚知道修改的对象、影响和状态。', {
