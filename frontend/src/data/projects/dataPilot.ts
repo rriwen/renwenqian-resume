@@ -1322,7 +1322,7 @@ function createDataPilotContent(locale: Locale) {
       '核心负责 Agent 从问数到智能生成报告的完整链路体验，覆盖对客需求与场景梳理、产品需求规划、前端设计研发与验证，以及与后端研发的接口对接；以提升应用采纳率为核心目标。支持 4 家付费客户交付。',
     ],
     metadata: ['职责：产品需求规划 · 前端设计研发与验证 · 接口协作', '场景：客户生产分析', '目标：提升应用采纳率'],
-    lead: '从业务场景出发，设计 AI 问答、应用生成与持续修改的完整体验，让用户看得懂结果、把得住修改范围',
+    lead: '从业务场景出发，设计 AI 问答、应用生成与持续修改的完整体验，让分析可信、成果可用、修改可控',
     parts: {
       experience: { title: '产品体验设计', sections },
       narrative: { title: '对话体验设计', sections: createDataPilotNarrative(sections) },
